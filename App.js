@@ -1,13 +1,22 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import * as React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { NavigationContainer } from "@react-navigation/native";
+import * as React from "react";
+import { Platform, StatusBar, StyleSheet, View } from "react-native";
 
-import useCachedResources from './hooks/useCachedResources';
-import BottomTabNavigator from './navigation/BottomTabNavigator';
-import LinkingConfiguration from './navigation/LinkingConfiguration';
+import useCachedResources from "./hooks/useCachedResources";
+import LinkingConfiguration from "./navigation/LinkingConfiguration";
 
-const Stack = createStackNavigator();
+import HomeStack from "./navigation/HomeStackNavigator";
+import DiscoverStack from "./navigation/DiscoverStackNavigator";
+import CategoriesStack from "./navigation/CategoriesStackNavigator";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import DrawerContent from "./navigation/DrawerContent";
+
+import Colors from "./constants/Colors";
+import { MaterialIcons } from "@expo/vector-icons";
+
+const Drawer = createDrawerNavigator();
+
+const INITIAL_ROUTE_NAME = "HomeStack";
 
 export default function App(props) {
   const isLoadingComplete = useCachedResources();
@@ -17,11 +26,26 @@ export default function App(props) {
   } else {
     return (
       <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
+        {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
         <NavigationContainer linking={LinkingConfiguration}>
-          <Stack.Navigator>
-            <Stack.Screen name="Root" component={BottomTabNavigator} />
-          </Stack.Navigator>
+          <Drawer.Navigator
+            initialRouteName={INITIAL_ROUTE_NAME}
+            drawerStyle={styles.drawer}
+            drawerContent={DrawerContent}
+            screenOptions={{
+              swipeEnabled: false,
+            }}
+          >
+            <Drawer.Screen
+              drawerIcon={() => (
+                <MaterialIcons name={focused ? "heart" : "heart-outline"} />
+              )}
+              name="Home"
+              component={HomeStack}
+            />
+            <Drawer.Screen name="Discover" component={DiscoverStack} />
+            <Drawer.Screen name="Categories" component={CategoriesStack} />
+          </Drawer.Navigator>
         </NavigationContainer>
       </View>
     );
@@ -31,6 +55,10 @@ export default function App(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
+  },
+  drawer: {
+    width: "66%",
+    backgroundColor: Colors.tintColor,
   },
 });

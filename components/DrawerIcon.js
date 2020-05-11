@@ -3,6 +3,6 @@ import { Text } from "react-native";
 
 import Colors from "../constants/Colors";
 
-export default function TabBarIcon(props) {
+export default function DrawerIcon(props) {
   return <Text>Hola</Text>;
 }
