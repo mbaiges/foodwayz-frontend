@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 
-export default function NavBar({ title, navigation }) {
+export default function DefaultNavBar({ title, navigation }) {
   return {
     headerLeft: () => (
       <View style={styles.l_icon}>
@@ -28,7 +28,7 @@ export default function NavBar({ title, navigation }) {
           name="person"
           size={28}
           style={styles.icon}
-          onPress={navigation.openDrawer}
+          onPress={() => navigation.navigate("UserProfileStack")}
         />
       </View>
     ),

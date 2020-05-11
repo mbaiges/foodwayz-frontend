@@ -3,8 +3,7 @@ import * as React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
 import HomeScreen from "../screens/HomeScreen";
-import LinksScreen from "../screens/LinksScreen";
-import NavBar from "./NavBar";
+import DefaultNavBar from "./DefaultNavBar";
 import { MaterialIcons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
@@ -18,10 +17,11 @@ export default function StackNavigator({ navigation, route }) {
   return (
     <Stack.Navigator
       initialRouteName={INITIAL_ROUTE_NAME}
-      screenOptions={() => NavBar({ title: getHeaderTitle(route), navigation })}
+      screenOptions={() =>
+        DefaultNavBar({ title: getHeaderTitle(route), navigation })
+      }
     >
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Links" component={LinksScreen} />
     </Stack.Navigator>
   );
 }

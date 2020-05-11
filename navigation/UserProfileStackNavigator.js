@@ -2,8 +2,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
-import HomeScreen from "../screens/HomeScreen";
 import DefaultNavBar from "./DefaultNavBar";
+import UserProfile from "../screens/UserProfileScreen";
+
 import { MaterialIcons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
@@ -21,7 +22,7 @@ export default function StackNavigator({ navigation, route }) {
         DefaultNavBar({ title: getHeaderTitle(route), navigation })
       }
     >
-      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="UserProfile" component={UserProfile} />
     </Stack.Navigator>
   );
 }
