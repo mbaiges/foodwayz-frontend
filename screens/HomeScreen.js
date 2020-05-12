@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 
-import { StyleSheet, View, Text, ScrollView, Button } from "react-native";
+import {
+  StyleSheet,
+  View,
+  SafeAreaView,
+  Text,
+  ScrollView,
+  Button,
+} from "react-native";
 import Card from "./components/Card";
 
 class HomeScreenComponent extends Component {
@@ -12,7 +19,7 @@ class HomeScreenComponent extends Component {
     const { navigation } = this.props;
 
     return (
-      <View style={styles.backgroundContainer}>
+      <SafeAreaView style={styles.backgroundContainer}>
         <ScrollView>
           <View>
             <Text>Home Screen</Text>
@@ -27,7 +34,7 @@ class HomeScreenComponent extends Component {
             </Card>
           </View>
         </ScrollView>
-      </View>
+      </SafeAreaView>
     );
   }
 }

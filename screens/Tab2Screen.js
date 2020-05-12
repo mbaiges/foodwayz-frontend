@@ -1,11 +1,11 @@
 import React from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, SafeAreaView } from "react-native";
 
 const Tab2Screen = () => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.textScreen}>Tab2 Screen</Text>
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -3,6 +3,7 @@ import { Card, ListItem, Button, Icon } from "react-native-elements";
 import {
   StyleSheet,
   View,
+  SafeAreaView,
   Text,
   Image,
   TextInput,
@@ -17,13 +18,13 @@ const { width } = Dimensions.get("window");
 
 const UserProfile = ({ navigation }) => {
   return (
-    <View style={styles.backgroundContainer}>
+    <SafeAreaView style={styles.backgroundContainer}>
       <View style={styles.mainPage}>
         <Image
           style={styles.logoImage}
           source={require("../assets/images/Po.jpg")}
         />
-        <Text style={styles.logoText}>Sergio Denis</Text>
+        <Text style={styles.logoText}>El guerrero Dragón</Text>
       </View>
 
       <View style={styles.reviewContainer}>
@@ -36,15 +37,8 @@ const UserProfile = ({ navigation }) => {
                 resizeMode="cover"
                 source={require("../assets/images/Po.jpg")}
               />
-              <View style={{ flexDirection: "row" }}>
+              <View style={styles.cardFooter}>
                 <Text style={styles.foodName}>Ribs</Text>
-                <View style={styles.cardFooter}>
-                  <Text style={styles.starNumber}>4</Text>
-                  <Icon
-                    name="star"
-                    type="material" /*size='40' si pongo esto crashea por algun motivo*/
-                  />
-                </View>
               </View>
             </Card>
             <Card>
@@ -66,7 +60,41 @@ const UserProfile = ({ navigation }) => {
           </ScrollView>
         </View>
       </View>
-    </View>
+
+      <View style={styles.reviewContainer}>
+        <Text style={styles.subtitleText}>My favorites</Text>
+        <View style={styles.review}>
+          <ScrollView horizontal={true}>
+            <Card>
+              <Image
+                style={styles.reviewImage}
+                resizeMode="cover"
+                source={require("../assets/images/Po.jpg")}
+              />
+              <View style={styles.cardFooter}>
+                <Text style={styles.foodName}>Ribs</Text>
+              </View>
+            </Card>
+            <Card>
+              <Image
+                style={styles.reviewImage}
+                resizeMode="cover"
+                source={require("../assets/images/Po.jpg")}
+              />
+              <Text style={styles.foodName}>Aguante Po</Text>
+            </Card>
+            <Card>
+              <Image
+                style={styles.reviewImage}
+                resizeMode="cover"
+                source={require("../assets/images/Po.jpg")}
+              />
+              <Text style={styles.foodName}>Aguante Po</Text>
+            </Card>
+          </ScrollView>
+        </View>
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -110,7 +138,6 @@ const styles = StyleSheet.create({
 
   starNumber: {
     position: "relative",
-    fontFamily: "Roboto",
     fontWeight: "bold",
     fontSize: 15,
     paddingLeft: 15,
@@ -130,7 +157,6 @@ const styles = StyleSheet.create({
 
   foodName: {
     textAlign: "left",
-    fontFamily: "Roboto",
     fontWeight: "bold",
     fontSize: 15,
     paddingLeft: 3,
@@ -138,7 +164,6 @@ const styles = StyleSheet.create({
 
   subtitleText: {
     textAlign: "left",
-    fontFamily: "Roboto",
     fontWeight: "bold",
     fontSize: 18,
     paddingLeft: 15,

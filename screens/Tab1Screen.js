@@ -1,9 +1,9 @@
 import React from "react";
-import { StyleSheet, Text, Button } from "react-native";
+import { StyleSheet, Text, SafeAreaView, Button } from "react-native";
 
 const Tab1Screen = ({ navigation }) => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.textScreen}>Home Screen</Text>
       <Button
         title="Goto Detail Screen"
@@ -16,7 +16,7 @@ const Tab1Screen = ({ navigation }) => {
       />
 
       <Button title="Log out" onPress={() => navigation.navigate("Auth")} />
-    </View>
+    </SafeAreaView>
   );
 };
 

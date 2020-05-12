@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import {
   StyleSheet,
   View,
+  SafeAreaView,
   Text,
   Image,
   TextInput,
@@ -27,106 +28,24 @@ class RegisterScreenComponent extends Component {
     };
   }
 
-  validate_fields = () => {
-    const { username, email, password1, password2, checked } = this.state;
-    if (username === "") {
-      alert("Please fill username");
-      return false;
-    } else if (email === "") {
-      alert("Please fill email");
-      return false;
-    } else if (password1 === "") {
-      alert("Please fill password");
-      return false;
-    } else if (password2 === "") {
-      alert("Please repeat password");
-      return false;
-    }
-
-    /*
-    ^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
-      └─────┬────┘└───┬──┘└─────┬─────┘└─────┬─────┘ └───┬───┘
-            │         │         │            │           no _ or . at the end
-            │         │         │            │
-            │         │         │            allowed characters
-            │         │         │
-            │         │         no __ or _. or ._ or .. inside
-            │         │
-            │         no _ or . at the beginning
-            │
-            username is 8-20 characters long
-    */
-    if (!this.validateUsername(username)) {
-      alert("Please enter a valid username");
-      return false;
-    } else if (!this.validateEmail(email)) {
-      alert("Please enter a valid email");
-      return false;
-    } else if (password1 !== password2) {
-      alert("Passwords must match");
-      return false;
-    } else if (!this.validatePassword(password1)) {
-      alert("Please enter a valid password");
-      return false;
-    } else if (!checked) {
-      alert("You must agree terms and conds before continuing");
-      return false;
-    }
-
-    return true;
-  };
-
   validateEmail = (email) => {
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
   };
 
-  validateUsername = (username) => {
-    let re = /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
-    return re.test(username);
-  };
   // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:
   validatePassword = (password) => {
     let re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return re.test(password);
   };
 
-  register = (navigation) => {
-    if (this.validate_fields()) {
-      const { username, email, password1 } = this.state;
-      console.log(`http://${api.baseURL}:${api.port}/${api.routes.register}`);
-      fetch(`http://${api.baseURL}:${api.port}/${api.routes.register}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: username,
-          email: email,
-          password: password1,
-        }),
-      })
-        .then((res) => {
-          console.log(`res = ${JSON.stringify(res)}`);
-          if (res.status === 200) {
-            navigation.navigate("LogIn");
-          } else if (res.status === 400) {
-            alert("");
-          } else if (res.status === 500) {
-            alert("Register failed");
-          }
-        })
-        .catch((err) => {
-          console.log(`An error ocurred: ${err}`);
-        });
-    }
-  };
+  register = (navigation) => {};
 
   render() {
     const { navigation } = this.props;
 
     return (
-      <View style={styles.backgroundContainer}>
+      <SafeAreaView style={styles.backgroundContainer}>
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
           style={styles.container}
@@ -135,7 +54,7 @@ class RegisterScreenComponent extends Component {
             <View style={styles.inner}>
               <Image
                 style={styles.logoImage}
-                source={require("../assets/logo.png")}
+                source={require("../assets/images/logo.png")}
               />
               <Text style={styles.logoText}>FoodWayz</Text>
               <View style={styles.inputBoxes}>
@@ -197,7 +116,7 @@ class RegisterScreenComponent extends Component {
               <Text
                 style={styles.termAndConds}
                 onPress={() => {
-                  navigation.navigate("Terms&Conditions");
+                  //navigation.navigate("Terms&Conditions");
                   console.log("Clicked on terms and conditions");
                 }}
               >
@@ -208,19 +127,19 @@ class RegisterScreenComponent extends Component {
           <View>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => this.register(navigation)}
+              onPress={() => this.register(this.state)}
             >
               <Text>REGISTER</Text>
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }
 
-export default RegisterScreen = ({ navigation }) => {
-  return <RegisterScreenComponent navigation={navigation} />;
+export default RegisterScreen = (props) => {
+  return <RegisterScreenComponent {...props} />;
 };
 
 const { width: WIDTH } = Dimensions.get("window");

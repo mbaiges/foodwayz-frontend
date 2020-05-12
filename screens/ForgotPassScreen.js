@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import {
   StyleSheet,
   View,
+  SafeAreaView,
   Text,
   Image,
   TextInput,
@@ -43,7 +44,7 @@ class ForgotPassScreenComponent extends Component {
     const { navigation } = this.props;
 
     return (
-      <View style={styles.backgroundContainer}>
+      <SafeAreaView style={styles.backgroundContainer}>
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
           style={styles.container}
@@ -53,7 +54,7 @@ class ForgotPassScreenComponent extends Component {
               <View style={styles.mainPage}>
                 <Image
                   style={styles.logoImage}
-                  source={require("../assets/logo.png")}
+                  source={require("../assets/images/logo.png")}
                 />
                 <Text style={styles.logoText}>FoodWayz</Text>
                 <Text style={styles.text}>
@@ -83,13 +84,13 @@ class ForgotPassScreenComponent extends Component {
             <Text>RESET PASSWORD</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }
 
-export default ForgotPassScreen = ({ navigation }) => {
-  return <ForgotPassScreenComponent navigation={navigation} />;
+export default ForgotPassScreen = (props) => {
+  return <ForgotPassScreenComponent {...props} />;
 };
 
 const { width: WIDTH } = Dimensions.get("window");

@@ -1,13 +1,13 @@
 import React from "react";
-import { StyleSheet, Text, Button } from "react-native";
+import { StyleSheet, SafeAreaView, Text, Button } from "react-native";
 
 const DetailScreen = ({ navigation }) => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.textScreen}>Detail Screen</Text>
 
       <Button title="Go back to Home" onPress={() => navigation.goBack()} />
-    </View>
+    </SafeAreaView>
   );
 };
 

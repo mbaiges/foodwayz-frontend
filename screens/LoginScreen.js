@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import {
   StyleSheet,
   View,
+  SafeAreaView,
   Text,
   Animated,
   TextInput,
@@ -12,7 +13,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import api from "../api";
+
+import { AuthContext } from "../App";
 
 class LoginScreenComponent extends Component {
   constructor() {
@@ -47,80 +49,7 @@ class LoginScreenComponent extends Component {
     keyboardDidHideListener.remove();
   }
 
-  validate_fields = () => {
-    const { email, password } = this.state;
-    if (email === "") {
-      alert("Please fill email");
-      return false;
-    } else if (password === "") {
-      alert("Please fill password");
-      return false;
-    }
-
-    /*
-    ^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
-      └─────┬────┘└───┬──┘└─────┬─────┘└─────┬─────┘ └───┬───┘
-            │         │         │            │           no _ or . at the end
-            │         │         │            │
-            │         │         │            allowed characters
-            │         │         │
-            │         │         no __ or _. or ._ or .. inside
-            │         │
-            │         no _ or . at the beginning
-            │
-            username is 8-20 characters long
-    */
-    if (!this.validateEmail(email)) {
-      alert("Please enter a valid email");
-      return false;
-    } else if (!this.validatePassword(password)) {
-      alert("Please enter a valid password");
-      return false;
-    }
-    return true;
-  };
-
-  validateEmail = (email) => {
-    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-  };
-  // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:
-  validatePassword = (password) => {
-    let re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return re.test(password);
-  };
-
-  login = (navigation) => {
-    if (this.validate_fields()) {
-      const { email, password } = this.state;
-      console.log(`http://${api.baseURL}:${api.port}/${api.routes.login}`);
-      fetch(`http://${api.baseURL}:${api.port}/${api.routes.login}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      })
-        .then((res) => {
-          console.log(`res = ${JSON.stringify(res)}`);
-          if (res.status === 200) {
-            navigation.navigate("Home");
-          } else if (res.status === 400) {
-            alert("User does not exist");
-          } else if (res.status === 401) {
-            alert("Incorrect password");
-          } else if (res.status === 500) {
-            alert("Login failed");
-          }
-        })
-        .catch((err) => {
-          console.log(`An error ocurred: ${err}`);
-        });
-    }
-  };
+  login = ({ state, navigation }) => {};
 
   _keyboardDidShow = () => {
     Animated.timing(this.imageHeight, {
@@ -137,10 +66,10 @@ class LoginScreenComponent extends Component {
   };
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, signIn } = this.props;
 
     return (
-      <View style={styles.backgroundContainer}>
+      <SafeAreaView style={styles.backgroundContainer}>
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
           style={styles.container}
@@ -149,7 +78,7 @@ class LoginScreenComponent extends Component {
             <View style={styles.inner}>
               <Animated.Image
                 style={{ height: this.imageHeight, width: this.imageHeight }}
-                source={require("../assets/logo.png")}
+                source={require("../assets/images/logo.png")}
               />
               <Text style={styles.logoText}>FoodWayz</Text>
               <View style={styles.inputBoxes}>
@@ -180,7 +109,11 @@ class LoginScreenComponent extends Component {
         <View alignItems="center">
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate("Home")}
+            onPress={async () => {
+              console.log("I want to navigate to Main");
+              //console.log(this.props.signIn);
+              //await signIn(this.state).catch((e) => console.log(e));
+            }}
           >
             <Text>LOG IN</Text>
           </TouchableOpacity>
@@ -188,26 +121,40 @@ class LoginScreenComponent extends Component {
         <View alignItems="center">
           <Text
             style={styles.forgotpassword}
-            onPress={() => navigation.navigate("ForgotPass")}
+            onPress={() => {
+              navigation.navigate("ForgotPass");
+            }}
           >
             {" "}
             Forgot your password? Get new!{" "}
           </Text>
           <Text
             style={styles.signUp}
-            onPress={() => navigation.navigate("Register")}
+            onPress={() => {
+              navigation.navigate("Register");
+            }}
           >
             {" "}
             Don't have an account yet? Sign up!{" "}
           </Text>
+          <Text
+            style={styles.signUp}
+            onPress={() => {
+              navigation.navigate("Main");
+            }}
+          >
+            {" "}
+            Don't have a working log-in system yet? Bypass security right now!{" "}
+          </Text>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }
 
-export default LoginScreen = ({ navigation }) => {
-  return <LoginScreenComponent navigation={navigation} />;
+export default LoginScreen = (props) => {
+  const { signIn } = React.useContext(AuthContext);
+  return <LoginScreenComponent {...props} signIn />;
 };
 
 const { width: WIDTH } = Dimensions.get("window");
