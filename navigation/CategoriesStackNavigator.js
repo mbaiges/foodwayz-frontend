@@ -4,7 +4,7 @@ import { View, StyleSheet, Text } from "react-native";
 
 import HomeScreen from "../screens/HomeScreen";
 import DefaultNavBar from "./DefaultNavBar";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 const INITIAL_ROUTE_NAME = "Home";

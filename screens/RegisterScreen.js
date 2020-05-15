@@ -28,6 +28,76 @@ class RegisterScreenComponent extends Component {
     };
   }
 
+  validate_signup_fields = ({
+    username,
+    email,
+    password1,
+    password2,
+    checked,
+  }) => {
+    if (username === "") {
+      alert("Please fill username");
+      return false;
+    } else if (email === "") {
+      alert("Please fill email");
+      return false;
+    } else if (password1 === "") {
+      alert("Please fill password");
+      return false;
+    } else if (password2 === "") {
+      alert("Please repeat password");
+      return false;
+    }
+
+    /*
+    ^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
+      └─────┬────┘└───┬──┘└─────┬─────┘└─────┬─────┘ └───┬───┘
+            │         │         │            │           no _ or . at the end
+            │         │         │            │
+            │         │         │            allowed characters
+            │         │         │
+            │         │         no __ or _. or ._ or .. inside
+            │         │
+            │         no _ or . at the beginning
+            │
+            username is 8-20 characters long
+    */
+    if (!this.validateUsername(username)) {
+      alert("Please enter a valid username");
+      return false;
+    } else if (!this.validateEmail(email)) {
+      alert("Please enter a valid email");
+      return false;
+    } else if (password1 !== password2) {
+      alert("Passwords must match");
+      return false;
+    } else if (!this.validatePassword(password1)) {
+      alert("Please enter a valid password");
+      return false;
+    } else if (!checked) {
+      alert("You must agree terms and conds before continuing");
+      return false;
+    }
+
+    return true;
+  };
+
+  validateEmail = (email) => {
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  };
+
+  validateUsername = (username) => {
+    let re = /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
+    return re.test(username);
+  };
+
+  // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:
+  validatePassword = (password) => {
+    let re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return re.test(password);
+  };
+
   validateEmail = (email) => {
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
@@ -39,7 +109,7 @@ class RegisterScreenComponent extends Component {
     return re.test(password);
   };
 
-  register = (navigation) => {};
+  register = ({navigation}) => {};
 
   render() {
     const { navigation } = this.props;

@@ -1,32 +1,32 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
+import { StyleSheet, Text, View, Button } from "react-native";
 import Colors from "../constants/Colors";
 
 export default function DefaultNavBar({ title, navigation }) {
   return {
     headerLeft: () => (
       <View style={styles.l_icon}>
-        <MaterialIcons
-          name="menu"
-          size={28}
-          onPress={navigation.openDrawer}
+        <Ionicons
+          name="md-menu"
+          size={38}
           style={styles.icon}
+          onPress={navigation.openDrawer}
         />
       </View>
     ),
     headerTitle: () => <Text style={styles.headerText}>{title}</Text>,
     headerRight: () => (
       <View style={styles.r_icons}>
-        <MaterialIcons
-          name="search"
-          size={28}
+        <Ionicons
+          name="md-search"
+          size={38}
           style={styles.icon}
           onPress={navigation.openDrawer}
         />
-        <MaterialIcons
-          name="person"
-          size={28}
+        <Ionicons
+          name="md-person"
+          size={38}
           style={styles.icon}
           onPress={() => navigation.navigate("UserProfileStack")}
         />

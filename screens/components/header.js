@@ -1,6 +1,6 @@
 // import React from "React";
 // import { StyleSheet, Text, View } from "react-native";
-// import { MaterialIcons } from "@expo/vector-icons";
+// import { Ionicons } from "@expo/vector-icons";
 
 // export default function Header() {
 //   const openMenu = () => {
@@ -9,7 +9,7 @@
 
 //   return (
 //     <View styles={styles.header}>
-//       <MaterialIcons
+//       <Ionicons
 //         name="menu"
 //         size={28}
 //         onPress={openMenu}

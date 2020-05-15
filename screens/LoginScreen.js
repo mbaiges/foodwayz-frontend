@@ -14,8 +14,6 @@ import {
   Keyboard,
 } from "react-native";
 
-import { AuthContext } from "../App";
-
 class LoginScreenComponent extends Component {
   constructor() {
     super();
@@ -33,6 +31,49 @@ class LoginScreenComponent extends Component {
     this.imageHeight = new Animated.Value(this.imageHeights.IMAGE_HEIGHT);
   }
 
+  validate_signin_fields = ({ email, password }) => {
+    if (email === "") {
+      alert("Please fill email");
+      return false;
+    } else if (password === "") {
+      alert("Please fill password");
+      return false;
+    }
+
+    /*
+    ^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
+      └─────┬────┘└───┬──┘└─────┬─────┘└─────┬─────┘ └───┬───┘
+            │         │         │            │           no _ or . at the end
+            │         │         │            │
+            │         │         │            allowed characters
+            │         │         │
+            │         │         no __ or _. or ._ or .. inside
+            │         │
+            │         no _ or . at the beginning
+            │
+            username is 8-20 characters long
+    */
+    if (!this.validateEmail(email)) {
+      alert("Please enter a valid email");
+      return false;
+    } else if (!this.validatePassword(password)) {
+      alert("Please enter a valid password");
+      return false;
+    }
+    return true;
+  };
+
+  validateEmail = (email) => {
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  };
+
+  // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:
+  validatePassword = (password) => {
+    let re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return re.test(password);
+  };
+
   componentDidMount() {
     keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
@@ -49,7 +90,9 @@ class LoginScreenComponent extends Component {
     keyboardDidHideListener.remove();
   }
 
-  login = ({ state, navigation }) => {};
+  login = ({ navigation }) => {
+
+  };
 
   _keyboardDidShow = () => {
     Animated.timing(this.imageHeight, {
@@ -153,8 +196,7 @@ class LoginScreenComponent extends Component {
 }
 
 export default LoginScreen = (props) => {
-  const { signIn } = React.useContext(AuthContext);
-  return <LoginScreenComponent {...props} signIn />;
+  return <LoginScreenComponent {...props} />;
 };
 
 const { width: WIDTH } = Dimensions.get("window");
