@@ -4,48 +4,39 @@ import {
   View,
   SafeAreaView,
   Text,
-  Image,
+  Animated,
   TextInput,
   TouchableOpacity,
   Dimensions,
-  Keyboard,
   KeyboardAvoidingView,
+  Platform,
   TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
-import CheckBox from "@react-native-community/checkbox";
-import api from "../api";
 
-class RegisterScreenComponent extends Component {
+class LoginScreenComponent extends Component {
   constructor() {
     super();
 
     this.state = {
-      username: "",
       email: "",
-      password1: "",
-      password2: "",
-      checked: false,
+      password: "",
     };
+
+    this.imageHeights = {
+      IMAGE_HEIGHT_SMALL: 84,
+      IMAGE_HEIGHT: 200,
+    };
+
+    this.imageHeight = new Animated.Value(this.imageHeights.IMAGE_HEIGHT);
   }
 
-  validate_signup_fields = ({
-    username,
-    email,
-    password1,
-    password2,
-    checked,
-  }) => {
-    if (username === "") {
-      alert("Please fill username");
-      return false;
-    } else if (email === "") {
+  validate_signin_fields = ({ email, password }) => {
+    if (email === "") {
       alert("Please fill email");
       return false;
-    } else if (password1 === "") {
+    } else if (password === "") {
       alert("Please fill password");
-      return false;
-    } else if (password2 === "") {
-      alert("Please repeat password");
       return false;
     }
 
@@ -62,23 +53,13 @@ class RegisterScreenComponent extends Component {
             │
             username is 8-20 characters long
     */
-    if (!this.validateUsername(username)) {
-      alert("Please enter a valid username");
-      return false;
-    } else if (!this.validateEmail(email)) {
+    if (!this.validateEmail(email)) {
       alert("Please enter a valid email");
       return false;
-    } else if (password1 !== password2) {
-      alert("Passwords must match");
-      return false;
-    } else if (!this.validatePassword(password1)) {
+    } else if (!this.validatePassword(password)) {
       alert("Please enter a valid password");
       return false;
-    } else if (!checked) {
-      alert("You must agree terms and conds before continuing");
-      return false;
     }
-
     return true;
   };
 
@@ -87,32 +68,48 @@ class RegisterScreenComponent extends Component {
     return re.test(email);
   };
 
-  validateUsername = (username) => {
-    let re = /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
-    return re.test(username);
-  };
-
   // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:
   validatePassword = (password) => {
     let re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return re.test(password);
   };
 
-  validateEmail = (email) => {
-    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
+  componentDidMount() {
+    keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      this._keyboardDidShow
+    );
+    keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      this._keyboardDidHide
+    );
+  }
+
+  componentWillUnmount() {
+    keyboardDidShowListener.remove();
+    keyboardDidHideListener.remove();
+  }
+
+  login = ({ navigation }) => {
+
   };
 
-  // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:
-  validatePassword = (password) => {
-    let re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return re.test(password);
+  _keyboardDidShow = () => {
+    Animated.timing(this.imageHeight, {
+      duration: 500,
+      toValue: this.imageHeights.IMAGE_HEIGHT_SMALL,
+    }).start();
   };
 
-  register = ({navigation}) => {};
+  _keyboardDidHide = () => {
+    Animated.timing(this.imageHeight, {
+      duration: 500,
+      toValue: this.imageHeights.IMAGE_HEIGHT,
+    }).start();
+  };
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, signIn } = this.props;
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
@@ -122,31 +119,21 @@ class RegisterScreenComponent extends Component {
         >
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.inner}>
-              <Image
-                style={styles.logoImage}
-                source={require("../assets/images/logo.png")}
+              <Animated.Image
+                style={{ height: this.imageHeight, width: this.imageHeight }}
+                source={require("../../assets/images/logo.png")}
               />
               <Text style={styles.logoText}>FoodWayz</Text>
               <View style={styles.inputBoxes}>
                 <View style={styles.inputView}>
                   <TextInput
                     style={styles.input}
-                    placeholder={"Username"}
-                    placeholderTextColor={"rgba(0,0,0,0.4)"}
-                    underLineColorAndroid="transparent"
-                    onChangeText={(value) => (this.state.username = value)}
-                  />
-                  <Text style={styles.inputTitle}> Username </Text>
-                </View>
-                <View style={styles.inputView}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder={"E-mail"}
+                    placeholder={"Email"}
                     placeholderTextColor={"rgba(0,0,0,0.4)"}
                     underLineColorAndroid="transparent"
                     onChangeText={(value) => (this.state.email = value)}
                   />
-                  <Text style={styles.inputTitle}> E-Mail </Text>
+                  <Text style={styles.inputTitle}> Email </Text>
                 </View>
                 <View style={styles.inputView}>
                   <TextInput
@@ -154,62 +141,62 @@ class RegisterScreenComponent extends Component {
                     style={styles.input}
                     placeholder={"Password"}
                     underLineColorAndroid="transparent"
-                    onChangeText={(value) => (this.state.password1 = value)}
+                    onChangeText={(value) => (this.state.password = value)}
                   />
                   <Text style={styles.inputTitle}> Password </Text>
-                </View>
-                <View style={styles.inputView}>
-                  <TextInput
-                    secureTextEntry={true}
-                    style={styles.input}
-                    placeholder={"Repeat password"}
-                    underLineColorAndroid="transparent"
-                    onChangeText={(value) => (this.state.password2 = value)}
-                  />
-                  <Text style={styles.inputTitle}> Repeat password </Text>
                 </View>
               </View>
             </View>
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
         <View alignItems="center">
-          <View style={styles.checkboxLine}>
-            <CheckBox
-              value={this.state.checked}
-              tintColors={{ true: "white", false: "black" }}
-              onValueChange={() =>
-                this.setState({ checked: !this.state.checked })
-              }
-            />
-            <View style={styles.checkboxText}>
-              <Text>I have read and accepted </Text>
-              <Text
-                style={styles.termAndConds}
-                onPress={() => {
-                  //navigation.navigate("Terms&Conditions");
-                  console.log("Clicked on terms and conditions");
-                }}
-              >
-                terms and conditions.
-              </Text>
-            </View>
-          </View>
-          <View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => this.register(this.state)}
-            >
-              <Text>REGISTER</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={async () => {
+              console.log("I want to navigate to Main");
+              //console.log(this.props.signIn);
+              //await signIn(this.state).catch((e) => console.log(e));
+            }}
+          >
+            <Text>LOG IN</Text>
+          </TouchableOpacity>
+        </View>
+        <View alignItems="center">
+          <Text
+            style={styles.forgotpassword}
+            onPress={() => {
+              navigation.navigate("ForgotPass");
+            }}
+          >
+            {" "}
+            Forgot your password? Get new!{" "}
+          </Text>
+          <Text
+            style={styles.signUp}
+            onPress={() => {
+              navigation.navigate("Register");
+            }}
+          >
+            {" "}
+            Don't have an account yet? Sign up!{" "}
+          </Text>
+          <Text
+            style={styles.signUp}
+            onPress={() => {
+              navigation.navigate("Main");
+            }}
+          >
+            {" "}
+            Don't have a working log-in system yet? Bypass security right now!{" "}
+          </Text>
         </View>
       </SafeAreaView>
     );
   }
 }
 
-export default RegisterScreen = (props) => {
-  return <RegisterScreenComponent {...props} />;
+export default LoginScreen = (props) => {
+  return <LoginScreenComponent {...props} />;
 };
 
 const { width: WIDTH } = Dimensions.get("window");
@@ -218,7 +205,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-
   backgroundContainer: {
     flex: 1,
     width: null,
@@ -227,7 +213,6 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
     paddingTop: 30,
   },
-
   inner: {
     position: "relative",
     padding: 24,
@@ -235,13 +220,20 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
   },
-
-  logoImage: {
-    position: "relative",
-    width: 84,
-    height: 84,
+  header: {
+    fontSize: 36,
+    marginBottom: 48,
   },
-
+  textInput: {
+    height: 40,
+    borderColor: "#000000",
+    borderBottomWidth: 1,
+    marginBottom: 36,
+  },
+  btnContainer: {
+    backgroundColor: "white",
+    marginTop: 12,
+  },
   logoText: {
     position: "relative",
     color: "white",
@@ -258,7 +250,7 @@ const styles = StyleSheet.create({
   },
 
   inputBoxes: {
-    top: -10,
+    top: -30,
   },
 
   input: {
@@ -304,17 +296,25 @@ const styles = StyleSheet.create({
     height: 48,
   },
 
-  checkboxLine: {
-    flexDirection: "row",
-    marginBottom: 10,
-  },
-
-  checkboxText: {
-    top: 5,
-    flexDirection: "row",
-  },
-
-  termAndConds: {
+  signUp: {
+    position: "relative",
+    color: "black",
+    fontSize: 11,
+    paddingTop: 0,
+    paddingBottom: 0,
+    fontWeight: "500",
+    opacity: 1,
     textDecorationLine: "underline",
+  },
+
+  forgotpassword: {
+    position: "relative",
+    color: "black",
+    fontSize: 11,
+    paddingTop: 25,
+    paddingBottom: 8,
+    fontWeight: "500",
+    textDecorationLine: "underline",
+    opacity: 1,
   },
 });

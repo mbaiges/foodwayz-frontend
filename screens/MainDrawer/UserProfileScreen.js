@@ -22,7 +22,7 @@ const UserProfile = ({ navigation }) => {
       <View style={styles.mainPage}>
         <Image
           style={styles.logoImage}
-          source={require("../assets/images/Po.jpg")}
+          source={require("../../assets/images/Po.jpg")}
         />
         <Text style={styles.logoText}>El guerrero Dragón</Text>
       </View>
@@ -35,7 +35,7 @@ const UserProfile = ({ navigation }) => {
               <Image
                 style={styles.reviewImage}
                 resizeMode="cover"
-                source={require("../assets/images/Po.jpg")}
+                source={require("../../assets/images/Po.jpg")}
               />
               <View style={styles.cardFooter}>
                 <Text style={styles.foodName}>Ribs</Text>
@@ -45,7 +45,7 @@ const UserProfile = ({ navigation }) => {
               <Image
                 style={styles.reviewImage}
                 resizeMode="cover"
-                source={require("../assets/images/Po.jpg")}
+                source={require("../../assets/images/Po.jpg")}
               />
               <Text style={styles.foodName}>Aguante Po</Text>
             </Card>
@@ -53,7 +53,7 @@ const UserProfile = ({ navigation }) => {
               <Image
                 style={styles.reviewImage}
                 resizeMode="cover"
-                source={require("../assets/images/Po.jpg")}
+                source={require("../../assets/images/Po.jpg")}
               />
               <Text style={styles.foodName}>Aguante Po</Text>
             </Card>
@@ -69,7 +69,7 @@ const UserProfile = ({ navigation }) => {
               <Image
                 style={styles.reviewImage}
                 resizeMode="cover"
-                source={require("../assets/images/Po.jpg")}
+                source={require("../../assets/images/Po.jpg")}
               />
               <View style={styles.cardFooter}>
                 <Text style={styles.foodName}>Ribs</Text>
@@ -79,7 +79,7 @@ const UserProfile = ({ navigation }) => {
               <Image
                 style={styles.reviewImage}
                 resizeMode="cover"
-                source={require("../assets/images/Po.jpg")}
+                source={require("../../assets/images/Po.jpg")}
               />
               <Text style={styles.foodName}>Aguante Po</Text>
             </Card>
@@ -87,7 +87,7 @@ const UserProfile = ({ navigation }) => {
               <Image
                 style={styles.reviewImage}
                 resizeMode="cover"
-                source={require("../assets/images/Po.jpg")}
+                source={require("../../assets/images/Po.jpg")}
               />
               <Text style={styles.foodName}>Aguante Po</Text>
             </Card>
