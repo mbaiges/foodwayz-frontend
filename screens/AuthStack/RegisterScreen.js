@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
 //import Api from '../../api'; 
-import Storage from '../../storage';
+import signUpAsync from "../../App";
 
 class RegisterScreenComponent extends Component {
   constructor() {
@@ -29,92 +29,13 @@ class RegisterScreenComponent extends Component {
     };
   }
 
-  validate_signup_fields = ({
-    username,
-    email,
-    password1,
-    password2,
-    checked,
-  }) => {
-    if (username === "") {
-      alert("Please fill username");
-      return false;
-    } else if (email === "") {
-      alert("Please fill email");
-      return false;
-    } else if (password1 === "") {
-      alert("Please fill password");
-      return false;
-    } else if (password2 === "") {
-      alert("Please repeat password");
-      return false;
-    }
-
     /*
-    ^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
-      └─────┬────┘└───┬──┘└─────┬─────┘└─────┬─────┘ └───┬───┘
-            │         │         │            │           no _ or . at the end
-            │         │         │            │
-            │         │         │            allowed characters
-            │         │         │
-            │         │         no __ or _. or ._ or .. inside
-            │         │
-            │         no _ or . at the beginning
-            │
-            username is 8-20 characters long
-    */
-    if (!this.validateUsername(username)) {
-      alert("Please enter a valid username");
-      return false;
-    } else if (!this.validateEmail(email)) {
-      alert("Please enter a valid email");
-      return false;
-    } else if (password1 !== password2) {
-      alert("Passwords must match");
-      return false;
-    } else if (!this.validatePassword(password1)) {
-      alert("Please enter a valid password");
-      return false;
-    } else if (!checked) {
-      alert("You must agree terms and conds before continuing");
-      return false;
-    }
-
-    return true;
-  };
-
-  validateEmail = (email) => {
-    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-  };
-
-  validateUsername = (username) => {
-    let re = /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
-    return re.test(username);
-  };
-
-  // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:
-  validatePassword = (password) => {
-    let re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return re.test(password);
-  };
-
-  validateEmail = (email) => {
-    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-  };
-
-  // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:
-  validatePassword = (password) => {
-    let re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return re.test(password);
-  };
-
   register = ({navigation}) => {
     if (this.validate_signup_fields(this.state)) {
       //this.Api.auth.register({email: this.state.email, username: this.state.username, password: this.state.password1});
     }
   };
+  */
 
   render() {
     const { navigation } = this.props;
@@ -202,7 +123,7 @@ class RegisterScreenComponent extends Component {
           <View>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => this.register({navigation})}
+              onPress={async () => await useRegister(this.state)}
             >
               <Text>REGISTER</Text>
             </TouchableOpacity>
@@ -216,6 +137,10 @@ class RegisterScreenComponent extends Component {
 export default RegisterScreen = (props) => {
   return <RegisterScreenComponent {...props} />;
 };
+
+async function useRegister(data) {
+  //return signUpAsync(data);
+}
 
 const { width: WIDTH } = Dimensions.get("window");
 
