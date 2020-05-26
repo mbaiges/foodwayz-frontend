@@ -183,6 +183,7 @@ class LoginScreenComponent extends Component {
           <Text
             style={styles.signUp}
             onPress={() => {
+              console.log("Navegating to main");
               navigation.navigate("Main");
             }}
           >

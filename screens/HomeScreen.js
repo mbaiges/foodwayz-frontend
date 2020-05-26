@@ -6,9 +6,13 @@ import {
   SafeAreaView,
   Text,
   ScrollView,
-  Button,
+  TouchableOpacity,
+  
 } from "react-native";
-import Card from "./components/Card";
+
+import { Image, ListItem, Button, Icon, Input, Rating} from 'react-native-elements';
+
+import FoodCard from "./components/FoodCard";
 
 class HomeScreenComponent extends Component {
   constructor() {
@@ -22,18 +26,45 @@ class HomeScreenComponent extends Component {
       <SafeAreaView style={styles.backgroundContainer}>
         <ScrollView>
           <View>
-            <Text>Home Screen</Text>
-            <Card
-              onPress={() => {
-                console.log("Clicked on hamburgesa");
-              }}
-              title="Hamburguesa"
-              brand="brand"
-            >
-              <Text style={styles.cardText}>de Local de hamburguesas</Text>
-            </Card>
+            <Text style={styles.homeSubtitle}>Recommended Dishes Near You</Text>
+            <ScrollView>
+              <FoodCard
+                  image={{uri: 'https://i2-prod.mirror.co.uk/incoming/article14334083.ece/ALTERNATES/s615/3_Beautiful-girl-with-a-gentle-smile.jpg'}}
+                  title="Aguante Po"
+                  brand= "El restaurante mas rico"
+                  onPress={async () => {navigation.navigate("Food");
+                    console.log("I want to navigate to Dish page");
+                  }}
+                  rating = {4.20}
+              />
+              
+
+              
+              
+            </ScrollView>
+            
           </View>
         </ScrollView>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+              style={styles.button}
+              onPress={async () => {
+                console.log("I want to navigate to the dish page");
+              }}
+            >
+              <View style={styles.buttonItemsContainer}>
+                <Text>FILTERS </Text>
+                <Icon
+                
+                  name='filter'
+                  type='material-community'
+                  
+                />
+                
+              
+              </View>
+            </TouchableOpacity>
+        </View>
       </SafeAreaView>
     );
   }
@@ -52,4 +83,58 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
     paddingTop: 30,
   },
+  
+  homeSubtitle:{
+    paddingLeft:15,
+    fontSize: 20,
+    fontFamily: "Roboto",
+    fontWeight: "bold",
+  },
+
+  cardImage: {
+    width: 220,
+    height: 180,
+    justifyContent: "center",
+    //marginLeft: "18%",
+  },
+
+  foodName: {
+    textAlign: "left",
+    fontWeight: "bold",
+    fontSize: 18,
+    paddingLeft: 3,
+  },
+
+  foodBrand: {
+    textAlign: "left",
+    fontSize: 14,
+    paddingLeft: 3,
+  },
+
+  buttonContainer:{
+    elevation: 20,
+    position:"absolute",
+    alignSelf:'center',
+    marginTop: 580,    
+  },
+
+  button: {
+    
+    borderRadius: 25,
+    backgroundColor: "#FC987E",
+    color: "white",
+    width: 150,
+    padding: 13,
+    height: 48,
+  },
+
+  buttonItemsContainer:{
+    flexDirection:'row',
+    marginLeft: "22%",
+  },
+
+  rating: {
+    alignSelf: "flex-start",
+  },
+
 });
