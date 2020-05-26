@@ -23,24 +23,29 @@ const UserProfile = ({ navigation }) => {
         <Image
           style={styles.logoImage}
           source={require("../assets/images/Po.jpg")}
+          
         />
         <Text style={styles.logoText}>El guerrero Dragón</Text>
       </View>
 
-      <View style={styles.reviewContainer}>
+      <View style={styles.reviewContainer} >
         <Text style={styles.subtitleText}>My reviews</Text>
         <View style={styles.review}>
           <ScrollView horizontal={true}>
-            <Card>
-              <Image
-                style={styles.reviewImage}
-                resizeMode="cover"
-                source={require("../assets/images/Po.jpg")}
-              />
-              <View style={styles.cardFooter}>
-                <Text style={styles.foodName}>Ribs</Text>
-              </View>
-            </Card>
+            <TouchableOpacity onPress={async () => {navigation.navigate("Food");
+                    console.log("I want to navigate to Dish page");
+                  }}>
+              <Card>
+                <Image
+                  style={styles.reviewImage}
+                  resizeMode="cover"
+                  source={require("../assets/images/Po.jpg")}
+                />
+                <View style={styles.cardFooter}>
+                  <Text style={styles.foodName}>Ribs</Text>
+                </View>
+              </Card>
+            </TouchableOpacity>
             <Card>
               <Image
                 style={styles.reviewImage}

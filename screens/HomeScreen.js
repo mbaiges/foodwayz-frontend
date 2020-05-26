@@ -29,18 +29,32 @@ class HomeScreenComponent extends Component {
             <Text style={styles.homeSubtitle}>Recommended Dishes Near You</Text>
             <ScrollView>
               <FoodCard
-                  image={{uri: 'https://i2-prod.mirror.co.uk/incoming/article14334083.ece/ALTERNATES/s615/3_Beautiful-girl-with-a-gentle-smile.jpg'}}
-                  title="Aguante Po"
+                  image={{uri: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg'}}
+                  title="Guiso muy rico"
                   brand= "El restaurante mas rico"
                   onPress={async () => {navigation.navigate("Food");
                     console.log("I want to navigate to Dish page");
                   }}
                   rating = {4.20}
               />
-              
-
-              
-              
+              <FoodCard
+                  image={{uri: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg'}}
+                  title="Guiso medio rico"
+                  brand= "El restaurante mas rico"
+                  onPress={async () => {navigation.navigate("Food");
+                    console.log("I want to navigate to Dish page");
+                  }}
+                  rating = {4.20}
+              />
+              <FoodCard
+                  image={{uri: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg'}}
+                  title="Guiso no tan rico"
+                  brand= "El restaurante mas rico"
+                  onPress={async () => {navigation.navigate("Food");
+                    console.log("I want to navigate to Dish page");
+                  }}
+                  rating = {4.20}
+              />
             </ScrollView>
             
           </View>
