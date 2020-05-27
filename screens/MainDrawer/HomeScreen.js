@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 
 import {
   StyleSheet,
@@ -10,19 +10,33 @@ import {
 } from "react-native";
 import Card from "../components/Card";
 
+import { UserContext } from '../../context/UserContext';
+
 class HomeScreenComponent extends Component {
   constructor() {
     super();
   }
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, context } = this.props;
+    const { authState, setAuthState } = context;
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
         <ScrollView>
           <View>
             <Text>Home Screen</Text>
+            <Button
+              onPress={() => {
+                setAuthState({
+                  state: 'SIGNED_OUT',
+                  token: ''
+                })
+              }}
+              title="Sign Out"
+            >
+              Sign Out
+            </Button>
             <Card
               onPress={() => {
                 console.log("Clicked on hamburgesa");
@@ -39,8 +53,9 @@ class HomeScreenComponent extends Component {
   }
 }
 
-export default function HomeScreen({ navigation }) {
-  return <HomeScreenComponent navigation={navigation} />;
+export default function HomeScreen(props) {
+  const { authState, setAuthState } = useContext(UserContext);
+  return <HomeScreenComponent {...props} context={{authState, setAuthState}} />;
 }
 
 const styles = StyleSheet.create({

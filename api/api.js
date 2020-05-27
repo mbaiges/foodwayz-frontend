@@ -2,7 +2,7 @@ export { Api };
 
 class Api {
   static get baseUrl() {
-    return 'http://127.0.0.1:8080/api';
+    return 'http://192.168.1.13:3002';
   }
 
   static get timeout() {
@@ -14,7 +14,7 @@ class Api {
       controller = controller || new AbortController();
       setTimeout(() => controller.abort(), Api.timeout);
       init.signal = controller.signal
-
+      
       fetch(url, init)
         .then(response => {
           return response.json();

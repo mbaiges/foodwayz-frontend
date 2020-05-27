@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -13,8 +13,8 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
-//import Api from '../../api'; 
-import signUpAsync from "../../App";
+import { User, AuthApi } from '../../api'; 
+import { UserContext } from '../../context/UserContext';
 
 class RegisterScreenComponent extends Component {
   constructor() {
@@ -29,16 +29,40 @@ class RegisterScreenComponent extends Component {
     };
   }
 
+  signUp = async function({ state, setAuthState, navigation }) {
     /*
-  register = ({navigation}) => {
-    if (this.validate_signup_fields(this.state)) {
-      //this.Api.auth.register({email: this.state.email, username: this.state.username, password: this.state.password1});
+    if (!validateSignupFields(state)) {
+      // Mensajito de error
+      console.log("Something went wrong.");
     }
-  };
-  */
+    */
+
+    const user = new User({
+      name: state.username,
+      email: state.email,
+      password: state.password1
+    });
+
+    try {
+      const ans = await AuthApi.signUp(user);
+      if(ans){
+        console.log(ans);
+        console.log("User successfully registered"); 
+        const auth = {
+          state: 'SIGNED_UP',
+          token: ''
+        };
+        await setAuthState(auth);
+        navigation.navigate("Login")
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, context } = this.props;
+    const { authState, setAuthState } = context;
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
@@ -123,7 +147,10 @@ class RegisterScreenComponent extends Component {
           <View>
             <TouchableOpacity
               style={styles.button}
-              onPress={async () => await useRegister(this.state)}
+              onPress={async () => {
+                console.log("I want to navigate to Main");
+                this.signUp({state: this.state, navigation, setAuthState});
+              }}
             >
               <Text>REGISTER</Text>
             </TouchableOpacity>
@@ -135,12 +162,9 @@ class RegisterScreenComponent extends Component {
 }
 
 export default RegisterScreen = (props) => {
-  return <RegisterScreenComponent {...props} />;
+  const { authState, setAuthState } = useContext(UserContext);
+  return <RegisterScreenComponent {...props} context={{authState, setAuthState}} />;
 };
-
-async function useRegister(data) {
-  //return signUpAsync(data);
-}
 
 const { width: WIDTH } = Dimensions.get("window");
 

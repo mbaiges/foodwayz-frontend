@@ -47,27 +47,27 @@ export function usePersistedAuthState(key, initialState) {
 
 export default function App(props) {
   const isLoadingComplete = useCachedResources();
-  const [authState, setPersistedAuthState] = usePersistedAuthState(StorageKey, null);
+  const [authState, setPersistedAuthState] = usePersistedAuthState(StorageKey, {state: 'SIGNED_OUT', token: ''});
   const providerAuthState = useMemo(() => ({authState, setAuthState: setPersistedAuthState}), [authState, setPersistedAuthState]);
-  let state, userToken;
 
   useEffect(() => {
     (async () => {
-      const auth = await JSON.parse(authState);
-      console.log("AuthState", authState);
+      const auth = authState //await JSON.parse(authState);
       if (auth) {
-        const {state, userToken: token} = auth;
+        const {state, token} = auth;
         if (state) {
           switch(state) {
-            case 'REGISTERED':
-              console.log("Im registered!");
+            case 'SIGNED_UP':
+              console.log("User signed out");
               break;
-            case 'LOGGED_IN':
-              console.log("Im logged in !");
+            case 'SIGNED_IN':
+              console.log("User signed out");
+              break;
+            case 'SIGNED_OUT':
+              console.log("User signed out")
               break;
           }
         }
-        console.log("Token", token);
       }
     })();
   }, [authState]);
@@ -81,7 +81,7 @@ export default function App(props) {
           <NavigationContainer>
             <UserContext.Provider value={providerAuthState}>
               <Stack.Navigator headerMode="none">
-                {(!userToken || userToken == '')?
+                {(!authState || authState.token === '')?
                   <Stack.Screen
                     name="Auth"
                     component={AuthStack}
@@ -93,7 +93,7 @@ export default function App(props) {
                   />
                 }
               </Stack.Navigator>
-              <Text>{authState}</Text>
+              {/* <Text>{authState}</Text> */}
             </UserContext.Provider>
           </NavigationContainer>
       </View>

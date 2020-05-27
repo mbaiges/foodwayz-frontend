@@ -14,6 +14,7 @@ import {
   Keyboard,
 } from "react-native";
 import { UserContext } from '../../context/UserContext';
+import { User, AuthApi } from '../../api';
 import { validateSigninFields } from '../../utils';
 
 class LoginScreenComponent extends Component {
@@ -63,33 +64,32 @@ class LoginScreenComponent extends Component {
     }).start();
   };
 
-  signIn = async function(state) {
+  signIn = async function({ state, setAuthState, navigation }) {
     /*
     if (!validateSigninFields(state)) {
       // Mensajito de error
       console.log("Something went wrong.");
     }
     */
-    let controller = new AbortController();
-    let signal = controller.signal;
-
-    setTimeout(() => controller.abort(), 5000);
-
-    init.signal = signal
-
-    fetch('192.168.1.103:3002', init)
-    .then(response => {
-      if (!response.ok)
-        reject(new Error(response.statusText));
-
-      return response.json();
-    })
-    .then(data => {
-      console.log(data);
-    })
-    .catch(error => {
-      console.log(error);
+    const user = new User({
+      email: state.email,
+      password: state.password
     });
+
+    try {
+      const ans = await AuthApi.signIn(user);
+      if(ans){
+        console.log(ans);
+        console.log("User successfully logged"); 
+        const auth = {
+          state: 'SIGNED_IN',
+          token: ans.accessToken
+        };
+        await setAuthState(auth);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   render() {
@@ -130,7 +130,6 @@ class LoginScreenComponent extends Component {
                   />
                   <Text style={styles.inputTitle}> Password </Text>
                 </View>
-                <Text>{authState}</Text>
               </View>
             </View>
           </TouchableWithoutFeedback>
@@ -140,11 +139,7 @@ class LoginScreenComponent extends Component {
             style={styles.button}
             onPress={async () => {
               console.log("I want to navigate to Main");
-              try {
-                await this.signIn(this.state);          
-              } catch (err) {
-                console.log("User didnt logged");
-              }
+              this.signIn({state: this.state, navigation, setAuthState});
             }}
           >
             <Text>LOG IN</Text>
@@ -163,8 +158,6 @@ class LoginScreenComponent extends Component {
           <Text
             style={styles.signUp}
             onPress={() => {
-              let auth = JSON.stringify({state: "REGISTERED", token: ''});
-              setAuthState(auth);
               navigation.navigate("Register");
             }}
           >
