@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -13,6 +13,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { UserContext } from '../../context/UserContext';
+import { validate_signin_fields } from '../../utils';
 
 class LoginScreenComponent extends Component {
   constructor() {
@@ -30,49 +32,6 @@ class LoginScreenComponent extends Component {
 
     this.imageHeight = new Animated.Value(this.imageHeights.IMAGE_HEIGHT);
   }
-
-  validate_signin_fields = ({ email, password }) => {
-    if (email === "") {
-      alert("Please fill email");
-      return false;
-    } else if (password === "") {
-      alert("Please fill password");
-      return false;
-    }
-
-    /*
-    ^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
-      └─────┬────┘└───┬──┘└─────┬─────┘└─────┬─────┘ └───┬───┘
-            │         │         │            │           no _ or . at the end
-            │         │         │            │
-            │         │         │            allowed characters
-            │         │         │
-            │         │         no __ or _. or ._ or .. inside
-            │         │
-            │         no _ or . at the beginning
-            │
-            username is 8-20 characters long
-    */
-    if (!this.validateEmail(email)) {
-      alert("Please enter a valid email");
-      return false;
-    } else if (!this.validatePassword(password)) {
-      alert("Please enter a valid password");
-      return false;
-    }
-    return true;
-  };
-
-  validateEmail = (email) => {
-    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-  };
-
-  // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:
-  validatePassword = (password) => {
-    let re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return re.test(password);
-  };
 
   componentDidMount() {
     keyboardDidShowListener = Keyboard.addListener(
@@ -109,7 +68,8 @@ class LoginScreenComponent extends Component {
   };
 
   render() {
-    const { navigation, signIn } = this.props;
+    const { navigation, context } = this.props;
+    const { authState, setAuthState } = context;
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
@@ -141,10 +101,15 @@ class LoginScreenComponent extends Component {
                     style={styles.input}
                     placeholder={"Password"}
                     underLineColorAndroid="transparent"
-                    onChangeText={(value) => (this.state.password = value)}
+                    onChangeText={(value) => {
+                      this.state.password = value
+                      //setAuthState(value);
+                      }  
+                    }
                   />
                   <Text style={styles.inputTitle}> Password </Text>
                 </View>
+                <Text>{authState}</Text>
               </View>
             </View>
           </TouchableWithoutFeedback>
@@ -183,6 +148,7 @@ class LoginScreenComponent extends Component {
           <Text
             style={styles.signUp}
             onPress={() => {
+              validate_signin_fields(this.state);
               navigation.navigate("Main");
             }}
           >
@@ -196,7 +162,8 @@ class LoginScreenComponent extends Component {
 }
 
 export default LoginScreen = (props) => {
-  return <LoginScreenComponent {...props} />;
+  const { authState, setAuthState } = useContext(UserContext);
+  return <LoginScreenComponent {...props} context={{authState, setAuthState}} />;
 };
 
 const { width: WIDTH } = Dimensions.get("window");
