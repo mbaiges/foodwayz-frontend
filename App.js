@@ -81,10 +81,17 @@ export default function App(props) {
           <NavigationContainer>
             <UserContext.Provider value={providerAuthState}>
               <Stack.Navigator headerMode="none">
-                <Stack.Screen
-                  name="Auth"
-                  component={AuthStack}
-                />
+                {(!userToken || userToken == '')?
+                  <Stack.Screen
+                    name="Auth"
+                    component={AuthStack}
+                  />
+                :
+                  <Stack.Screen
+                    name="Main"
+                    component={MainDrawer}
+                  />
+                }
               </Stack.Navigator>
               <Text>{authState}</Text>
             </UserContext.Provider>

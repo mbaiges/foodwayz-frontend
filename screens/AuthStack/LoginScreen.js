@@ -73,11 +73,11 @@ class LoginScreenComponent extends Component {
     let controller = new AbortController();
     let signal = controller.signal;
 
-    setTimeout(() => controller.abort(), Api.timeout);
+    setTimeout(() => controller.abort(), 5000);
 
     init.signal = signal
 
-    fetch(url, init)
+    fetch('192.168.1.103:3002', init)
     .then(response => {
       if (!response.ok)
         reject(new Error(response.statusText));
