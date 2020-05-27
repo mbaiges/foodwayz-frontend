@@ -14,7 +14,7 @@ import {
   Keyboard,
 } from "react-native";
 import { UserContext } from '../../context/UserContext';
-import { validate_signin_fields } from '../../utils';
+import { validateSigninFields } from '../../utils';
 
 class LoginScreenComponent extends Component {
   constructor() {
@@ -49,10 +49,6 @@ class LoginScreenComponent extends Component {
     keyboardDidHideListener.remove();
   }
 
-  login = ({ navigation }) => {
-
-  };
-
   _keyboardDidShow = () => {
     Animated.timing(this.imageHeight, {
       duration: 500,
@@ -66,6 +62,35 @@ class LoginScreenComponent extends Component {
       toValue: this.imageHeights.IMAGE_HEIGHT,
     }).start();
   };
+
+  signIn = async function(state) {
+    /*
+    if (!validateSigninFields(state)) {
+      // Mensajito de error
+      console.log("Something went wrong.");
+    }
+    */
+    let controller = new AbortController();
+    let signal = controller.signal;
+
+    setTimeout(() => controller.abort(), Api.timeout);
+
+    init.signal = signal
+
+    fetch(url, init)
+    .then(response => {
+      if (!response.ok)
+        reject(new Error(response.statusText));
+
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  }
 
   render() {
     const { navigation, context } = this.props;
@@ -101,11 +126,7 @@ class LoginScreenComponent extends Component {
                     style={styles.input}
                     placeholder={"Password"}
                     underLineColorAndroid="transparent"
-                    onChangeText={(value) => {
-                      this.state.password = value
-                      //setAuthState(value);
-                      }  
-                    }
+                    onChangeText={(value) => { this.state.password = value } }
                   />
                   <Text style={styles.inputTitle}> Password </Text>
                 </View>
@@ -119,8 +140,11 @@ class LoginScreenComponent extends Component {
             style={styles.button}
             onPress={async () => {
               console.log("I want to navigate to Main");
-              //console.log(this.props.signIn);
-              //await signIn(this.state).catch((e) => console.log(e));
+              try {
+                await this.signIn(this.state);          
+              } catch (err) {
+                console.log("User didnt logged");
+              }
             }}
           >
             <Text>LOG IN</Text>
@@ -139,6 +163,8 @@ class LoginScreenComponent extends Component {
           <Text
             style={styles.signUp}
             onPress={() => {
+              let auth = JSON.stringify({state: "REGISTERED", token: ''});
+              setAuthState(auth);
               navigation.navigate("Register");
             }}
           >

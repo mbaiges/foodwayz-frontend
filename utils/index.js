@@ -14,7 +14,7 @@ export function validatePassword(password) {
     return re.test(password);
   };
   
-export function validate_signup_fields({
+export function validateSignupFields({
     username,
     email,
     password1,
@@ -68,7 +68,7 @@ export function validate_signup_fields({
     return true;
   };
 
-export function validate_signin_fields({ email, password }) {
+export function validateSigninFields({ email, password }) {
     if (email === "") {
       alert("Please fill email");
       return false;

@@ -24,6 +24,7 @@ export function usePersistedAuthState(key, initialState) {
 
   useEffect(() => {
     async function getAndSetInitialState() {
+      //await AsyncStorage.removeItem(key);
       let persistedState = await AsyncStorage.getItem(key);
       if (persistedState) {
         setAuthState(JSON.parse(persistedState));
@@ -37,7 +38,7 @@ export function usePersistedAuthState(key, initialState) {
   }, [])
 
   async function setPersistedAuthState(authState) {
-    AsyncStorage.setItem(key, JSON.stringify(authState));
+    await AsyncStorage.setItem(key, JSON.stringify(authState));
     setAuthState(authState);
   }
 
@@ -46,22 +47,27 @@ export function usePersistedAuthState(key, initialState) {
 
 export default function App(props) {
   const isLoadingComplete = useCachedResources();
-  const [authState, setAuthState] = usePersistedAuthState(StorageKey, null);
-  const providerAuthState = useMemo(() => ({authState, setAuthState}), [authState, setAuthState]);
+  const [authState, setPersistedAuthState] = usePersistedAuthState(StorageKey, null);
+  const providerAuthState = useMemo(() => ({authState, setAuthState: setPersistedAuthState}), [authState, setPersistedAuthState]);
+  let state, userToken;
 
   useEffect(() => {
     (async () => {
-      if (authState) {
-        const {state, token} = authState;
+      const auth = await JSON.parse(authState);
+      console.log("AuthState", authState);
+      if (auth) {
+        const {state, userToken: token} = auth;
         if (state) {
           switch(state) {
             case 'REGISTERED':
+              console.log("Im registered!");
               break;
             case 'LOGGED_IN':
+              console.log("Im logged in !");
               break;
           }
         }
-        console.log(token);
+        console.log("Token", token);
       }
     })();
   }, [authState]);
@@ -80,7 +86,7 @@ export default function App(props) {
                   component={AuthStack}
                 />
               </Stack.Navigator>
-              <Text>{JSON.stringify(authState, null, 2)}</Text>
+              <Text>{authState}</Text>
             </UserContext.Provider>
           </NavigationContainer>
       </View>
