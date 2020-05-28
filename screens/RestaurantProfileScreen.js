@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, ListItem, Button, Icon } from "react-native-elements";
+import { Card, ListItem, Button, Icon, Rating} from "react-native-elements";
 import {
   StyleSheet,
   View,
@@ -19,20 +19,31 @@ const { width } = Dimensions.get("window");
 const RestaurantProfile = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.backgroundContainer}>
+      
+
+      <ScrollView>
       <View style={styles.mainPage}>
-        <Image
-          style={styles.logoImage}
-          source={require("../assets/images/Po.jpg")}
-          
-        />
+        <ScrollView horizontal={true}>
+          <Card>
+            <Image
+              style={styles.logoImage}
+              source={{uri: 'https://i.pinimg.com/originals/eb/80/87/eb80873b89dcc92228712b6257ac05d0.jpg'}}
+            />
+          </Card>
+          <Card>
+            <Image
+              style={styles.logoImage}
+              source={{uri: 'https://media-cdn.tripadvisor.com/media/photo-s/12/3f/af/ba/ambience.jpg'}}
+            />
+          </Card>
+        </ScrollView>
         <Text style={styles.logoText}>Restaurante El Panda Guerrero</Text>
-        <View style={styles.ratingContainer}>
-            <Text style={styles.ratingText}>3.5</Text>
-            <Rating imageSize={30} readonly startingValue={rating} style={styles.rating} />
-        </View>
         <Text style={styles.primaryText}>About us</Text>
-        <Text style={styles.secondaryText}>Asian restaurant based on the film Kung Fu Panda </Text>
+        <Text style={styles.secondaryText}>Somos un restaurante asiático basado en la película Kung Fu Panda.
+        Nuestros cocineros panda trabajan las 24h sin descansar para que tú puedas comer
+        una sopa a las 2 de la madrugada si así lo deseas!</Text>
       </View>
+
 
       <View style={styles.popularContainer} >
         <Text style={styles.subtitleText}>Our most popular dishes</Text>
@@ -45,10 +56,10 @@ const RestaurantProfile = ({ navigation }) => {
                 <Image
                   style={styles.popularImage}
                   resizeMode="cover"
-                  source={require("../assets/images/Po.jpg")}
+                  source={{uri: 'https://s1.eestatic.com/2020/01/08/cocinillas/recetas/sopas-y-cremas/Caldo-Pollo-Fideos-Sin_Lactosa-Sopas_y_cremas_458216170_142008613_1706x960.jpg'}}
                 />
                 <View style={styles.cardFooter}>
-                  <Text style={styles.foodName}>Ribs</Text>
+                  <Text style={styles.foodName}>Rica Sopa</Text>
                 </View>
               </Card>
             </TouchableOpacity>
@@ -56,24 +67,27 @@ const RestaurantProfile = ({ navigation }) => {
               <Image
                 style={styles.popularImage}
                 resizeMode="cover"
-                source={require("../assets/images/Po.jpg")}
+                source={{uri: 'https://i.pinimg.com/originals/e6/b0/6f/e6b06fc8b9901993fae74c34bcff2e09.jpg'}}
               />
-              <Text style={styles.foodName}>Aguante Po</Text>
+              <Text style={styles.foodName}>Tallarines Po</Text>
             </Card>
             <Card>
               <Image
                 style={styles.popularImage}
                 resizeMode="cover"
-                source={require("../assets/images/Po.jpg")}
+                source={{uri: 'https://img.culturacolectiva.com/cdn-cgi/image/f=auto,w=1600,q=80,fit=contain/content_image/2019/5/2/1556836847320-recetas-de-comida-china-para-preparar-facil-y-rapido.001.jpeg'}}
               />
-              <Text style={styles.foodName}>Aguante Po</Text>
+              <Text style={styles.foodName}>Parrillada Panda</Text>
             </Card>
           </ScrollView>
         </View>
-      </View>
+      </View>    
+
 
       <View style={styles.popularContainer}>
         <Text style={styles.subtitleText}>All of our dishes</Text>
+
+        <Text style={styles.subsubtitleText}>Go vegan!</Text>
         <View style={styles.popular}>
           <ScrollView horizontal={true}>
             <Card>
@@ -83,28 +97,30 @@ const RestaurantProfile = ({ navigation }) => {
                 source={require("../assets/images/Po.jpg")}
               />
               <View style={styles.cardFooter}>
-                <Text style={styles.foodName}>Ribs</Text>
+                <Text style={styles.foodName}>Ensalada</Text>
               </View>
-            </Card>
-            <Card>
-              <Image
-                style={styles.popularImage}
-                resizeMode="cover"
-                source={require("../assets/images/Po.jpg")}
-              />
-              <Text style={styles.foodName}>Aguante Po</Text>
-            </Card>
-            <Card>
-              <Image
-                style={styles.popularImage}
-                resizeMode="cover"
-                source={require("../assets/images/Po.jpg")}
-              />
-              <Text style={styles.foodName}>Aguante Po</Text>
             </Card>
           </ScrollView>
         </View>
+
+        <Text style={styles.subsubtitleText}>Meat yourself</Text>
+        <View style={styles.popular}>
+          <ScrollView horizontal={true}>
+            <Card>
+              <Image
+                style={styles.popularImage}
+                resizeMode="cover"
+                source={require("../assets/images/Po.jpg")}
+              />
+              <View style={styles.cardFooter}>
+                <Text style={styles.foodName}>Costillar</Text>
+              </View>
+            </Card>
+          </ScrollView>
+        </View>
+        
       </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -129,24 +145,28 @@ const styles = StyleSheet.create({
 
   logoImage: {
     position: "relative",
-    width: 120,
-    height: 120,
+    width: 240,
+    height: 240,
     justifyContent: "center",
-    borderRadius: 120 / 2,
+    margin: 15,
   },
 
   primaryText: {
     textAlign: "left",
     fontWeight: "bold",
+    textDecorationLine: "underline",
     fontSize: 18,
-    paddingLeft: 15,
-    paddingTop:15,
+    marginBottom: -10,
   },
 
   secondaryText: {
     textAlign: "left",
     fontSize: 14,
-    paddingLeft: 15,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 10,
+    padding: 15,
+    textAlign: "justify",
   },
 
   popular: {
@@ -174,7 +194,7 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 30,
     paddingTop: 10,
-    paddingBottom: 25,
+    paddingBottom: 10,
     fontWeight: "500",
     opacity: 1,
     textAlign: "center",
@@ -192,6 +212,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 18,
     paddingLeft: 15,
+  },
+
+  subsubtitleText: {
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 14,
+    marginLeft: 15,
+    marginTop: 15,
   },
 
   cardFooter: {
@@ -221,24 +249,6 @@ const styles = StyleSheet.create({
     flex: 2,
   },
 
-  rating: {
-    alignSelf: "flex-start",
-  },
-
-  ratingContainer:{
-    marginTop: 0,
-    flexDirection: 'row'
-  },
-
-  ratingText:{
-    textAlign: "left",
-    fontWeight: "bold",
-    fontSize: 27,
-    paddingLeft: 40,
-    paddingRight: 20,
-   
-  }
-
 });
 
-export default UserProfile;
+export default RestaurantProfile;
