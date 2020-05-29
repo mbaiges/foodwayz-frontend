@@ -3,7 +3,7 @@ import * as React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
 import DefaultNavBar from "./NavBars/DefaultNavBar";
-import { UserProfile } from "../screens/MainDrawer";
+import { ContactUs } from "../screens/MainDrawer";
 
 import { Ionicons } from "@expo/vector-icons";
 
@@ -22,7 +22,7 @@ export default function StackNavigator({ navigation, route }) {
         DefaultNavBar({ title: getHeaderTitle(route), navigation })
       }
     >
-      <Stack.Screen name="UserProfile" component={UserProfile} />
+      <Stack.Screen name="ContactUs" component={ContactUs} />
     </Stack.Navigator>
   );
 }

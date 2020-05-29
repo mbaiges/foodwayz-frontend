@@ -7,7 +7,6 @@ import React, { useEffect, useState, useMemo } from "react";
 import { AsyncStorage, Platform, StatusBar, StyleSheet, View, Text } from "react-native";
 
 import useCachedResources from "./hooks/useCachedResources";
-import LinkingConfiguration from "./navigation/LinkingConfiguration";
 
 import { createStackNavigator } from "@react-navigation/stack";
 

@@ -11,9 +11,9 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import FoodCard from "./components/FoodCard";
+import FoodCard from "../../components/FoodCard";
 
-export default class SearchScreen extends React.Component {
+class Search extends React.Component {
   state = {
     search: '',
   };
@@ -49,3 +49,8 @@ export default class SearchScreen extends React.Component {
     );
   }
 }
+
+export default SearchScreen = (props) => {
+  return <Search {...props} />;
+};
+

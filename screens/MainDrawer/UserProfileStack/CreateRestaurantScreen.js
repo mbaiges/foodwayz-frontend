@@ -24,18 +24,18 @@ class CreateRestaurant extends Component {
     
         this.state = {
           name: "",
-          adress: "",
+          address: "",
           phone: [],
           checked: false,
         };
     
       }
     
-      validate_signin_fields = ({ name, adress }) => {
+      validate_signin_fields = ({ name, address }) => {
         if (name === "") {
           alert("Please fill name");
           return false;
-        } else if (adress === "") {
+        } else if (address === "") {
           alert("Please fill adress");
           return false;
         }
@@ -65,7 +65,7 @@ class CreateRestaurant extends Component {
                     placeholder={"adress"}
                     placeholderTextColor={"rgba(0,0,0,0.4)"}
                     underLineColorAndroid="transparent"
-                    onChangeText={(value) => (this.state.adress = value)}
+                    onChangeText={(value) => (this.state.address = value)}
                 />
             </View>
             <View style={styles.phoneInputView}>

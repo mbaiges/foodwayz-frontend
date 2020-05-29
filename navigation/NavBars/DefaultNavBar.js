@@ -1,7 +1,7 @@
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, View, Button } from "react-native";
-import Colors from "../constants/Colors";
+import Colors from "../../constants/Colors";
 
 export default function DefaultNavBar({ title, navigation }) {
   return {
@@ -22,7 +22,7 @@ export default function DefaultNavBar({ title, navigation }) {
           name="md-search"
           size={38}
           style={styles.icon}
-          onPress={navigation.openDrawer}
+          onPress={() => navigation.navigate("Search")}
         />
         <Ionicons
           name="md-person"

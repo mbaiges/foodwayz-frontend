@@ -12,7 +12,7 @@ import {
 } from "react-native";
 
 
-import ReviewCard from "./components/ReviewCard";
+import ReviewCard from "../components/ReviewCard";
 
 //import { Constants } from 'expo';
 

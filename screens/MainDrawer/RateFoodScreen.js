@@ -17,7 +17,7 @@ import CheckBox from "@react-native-community/checkbox";
 
 const { width } = Dimensions.get("window");
 
-class RateDish extends Component {
+class RateFood extends Component {
 
     constructor() {
         super();
@@ -153,4 +153,4 @@ const styles = StyleSheet.create({
       },
 });
 
-export default RateDish;
+export default RateFood;

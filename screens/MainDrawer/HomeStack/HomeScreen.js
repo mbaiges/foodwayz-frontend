@@ -12,9 +12,9 @@ import {
 
 import { Image, ListItem, Button, Icon, Input, Rating} from 'react-native-elements';
 
-import FoodCard from "../components/FoodCard";
+import FoodCard from "../../components/FoodCard";
 
-import { UserContext } from '../../context/UserContext';
+import { UserContext } from '../../../context/UserContext';
 
 class HomeScreenComponent extends Component {
   constructor() {

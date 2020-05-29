@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Card, ListItem, Button, Icon, Input} from 'react-native-elements';
-import { StyleSheet, View, Text, Image, TextInput, ScrollView, TouchableOpacity, Dimensions} from 'react-native';
-import { SafeAreaView } from 'react-navigation';
+import { SafeAreaView, StyleSheet, View, Text, Image, TextInput, ScrollView, TouchableOpacity, Dimensions} from 'react-native';
 
 
 //import { Constants } from 'expo';
@@ -24,7 +23,7 @@ const EditProfile = ({ navigation }) => {
     <ScrollView>
     <View style={styles.backgroundContainer}>
       <View style={styles.mainPage}>
-          <Image style={styles.logoImage} source={require('../assets/Po.jpg')}/>
+          <Image style={styles.logoImage} source={require('../../../assets/images/Po.jpg')}/>
           <Text style={styles.logoEditText}>Edit image</Text>
       </View>
       <Text style={styles.subtitle}> Personal Information</Text>
