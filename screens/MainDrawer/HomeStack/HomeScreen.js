@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 
 import {
   StyleSheet,
@@ -12,7 +12,9 @@ import {
 
 import { Image, ListItem, Button, Icon, Input, Rating} from 'react-native-elements';
 
-import FoodCard from "./components/FoodCard";
+import FoodCard from "../../components/FoodCard";
+
+import { UserContext } from '../../../context/UserContext';
 
 class HomeScreenComponent extends Component {
   constructor() {
@@ -20,13 +22,25 @@ class HomeScreenComponent extends Component {
   }
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, context } = this.props;
+    const { authState, setAuthState } = context;
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
         <ScrollView>
           <View>
             <Text style={styles.homeSubtitle}>Recommended Dishes Near You</Text>
+            <Button
+              onPress={() => {
+                setAuthState({
+                  state: 'SIGNED_OUT',
+                  token: ''
+                })
+              }}
+              title="Sign Out"
+            >
+              Sign Out
+            </Button>
             <ScrollView>
               <FoodCard
                   image={{uri: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg'}}
@@ -62,30 +76,29 @@ class HomeScreenComponent extends Component {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
               style={styles.button}
-              onPress={async () => {
-                console.log("I want to navigate to the dish page");
-              }}
-            >
-              <View style={styles.buttonItemsContainer}>
-                <Text>FILTERS </Text>
-                <Icon
-                
-                  name='filter'
-                  type='material-community'
-                  
-                />
-                
+              onPress={async () => {navigation.navigate("Filter")}}
+          >
+            <View style={styles.buttonItemsContainer}>
+              <Text>FILTERS </Text>
+              <Icon
               
-              </View>
-            </TouchableOpacity>
+                name='filter'
+                type='material-community'
+                
+              />
+              
+            
+            </View>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     );
   }
 }
 
-export default function HomeScreen({ navigation }) {
-  return <HomeScreenComponent navigation={navigation} />;
+export default function HomeScreen(props) {
+  const { authState, setAuthState } = useContext(UserContext);
+  return <HomeScreenComponent {...props} context={{authState, setAuthState}} />;
 }
 
 const styles = StyleSheet.create({

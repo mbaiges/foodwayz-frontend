@@ -2,8 +2,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
-import HomeScreen from "../screens/HomeScreen";
-import DefaultNavBar from "./DefaultNavBar";
+import HomeScreen from "../screens/MainDrawer/HomeStack/HomeScreen";
+import DefaultNavBar from "./NavBars/DefaultNavBar";
 import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();

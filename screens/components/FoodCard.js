@@ -2,67 +2,57 @@ import React, { Component } from "react";
 
 import { StyleSheet, View, ScrollView, Text, TouchableOpacity} from "react-native";
 import {Rating, Card} from 'react-native-elements';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default class FoodCard extends Component {
   constructor() {
     super();
+
+    this.tags = ["Tag1","Tag2","Tag3","Tag4"];
   }
 
   render() {
     const { image, title, brand, onPress, rating } = this.props;
+    var tagButtons = [];
+    
+    for( let i = 0; i < tagButtons.length ; i++){
+      tagButtons.push(
+        <View key={i}>
+          <TouchableOpacity style={styles.buttonTag}
+            onPress={() => Alert.alert('Simple Button pressed')}
+          >
+            <Text>{this.tags[i]}</Text>
+          </TouchableOpacity>
+        </View>
+        
+      )
+    }
 
     return (
-      <TouchableOpacity 
-         onPress={onPress}      
-      >
-         <Card
-          image={image}
-          imageStyle={{
-          height: 200,
-          resizeMode: 'cover'
-          }}
+      <SafeAreaView>
+        <TouchableOpacity 
+          onPress={onPress}      
         >
-           <Text style={styles.foodName}>{title}</Text>
-           <Text style={styles.foodBrand}>{brand}</Text>
-           <ScrollView horizontal={true} style={styles.tagsList}>
-              <TouchableOpacity style={styles.buttonTag}
-                onPress={() => Alert.alert('Simple Button pressed')}
-              >
-              <Text>Tag1</Text>
-              </TouchableOpacity>
-              
-              <TouchableOpacity style={styles.buttonTag}
-                onPress={() => Alert.alert('Simple Button pressed')}
-              >
-              <Text>Tag2</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.buttonTag}
-                onPress={() => Alert.alert('Simple Button pressed')}
-              >
-              <Text>Tag3</Text>
-              </TouchableOpacity>
-              
-              <TouchableOpacity style={styles.buttonTag}
-                onPress={() => Alert.alert('Simple Button pressed')}
-              >
-              <Text>Tag4</Text>
-              </TouchableOpacity>
-            
-              <TouchableOpacity style={styles.buttonTag}
-                onPress={() => Alert.alert('Simple Button pressed')}
-              >
-              <Text>Taaaag5</Text>
-              </TouchableOpacity>
-            
-              <TouchableOpacity style={styles.buttonTag}
-                onPress={() => Alert.alert('Simple Button pressed')}
-              >
-              <Text>Taaaaaaaaaag6</Text>
-              </TouchableOpacity>
-            </ScrollView>      
-           <Rating imageSize={20} readonly startingValue={rating} style={styles.rating} /> 
-        </Card>
-      </TouchableOpacity>
+          <Card
+            image={image}
+            imageStyle={{
+            height: 200,
+            }}
+          >
+              <Text style={styles.foodName}>{title}</Text>
+              <Text style={styles.foodBrand}>{brand}</Text>
+              <ScrollView horizontal={true} style={styles.tagsList}>
+                {tagButtons[1]}    
+                {/* <TouchableOpacity style={styles.buttonTag}
+                  onPress={() => Alert.alert('Simple Button pressed')}
+                >
+                  <Text>{this.tags[1]}</Text>
+                </TouchableOpacity> */}
+              </ScrollView>      
+            <Rating imageSize={20} readonly startingValue={rating} style={styles.rating} /> 
+          </Card>
+        </TouchableOpacity>
+      </SafeAreaView>
     );
   }
 }

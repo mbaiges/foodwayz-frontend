@@ -2,8 +2,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
-import HomeScreen from "../screens/HomeScreen";
-import DefaultNavBar from "./DefaultNavBar";
+import { Home } from "../screens/MainDrawer";
+import DefaultNavBar from "./NavBars/DefaultNavBar";
 import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
@@ -21,7 +21,7 @@ export default function StackNavigator({ navigation, route }) {
         DefaultNavBar({ title: getHeaderTitle(route), navigation })
       }
     >
-      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Home" component={Home} />
     </Stack.Navigator>
   );
 }
