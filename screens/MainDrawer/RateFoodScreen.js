@@ -15,6 +15,8 @@ import CheckBox from "@react-native-community/checkbox";
 
 //import { Constants } from 'expo';
 
+//hola
+
 const { width } = Dimensions.get("window");
 
 class RateFood extends Component {
