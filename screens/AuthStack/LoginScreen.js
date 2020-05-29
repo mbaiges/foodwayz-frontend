@@ -64,7 +64,7 @@ class LoginScreenComponent extends Component {
     }).start();
   };
 
-  signIn = async function({ state, setAuthState, navigation }) {
+  signIn = async function ({ state, setAuthState, navigation }) {
     /*
     if (!validateSigninFields(state)) {
       // Mensajito de error
@@ -78,9 +78,9 @@ class LoginScreenComponent extends Component {
 
     try {
       const ans = await AuthApi.signIn(user);
-      if(ans){
+      if (ans) {
         console.log(ans);
-        console.log("User successfully logged"); 
+        console.log("User successfully logged");
         const auth = {
           state: 'SIGNED_IN',
           token: ans.accessToken
@@ -126,7 +126,7 @@ class LoginScreenComponent extends Component {
                     style={styles.input}
                     placeholder={"Password"}
                     underLineColorAndroid="transparent"
-                    onChangeText={(value) => { this.state.password = value } }
+                    onChangeText={(value) => { this.state.password = value }}
                   />
                   <Text style={styles.inputTitle}> Password </Text>
                 </View>
@@ -139,7 +139,7 @@ class LoginScreenComponent extends Component {
             style={styles.button}
             onPress={async () => {
               console.log("I want to navigate to Main");
-              this.signIn({state: this.state, navigation, setAuthState});
+              this.signIn({ state: this.state, navigation, setAuthState });
             }}
           >
             <Text>LOG IN</Text>
@@ -181,7 +181,7 @@ class LoginScreenComponent extends Component {
 
 export default LoginScreen = (props) => {
   const { authState, setAuthState } = useContext(UserContext);
-  return <LoginScreenComponent {...props} context={{authState, setAuthState}} />;
+  return <LoginScreenComponent {...props} context={{ authState, setAuthState }} />;
 };
 
 const { width: WIDTH } = Dimensions.get("window");
