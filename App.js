@@ -3,6 +3,8 @@ import AuthStack from "./navigation/AuthStackNavigator";
 import { UserContext } from "./context/UserContext";
 import MainDrawer from "./navigation/MainDrawerNavigator";
 
+import TestScreen from "./screens/TestScreen/ImageTest"
+
 import React, { useEffect, useState, useMemo } from "react";
 import { AsyncStorage, Platform, StatusBar, StyleSheet, View, Text } from "react-native";
 
@@ -10,6 +12,9 @@ import useCachedResources from "./hooks/useCachedResources";
 import LinkingConfiguration from "./navigation/LinkingConfiguration";
 
 import { createStackNavigator } from "@react-navigation/stack";
+
+import { firebaseConfig } from './constants/ApiKeys';
+import * as firebase from 'firebase';
 
 import Colors from "./constants/Colors";
 
@@ -47,16 +52,21 @@ export function usePersistedAuthState(key, initialState) {
 
 export default function App(props) {
   const isLoadingComplete = useCachedResources();
-  const [authState, setPersistedAuthState] = usePersistedAuthState(StorageKey, {state: 'SIGNED_OUT', token: ''});
-  const providerAuthState = useMemo(() => ({authState, setAuthState: setPersistedAuthState}), [authState, setPersistedAuthState]);
+  const [authState, setPersistedAuthState] = usePersistedAuthState(StorageKey, { state: 'SIGNED_OUT', token: '' });
+  const providerAuthState = useMemo(() => ({ authState, setAuthState: setPersistedAuthState }), [authState, setPersistedAuthState]);
+
+  //initialize firebase
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
 
   useEffect(() => {
     (async () => {
       const auth = authState //await JSON.parse(authState);
       if (auth) {
-        const {state, token} = auth;
+        const { state, token } = auth;
         if (state) {
-          switch(state) {
+          switch (state) {
             case 'SIGNED_UP':
               console.log("User signed out");
               break;
@@ -78,24 +88,17 @@ export default function App(props) {
     return (
       <View style={styles.container}>
         {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
-          <NavigationContainer>
-            <UserContext.Provider value={providerAuthState}>
-              <Stack.Navigator headerMode="none">
-                {(!authState || authState.token === '')?
-                  <Stack.Screen
-                    name="Auth"
-                    component={AuthStack}
-                  />
-                :
-                  <Stack.Screen
-                    name="Main"
-                    component={MainDrawer}
-                  />
-                }
-              </Stack.Navigator>
-              {/* <Text>{authState}</Text> */}
-            </UserContext.Provider>
-          </NavigationContainer>
+        <NavigationContainer>
+          <UserContext.Provider value={providerAuthState}>
+            <Stack.Navigator headerMode="none">
+              <Stack.Screen
+                name="Test"
+                component={TestScreen}
+              />
+            </Stack.Navigator>
+            {/* <Text>{authState}</Text> */}
+          </UserContext.Provider>
+        </NavigationContainer>
       </View>
     );
   }
@@ -107,7 +110,7 @@ export async function signUpAsync(data) {
 }
 
 export async function signInAsync() {
-  let authState = {token:'asdasdasd'}; //await AppAuth.authAsync(config);
+  let authState = { token: 'asdasdasd' }; //await AppAuth.authAsync(config);
   //await cacheAuthAsync(authState);
   console.log('signInAsync', authState);
   return authState;
@@ -136,7 +139,7 @@ function checkIfTokenExpired({ accessTokenExpirationDate }) {
 }
 
 async function refreshAuthAsync({ refreshToken }) {
-  let authState = {token:'asdasdasd'};// await AppAuth.refreshAsync(config, refreshToken);
+  let authState = { token: 'asdasdasd' };// await AppAuth.refreshAsync(config, refreshToken);
   console.log('refreshAuth', authState);
   await cacheAuthAsync(authState);
   return authState;
@@ -144,12 +147,12 @@ async function refreshAuthAsync({ refreshToken }) {
 
 export async function signOutAsync({ accessToken }) {
   try {
-      /*
-    await AppAuth.revokeAsync(config, {
-      token: accessToken,
-      isClientIdProvided: true,
-    });
-    */
+    /*
+  await AppAuth.revokeAsync(config, {
+    token: accessToken,
+    isClientIdProvided: true,
+  });
+  */
     await AsyncStorage.removeItem(StorageKey);
     return null;
   } catch (e) {
