@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, ListItem, Button, Icon, Rating} from "react-native-elements";
+import { Card, ListItem, Button, Icon, Rating } from "react-native-elements";
 import {
   StyleSheet,
   View,
@@ -12,9 +12,8 @@ import {
   Dimensions,
 } from "react-native";
 
-//import { Constants } from 'expo';
-
 const { width } = Dimensions.get("window");
+const { rating } = this.props;
 
 const RestaurantProfile = ({ navigation }) => {
   return (
@@ -38,6 +37,7 @@ const RestaurantProfile = ({ navigation }) => {
           </Card>
         </ScrollView>
         <Text style={styles.logoText}>Restaurante El Panda Guerrero</Text>
+        <Rating imageSize={20} readonly startingValue={rating} style={styles.rating} /> 
         <Text style={styles.primaryText}>About us</Text>
         <Text style={styles.secondaryText}>Somos un restaurante asiático basado en la película Kung Fu Panda.
         Nuestros cocineros panda trabajan las 24h sin descansar para que tú puedas comer
