@@ -15,8 +15,6 @@ import CheckBox from "@react-native-community/checkbox";
 
 //import { Constants } from 'expo';
 
-//hola
-
 const { width } = Dimensions.get("window");
 
 class RateFood extends Component {
@@ -46,7 +44,6 @@ class RateFood extends Component {
                     fractions={1}
                     showRating
                     onFinishRating={this.ratingCompleted}
-
                 />
             </View>
             <View style={styles.inputView}>

@@ -27,35 +27,50 @@ class Reviews extends Component {
           allReviews: 5,
         };
 
+        this.reviews= [
+            {
+            name:"Mati",
+            date:"11 months ago",
+            rating: 1,
+            comment:"No me gusto, tenia arroz"
+            },
+            {
+            name:"Andy",
+            date:"1 month ago",
+            rating:5,
+            comment:"Estaba buenardo"
+            },
+            {
+            name:"Gabi",
+            date:"2 months ago",
+            rating:3,
+            comment:"Meh, probe mejores la verdad"
+            } ]
     }
     
       render() {
         const { navigation, signIn } = this.props;
+        var reviewCards = [];
+        for(let i = 0; i < this.reviews.length ; i++){
+        reviewCards.push(
+            <View key={i}>
+                <ReviewCard
+                    name = {this.reviews[i].name}
+                    date = {this.reviews[i].date}
+                    rating = {this.reviews[i].rating}
+                    comment = {this.reviews[i].comment}                   
+                />
+                
+            </View>
+            )
+        }                  
 
     return (
         <SafeAreaView style={styles.backgroundContainer}>
             <ScrollView>
             <View>
             <Text style={styles.logoText}>All reviews</Text>
-              <ReviewCard
-                  name="Mati"
-                  date="11 months ago"
-                  rating = {1}
-                  comment="No me gusto, tenia arroz"
-              />
-              <ReviewCard
-                  name="Andy"
-                  date="1 month ago"
-                  rating = {5}
-                  comment="Estaba buenardo"
-              />
-              <ReviewCard
-                  name="Gabi"
-                  date="2 months ago"
-                  rating = {3}
-                  comment="Meh, probe mejores la verdad"
-              />
-            
+            { reviewCards }
           </View>
         </ScrollView>
         </SafeAreaView>
