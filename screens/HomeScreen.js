@@ -62,22 +62,20 @@ class HomeScreenComponent extends Component {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
               style={styles.button}
-              onPress={async () => {
-                console.log("I want to navigate to the dish page");
-              }}
-            >
-              <View style={styles.buttonItemsContainer}>
-                <Text>FILTERS </Text>
-                <Icon
-                
-                  name='filter'
-                  type='material-community'
-                  
-                />
-                
+              onPress={async () => {navigation.navigate("Filter")}}
+          >
+            <View style={styles.buttonItemsContainer}>
+              <Text>FILTERS </Text>
+              <Icon
               
-              </View>
-            </TouchableOpacity>
+                name='filter'
+                type='material-community'
+                
+              />
+              
+            
+            </View>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     );

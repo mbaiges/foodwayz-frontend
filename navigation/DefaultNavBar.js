@@ -22,7 +22,7 @@ export default function DefaultNavBar({ title, navigation }) {
           name="md-search"
           size={38}
           style={styles.icon}
-          onPress={navigation.openDrawer}
+          onPress={() => navigation.navigate("Search")}
         />
         <Ionicons
           name="md-person"

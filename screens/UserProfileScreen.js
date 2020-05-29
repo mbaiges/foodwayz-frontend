@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, ListItem, Button, Icon } from "react-native-elements";
+import { Card, ListItem, Button, Icon, Rating } from "react-native-elements";
 import {
   StyleSheet,
   View,
@@ -17,24 +17,62 @@ import {
 const { width } = Dimensions.get("window");
 
 const UserProfile = ({ navigation }) => {
+  
   return (
     <SafeAreaView style={styles.backgroundContainer}>
-      <View style={styles.mainPage}>
-        <Image
-          style={styles.logoImage}
-          source={require("../assets/images/Po.jpg")}
-          
-        />
-        <Text style={styles.logoText}>El guerrero Dragón</Text>
-      </View>
+      <ScrollView>
+        <View style={styles.mainPage}>
+          <Image
+            style={styles.logoImage}
+            source={require("../assets/images/Po.jpg")}
+            
+          />
+          <Text style={styles.logoText}>El guerrero Dragón</Text>
+        </View>
 
-      <View style={styles.reviewContainer} >
-        <Text style={styles.subtitleText}>My reviews</Text>
-        <View style={styles.review}>
-          <ScrollView horizontal={true}>
-            <TouchableOpacity onPress={async () => {navigation.navigate("Food");
-                    console.log("I want to navigate to Dish page");
-                  }}>
+        <View style={styles.reviewContainer} >
+          <Text style={styles.subtitleText}>My reviews</Text>
+          <View style={styles.review}>
+            <ScrollView horizontal={true}>
+              <TouchableOpacity onPress={async () => {navigation.navigate("Food");
+                      console.log("I want to navigate to Dish page");
+                    }}>
+                <Card
+                  image={{uri: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg'}}
+                  imageStyle={{
+                    height: 100,
+                    }}
+                >
+                  <View style={styles.cardFooter}>
+                    <Text style={styles.foodName}>Ribs</Text>
+                  </View>
+                  <Rating imageSize={20} readonly startingValue="3" style={styles.rating} /> 
+                </Card>
+              </TouchableOpacity>
+              <Card>
+                <Image
+                  style={styles.reviewImage}
+                  resizeMode="cover"
+                  source={require("../assets/images/Po.jpg")}
+                />
+                <Text style={styles.foodName}>Aguante Po</Text>
+              </Card>
+              <Card>
+                <Image
+                  style={styles.reviewImage}
+                  resizeMode="cover"
+                  source={require("../assets/images/Po.jpg")}
+                />
+                <Text style={styles.foodName}>Aguante Po</Text>
+              </Card>
+            </ScrollView>
+          </View>
+        </View>
+
+        <View style={styles.favouritesContainer}>
+          <Text style={styles.subtitleText}>My favorites</Text>
+          <View style={styles.review}>
+            <ScrollView horizontal={true}>
               <Card>
                 <Image
                   style={styles.reviewImage}
@@ -45,60 +83,26 @@ const UserProfile = ({ navigation }) => {
                   <Text style={styles.foodName}>Ribs</Text>
                 </View>
               </Card>
-            </TouchableOpacity>
-            <Card>
-              <Image
-                style={styles.reviewImage}
-                resizeMode="cover"
-                source={require("../assets/images/Po.jpg")}
-              />
-              <Text style={styles.foodName}>Aguante Po</Text>
-            </Card>
-            <Card>
-              <Image
-                style={styles.reviewImage}
-                resizeMode="cover"
-                source={require("../assets/images/Po.jpg")}
-              />
-              <Text style={styles.foodName}>Aguante Po</Text>
-            </Card>
-          </ScrollView>
+              <Card>
+                <Image
+                  style={styles.reviewImage}
+                  resizeMode="cover"
+                  source={require("../assets/images/Po.jpg")}
+                />
+                <Text style={styles.foodName}>Aguante Po</Text>
+              </Card>
+              <Card>
+                <Image
+                  style={styles.reviewImage}
+                  resizeMode="cover"
+                  source={require("../assets/images/Po.jpg")}
+                />
+                <Text style={styles.foodName}>Aguante Po</Text>
+              </Card>
+            </ScrollView>
+          </View>
         </View>
-      </View>
-
-      <View style={styles.reviewContainer}>
-        <Text style={styles.subtitleText}>My favorites</Text>
-        <View style={styles.review}>
-          <ScrollView horizontal={true}>
-            <Card>
-              <Image
-                style={styles.reviewImage}
-                resizeMode="cover"
-                source={require("../assets/images/Po.jpg")}
-              />
-              <View style={styles.cardFooter}>
-                <Text style={styles.foodName}>Ribs</Text>
-              </View>
-            </Card>
-            <Card>
-              <Image
-                style={styles.reviewImage}
-                resizeMode="cover"
-                source={require("../assets/images/Po.jpg")}
-              />
-              <Text style={styles.foodName}>Aguante Po</Text>
-            </Card>
-            <Card>
-              <Image
-                style={styles.reviewImage}
-                resizeMode="cover"
-                source={require("../assets/images/Po.jpg")}
-              />
-              <Text style={styles.foodName}>Aguante Po</Text>
-            </Card>
-          </ScrollView>
-        </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -116,7 +120,7 @@ const styles = StyleSheet.create({
   mainPage: {
     //flex: 1,
     position: "relative",
-    paddingTop: 20,
+    paddingTop: 10,
     //paddingBottom: 40,
     alignItems: "center",
   },
@@ -185,6 +189,10 @@ const styles = StyleSheet.create({
     color: "white",
     marginHorizontal: 25,
   },
+  rating: {
+    alignSelf: "flex-start",
+  },
+
 
   button: {
     elevation: 15,
@@ -200,6 +208,11 @@ const styles = StyleSheet.create({
   reviewContainer: {
     flex: 2,
   },
+  favouritesContainer:{
+    flex: 2,
+    paddingTop: 5,
+  },
+  
 });
 
 export default UserProfile;
