@@ -54,7 +54,7 @@ class ForgotPassScreenComponent extends Component {
               <View style={styles.mainPage}>
                 <Image
                   style={styles.logoImage}
-                  source={require("../assets/images/logo.png")}
+                  source={require("../../assets/images/logo.png")}
                 />
                 <Text style={styles.logoText}>FoodWayz</Text>
                 <Text style={styles.text}>

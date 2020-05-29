@@ -3,7 +3,7 @@ import * as React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
 import DefaultNavBar from "./DefaultNavBar";
-import UserProfile from "../screens/UserProfileScreen";
+import UserProfile from "../screens/MainDrawer/UserProfileScreen";
 
 import { Ionicons } from "@expo/vector-icons";
 

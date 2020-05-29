@@ -2,11 +2,12 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
-import HomeScreen from "../screens/HomeScreen";
+//import HomeScreen from "../screens/HomeScreen";
 import FoodScreen from "../screens/FoodScreen";
 import FilterScreen from "../screens/FilterScreen";
 import SearchScreen from "../screens/SearchScreen";
 
+import HomeScreen from "../screens/MainDrawer/HomeScreen";
 import DefaultNavBar from "./DefaultNavBar";
 import SearchNavBar from "./SearchNavBar";
 

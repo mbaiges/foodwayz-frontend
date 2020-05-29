@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -13,7 +13,8 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
-import api from "../api";
+import { User, AuthApi } from '../../api'; 
+import { UserContext } from '../../context/UserContext';
 
 class RegisterScreenComponent extends Component {
   constructor() {
@@ -28,91 +29,40 @@ class RegisterScreenComponent extends Component {
     };
   }
 
-  validate_signup_fields = ({
-    username,
-    email,
-    password1,
-    password2,
-    checked,
-  }) => {
-    if (username === "") {
-      alert("Please fill username");
-      return false;
-    } else if (email === "") {
-      alert("Please fill email");
-      return false;
-    } else if (password1 === "") {
-      alert("Please fill password");
-      return false;
-    } else if (password2 === "") {
-      alert("Please repeat password");
-      return false;
-    }
-
+  signUp = async function({ state, setAuthState, navigation }) {
     /*
-    ^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
-      └─────┬────┘└───┬──┘└─────┬─────┘└─────┬─────┘ └───┬───┘
-            │         │         │            │           no _ or . at the end
-            │         │         │            │
-            │         │         │            allowed characters
-            │         │         │
-            │         │         no __ or _. or ._ or .. inside
-            │         │
-            │         no _ or . at the beginning
-            │
-            username is 8-20 characters long
-    */
-    if (!this.validateUsername(username)) {
-      alert("Please enter a valid username");
-      return false;
-    } else if (!this.validateEmail(email)) {
-      alert("Please enter a valid email");
-      return false;
-    } else if (password1 !== password2) {
-      alert("Passwords must match");
-      return false;
-    } else if (!this.validatePassword(password1)) {
-      alert("Please enter a valid password");
-      return false;
-    } else if (!checked) {
-      alert("You must agree terms and conds before continuing");
-      return false;
+    if (!validateSignupFields(state)) {
+      // Mensajito de error
+      console.log("Something went wrong.");
     }
+    */
 
-    return true;
-  };
+    const user = new User({
+      name: state.username,
+      email: state.email,
+      password: state.password1
+    });
 
-  validateEmail = (email) => {
-    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-  };
-
-  validateUsername = (username) => {
-    let re = /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
-    return re.test(username);
-  };
-
-  // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:
-  validatePassword = (password) => {
-    let re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return re.test(password);
-  };
-
-  validateEmail = (email) => {
-    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-  };
-
-  // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:
-  validatePassword = (password) => {
-    let re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return re.test(password);
-  };
-
-  register = ({navigation}) => {};
+    try {
+      const ans = await AuthApi.signUp(user);
+      if(ans){
+        console.log(ans);
+        console.log("User successfully registered"); 
+        const auth = {
+          state: 'SIGNED_UP',
+          token: ''
+        };
+        await setAuthState(auth);
+        navigation.navigate("Login")
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, context } = this.props;
+    const { authState, setAuthState } = context;
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
@@ -124,7 +74,7 @@ class RegisterScreenComponent extends Component {
             <View style={styles.inner}>
               <Image
                 style={styles.logoImage}
-                source={require("../assets/images/logo.png")}
+                source={require("../../assets/images/logo.png")}
               />
               <Text style={styles.logoText}>FoodWayz</Text>
               <View style={styles.inputBoxes}>
@@ -174,7 +124,7 @@ class RegisterScreenComponent extends Component {
         </KeyboardAvoidingView>
         <View alignItems="center">
           <View style={styles.checkboxLine}>
-            <CheckBox
+          <CheckBox
               value={this.state.checked}
               tintColors={{ true: "white", false: "black" }}
               onValueChange={() =>
@@ -197,7 +147,10 @@ class RegisterScreenComponent extends Component {
           <View>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => this.register(this.state)}
+              onPress={async () => {
+                console.log("I want to navigate to Main");
+                this.signUp({state: this.state, navigation, setAuthState});
+              }}
             >
               <Text>REGISTER</Text>
             </TouchableOpacity>
@@ -209,7 +162,8 @@ class RegisterScreenComponent extends Component {
 }
 
 export default RegisterScreen = (props) => {
-  return <RegisterScreenComponent {...props} />;
+  const { authState, setAuthState } = useContext(UserContext);
+  return <RegisterScreenComponent {...props} context={{authState, setAuthState}} />;
 };
 
 const { width: WIDTH } = Dimensions.get("window");
