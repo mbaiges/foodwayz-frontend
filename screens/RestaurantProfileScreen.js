@@ -13,7 +13,7 @@ import {
 } from "react-native";
 
 const { width } = Dimensions.get("window");
-const { rating } = this.props;
+//const { rating } = this.props;
 
 const RestaurantProfile = ({ navigation }) => {
   return (
