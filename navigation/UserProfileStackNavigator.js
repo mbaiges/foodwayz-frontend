@@ -5,7 +5,8 @@ import { View, StyleSheet, Text } from "react-native";
 import DefaultNavBar from "./NavBars/DefaultNavBar";
 import { 
   UserProfile,
-  RestaurantProfile
+  RestaurantProfile,
+  RestaurantStatisticsProfile
 } from "../screens/MainDrawer";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -27,6 +28,7 @@ export default function StackNavigator({ navigation, route }) {
     >
       <Stack.Screen name="UserProfile" component={UserProfile} />
       <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} />
+      <Stack.Screen name="RestaurantStatisticsProfile" component={RestaurantStatisticsProfile} />
     </Stack.Navigator>
   );
 }

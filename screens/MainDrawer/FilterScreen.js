@@ -47,7 +47,6 @@ class FilterScreenComponent extends Component {
                     checked = {this.state.values[i]}
                     onPress={() => this.changeValues(i)}
                 />
-                
             </View>
         )                        
     }
@@ -126,3 +125,4 @@ const styles = StyleSheet.create({
 
  
 });
+

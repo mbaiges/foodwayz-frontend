@@ -106,6 +106,10 @@ const UserProfile = ({ navigation }) => {
           title="Restaurants"
           onPress={() => {navigation.navigate("RestaurantProfile")}}
         ></Button>
+        <Button
+          title="Statistics"
+          onPress={() => {navigation.navigate("RestaurantStatisticsProfile")}}
+        ></Button>
       </ScrollView>
     </SafeAreaView>
   );

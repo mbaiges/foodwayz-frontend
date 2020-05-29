@@ -13,7 +13,8 @@ import {
 import {
     CreateRestaurant,
     EditProfile,
-    UserProfile
+    UserProfile,
+    RestaurantStatisticsProfile,
 } from './UserProfileStack';
 
 import Filter from './FilterScreen';
@@ -36,6 +37,7 @@ export {
     CreateRestaurant,
     EditProfile,
     UserProfile,
+    RestaurantStatisticsProfile,
 
     // Shared
     Filter,

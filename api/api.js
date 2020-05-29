@@ -2,7 +2,7 @@ export { Api };
 
 class Api {
   static get baseUrl() {
-    return 'http://192.168.1.13:3002';
+    return 'http://192.168.0.10:3002';
   }
 
   static get timeout() {
