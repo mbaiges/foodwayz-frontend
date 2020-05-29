@@ -21,7 +21,7 @@ export default class FoodCard extends Component {
           <TouchableOpacity style={styles.buttonTag}
             onPress={() => Alert.alert('Simple Button pressed')}
           >
-            <Text>{this.tags[i]}}</Text>
+            <Text>{this.tags[i]}</Text>
           </TouchableOpacity>
         </View>
         
@@ -37,7 +37,6 @@ export default class FoodCard extends Component {
             image={image}
             imageStyle={{
             height: 200,
-            resizeMode: 'cover'
             }}
           >
               <Text style={styles.foodName}>{title}</Text>

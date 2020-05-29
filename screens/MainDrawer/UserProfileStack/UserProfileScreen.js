@@ -38,7 +38,7 @@ const UserProfile = ({ navigation }) => {
                       console.log("I want to navigate to Dish page");
                     }}>
                 <Card
-                  image={{uri: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg'}}
+                  // image={{uri: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg'}}
                   imageStyle={{
                     height: 100,
                     }}
@@ -46,7 +46,7 @@ const UserProfile = ({ navigation }) => {
                   <View style={styles.cardFooter}>
                     <Text style={styles.foodName}>Ribs</Text>
                   </View>
-                  <Rating imageSize={20} readonly startingValue="3" style={styles.rating} /> 
+                  <Rating imageSize={20} readonly startingValue={3} style={styles.rating} /> 
                 </Card>
               </TouchableOpacity>
               <Card>
@@ -102,6 +102,10 @@ const UserProfile = ({ navigation }) => {
             </ScrollView>
           </View>
         </View>
+        <Button
+          title="Restaurants"
+          onPress={() => {navigation.navigate("RestaurantProfile")}}
+        ></Button>
       </ScrollView>
     </SafeAreaView>
   );

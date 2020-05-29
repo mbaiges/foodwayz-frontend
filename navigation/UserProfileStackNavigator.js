@@ -3,12 +3,15 @@ import * as React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
 import DefaultNavBar from "./NavBars/DefaultNavBar";
-import { UserProfile } from "../screens/MainDrawer";
+import { 
+  UserProfile,
+  RestaurantProfile
+} from "../screens/MainDrawer";
 
 import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
-const INITIAL_ROUTE_NAME = "Home";
+const INITIAL_ROUTE_NAME = "UserProfile";
 
 export default function StackNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
@@ -23,6 +26,7 @@ export default function StackNavigator({ navigation, route }) {
       }
     >
       <Stack.Screen name="UserProfile" component={UserProfile} />
+      <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} />
     </Stack.Navigator>
   );
 }

@@ -23,16 +23,21 @@ import RestaurantProfile from './RestaurantProfileScreen';
 import Reviews from './ReviewsScreen';
 
 export {
+    // About Us Stack
     AboutUs,
 
+    // Contact Us Stack
     ContactUs,
 
+    // Home Stack
     Home,
 
+    // User Profile Stack
     CreateRestaurant,
     EditProfile,
     UserProfile,
 
+    // Shared
     Filter,
     Food,
     RateFood,
