@@ -16,43 +16,39 @@ import FoodCard from "../../components/FoodCard";
 
 import { UserContext } from '../../../context/UserContext';
 
+import { FoodApi } from '../../../api';
+
 class HomeScreenComponent extends Component {
   constructor() {
     super();
-    this.foods = [];
+    this.state = {
+      foods: [],
+    }
   }
 
   async fetchFoods() {
-    this.foods = [
-      {
-        id: 1,
-        imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
-        title: 'Guiso muy rico',
-        brand: 'El restaurante mas rico',
-        rating: 3.4,
-      },
-      {
-        id: 2,
-        imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
-        title: 'Guiso medio rico',
-        brand: 'El restaurante mas rico',
-        rating: 3.4,
-      },
-      {
-        id: 3,
-        imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
-        title: 'Guiso no tan ricos',
-        brand: 'El restaurante mas rico',
-        rating: 3.4,
-      }
-    ];
+    const resp = await FoodApi.getAll();
+    this.setState({
+      foods: resp.result.map((food) => {
+        return {
+          id: food.a_food_id,
+          imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
+          title: food.a_description,
+          brand: 'El restaurante mas rico',
+          rating: food.a_score,
+        }
+      })
+    })
+    console.log(this.state.foods);
+  }
+
+  componentDidMount() {
+    this.fetchFoods();
   }
 
   render() {
     const { navigation, context } = this.props;
     const { authState, setAuthState } = context;
-
-    this.fetchFoods();
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
@@ -72,18 +68,18 @@ class HomeScreenComponent extends Component {
             </Button>
             <ScrollView>
               {
-                this.foods.map(food => {
+                this.state.foods.map(food => {
                   return (
-                    <FoodCard 
+                    <FoodCard
                       key={food.id}
                       image={{ uri: food.imageUrl }}
-                      title={ food.title}
-                      brand={ food.brand}
+                      title={food.title}
+                      brand={food.brand}
                       onPress={async () => {
                         navigation.navigate("Food");
                         console.log("I want to navigate to Dish page");
                       }}
-                      rating = { food.rating}
+                      rating={food.rating}
                     />
                   )
                 })

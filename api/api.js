@@ -74,6 +74,6 @@ class Api {
   }
 
   static setTokenGetter(getter) {
-    getToken = getter;
+    Api.getToken = getter;
   }
 }
