@@ -1,5 +1,6 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import { Card, ListItem, Button, Icon, Rating } from "react-native-elements";
+import { UserContext } from '../../../context/UserContext';
 import {
   StyleSheet,
   View,
@@ -12,104 +13,123 @@ import {
   Dimensions,
 } from "react-native";
 
-//import { Constants } from 'expo';
+import { UserApi } from '../../../api';
 
 const { width } = Dimensions.get("window");
 
-const UserProfile = ({ navigation }) => {
-  
-  return (
-    <SafeAreaView style={styles.backgroundContainer}>
-      <ScrollView>
-        <View style={styles.mainPage}>
-          <Image
-            style={styles.logoImage}
-            source={require("../../../assets/images/Po.jpg")}
-            
-          />
-          <Text style={styles.logoText}>El guerrero Dragón</Text>
-        </View>
+class UserProfileComponent extends Component {
+  constructor() {
+    super();
+    this.state = {
+      user: {},
+      reviews: [
+        {
+          name: 'Ribs',
+          imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
+        },
+        {
+          name: 'guanacos',
+          imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
+        },
+        {
+          name: 'fritas',
+          imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
+        }
+      ]
+    }
+  }
 
-        <View style={styles.reviewContainer} >
-          <Text style={styles.subtitleText}>My reviews</Text>
-          <View style={styles.review}>
-            <ScrollView horizontal={true}>
-              <TouchableOpacity onPress={async () => {navigation.navigate("Food");
-                      console.log("I want to navigate to Dish page");
-                    }}>
-                <Card
-                  // image={{uri: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg'}}
-                  imageStyle={{
-                    height: 100,
-                    }}
-                >
-                  <View style={styles.cardFooter}>
-                    <Text style={styles.foodName}>Ribs</Text>
-                  </View>
-                  <Rating imageSize={20} readonly startingValue={3} style={styles.rating} /> 
-                </Card>
-              </TouchableOpacity>
-              <Card>
-                <Image
-                  style={styles.reviewImage}
-                  resizeMode="cover"
-                  source={require("../../../assets/images/Po.jpg")}
-                />
-                <Text style={styles.foodName}>Aguante Po</Text>
-              </Card>
-              <Card>
-                <Image
-                  style={styles.reviewImage}
-                  resizeMode="cover"
-                  source={require("../../../assets/images/Po.jpg")}
-                />
-                <Text style={styles.foodName}>Aguante Po</Text>
-              </Card>
-            </ScrollView>
-          </View>
-        </View>
+  async fetchUser() {
+    const resp = await UserApi.getMe();
+    this.setState({
+      user: resp.result[0]
+    })
+    console.log(this.state.user);
+  }
 
-        <View style={styles.favouritesContainer}>
-          <Text style={styles.subtitleText}>My favorites</Text>
-          <View style={styles.review}>
-            <ScrollView horizontal={true}>
-              <Card>
-                <Image
-                  style={styles.reviewImage}
-                  resizeMode="cover"
-                  source={require("../../../assets/images/Po.jpg")}
-                />
-                <View style={styles.cardFooter}>
-                  <Text style={styles.foodName}>Ribs</Text>
-                </View>
-              </Card>
-              <Card>
-                <Image
-                  style={styles.reviewImage}
-                  resizeMode="cover"
-                  source={require("../../../assets/images/Po.jpg")}
-                />
-                <Text style={styles.foodName}>Aguante Po</Text>
-              </Card>
-              <Card>
-                <Image
-                  style={styles.reviewImage}
-                  resizeMode="cover"
-                  source={require("../../../assets/images/Po.jpg")}
-                />
-                <Text style={styles.foodName}>Aguante Po</Text>
-              </Card>
-            </ScrollView>
+  async fetchReviews() {
+
+  }
+
+  async componentDidMount() {
+    await this.fetchUser();
+    await this.fetchReviews();
+  }
+
+  render() {
+    const { navigation, context } = this.props;
+    const { authState, setAuthState } = context;
+
+    return (
+      <SafeAreaView style={styles.backgroundContainer}>
+        <ScrollView>
+          <View style={styles.mainPage}>
+            <Image
+              style={styles.logoImage}
+              source={require("../../../assets/images/Po.jpg")}
+
+            />
+            <Text style={styles.logoText}>{this.state.user.name}</Text>
           </View>
-        </View>
-        <Button
-          title="Restaurants"
-          onPress={() => {navigation.navigate("RestaurantProfile")}}
-        ></Button>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+
+          <View style={styles.reviewContainer} >
+            <Text style={styles.subtitleText}>My reviews</Text>
+            <View style={styles.review}>
+              <ScrollView horizontal={true}>
+                {
+                  this.state.reviews.map(review => {
+                    return (
+                      <TouchableOpacity onPress={async () => {
+                        navigation.navigate("Food");
+                        console.log("I want to navigate to Dish page");
+                      }}>
+                        <Card
+                          image={{ uri: review.imageUrl }}
+                          imageStyle={{
+                            height: 100,
+                          }}
+                        >
+                          <View style={styles.cardFooter}>
+                            <Text style={styles.foodName}>{review.name}</Text>
+                          </View>
+                          <Rating imageSize={20} readonly startingValue={3} style={styles.rating} />
+                        </Card>
+                      </TouchableOpacity>
+                    )
+                  })
+                }
+              </ScrollView>
+            </View>
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={async () => { navigation.navigate("RestaurantProfile") }}
+            >
+              <Text style={styles.buttonText}>My Restaurants</Text>
+            </TouchableOpacity>
+          </View>
+          <Button
+            title="Statistics"
+            onPress={() => { navigation.navigate("RestaurantStatisticsProfile") }}
+          ></Button>
+          <Button
+            onPress={() => {
+              setAuthState({
+                state: 'SIGNED_OUT',
+                token: ''
+              })
+            }}
+            title="Sign Out"
+          >
+            Sign Out
+            </Button>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+}
 
 const { width: WIDTH } = Dimensions.get("window");
 
@@ -212,11 +232,39 @@ const styles = StyleSheet.create({
   reviewContainer: {
     flex: 2,
   },
-  favouritesContainer:{
+  favouritesContainer: {
     flex: 2,
     paddingTop: 5,
   },
-  
+
+  buttonContainer: {
+    position: "absolute",
+    alignContent: 'flex-end',
+    paddingTop: 20,
+    paddingLeft: 260,
+    paddingBottom: 22,
+  },
+
+  button: {
+    elevation: 15,
+    borderRadius: 25,
+    backgroundColor: "#FC987E",
+    color: "black",
+    width: 130,
+    alignItems: "center",
+    padding: 13,
+    height: 48,
+  },
+
+
+  buttonText: {
+    color: "white",
+
+  },
+
 });
 
-export default UserProfile;
+export default function UserProfile(props) {
+  const { authState, setAuthState } = useContext(UserContext);
+  return <UserProfileComponent {...props} context={{ authState, setAuthState }} />;
+}

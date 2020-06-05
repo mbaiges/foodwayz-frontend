@@ -7,7 +7,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-
 } from "react-native";
 
 import { Image, ListItem, Button, Icon, Input, Rating } from 'react-native-elements';
@@ -55,17 +54,6 @@ class HomeScreenComponent extends Component {
         <ScrollView>
           <View>
             <Text style={styles.homeSubtitle}>Recommended Dishes Near You</Text>
-            <Button
-              onPress={() => {
-                setAuthState({
-                  state: 'SIGNED_OUT',
-                  token: ''
-                })
-              }}
-              title="Sign Out"
-            >
-              Sign Out
-            </Button>
             <ScrollView>
               {
                 this.state.foods.map(food => {
