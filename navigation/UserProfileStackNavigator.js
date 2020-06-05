@@ -3,9 +3,10 @@ import * as React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
 import DefaultNavBar from "./NavBars/DefaultNavBar";
-import { 
+import {
   UserProfile,
   RestaurantProfile,
+  EditProfile,
   RestaurantStatisticsProfile,
   AddDish
 } from "../screens/MainDrawer";
@@ -29,6 +30,7 @@ export default function StackNavigator({ navigation, route }) {
     >
       <Stack.Screen name="UserProfile" component={UserProfile} />
       <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} />
+      <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="RestaurantStatisticsProfile" component={RestaurantStatisticsProfile} />
       <Stack.Screen name="AddDish" component={AddDish} />
     </Stack.Navigator>

@@ -108,14 +108,18 @@ class UserProfileComponent extends Component {
             </View>
           </View>
 
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={async () => { navigation.navigate("RestaurantProfile") }}
-            >
-              <Text style={styles.buttonText}>My Restaurants</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={async () => { navigation.navigate("RestaurantProfile") }}
+          >
+            <Text style={styles.buttonText}>My Restaurants</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={async () => { navigation.navigate("EditProfile") }}
+          >
+            <Text style={styles.buttonText}>Edit Profile</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
             onPress={() => { navigation.navigate("RestaurantStatisticsProfile") }}
