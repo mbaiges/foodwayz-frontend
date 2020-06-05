@@ -124,7 +124,7 @@ class UserProfileComponent extends Component {
             style={styles.button}
             onPress={() => { navigation.navigate("RestaurantStatisticsProfile") }}
           >
-            <Text>Statistics</Text>
+            <Text style={styles.buttonText}>Statistics</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -135,7 +135,7 @@ class UserProfileComponent extends Component {
             }}
             style={styles.button}
           >
-            <Text>Sign Out</Text>
+            <Text style={styles.buttonText}>Sign Out</Text>
           </TouchableOpacity>
         </ScrollView>
       </SafeAreaView>

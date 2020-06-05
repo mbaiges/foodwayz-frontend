@@ -31,7 +31,7 @@ class HomeScreenComponent extends Component {
       foods: resp.result.map((food) => {
         return {
           id: food.a_food_id,
-          imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
+          imageUrl: food.a_image_url,
           title: food.a_description,
           brand: 'El restaurante mas rico',
           rating: food.a_score,
