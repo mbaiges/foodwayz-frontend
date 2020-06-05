@@ -5,15 +5,15 @@ import * as firebase from 'firebase';
 
 class TestComp extends React.Component {
 
-    state = {
-        imageUrl: null,
-    };
+    constructor() {
+        super();
 
-    givenImageName;
-
-    static navigationOptions = {
-        header: null,
-    };
+        this.state = {
+            imageUrl: null,
+        };
+    
+        this.givenImageName;
+    }
 
     onChooseImagePress = async () => {
         let result = await ImagePicker.launchCameraAsync();
@@ -47,16 +47,6 @@ class TestComp extends React.Component {
         });
     }
 
-    checkImage = () => {
-        const { imageUrl } = this.state;
-
-        if (imageUrl) {
-            return <Image source={{ uri: imageUrl, width: 200, height: 200, }} />;
-        } else {
-            return <Image source={{ uri: 'https://img2.freepng.es/20180213/lbe/kisspng-po-giant-panda-kung-fu-panda-bear-valentines-day-big-eyes-of-the-panda-5a8358022317c9.3491182915185571861438.jpg', width: 200, height: 200, }} />
-        }
-    }
-
     render() {
         return (
             <View alignItems="center" style={styles.backgroundContainer}>
@@ -83,7 +73,7 @@ class TestComp extends React.Component {
                     </View>
                 </View>
                 <View>
-                    {this.checkImage()}
+                    <Image source={{ uri: this.state.imageUrl?this.state.imageUrl:'https://img2.freepng.es/20180213/lbe/kisspng-po-giant-panda-kung-fu-panda-bear-valentines-day-big-eyes-of-the-panda-5a8358022317c9.3491182915185571861438.jpg', width: 200, height: 200, }} />
                 </View>
             </View>
         );
