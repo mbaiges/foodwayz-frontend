@@ -15,6 +15,7 @@ import {
     EditProfile,
     UserProfile,
     RestaurantStatisticsProfile,
+
 } from './UserProfileStack';
 
 import Filter from './FilterScreen';
@@ -22,6 +23,7 @@ import Food from './FoodScreen';
 import RateFood from './RateFoodScreen';
 import RestaurantProfile from './RestaurantProfileScreen';
 import Reviews from './ReviewsScreen';
+import AddDish from './AddDishScreen';
 
 export {
     // About Us Stack
@@ -39,10 +41,13 @@ export {
     UserProfile,
     RestaurantStatisticsProfile,
 
+
     // Shared
     Filter,
     Food,
     RateFood,
     RestaurantProfile,
-    Reviews
+    Reviews,
+    AddDish,
+
 }

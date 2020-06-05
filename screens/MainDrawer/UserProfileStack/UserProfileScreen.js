@@ -38,7 +38,7 @@ const UserProfile = ({ navigation }) => {
                       console.log("I want to navigate to Dish page");
                     }}>
                 <Card
-                  // image={{uri: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg'}}
+                  image={{uri: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg'}}
                   imageStyle={{
                     height: 100,
                     }}
@@ -102,10 +102,15 @@ const UserProfile = ({ navigation }) => {
             </ScrollView>
           </View>
         </View>
-        <Button
-          title="Restaurants"
-          onPress={() => {navigation.navigate("RestaurantProfile")}}
-        ></Button>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+              style={styles.button}
+              onPress={async () => {navigation.navigate("RestaurantProfile")}}
+          >
+              <Text style={styles.buttonText}>My Restaurants</Text>
+          </TouchableOpacity>
+        </View>
         <Button
           title="Statistics"
           onPress={() => {navigation.navigate("RestaurantStatisticsProfile")}}
@@ -221,6 +226,31 @@ const styles = StyleSheet.create({
     paddingTop: 5,
   },
   
+  buttonContainer:{
+    position: "absolute",
+    alignContent:'flex-end',
+    paddingTop: 20,
+    paddingLeft:260,
+    paddingBottom: 22,
+  },
+
+  button: {
+    elevation: 15,
+    borderRadius: 25,
+    backgroundColor: "#FC987E",
+    color: "black",
+    width: 130,
+    alignItems: "center",
+    padding: 13,
+    height: 48,
+  },
+
+
+  buttonText:{
+    color: "white",
+      
+  },
+
 });
 
 export default UserProfile;

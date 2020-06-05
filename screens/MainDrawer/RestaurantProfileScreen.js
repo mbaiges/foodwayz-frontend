@@ -45,6 +45,14 @@ const RestaurantProfile = ({ navigation }) => {
         una sopa a las 2 de la madrugada si así lo deseas!</Text>
       </View>
 
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+            style={styles.button}
+            onPress={async () => {navigation.navigate("AddDish")}}
+        >
+            <Text style={styles.buttonText}>ADD NEW DISH</Text>
+        </TouchableOpacity>
+      </View>
 
       <View style={styles.popularContainer} >
         <Text style={styles.subtitleText}>Our most popular dishes</Text>
@@ -209,16 +217,17 @@ const styles = StyleSheet.create({
   },
 
   subtitleText: {
+    paddingTop:10,
     textAlign: "left",
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 20,
     paddingLeft: 15,
   },
 
   subsubtitleText: {
     textAlign: "center",
     fontWeight: "bold",
-    fontSize: 14,
+    fontSize: 18,
     marginLeft: 15,
     marginTop: 15,
   },
@@ -235,15 +244,31 @@ const styles = StyleSheet.create({
     marginHorizontal: 25,
   },
 
+
+
+  
+  buttonContainer:{
+    alignItems:"center",
+    paddingTop: 20,
+    paddingBottom: 22,
+  },
+
+
   button: {
     elevation: 15,
     borderRadius: 25,
-    backgroundColor: "white",
+    backgroundColor: "#FC987E",
     color: "black",
     width: 217,
     alignItems: "center",
     padding: 13,
     height: 48,
+  },
+
+
+  buttonText:{
+    color: "white",
+      
   },
 
   popularContainer: {

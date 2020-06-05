@@ -276,12 +276,21 @@ const styles = StyleSheet.create({
         paddingLeft: 180,
     },
     
+    buttonTitle:{
+        textAlign: "left",
+        fontWeight: "bold",
+        fontSize: 26,
+        //paddingLeft: 3,
+    },
+    
+    
     buttonContainer:{
         alignItems:"center",
         paddingTop: 20,
         paddingBottom: 22,
     },
 
+  
     button: {
         elevation: 15,
         borderRadius: 25,
@@ -293,12 +302,7 @@ const styles = StyleSheet.create({
         height: 48,
     },
 
-    buttonTitle:{
-        textAlign: "left",
-        fontWeight: "bold",
-        fontSize: 26,
-        //paddingLeft: 3,
-    },
+    
     buttonText:{
         color: "white",
         
