@@ -39,8 +39,17 @@ export default class FoodCard extends Component {
             height: 200,
             }}
           >
-              <Text style={styles.foodName}>{title}</Text>
-              <Text style={styles.foodBrand}>{brand}</Text>
+              
+              {brand?(
+                <View>
+                  <Text style={styles.foodName}>{title}</Text>
+                  <Text style={styles.foodBrand}>{brand}</Text>
+                </View>
+              ):(
+                <Text style={styles.foodName}>{title}</Text>
+              )
+              }
+              
               <ScrollView horizontal={true} style={styles.tagsList}>
                 {tagButtons[1]}    
                 {/* <TouchableOpacity style={styles.buttonTag}

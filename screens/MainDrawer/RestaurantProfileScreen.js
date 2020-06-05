@@ -11,8 +11,140 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
+import FoodCard from "../components/FoodCard";
+import { RestaurantApi } from '../../api';
 
-//import { Constants } from 'expo';
+class RestaurantProfileComponent extends React.Component{
+  
+  constructor() {
+    super();
+    this.state = {
+      name: '',
+      description: '',
+      images: [],
+      popularfood: [],
+      allfood: []
+    }
+  }
+
+  componentDidMount() {
+    const { id } = this.props;
+    
+    try {
+      const rest_resp = RestaurantApi.get(id);
+      //const img_resp = RestaurantImagesApi.get(id);
+      //const foods_resp = FoodsApi.getByRestaurant(id);
+      this.setState({
+        name: resp.result.a_name,
+        images: [],
+        popularfood: [],
+        allfood: [],
+      })
+    } catch (error) {
+      
+    }
+
+  }
+  
+  render(){
+
+    return (
+      <SafeAreaView style={styles.backgroundContainer}>
+        <ScrollView>
+
+          <View style={styles.mainPage}>
+            <ScrollView horizontal={true}>
+                {this.state.images.map((imageURL, idx) =>
+                  (
+                  <Card key={idx}><Image style={styles.logoImage} src={imageURL}/></Card>
+                  )
+                )}
+              </ScrollView>
+            <Text style={styles.logoText}>{this.state.name}</Text>
+            <Text style={styles.primaryText}>About us</Text>
+            <Text style={styles.secondaryText}>{this.state.description}</Text>
+          </View>
+
+        <View style={styles.popularContainer} >
+          <Text style={styles.subtitleText}>Our most popular dishes</Text>
+          <View style={styles.popular}>
+          <ScrollView horizontal={true}>
+              {this.state.popularfoods.map(food =>
+                (
+                  <FoodCard key={food.id}
+                    src={food.image}
+                    title={food.name}
+                    onPress={async () => {navigation.navigate("Food");
+                      console.log("I want to navigate to Dish page");
+                    }}
+                    rating = {food.rating}
+                  />
+                )
+              )}
+            </ScrollView>
+          </View>
+        </View>    
+
+        <View style={styles.popularContainer}>
+          <Text style={styles.subtitleText}>All of our dishes</Text>
+          <View style={styles.popular}>
+            <ScrollView horizontal={true}>
+              {this.state.allfoods.map(food =>
+                (
+                  <FoodCard key={food.id}
+                    image={{uri: food.image}}
+                    title={food.name}
+                    onPress={async () => {navigation.navigate("Food");
+                      console.log("I want to navigate to Dish page");
+                    }}
+                    rating = {food.rating}
+                  />
+                )
+              )}
+            </ScrollView>
+          </View>
+        </View>
+
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+}
+
+export default function RestaurantProfileScreen(props) {
+  return <RestaurantProfileComponent {...props}/>
+} 
+
+
+/*export default class RestaurantProfileScreen extends React.Component{
+  state={
+    loading: true,
+    dishes: []
+  };
+
+  async componentDidMount(){
+    const url="";
+    const response = await fetch(url);
+    const data = await response.json();
+    this.setState({dishes: data.results, loading: false});
+  }
+  
+  render(){
+    return(
+      <div>
+        {this.state.dishes.map(foodCard => (
+          <div key={FoodCard.ID}>
+            <div>{FoodCard.name}</div>
+            <div>{FoodCard.description}</div>
+            <img src={FoodCard.picture}/>
+          </div>
+        ))}
+      </div>
+    );
+  }
+}
+
+
 
 const { width } = Dimensions.get("window");
 
@@ -30,19 +162,11 @@ const RestaurantProfile = ({ navigation }) => {
               source={{uri: 'https://i.pinimg.com/originals/eb/80/87/eb80873b89dcc92228712b6257ac05d0.jpg'}}
             />
           </Card>
-          <Card>
-            <Image
-              style={styles.logoImage}
-              source={{uri: 'https://media-cdn.tripadvisor.com/media/photo-s/12/3f/af/ba/ambience.jpg'}}
-            />
-          </Card>
         </ScrollView>
-        <Text style={styles.logoText}>Restaurante El Panda Guerrero</Text>
-        
+
+        <Text style={styles.logoText}>{restaurantName}</Text>
         <Text style={styles.primaryText}>About us</Text>
-        <Text style={styles.secondaryText}>Somos un restaurante asiático basado en la película Kung Fu Panda.
-        Nuestros cocineros panda trabajan las 24h sin descansar para que tú puedas comer
-        una sopa a las 2 de la madrugada si así lo deseas!</Text>
+        <Text style={styles.secondaryText}>{restaurantDescription}</Text>
       </View>
 
 
@@ -64,22 +188,6 @@ const RestaurantProfile = ({ navigation }) => {
                 </View>
               </Card>
             </TouchableOpacity>
-            <Card>
-              <Image
-                style={styles.popularImage}
-                resizeMode="cover"
-                source={{uri: 'https://i.pinimg.com/originals/e6/b0/6f/e6b06fc8b9901993fae74c34bcff2e09.jpg'}}
-              />
-              <Text style={styles.foodName}>Tallarines Po</Text>
-            </Card>
-            <Card>
-              <Image
-                style={styles.popularImage}
-                resizeMode="cover"
-                source={{uri: 'https://img.culturacolectiva.com/cdn-cgi/image/f=auto,w=1600,q=80,fit=contain/content_image/2019/5/2/1556836847320-recetas-de-comida-china-para-preparar-facil-y-rapido.001.jpeg'}}
-              />
-              <Text style={styles.foodName}>Parrillada Panda</Text>
-            </Card>
           </ScrollView>
         </View>
       </View>    
@@ -124,7 +232,7 @@ const RestaurantProfile = ({ navigation }) => {
       </ScrollView>
     </SafeAreaView>
   );
-};
+};*/
 
 const { width: WIDTH } = Dimensions.get("window");
 
@@ -252,4 +360,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default RestaurantProfile;
+//export default RestaurantProfile;
