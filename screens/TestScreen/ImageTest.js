@@ -11,7 +11,7 @@ class TestComp extends React.Component {
         this.state = {
             imageUrl: null,
         };
-    
+
         this.givenImageName;
     }
 
@@ -41,7 +41,6 @@ class TestComp extends React.Component {
     getImage = async () => {
         firebase.storage().ref().child(`images/${this.givenImageName}`).getDownloadURL().then((url) => {
             this.setState({ imageUrl: url });
-            console.log(url);
         }).catch(function (error) {
             Alert.alert(error.message);
         });
@@ -73,7 +72,7 @@ class TestComp extends React.Component {
                     </View>
                 </View>
                 <View>
-                    <Image source={{ uri: this.state.imageUrl?this.state.imageUrl:'https://img2.freepng.es/20180213/lbe/kisspng-po-giant-panda-kung-fu-panda-bear-valentines-day-big-eyes-of-the-panda-5a8358022317c9.3491182915185571861438.jpg', width: 200, height: 200, }} />
+                    <Image source={{ uri: this.state.imageUrl ? this.state.imageUrl : 'https://img2.freepng.es/20180213/lbe/kisspng-po-giant-panda-kung-fu-panda-bear-valentines-day-big-eyes-of-the-panda-5a8358022317c9.3491182915185571861438.jpg', width: 200, height: 200, }} />
                 </View>
             </View>
         );
