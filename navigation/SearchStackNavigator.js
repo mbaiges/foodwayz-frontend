@@ -3,7 +3,7 @@ import * as React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
 import DefaultNavBar from "./DefaultNavBar";
-import SearchScreen from "../screens/SearchScreen";
+// import { Search } from "../screens/MainDrawer";
 
 import { Ionicons } from "@expo/vector-icons";
 
@@ -22,7 +22,7 @@ export default function StackNavigator({ navigation, route }) {
         DefaultNavBar({ title: getHeaderTitle(route), navigation })
       }
     >
-      <Stack.Screen name="SearchScreen" component={SearchScreen} />
+      {/* <Stack.Screen name="Search" component={Search} /> */}
     </Stack.Navigator>
   );
 }

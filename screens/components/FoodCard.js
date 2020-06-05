@@ -19,9 +19,9 @@ export default class FoodCard extends Component {
       tagButtons.push(
         <View key={i}>
           <TouchableOpacity style={styles.buttonTag}
-            onPress={() => Alert.alert('Simple Button pressed')}
+            onPress={() => Alert.alert('Tag Button pressed')}
           >
-            <Text>{this.tags[i]}}</Text>
+            <Text>{this.tags[i]}</Text>
           </TouchableOpacity>
         </View>
         
@@ -37,13 +37,12 @@ export default class FoodCard extends Component {
             image={image}
             imageStyle={{
             height: 200,
-            resizeMode: 'cover'
             }}
           >
               <Text style={styles.foodName}>{title}</Text>
               <Text style={styles.foodBrand}>{brand}</Text>
               <ScrollView horizontal={true} style={styles.tagsList}>
-                {tagButtons[1]}    
+                {tagButtons}    
                 {/* <TouchableOpacity style={styles.buttonTag}
                   onPress={() => Alert.alert('Simple Button pressed')}
                 >

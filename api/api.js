@@ -1,8 +1,10 @@
 export { Api };
 
 class Api {
+  static getToken = () => {return ''};
+
   static get baseUrl() {
-    return 'http://192.168.1.13:3002';
+    return 'http://192.168.1.4:3002';
   }
 
   static get timeout() {
@@ -14,7 +16,7 @@ class Api {
       controller = controller || new AbortController();
       setTimeout(() => controller.abort(), Api.timeout);
       init.signal = controller.signal
-      
+
       fetch(url, init)
         .then(response => {
           return response.json();
@@ -32,14 +34,19 @@ class Api {
   }
 
   static get(url, controller) {
-    return Api.fetch(url, {}, controller)
+    return Api.fetch(url, {
+      headers: {
+        'Authorization': 'Bearer ' + Api.getToken(),
+      }
+    }, controller)
   }
 
   static post(url, data, controller) {
     return Api.fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json; charset=utf-8'
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': 'Bearer ' + Api.getToken(),
       },
       body: JSON.stringify(data)
     }, controller);
@@ -50,7 +57,8 @@ class Api {
     return Api.fetch(url, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json; charset=utf-8'
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': 'Bearer ' + Api.getToken(),
       },
       body: JSON.stringify(data)
     }, controller);
@@ -59,6 +67,13 @@ class Api {
   static delete(url, controller) {
     return Api.fetch(url, {
       method: 'DELETE',
+      headers: {
+        'Authorization': 'Bearer ' + Api.getToken(),
+      }
     }, controller);
+  }
+
+  static setTokenGetter(getter) {
+    Api.getToken = getter;
   }
 }

@@ -3,12 +3,14 @@ import * as React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
 //import HomeScreen from "../screens/HomeScreen";
-import FoodScreen from "../screens/FoodScreen";
-import FilterScreen from "../screens/FilterScreen";
-import SearchScreen from "../screens/SearchScreen";
+import {
+  Food,
+  Filter,
+  Search,
+  Home
+} from '../screens/MainDrawer';
 
-import HomeScreen from "../screens/MainDrawer/HomeScreen";
-import DefaultNavBar from "./DefaultNavBar";
+import DefaultNavBar from "./NavBars/DefaultNavBar";
 import SearchNavBar from "./SearchNavBar";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -28,11 +30,11 @@ export default function StackNavigator({ navigation, route }) {
         DefaultNavBar({ title: getHeaderTitle(route), navigation })
       }
     >
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Food" component={FoodScreen} />
-      <Stack.Screen name="Filter" component={FilterScreen} />
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Food" component={Food} />
+      <Stack.Screen name="Filter" component={Filter} />
       {/* <Stack.Screen name="Search" component={SearchScreen} options={() => SearchNavBar({ title: getHeaderTitle(route), navigation })} /> */}
-      <Stack.Screen name="Search" component={SearchScreen} />
+      {/* <Stack.Screen name="Search" component={Search} /> */}
     </Stack.Navigator>
   );
 }

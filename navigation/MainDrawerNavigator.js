@@ -10,6 +10,8 @@ import HomeStack from "./HomeStackNavigator";
 import DiscoverStack from "./DiscoverStackNavigator";
 import CategoriesStack from "./CategoriesStackNavigator";
 import UserProfileStack from "./UserProfileStackNavigator";
+import ContactUsStack from "./ContactUsStackNavigator";
+import AboutUsStack from "./AboutUsStackNavigator";
 
 const Drawer = createDrawerNavigator();
 const INITIAL_ROUTE_NAME = "Home";
@@ -40,6 +42,8 @@ export default function MainDrawerNavigator({ navigation, route }) {
         component={CategoriesStack}
       />
       <Drawer.Screen name="UserProfileStack" component={UserProfileStack} />
+      <Drawer.Screen name="ContactUsStack" component={ContactUsStack} />
+      <Drawer.Screen name="AboutUsStack" component={AboutUsStack} />
     </Drawer.Navigator>
   );
 }

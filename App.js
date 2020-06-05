@@ -9,12 +9,12 @@ import React, { useEffect, useState, useMemo } from "react";
 import { AsyncStorage, Platform, StatusBar, StyleSheet, View, Text } from "react-native";
 
 import useCachedResources from "./hooks/useCachedResources";
-import LinkingConfiguration from "./navigation/LinkingConfiguration";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
 import { firebaseConfig } from './constants/ApiKeys';
 import * as firebase from 'firebase';
+import { Api } from "./api/api"
 
 import Colors from "./constants/Colors";
 
@@ -26,6 +26,7 @@ const StorageKey = '@FoodWayz:AuthKey';
 
 export function usePersistedAuthState(key, initialState) {
   const [authState, setAuthState] = useState(null)
+  Api.setTokenGetter(() => authState.token);
 
   useEffect(() => {
     async function getAndSetInitialState() {
@@ -62,7 +63,7 @@ export default function App(props) {
 
   useEffect(() => {
     (async () => {
-      const auth = authState //await JSON.parse(authState);
+      const auth = authState; //await JSON.parse(authState);
       if (auth) {
         const { state, token } = auth;
         if (state) {
@@ -91,10 +92,17 @@ export default function App(props) {
         <NavigationContainer>
           <UserContext.Provider value={providerAuthState}>
             <Stack.Navigator headerMode="none">
-              <Stack.Screen
-                name="Test"
-                component={TestScreen}
-              />
+              {(!authState || authState.token === '') ?
+                <Stack.Screen
+                  name="Auth"
+                  component={AuthStack}
+                />
+                :
+                <Stack.Screen
+                  name="Main"
+                  component={MainDrawer}
+                />
+              }
             </Stack.Navigator>
             {/* <Text>{authState}</Text> */}
           </UserContext.Provider>
@@ -170,4 +178,3 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.tintColor,
   },
 });
-

@@ -2,7 +2,7 @@ import { Api } from './api';
 
 class User {
   constructor(data) {
-    const {id, name, email, password} = data;
+    const { id, name, email, password } = data;
     if (id) {
       this.id = id;
     }
@@ -14,15 +14,15 @@ class User {
   }
 }
 
-class UserApi{
-  constructor() {}
+class UserApi {
+  constructor() { }
 
   static get url() {
     return `${Api.baseUrl}/user`;
   }
 
   static add(user) {
-  return Api.post(UserApi.url, user);
+    return Api.post(UserApi.url, user);
   }
 
   static modify(user) {
@@ -35,6 +35,10 @@ class UserApi{
 
   static get(id) {
     return Api.get(`${UserApi.url}/${id}`);
+  }
+
+  static getMe(id) {
+    return Api.get(`${UserApi.url}`);
   }
 
   static getAll() {
