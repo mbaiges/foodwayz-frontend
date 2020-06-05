@@ -12,103 +12,109 @@ import {
   Dimensions
 } from "react-native";
 
-import { Image, ListItem, Icon, Input, Rating} from 'react-native-elements';
-
-
+import { Image, ListItem, Icon, Input, Rating } from 'react-native-elements';
 
 class FoodScreenComponent extends Component {
   constructor() {
     super();
+    this.state = {
+      food: {},
+      tags: [],
+    }
+  }
+
+  async fetchFood() {
+    this.setState({
+      food: {
+        name: 'guiso',
+        restaurant: 'Restaurante Bellagamba',
+        description: 'Guiso con carne, papa, zanahorias, .... ',
+        rating: 5
+      }
+    })
+    this.setState({
+      tags: [
+        {
+          name: 'Tag1'
+        },
+        {
+          name: 'Tag2'
+        },
+        {
+          name: 'Tag3'
+        }
+      ]
+    })
+  }
+
+  componentDidMount() {
+    this.fetchFood();
   }
 
   render() {
     const { navigation } = this.props;
-    const { rating } = this.props;
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
-        <ScrollView justifyContent = 'flex-start'>
-          <View style={{alignItems: 'center'}}>
+        <ScrollView justifyContent='flex-start'>
+          <View style={{ alignItems: 'center' }}>
             <Image source={{ uri: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg' }}
-                  style={styles.imageStyle}/>
+              style={styles.imageStyle} />
           </View>
-          <Text style={styles.primaryText}>Guiso</Text>
-          <Text style={styles.secondaryText}>Restaurante Bellagamba </Text> 
+          <Text style={styles.primaryText}>{this.state.food.name}</Text>
+          <Text style={styles.secondaryText}>{this.state.food.restaurant}</Text>
 
           <Text style={styles.primaryText}>Description</Text>
-          <Text style={styles.secondaryText}>Guiso con carne, papa, zanahorias, .... </Text>
-          
+          <Text style={styles.secondaryText}>{this.state.food.description}</Text>
+
           <View>
             <Text style={styles.primaryText}>Tags</Text>
             <View style={styles.tagsList}>
-              <TouchableOpacity style={styles.buttonTag}
-                onPress={() => Alert.alert('Simple Button pressed')}
-              >
-              <Text>Tag1</Text>
-              </TouchableOpacity>
-              
-              <TouchableOpacity style={styles.buttonTag}
-                onPress={() => Alert.alert('Simple Button pressed')}
-              >
-              <Text>Tag2</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.buttonTag}
-                onPress={() => Alert.alert('Simple Button pressed')}
-              >
-              <Text>Tag3</Text>
-              </TouchableOpacity>
-              
-              <TouchableOpacity style={styles.buttonTag}
-                onPress={() => Alert.alert('Simple Button pressed')}
-              >
-              <Text>Tag4</Text>
-              </TouchableOpacity>
-            
-              <TouchableOpacity style={styles.buttonTag}
-                onPress={() => Alert.alert('Simple Button pressed')}
-              >
-              <Text>Taaaag5</Text>
-              </TouchableOpacity>
-            
-              <TouchableOpacity style={styles.buttonTag}
-                onPress={() => Alert.alert('Simple Button pressed')}
-              >
-              <Text>Taaaaaaaaaag6</Text>
-              </TouchableOpacity>
+              {
+                this.state.tags.map((tag, idx) => {
+                  return (
+                    <TouchableOpacity
+                      key={idx}
+                      style={styles.buttonTag}
+                      onPress={() => Alert.alert('Simple Button pressed')}
+                    >
+                      <Text>{tag.name}</Text>
+                    </TouchableOpacity>
+                  )
+                })
+              }
             </View>
-            
-          </View>  
 
-          
-          <View style={styles.showAll} flexDirection='row' justifyContent= 'space-between'  >
+          </View>
+
+          <View style={styles.showAll} flexDirection='row' justifyContent='space-between'  >
             <Text style={styles.primaryText}>Rate:</Text>
             <View>
               <Text style={styles.secondaryText}>SHOW ALL</Text>
               <Icon
-                    name='arrow-right'
-                    type='material-community'
-                    
-                  />
+                name='arrow-right'
+                type='material-community'
+
+              />
             </View>
           </View>
-          
+
           <View style={styles.ratingContainer}>
-            <Text style={styles.ratingText}>3.5</Text>
-            <Rating imageSize={30} readonly startingValue={rating} style={styles.rating} />
+            <Text style={styles.ratingText}>{this.state.food.rating}</Text>
+            <Rating imageSize={30} readonly startingValue={this.state.food.rating} style={styles.rating} />
           </View>
 
-          
-        <View alignItems="center">
-          <TouchableOpacity
-            style={styles.button}
-            onPress={async () => {
-              console.log("I want to navigate to Main");
-              
-            }}
-          >
-            <Text style={styles.buttonItemsContainer}>RATE DISH</Text>
-          </TouchableOpacity>
-        </View>
+          <View alignItems="center">
+            <TouchableOpacity
+              style={styles.button}
+              onPress={async () => {
+                console.log("I want to navigate to Main");
+
+              }}
+            >
+              <Text style={styles.buttonItemsContainer}>RATE DISH</Text>
+            </TouchableOpacity>
+          </View>
 
         </ScrollView>
 
@@ -128,7 +134,7 @@ const styles = StyleSheet.create({
     width: null,
     height: null,
     backgroundColor: "#FFFFFF",
-    paddingBottom: 0, 
+    paddingBottom: 0,
     paddingTop: 0,
   },
 
@@ -137,7 +143,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 18,
     paddingLeft: 15,
-    paddingTop:15,
+    paddingTop: 15,
   },
 
   secondaryText: {
@@ -145,36 +151,36 @@ const styles = StyleSheet.create({
     fontSize: 14,
     paddingLeft: 15,
   },
-  
+
   tagsList: {
-    flex: 1, 
+    flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
 
   buttonTag: {
     borderRadius: 25,
-    color:"black",
-    backgroundColor:"#D8D8D8",
+    color: "black",
+    backgroundColor: "#D8D8D8",
     padding: 13,
     marginLeft: 20,
-    marginTop:5,
+    marginTop: 5,
     alignSelf: 'flex-start',
   },
 
-  imageStyle:{
+  imageStyle: {
     width: Dimensions.get('window').width,
-    height: 200, 
-    alignSelf:'center',
-    
+    height: 200,
+    alignSelf: 'center',
+
   },
 
 
-  buttonContainer:{
+  buttonContainer: {
     elevation: 20,
-    position:"absolute",
-    alignSelf:'center',
-    marginTop: 580,    
+    position: "absolute",
+    alignSelf: 'center',
+    marginTop: 580,
   },
 
   button: {
@@ -184,10 +190,10 @@ const styles = StyleSheet.create({
     width: 150,
     padding: 13,
     height: 48,
-    marginTop:20,
+    marginTop: 20,
   },
 
-  buttonItemsContainer:{
+  buttonItemsContainer: {
     marginLeft: "21%",
   },
 
@@ -195,22 +201,22 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
 
-  showAll:{
-  
+  showAll: {
+
     marginTop: 22,
 
   },
-  ratingContainer:{
+  ratingContainer: {
     marginTop: 0,
     flexDirection: 'row'
   },
 
-  ratingText:{
+  ratingText: {
     textAlign: "left",
     fontWeight: "bold",
     fontSize: 27,
     paddingLeft: 40,
     paddingRight: 20,
-   
+
   }
 });

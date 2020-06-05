@@ -22,20 +22,7 @@ class UserProfileComponent extends Component {
     super();
     this.state = {
       user: {},
-      reviews: [
-        {
-          name: 'Ribs',
-          imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
-        },
-        {
-          name: 'guanacos',
-          imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
-        },
-        {
-          name: 'fritas',
-          imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
-        }
-      ]
+      reviews: [],
     }
   }
 
@@ -44,11 +31,28 @@ class UserProfileComponent extends Component {
     this.setState({
       user: resp.result[0]
     })
-    console.log(this.state.user);
   }
 
   async fetchReviews() {
-
+    this.setState({
+      reviews: [
+        {
+          name: 'Ribs',
+          imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
+          score: 3
+        },
+        {
+          name: 'guanacos',
+          imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
+          score: 4
+        },
+        {
+          name: 'fritas',
+          imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
+          score: 1.5
+        }
+      ]
+    })
   }
 
   async componentDidMount() {
@@ -77,12 +81,14 @@ class UserProfileComponent extends Component {
             <View style={styles.review}>
               <ScrollView horizontal={true}>
                 {
-                  this.state.reviews.map(review => {
+                  this.state.reviews.map((review, idx) => {
                     return (
-                      <TouchableOpacity onPress={async () => {
-                        navigation.navigate("Food");
-                        console.log("I want to navigate to Dish page");
-                      }}>
+                      <TouchableOpacity
+                        key={idx}
+                        onPress={async () => {
+                          navigation.navigate("Food");
+                          console.log("I want to navigate to Dish page");
+                        }}>
                         <Card
                           image={{ uri: review.imageUrl }}
                           imageStyle={{
@@ -92,7 +98,7 @@ class UserProfileComponent extends Component {
                           <View style={styles.cardFooter}>
                             <Text style={styles.foodName}>{review.name}</Text>
                           </View>
-                          <Rating imageSize={20} readonly startingValue={3} style={styles.rating} />
+                          <Rating imageSize={20} readonly startingValue={review.score} style={styles.rating} />
                         </Card>
                       </TouchableOpacity>
                     )
@@ -110,21 +116,23 @@ class UserProfileComponent extends Component {
               <Text style={styles.buttonText}>My Restaurants</Text>
             </TouchableOpacity>
           </View>
-          <Button
-            title="Statistics"
+          <TouchableOpacity
+            style={styles.button}
             onPress={() => { navigation.navigate("RestaurantStatisticsProfile") }}
-          ></Button>
-          <Button
+          >
+            <Text>Statistics</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
             onPress={() => {
               setAuthState({
                 state: 'SIGNED_OUT',
                 token: ''
               })
             }}
-            title="Sign Out"
+            style={styles.button}
           >
-            Sign Out
-            </Button>
+            <Text>Sign Out</Text>
+          </TouchableOpacity>
         </ScrollView>
       </SafeAreaView>
     );
