@@ -38,6 +38,15 @@ const RestaurantProfile = ({ navigation }) => {
           </Card>
         </ScrollView>
         <Text style={styles.logoText}>Restaurante El Panda Guerrero</Text>
+
+        <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => { navigation.navigate("RestaurantStatisticsProfile") }}
+            >
+              <Text style={styles.buttonText}>Statistics</Text>
+            </TouchableOpacity>
+        </View>
         
         <Text style={styles.primaryText}>About us</Text>
         <Text style={styles.secondaryText}>Somos un restaurante asiático basado en la película Kung Fu Panda.

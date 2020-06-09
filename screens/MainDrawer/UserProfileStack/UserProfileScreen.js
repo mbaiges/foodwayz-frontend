@@ -107,36 +107,44 @@ class UserProfileComponent extends Component {
               </ScrollView>
             </View>
           </View>
-
-          <TouchableOpacity
-            style={styles.button}
-            onPress={async () => { navigation.navigate("RestaurantProfile") }}
-          >
-            <Text style={styles.buttonText}>My Restaurants</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={async () => { navigation.navigate("EditProfile") }}
-          >
-            <Text style={styles.buttonText}>Edit Profile</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => { navigation.navigate("RestaurantStatisticsProfile") }}
-          >
-            <Text style={styles.buttonText}>Statistics</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setAuthState({
-                state: 'SIGNED_OUT',
-                token: ''
-              })
-            }}
-            style={styles.button}
-          >
-            <Text style={styles.buttonText}>Sign Out</Text>
-          </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={async () => { navigation.navigate("RestaurantProfile") }}
+            >
+              <Text style={styles.buttonText}>My Restaurants</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={async () => { navigation.navigate("EditProfile") }}
+            >
+              <Text style={styles.buttonText}>Edit Profile</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => { navigation.navigate("RestaurantStatisticsProfile") }}
+            >
+              <Text style={styles.buttonText}>Statistics</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                setAuthState({
+                  state: 'SIGNED_OUT',
+                  token: ''
+                })
+              }}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>Sign Out</Text>
+            </TouchableOpacity>
+          </View>
+          
         </ScrollView>
       </SafeAreaView>
     );
@@ -249,14 +257,12 @@ const styles = StyleSheet.create({
     paddingTop: 5,
   },
 
-  buttonContainer: {
-    position: "absolute",
-    alignContent: 'flex-end',
-    paddingTop: 20,
-    paddingLeft: 260,
-    paddingBottom: 22,
+  
+  buttonContainer:{
+    alignItems:"center",
+    paddingTop: 10,
+    paddingBottom: 15,
   },
-
   button: {
     elevation: 15,
     borderRadius: 25,
