@@ -33,12 +33,13 @@ class HomeScreenComponent extends Component {
           id: food.a_food_id,
           imageUrl: food.a_image_url,
           title: food.a_description,
-          brand: 'El restaurante mas rico',
+          brand: food.a_rest[0].a_name,
           rating: food.a_score,
         }
       })
     })
     console.log(this.state.foods);
+    console.log(JSON.stringify(resp.result));
   }
 
   componentDidMount() {

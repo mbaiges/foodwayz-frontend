@@ -1,79 +1,126 @@
-import React, { Component } from 'react';
+import React, { Component, useContext} from 'react';
 import { Card, ListItem, Button, Icon, Input} from 'react-native-elements';
 import { SafeAreaView, StyleSheet, View, Text, Image, TextInput, ScrollView, TouchableOpacity, Dimensions} from 'react-native';
-
+import { UserContext } from '../../../context/UserContext';
+import { UserApi } from '../../../api';
 
 //import { Constants } from 'expo';
 
-const { width } = Dimensions.get('window');
+// const state={
+//     Name: "Alfredo",
+//     LastName: "Rotta",
+//     Email: "alfredorotta@gmail.com",
+//     BirthDate : "13/02/1999",
+//     Gender: "Male",
+// };
 
-const state={
-    Name: "Alfredo",
-    LastName: "Rotta",
-    Email: "alfredorotta@gmail.com",
-    BirthDate : "13/02/1999",
-    Gender: "Male",
-};
+class EditProfileComponent extends Component {
+  constructor() {
+    super();
+    this.state = {
+      user: {},
+    }
+  }
 
+  async fetchUser() {
+    console.log('fetching user');
+    const resp = await UserApi.getMe();
+    this.setState({
+      user: resp.result[0]
+    })
+    console.log('done fetching user');
+    console.log(this.state.user);
+    console.log(JSON.stringify(resp.result[0]));
+  }
 
-const EditProfile = ({ navigation }) => {
+  async componentDidMount() {
+    console.log('mounting');
+    await this.fetchUser();
+  }
+
+  async changeImage() {
     
+  }
 
-  return (
-    <ScrollView>
-    <View style={styles.backgroundContainer}>
-      <View style={styles.mainPage}>
-          <Image style={styles.logoImage} source={require('../../../assets/images/Po.jpg')}/>
-          <Text style={styles.logoEditText}>Edit image</Text>
-      </View>
-      <Text style={styles.subtitle}> Personal Information</Text>
-      <View style={styles.inputView}>
-        <Text style={styles.inputTitle}>Name</Text>
-        <View style={styles.inputBox}>
-            <Input placeholder='Name'>{state.Name}</Input>  
+  async saveChanges() {
+    
+  }
+
+  async changePass() {
+    
+  }
+
+  async setAlergies() {
+    
+  }
+
+  render() {
+    const { navigation, context } = this.props;
+    const { authState, setAuthState } = context;
+
+    return (
+      <ScrollView>
+      <View style={styles.backgroundContainer}>
+        <View style={styles.mainPage}>
+            <Image style={styles.logoImage} source={{ uri: this.state.user.a_image_url }}/>
+            <TouchableOpacity style={styles.small_button} onPress={() => this.changeImage()} >
+              <Text>EDIT IMAGE</Text>
+            </TouchableOpacity>
+            
         </View>
-      </View>
-      <View style={styles.inputView}>
-        <Text style={styles.inputTitle}>Last Name</Text>
-        <View style={styles.inputBox}>
-            <Input placeholder='Last Name'>{state.LastName}</Input>  
+        <Text style={styles.subtitle}>Personal Information</Text>
+        <View style={styles.inputView}>
+          <Text style={styles.inputTitle}>Name</Text>
+          <View style={styles.inputBox}>
+              <Input placeholder='Name'>{this.state.user.a_name}</Input>  
+          </View>
         </View>
-      </View>
-      <View style={styles.inputView}>
-        <Text style={styles.inputTitle}>Email</Text>
-        <View style={styles.inputBox}>
-            <Input placeholder='Email'>{state.Email}</Input>  
+        <View style={styles.inputView}>
+          <Text style={styles.inputTitle}>Email</Text>
+          <View style={styles.inputBox}>
+              <Input placeholder='Email'>{this.state.user.a_email}</Input>  
+          </View>
         </View>
-      </View>
-      <View style={styles.inputView}>
-        <Text style={styles.inputTitle}>Birth Date</Text>
-        <View style={styles.inputBox}>
-            <Input placeholder='Birth Date'>{state.BirthDate}</Input>  
+        <View style={styles.inputView}>
+          <Text style={styles.inputTitle}>Birth Date</Text>
+          <View style={styles.inputBox}>
+              <Input placeholder='Birth Date'>{this.state.BirthDate}</Input>  
+          </View>
         </View>
-      </View>
-      <View style={styles.inputView}>
-        <Text style={styles.inputTitle}>Gender</Text>
-        <View style={styles.inputBox}>
-            <Input placeholder='Gender'>{state.Gender}</Input>  
+        <View style={styles.inputView}>
+          <Text style={styles.inputTitle}>Gender</Text>
+          <View style={styles.inputBox}>
+              <Input placeholder='Gender'>{this.state.Gender}</Input>  
+          </View>
         </View>
+        
+        <View>
+          <TouchableOpacity style={styles.button} onPress={() => this.changePass()} >
+              <Text>CHANGE PASSWORD</Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <TouchableOpacity style={styles.button} onPress={() => this.setAlergies()} >
+              <Text>SET ALLERGIES</Text>
+          </TouchableOpacity>
+        </View> 
+        <View>
+          <TouchableOpacity style={styles.button} onPress={() => this.saveChanges()} >
+              <Text>SAVE CHANGES</Text>
+          </TouchableOpacity>
+        </View> 
       </View>
-      
-      <View>
-        <TouchableOpacity style={styles.button} onPress={() => this.making_api_call()} >
-            <Text>CHANGE PASSWORD</Text>
-        </TouchableOpacity>
-      </View>
-      <View>
-        <TouchableOpacity style={styles.button} onPress={() => this.making_api_call()} >
-            <Text>SET ALLERGIES</Text>
-        </TouchableOpacity>
-      </View> 
-    </View>
-    </ScrollView>
-  );
-};
+      </ScrollView>
+    );
+  }
+}
 
 const { width: WIDTH } = Dimensions.get('window')
+
+export default function EditProfile(props) {
+  const { authState, setAuthState } = useContext(UserContext);
+  return <EditProfileComponent {...props} context={{ authState, setAuthState }} />;
+}
 
 const styles = StyleSheet.create({
     backgroundContainer: {
@@ -169,19 +216,30 @@ const styles = StyleSheet.create({
     },
 
     button: {
-        elevation: 5,
-        borderRadius: 25,
-        backgroundColor: "#FC987E",
-        color: "black",
-        width: 217,
-        alignItems: "center",
-        padding: 13,
-        height: 48,
-        alignSelf: "center",
-        marginBottom: 20
-      },
+      elevation: 5,
+      borderRadius: 25,
+      backgroundColor: "#FC987E",
+      color: "black",
+      width: 217,
+      alignItems: "center",
+      padding: 13,
+      height: 48,
+      alignSelf: "center",
+      marginBottom: 20
+    },
     
+    small_button:{
+      elevation: 5,
+      borderRadius: 25,
+      backgroundColor: "#FC987E",
+      color: "black",
+      width: 120,
+      alignItems: "center",
+      height: 30,
+      padding: 5,
+      alignSelf: "center",
+      marginBottom: 20,
+      marginTop: 20
+    },
   
   });
-
-export default EditProfile;

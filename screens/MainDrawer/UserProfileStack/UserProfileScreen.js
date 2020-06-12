@@ -27,10 +27,14 @@ class UserProfileComponent extends Component {
   }
 
   async fetchUser() {
+    console.log('fetching user');
     const resp = await UserApi.getMe();
     this.setState({
       user: resp.result[0]
     })
+    console.log('done fetching user');
+    console.log(this.state.user);
+    console.log(JSON.stringify(resp.result[0]));
   }
 
   async fetchReviews() {
@@ -56,6 +60,7 @@ class UserProfileComponent extends Component {
   }
 
   async componentDidMount() {
+    console.log('mounting');
     await this.fetchUser();
     await this.fetchReviews();
   }
@@ -70,10 +75,9 @@ class UserProfileComponent extends Component {
           <View style={styles.mainPage}>
             <Image
               style={styles.logoImage}
-              source={require("../../../assets/images/Po.jpg")}
-
+              source={{ uri: this.state.user.a_image_url }}
             />
-            <Text style={styles.logoText}>{this.state.user.name}</Text>
+            <Text style={styles.logoText}>{this.state.user.a_name}</Text>
           </View>
 
           <View style={styles.reviewContainer} >
@@ -152,6 +156,11 @@ class UserProfileComponent extends Component {
 }
 
 const { width: WIDTH } = Dimensions.get("window");
+
+export default function UserProfile(props) {
+  const { authState, setAuthState } = useContext(UserContext);
+  return <UserProfileComponent {...props} context={{ authState, setAuthState }} />;
+}
 
 const styles = StyleSheet.create({
   backgroundContainer: {
@@ -282,7 +291,3 @@ const styles = StyleSheet.create({
 
 });
 
-export default function UserProfile(props) {
-  const { authState, setAuthState } = useContext(UserContext);
-  return <UserProfileComponent {...props} context={{ authState, setAuthState }} />;
-}
