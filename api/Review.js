@@ -30,8 +30,12 @@ class ReviewApi{
     return Api.delete(`${ReviewApi.url}/${id}`);
   }
 
-  static get(id) {
-    return Api.get(`${ReviewApi.url}/${id}`);
+  static getReviewsByUser(id) {
+    return Api.get(`${ReviewApi.url}/user/${id}`);
+  }
+
+  static getReviewsByFood(id) {
+    return Api.get(`${ReviewApi.url}/food/${id}`);
   }
 
   static getAll() {

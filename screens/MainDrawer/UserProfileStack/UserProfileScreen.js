@@ -13,7 +13,7 @@ import {
   Dimensions,
 } from "react-native";
 
-import { UserApi } from '../../../api';
+import { UserApi, ReviewApi } from '../../../api';
 
 const { width } = Dimensions.get("window");
 
@@ -30,33 +30,39 @@ class UserProfileComponent extends Component {
     console.log('fetching user');
     const resp = await UserApi.getMe();
     this.setState({
-      user: resp.result[0]
+      user: resp.result
     })
     console.log('done fetching user');
     console.log(this.state.user);
-    console.log(JSON.stringify(resp.result[0]));
+    console.log(JSON.stringify(resp.result));
   }
 
   async fetchReviews() {
+    // this.setState({
+    //   reviews: [
+    //     {
+    //       name: 'Ribs',
+    //       imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
+    //       score: 3
+    //     },
+    //     {
+    //       name: 'guanacos',
+    //       imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
+    //       score: 4
+    //     },
+    //     {
+    //       name: 'fritas',
+    //       imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
+    //       score: 1.5
+    //     }
+    //   ]
+    // });
+    const resp = await ReviewApi.getReviewsByUser(this.state.user.a_user_id);
     this.setState({
-      reviews: [
-        {
-          name: 'Ribs',
-          imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
-          score: 3
-        },
-        {
-          name: 'guanacos',
-          imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
-          score: 4
-        },
-        {
-          name: 'fritas',
-          imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
-          score: 1.5
-        }
-      ]
+      reviews: resp.result
     })
+    console.log(resp.result)
+    console.log(this.state.review)
   }
 
   async componentDidMount() {
@@ -94,15 +100,15 @@ class UserProfileComponent extends Component {
                           console.log("I want to navigate to Dish page");
                         }}>
                         <Card
-                          image={{ uri: review.imageUrl }}
+                          image={{ uri: review.a_food.a_image_url }}
                           imageStyle={{
                             height: 100,
                           }}
                         >
                           <View style={styles.cardFooter}>
-                            <Text style={styles.foodName}>{review.name}</Text>
+                            <Text style={styles.foodName}>{review.a_food.a_title}</Text>
                           </View>
-                          <Rating imageSize={20} readonly startingValue={review.score} style={styles.rating} />
+                          <Rating imageSize={20} readonly startingValue={review.a_score} style={styles.rating} />
                         </Card>
                       </TouchableOpacity>
                     )

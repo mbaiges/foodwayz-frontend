@@ -32,9 +32,9 @@ class HomeScreenComponent extends Component {
         return {
           id: food.a_food_id,
           imageUrl: food.a_image_url,
-          title: food.a_description,
+          title: food.a_title,
           desc: food.a_description,
-          brand: food.a_rest[0].a_name,
+          brand: food.a_rest.a_name,
           rating: food.a_score,
         }
       })

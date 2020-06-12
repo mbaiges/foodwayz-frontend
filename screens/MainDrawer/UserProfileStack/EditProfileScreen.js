@@ -2,7 +2,7 @@ import React, { Component, useContext} from 'react';
 import { Card, ListItem, Button, Icon, Input} from 'react-native-elements';
 import { SafeAreaView, StyleSheet, View, Text, Image, TextInput, ScrollView, TouchableOpacity, Dimensions} from 'react-native';
 import { UserContext } from '../../../context/UserContext';
-import { UserApi } from '../../../api';
+import { UserApi, ReviewApi} from '../../../api';
 
 
 class EditProfileComponent extends Component {
