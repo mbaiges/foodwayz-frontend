@@ -24,15 +24,11 @@ class FoodScreenComponent extends Component {
   }
 
   async fetchFood() {
+    const { route } = this.props;
+    const { food } = route.params;
+    console.log(food);
     this.setState({
-      food: {
-        name: 'guiso',
-        restaurant: 'Restaurante Bellagamba',
-        description: 'Guiso con carne, papa, zanahorias, .... ',
-        rating: 5
-      }
-    })
-    this.setState({
+      food: food,
       tags: [
         {
           name: 'Tag1'
@@ -52,20 +48,21 @@ class FoodScreenComponent extends Component {
   }
 
   render() {
+    
     const { navigation } = this.props;
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
         <ScrollView justifyContent='flex-start'>
           <View style={{ alignItems: 'center' }}>
-            <Image source={{ uri: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg' }}
+            <Image source={{ uri: this.state.food.imageUrl }}
               style={styles.imageStyle} />
           </View>
-          <Text style={styles.primaryText}>{this.state.food.name}</Text>
-          <Text style={styles.secondaryText}>{this.state.food.restaurant}</Text>
+          <Text style={styles.primaryText}>{this.state.food.title}</Text>
+          <Text style={styles.secondaryText}>{this.state.food.brand}</Text>
 
           <Text style={styles.primaryText}>Description</Text>
-          <Text style={styles.secondaryText}>{this.state.food.description}</Text>
+          <Text style={styles.secondaryText}>{this.state.food.desc}</Text>
 
           <View>
             <Text style={styles.primaryText}>Tags</Text>
@@ -84,7 +81,6 @@ class FoodScreenComponent extends Component {
                 })
               }
             </View>
-
           </View>
 
           <View style={styles.showAll} flexDirection='row' justifyContent='space-between'  >
@@ -123,8 +119,8 @@ class FoodScreenComponent extends Component {
   }
 }
 
-export default function FoodScreen({ navigation }) {
-  return <FoodScreenComponent navigation={navigation} />;
+export default function FoodScreen( props ) {
+  return <FoodScreenComponent {...props} />;
 }
 
 const styles = StyleSheet.create({

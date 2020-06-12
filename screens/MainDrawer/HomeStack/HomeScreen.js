@@ -33,6 +33,7 @@ class HomeScreenComponent extends Component {
           id: food.a_food_id,
           imageUrl: food.a_image_url,
           title: food.a_description,
+          desc: food.a_description,
           brand: food.a_rest[0].a_name,
           rating: food.a_score,
         }
@@ -65,7 +66,7 @@ class HomeScreenComponent extends Component {
                       title={food.title}
                       brand={food.brand}
                       onPress={async () => {
-                        navigation.navigate("Food");
+                        navigation.navigate("Food", { food: food });
                         console.log("I want to navigate to Dish page");
                       }}
                       rating={food.rating}

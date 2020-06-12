@@ -4,15 +4,6 @@ import { SafeAreaView, StyleSheet, View, Text, Image, TextInput, ScrollView, Tou
 import { UserContext } from '../../../context/UserContext';
 import { UserApi } from '../../../api';
 
-//import { Constants } from 'expo';
-
-// const state={
-//     Name: "Alfredo",
-//     LastName: "Rotta",
-//     Email: "alfredorotta@gmail.com",
-//     BirthDate : "13/02/1999",
-//     Gender: "Male",
-// };
 
 class EditProfileComponent extends Component {
   constructor() {
