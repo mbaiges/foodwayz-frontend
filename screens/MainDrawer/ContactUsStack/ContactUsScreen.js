@@ -24,8 +24,7 @@ class ContactUs extends Component {
     
         this.state = {
           name: "",
-          email: "",
-          phone: "",
+          type: "",
           comment: "",
         };
     
@@ -35,12 +34,8 @@ class ContactUs extends Component {
         if (name === "") {
           alert("Please fill name");
           return false;
-        } else if (address === "") {
-          alert("Please fill adress");
-          return false;
-        }
-        else if (phone === "") {
-          alert("Please fill phone");
+        } else if (type === "") {
+          alert("Please fill message type");
           return false;
         }
         else if (comment === "") {
@@ -69,25 +64,31 @@ class ContactUs extends Component {
                     onChangeText={(value) => (this.state.name = value)}
                 />
             </View>
-            <View style={styles.inputView}>
-            <Text style={styles.subtitle}>Email</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder={"email"}
-                    placeholderTextColor={"rgba(0,0,0,0.4)"}
-                    underLineColorAndroid="transparent"
-                    onChangeText={(value) => (this.state.email = value)}
-                />
-            </View>
-            <View style={styles.inputView}>
-              <Text style={styles.subtitle}>Phone</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder={"Phone number"}
-                    placeholderTextColor={"rgba(0,0,0,0.4)"}
-                    underLineColorAndroid="transparent"
-                    onChangeText={(value) => (this.state.phone = value)}
-                />
+
+            <Text style={styles.subtitle}>Why you want to contact us?</Text>
+            <View style={styles.opacities}>
+                
+                <TouchableOpacity
+                    style={styles.opacity}
+                    onPress={() => this.state.type = "suggestion"}
+                >
+                  <Text style={styles.subtitle}>Comment</Text>
+                  
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.opacity}
+                    onPress={() => this.state.type = "suggestion"}
+                >
+                  <Text style={styles.subtitle}>Suggestion</Text>
+                  
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.opacity}
+                    onPress={() => (this.state.type = "complain")}
+                >
+                  <Text style={styles.subtitle}>Complain</Text>
+                 
+                </TouchableOpacity>
             </View>
             <View style={styles.inputView}>
               <Text style={styles.subtitle}>Message</Text>
@@ -109,8 +110,10 @@ class ContactUs extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.cancelButton}
+                    onPress={() => {navigation.navigate("Home");}}
                 >
                     <Text style={styles.cancel}>Cancel</Text>
+                 
                 </TouchableOpacity>
             </View>
             </ScrollView>
@@ -201,6 +204,19 @@ const styles = StyleSheet.create({
         borderColor: "#FC987E",
         borderWidth: 1,
       },
+    opacities:{
+        flexDirection:"row"
+    },
+    opacity: {
+      backgroundColor: "#FC987E",
+      color: "white",
+      alignItems: "center",
+      borderRadius: 20,
+      margin:10,
+      height: 40,
+      paddingTop:8,
+      paddingEnd:10
+    } 
     
 });
 

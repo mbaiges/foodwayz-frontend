@@ -55,8 +55,12 @@ class FoodScreenComponent extends Component {
             experience.
           </Text>
         </View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity 
+          style={styles.button}
+          onPress={() => {navigation.navigate("Home");}}
+          >
           <Text style={styles.back}>BACK</Text>
+        
         </TouchableOpacity>
       </View>
     </SafeAreaView>
