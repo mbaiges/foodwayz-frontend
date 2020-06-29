@@ -44,7 +44,6 @@ class RateFood extends Component {
                     fractions={1}
                     showRating
                     onFinishRating={this.ratingCompleted}
-
                 />
             </View>
             <View style={styles.inputView}>

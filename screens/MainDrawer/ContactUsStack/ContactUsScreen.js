@@ -1,177 +1,207 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { Card, ListItem, Button, Icon } from "react-native-elements";
+import {
+  StyleSheet,
+  View,
+  SafeAreaView,
+  Text,
+  Image,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
+import CheckBox from "@react-native-community/checkbox";
 
-function ContactUs(props) {
-  return (
-    <View style={styles.container}>
-      <View style={styles.rectStack}>
-        <View style={styles.rect}></View>
-        <View style={styles.rect6}></View>
-      </View>
-      <Text style={styles.contactUs}>Contact us</Text>
-      <Text style={styles.loremIpsum}>
-        Please fill out this form to contact us.
-      </Text>
-      <View style={styles.rect2Stack}>
-        <View style={styles.rect2}></View>
-        <Text style={styles.name}>NAME</Text>
-      </View>
-      <View style={styles.emailStack}>
-        <Text style={styles.email}>EMAIL</Text>
-        <View style={styles.rect3}></View>
-      </View>
-      <View style={styles.rect4Stack}>
-        <View style={styles.rect4}></View>
-        <Text style={styles.phoneNumber}>PHONE NUMBER</Text>
-      </View>
-      <View style={styles.messageStack}>
-        <Text style={styles.message}>MESSAGE</Text>
-        <View style={styles.rect5}></View>
-      </View>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.send}>SEND</Text>
-      </TouchableOpacity>
-    </View>
-  );
+//import { Constants } from 'expo';
+
+const { width } = Dimensions.get("window");
+
+class ContactUs extends Component {
+
+    constructor() {
+        super();
+    
+        this.state = {
+          name: "",
+          email: "",
+          phone: "",
+          comment: "",
+        };
+    
+      }
+    
+      validate_signin_fields = ({ name, address }) => {
+        if (name === "") {
+          alert("Please fill name");
+          return false;
+        } else if (address === "") {
+          alert("Please fill adress");
+          return false;
+        }
+        else if (phone === "") {
+          alert("Please fill phone");
+          return false;
+        }
+        else if (comment === "") {
+          alert("Please fill message");
+          return false;
+        }
+        return true;
+      };
+    
+    
+      render() {
+        const { navigation, signIn } = this.props;
+
+    return (
+        <SafeAreaView style={styles.backgroundContainer}>
+          <ScrollView>
+            <Text style={styles.logoText}>Contact us</Text>
+            <View style={styles.inputBoxes}></View>
+            <View style={styles.inputView}>
+              <Text style={styles.subtitle}>Name</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder={"Name"}
+                    placeholderTextColor={"rgba(0,0,0,0.4)"}
+                    underLineColorAndroid="transparent"
+                    onChangeText={(value) => (this.state.name = value)}
+                />
+            </View>
+            <View style={styles.inputView}>
+            <Text style={styles.subtitle}>Email</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder={"email"}
+                    placeholderTextColor={"rgba(0,0,0,0.4)"}
+                    underLineColorAndroid="transparent"
+                    onChangeText={(value) => (this.state.email = value)}
+                />
+            </View>
+            <View style={styles.inputView}>
+              <Text style={styles.subtitle}>Phone</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder={"Phone number"}
+                    placeholderTextColor={"rgba(0,0,0,0.4)"}
+                    underLineColorAndroid="transparent"
+                    onChangeText={(value) => (this.state.phone = value)}
+                />
+            </View>
+            <View style={styles.inputView}>
+              <Text style={styles.subtitle}>Message</Text>
+                <TextInput
+                    style={styles.message}
+                    multiline
+                    numberOfLines={10}
+                    placeholder={"I hava a message for you!"}
+                    placeholderTextColor={"rgba(0,0,0,0.4)"}
+                    underLineColorAndroid="transparent"
+                    onChangeText={(value) => (this.state.comment = value)}
+                />
+            </View>
+            <View style={styles.buttons}>
+                <TouchableOpacity
+                    style={styles.saveButton}
+                >
+                    <Text style={styles.save}>Send</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.cancelButton}
+                >
+                    <Text style={styles.cancel}>Cancel</Text>
+                </TouchableOpacity>
+            </View>
+            </ScrollView>
+        </SafeAreaView>
+    );
+    };
 }
 
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
+    backgroundContainer: {
+        flex: 1,
+        width: null,
+        height: null,
+        backgroundColor: "white",
+    },
+    subtitle: {
+      fontSize: 16,
+      fontWeight: "bold",
+      color: "black",
+      marginLeft:15,
+    },
+    inputView: {
+        position: "relative",
+        marginBottom:20,
+    },
+    input: {
+        position: "relative",
+        height: 60,
+        borderBottomColor:"gray",
+        borderBottomWidth:1,
+        paddingLeft: 10,
+        fontSize: 16,
+        backgroundColor: "white",
+        color: "#000000",
+        marginHorizontal: 25,
+    },
+    message: {
+      marginTop:10,
+      position: "relative",
+      borderColor:"gray",
+      borderWidth:1,
+      paddingLeft: 5,
+      fontSize: 16,
+      backgroundColor: "white",
+      color: "#000000",
+      marginHorizontal: 25,
+      textAlignVertical:"top",
   },
-  rect: {
-    top: 0,
-    width: 0,
-    height: 0,
-    position: "absolute",
-    backgroundColor: "rgba(252,152,126,1)",
-    left: 187
-  },
-  rect6: {
-    top: 0,
-    left: 0,
-    width: 375,
-    height: 85,
-    position: "absolute",
-    backgroundColor: "rgba(252,149,126,1)"
-  },
-  rectStack: {
-    width: 375,
-    height: 85,
-    marginLeft: -7
-  },
-  contactUs: {
-    fontFamily: "roboto-700",
-    color: "#121212",
-    fontSize: 28,
-    marginTop: 25,
-    marginLeft: 24
-  },
-  loremIpsum: {
-    fontFamily: "roboto-regular",
-    color: "#121212",
-    marginTop: 14,
-    marginLeft: 24
-  },
-  rect2: {
-    top: 15,
-    left: 0,
-    width: 323,
-    height: 35,
-    position: "absolute",
-    backgroundColor: "#E6E6E6"
-  },
-  name: {
-    top: 0,
-    left: 0,
-    position: "absolute",
-    fontFamily: "roboto-regular",
-    color: "#121212"
-  },
-  rect2Stack: {
-    width: 323,
-    height: 50,
-    marginTop: 24,
-    marginLeft: 24
-  },
-  email: {
-    top: 0,
-    left: 0,
-    position: "absolute",
-    fontFamily: "roboto-regular",
-    color: "#121212"
-  },
-  rect3: {
-    top: 16,
-    left: 0,
-    width: 323,
-    height: 35,
-    position: "absolute",
-    backgroundColor: "#E6E6E6"
-  },
-  emailStack: {
-    width: 323,
-    height: 51,
-    marginTop: 25,
-    marginLeft: 24
-  },
-  rect4: {
-    top: 16,
-    left: 0,
-    width: 323,
-    height: 35,
-    position: "absolute",
-    backgroundColor: "#E6E6E6"
-  },
-  phoneNumber: {
-    top: 0,
-    left: 0,
-    position: "absolute",
-    fontFamily: "roboto-regular",
-    color: "#121212"
-  },
-  rect4Stack: {
-    width: 323,
-    height: 51,
-    marginTop: 21,
-    marginLeft: 24
-  },
-  message: {
-    top: 0,
-    left: 0,
-    position: "absolute",
-    fontFamily: "roboto-regular",
-    color: "#121212"
-  },
-  rect5: {
-    top: 16,
-    left: 0,
-    width: 323,
-    height: 225,
-    position: "absolute",
-    backgroundColor: "#E6E6E6"
-  },
-  messageStack: {
-    width: 323,
-    height: 241,
-    marginTop: 16,
-    marginLeft: 24
-  },
-  button: {
-    width: 164,
-    height: 38,
-    backgroundColor: "rgba(252,149,126,1)",
-    borderRadius: 22,
-    marginTop: 34,
-    marginLeft: 106
-  },
-  send: {
-    fontFamily: "roboto-regular",
-    color: "rgba(255,255,255,1)",
-    fontSize: 20,
-    marginTop: 7,
-    marginLeft: 56
-  }
+    logoText: {
+        position: "relative",
+        color: "black",
+        fontSize: 20,
+        paddingTop: 10,
+        paddingLeft:15,
+        paddingBottom: 25,
+        fontWeight: "bold",
+        opacity: 1,
+        textAlign: "left",
+    },
+    buttons: {
+        flexDirection:"row",
+        paddingTop:10,
+    },
+    saveButton: {
+        marginLeft:180,
+        backgroundColor: "#FC987E",
+        color: "white",
+        width: 100,
+        alignItems: "center",
+        paddingTop:8,
+        height: 40,
+        marginRight:15,
+      },
+    save: {
+        color:"white",
+    },
+    cancel: {
+        color:"#FC987E",
+    },
+    cancelButton: {
+        backgroundColor: "white",
+        paddingTop:8,
+        width: 100,
+        alignItems: "center",
+        padding: 13,
+        height: 40,
+        borderColor: "#FC987E",
+        borderWidth: 1,
+      },
+    
 });
 
 export default ContactUs;

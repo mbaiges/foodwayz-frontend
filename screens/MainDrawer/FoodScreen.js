@@ -86,12 +86,14 @@ class FoodScreenComponent extends Component {
           <View style={styles.showAll} flexDirection='row' justifyContent='space-between'  >
             <Text style={styles.primaryText}>Rate:</Text>
             <View>
-              <Text style={styles.secondaryText}>SHOW ALL</Text>
-              <Icon
-                name='arrow-right'
-                type='material-community'
-
-              />
+              <TouchableOpacity onPress={() => {navigation.navigate("Reviews");}}>
+                <Text style={styles.secondaryText}>SHOW ALL</Text>
+                <Icon
+                      name='arrow-right'
+                      type='material-community'
+                      
+                    />
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -100,17 +102,15 @@ class FoodScreenComponent extends Component {
             <Rating imageSize={30} readonly startingValue={this.state.food.rating} style={styles.rating} />
           </View>
 
-          <View alignItems="center">
-            <TouchableOpacity
-              style={styles.button}
-              onPress={async () => {
-                console.log("I want to navigate to Main");
-
-              }}
-            >
-              <Text style={styles.buttonItemsContainer}>RATE DISH</Text>
-            </TouchableOpacity>
-          </View>
+          
+        <View alignItems="center">
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {navigation.navigate("RateFood");}}
+          >
+            <Text style={styles.buttonItemsContainer}>RATE DISH</Text>
+          </TouchableOpacity>
+        </View>
 
         </ScrollView>
 
