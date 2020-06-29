@@ -19,6 +19,8 @@ class FoodScreenComponent extends Component {
     super();
   }
 
+  //comment
+
   render() {
     const { navigation } = this.props;
     const { rating } = this.props;
