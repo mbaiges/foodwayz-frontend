@@ -17,7 +17,7 @@ import CheckBox from "@react-native-community/checkbox";
 
 const { width } = Dimensions.get("window");
 
-class ContactUs extends Component {
+class Premium extends Component {
 
     constructor() {
         super();
@@ -25,7 +25,7 @@ class ContactUs extends Component {
         //comment
     
         this.state = {
-          name: "",
+          cardNumber: "",
           type: "",
           comment: "",
         };
@@ -54,16 +54,16 @@ class ContactUs extends Component {
     return (
         <SafeAreaView style={styles.backgroundContainer}>
           <ScrollView>
-            <Text style={styles.logoText}>Contact us</Text>
+            <Text style={styles.logoText}>Sign up for premium</Text>
             <View style={styles.inputBoxes}></View>
             <View style={styles.inputView}>
-              <Text style={styles.subtitle}>Title</Text>
+              <Text style={styles.subtitle}>Card number</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder={"Name"}
+                    placeholder={"1111 2222 3333 4444"}
                     placeholderTextColor={"rgba(0,0,0,0.4)"}
                     underLineColorAndroid="transparent"
-                    onChangeText={(value) => (this.state.name = value)}
+                    onChangeText={(value) => (this.state.cardNumber = value)}
                 />
             </View>
 
@@ -222,4 +222,4 @@ const styles = StyleSheet.create({
     
 });
 
-export default ContactUs;
+export default Premium;
