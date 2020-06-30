@@ -1,3 +1,5 @@
+// Checked / Not Tested
+
 import { Api } from './api';
 
 import { User } from './User';

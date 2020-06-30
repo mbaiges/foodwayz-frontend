@@ -1,12 +1,13 @@
+// Checked / Not Tested
+
 import { Api } from './api';
 
 class Characteristic {
-  constructor(data) {
-    const {id, name} = data;
-    if (id) {
-      this.id = id;
+  constructor({a_char_id, a_char_name}) {
+    if (a_char_id) {
+      this.a_char_id = a_char_id;
     }
-    this.name = name;
+    this.a_char_name = a_char_name;
   }
 }
 
@@ -22,7 +23,7 @@ class CharacteristicApi{
   }
 
   static modify(char) {
-    return Api.put(`${CharacteristicApi.url}/${Api.id}`, char);
+    return Api.put(`${CharacteristicApi.url}/${char.a_char_id}`, char);
   }
 
   static delete(id) {

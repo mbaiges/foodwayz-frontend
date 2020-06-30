@@ -1,11 +1,13 @@
+// Checked / Not Tested
+
 import { Api } from './api';
 
 class Type {
-  constructor(data) {
-    const {id, name} = data;
-    
-    this.id = id;
-    this.name = name;
+  constructor({a_type_id, a_type_name}) {
+    if (a_type_id) {
+      this.a_type_id = a_type_id;
+    }
+    this.a_type_name = a_type_name;
   }
 }
 
@@ -21,7 +23,7 @@ class TypeApi{
   }
 
   static modify(type) {
-    return Api.put(`${TypeApi.url}/${type.id}`, type);
+    return Api.put(`${TypeApi.url}/${type.a_type_id}`, type);
   }
 
   static delete(id) {
