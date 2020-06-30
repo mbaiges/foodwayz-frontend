@@ -72,8 +72,8 @@ class LoginScreenComponent extends Component {
     }
     */
     const user = new User({
-      email: state.email,
-      password: state.password
+      a_email: state.email,
+      a_password: state.password
     });
 
     try {
