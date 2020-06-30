@@ -32,7 +32,7 @@ class ReviewInfo extends Component {
             <Text style={styles.logoText}>Review</Text>
 
             <Text style={styles.subtitle}>Review by</Text>
-
+       
             <View style={styles.userInfo}>
             <Text style={styles.text}>{this.review.a_user.a_name}</Text>
             <Image
