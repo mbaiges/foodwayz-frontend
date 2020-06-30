@@ -4,7 +4,7 @@ class Api {
   static getToken = () => {return ''};
 
   static get baseUrl() {
-    return 'http://192.168.1.4:3002';
+    return 'http://192.168.1.13:3002';
   }
 
   static get timeout() {
