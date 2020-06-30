@@ -1,5 +1,5 @@
 import React, { Component, useContext } from "react";
-import { CharacteristicApi } from '../../../api';
+import { CharacteristicApi, UserHasCharacteristicApi } from '../../../api';
 import { UserContext } from '../../../context/UserContext';
 import {
   StyleSheet,
@@ -17,10 +17,7 @@ import { CheckBox } from "react-native-elements";
 
 import { UserApi } from '../../../api';
 
-
 const { width } = Dimensions.get("window");
-
-
 
 class EditProfileAllergiesComponent extends Component {
     constructor() {
@@ -43,7 +40,16 @@ class EditProfileAllergiesComponent extends Component {
   }
 
   async fetchUserChars(){
-    const resp = await CharacteristicApi.getAll();
+
+    const { route } = this.props
+    const  { user } = route.params
+
+    console.log(user.a_user_id);
+
+    // const resp = await UserHasCharacteristicApi.getCharactersticsByUser(user.a_user_id);
+
+    // console.log(resp);
+
   }
 
   async fetchChars(){
@@ -60,7 +66,6 @@ class EditProfileAllergiesComponent extends Component {
     await this.fetchUserChars();
     await this.fetchChars();
   }
-
 
   render() {
     

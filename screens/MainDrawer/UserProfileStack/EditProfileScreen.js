@@ -190,7 +190,7 @@ class EditProfileComponent extends Component {
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("EditProfileAllergies")} >
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("EditProfileAllergies", { user: this.state.user })} >
               <Text>SET ALLERGIES</Text>
           </TouchableOpacity>
         </View>
