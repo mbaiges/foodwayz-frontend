@@ -16,47 +16,17 @@ class OwnsApi{
     return Api.baseUrl;
   }
 
-  /*
-  BODY:
-    --
-  RESULTADOS:
-    200 - se vinculó el owner id con restaurant id
-      EJEMPLO:
-      {
-        "message": "Successfully added owns",
-        "result": [
-          {
-            "a_user_id": 1,
-            "a_rest_id": 1
-          }
-        ]
-      }
-    409 - El usuario ya es owner
-      EJEMPLO:
-      {
-        "message": "Conflict with owner",
-        "description": [
-          {
-            "reason": "already exists",
-            "conflicting_obj": {
-              "a_user_id": 1,
-              "a_premium_level": 0
-            }
-          }
-        ]
-      }
-    500 - Falló la acción solicitada (probablemente no haya comunicación con la BD)
-  */
-  static add(owns) {
-    return Api.post(`${OwnsApi.url}/owner/${owns.a_user_id}/restaurant/${owns.a_rest_id}`, owns);
+  
+  static add(restId) {
+  return Api.post(`${OwnsApi.url}/owner/restaurant/${restId}`);
   }
 
-  static delete(id) {
-    return Api.delete(`${OwnsApi.url}/owner/${owns.a_user_id}/restaurant/${owns.a_rest_id}`);
+  static delete(restId) {
+    return Api.delete(`${OwnsApi.url}/owner/restaurant/${restId}`);
   }
 
-  static getOwnerRestaurants(ownerId) {
-    return Api.get(`${OwnsApi.url}/owner/${ownerId}/restaurant`);
+  static getMyRestaurants() {
+    return Api.get(`${OwnsApi.url}/owner/restaurant`);
   }
 
   static getRestaurantOwners(restId) {
