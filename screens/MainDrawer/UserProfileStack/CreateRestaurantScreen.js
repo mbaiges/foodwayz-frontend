@@ -59,6 +59,7 @@ class CreateRestaurantComponent extends Component {
       render() {
     
         const {navigation} = this.props;
+        var modalInput = "";
         var chainOptionButtons = [];
         for(let i = 0; i < this.chainOptions.length ; i++){
             chainOptionButtons.push(
@@ -72,6 +73,7 @@ class CreateRestaurantComponent extends Component {
                             selectedChain: this.chainOptions[i],
                             chainSelected: true,
                         });
+                        modalInput = "";
                         }}
                     >
                         <Text style={styles.buttonText}>{this.chainOptions[i].name}</Text>
@@ -109,8 +111,9 @@ class CreateRestaurantComponent extends Component {
                     <View style={styles.inputBox}>
                         <Input
                             style={styles.input}
-                            underLineColorAndroid="transparent"
+                            underLineColorAndroid="transparent"                      
                             onChangeText={(value) => { this.setState({name: value})}}
+
                         />  
                     </View>
                 </View>
@@ -152,6 +155,7 @@ class CreateRestaurantComponent extends Component {
                         onPress={() => {this.tickPressed()}}
                     />
                 </View>
+                {this.state.chainSelected && chainSelectedAndChange}
                 <View style={styles.centeredView}>
                     <Modal
                         animationType="slide"
@@ -163,7 +167,16 @@ class CreateRestaurantComponent extends Component {
                     >
                         <View style={styles.centeredView}>
                             <View style={styles.modalView}>
-                                <Text style={styles.modalTitle}>Choose Chain </Text>
+                                <Text style={styles.modalTitle}>Choose Chain</Text>
+                                <Input
+                                    placeholder={"Search"}
+                                    rightIcon={
+                                        <Icon
+                                        name='search'
+                                        />
+                                      }
+                                    onChangeText={(value) => (modalInput = value)}
+                                />
                                 <ScrollView>
                                     {chainOptionButtons}
                                 </ScrollView>    
@@ -172,7 +185,7 @@ class CreateRestaurantComponent extends Component {
                     </Modal>
                 </View>
 
-                {this.state.chainSelected && chainSelectedAndChange}
+                
 
 
                 <View>
@@ -233,7 +246,7 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 20,
         paddingLeft:15,
-        paddingTop: 20,
+        paddingTop: 10,
         fontFamily: 'Roboto', 
         fontWeight: 'bold',
         paddingBottom: 5,
