@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, ListItem, Button, Icon } from "react-native-elements";
+import { Card, ListItem, Button, Icon, Picker } from "react-native-elements";
 import {
   StyleSheet,
   View,
@@ -216,7 +216,17 @@ const styles = StyleSheet.create({
       height: 40,
       paddingTop:8,
       paddingEnd:10
-    } 
+    } ,
+
+    pickers:{
+      flexDirection:"row"
+  },
+  picker: {
+    margin:10,
+    height: 40,
+    paddingTop:8,
+    paddingEnd:10
+  } 
     
 });
 

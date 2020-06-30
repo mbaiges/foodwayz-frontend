@@ -14,7 +14,7 @@ import {
 
 import { Image, ListItem, Icon, Input, Rating} from 'react-native-elements';
 
-class FoodScreenComponent extends Component {
+class AboutUsComponent extends Component {
   constructor() {
     super();
   }
@@ -70,8 +70,8 @@ class FoodScreenComponent extends Component {
 }
 }
 
-export default function FoodScreen({ navigation }) {
-  return <FoodScreenComponent navigation={navigation} />;
+export default function AboutUscreen({ navigation }) {
+  return <AboutUsComponent navigation={navigation} />;
 }
 
 const styles = StyleSheet.create({
