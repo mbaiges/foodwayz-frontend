@@ -1,13 +1,16 @@
+// Checked / Not Tested
+
 import { Api } from './api';
 
 class Review {
-  constructor(data) {
-    const {userId, foodId, desc, score} = data;
-    this.userId = userId;
-    this.foodId = foodId;
-    if (desc)
-      this.desc = desc;
-    this.score = score;
+  constructor({ a_review_id, a_user_id, a_food_id, a_desc, a_score }) {
+    if (a_review_id)
+      this.a_review_id = a_review_id;
+    this.a_user_id = a_user_id;
+    this.a_food_id = a_food_id;
+    if (a_desc)
+      this.a_desc = a_desc;
+    this.a_score = a_score;
   }
 }
 
@@ -18,28 +21,24 @@ class ReviewApi{
     return `${Api.baseUrl}/review`;
   }
 
-  static add(review) {
-  return Api.post(ReviewApi.url, review);
-  }
-
-  static modify(review) {
-    return Api.put(`${ReviewApi.url}/${review.id}`, review);
+  static get(id) {
+    return Api.get(`${ReviewApi.url}/${id}`);
   }
 
   static delete(id) {
     return Api.delete(`${ReviewApi.url}/${id}`);
   }
 
-  static getReviewsByUser(id) {
-    return Api.get(`${ReviewApi.url}/user/${id}`);
+  static add(review) {
+    return Api.post(`${ReviewApi.url}/food/${review.a_food_id}`, review);
   }
 
-  static getReviewsByFood(id) {
-    return Api.get(`${ReviewApi.url}/food/${id}`);
+  static getReviewsByFood(foodId) {
+    return Api.get(`${ReviewApi.url}/food/${foodId}`);
   }
 
-  static getAll() {
-    return Api.get(ReviewApi.url);
+  static getReviewsByUser(userId) {
+    return Api.get(`${ReviewApi.url}/user/${userId}`);
   }
 }
 

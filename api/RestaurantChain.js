@@ -1,3 +1,5 @@
+// Checked / Not Tested
+
 import { Api } from './api';
 
 class RestaurantChain {
@@ -5,10 +7,7 @@ class RestaurantChain {
     if (a_rest_chain_id)
       this.a_rest_chain_id = a_rest_chain_id;
     this.a_name = a_name;
-    if (a_score)
-      this.a_score = a_score;
-    else
-      this.a_score = 0;
+    this.a_score = a_score;
     this.a_image_url = a_image_url;
   }
 }

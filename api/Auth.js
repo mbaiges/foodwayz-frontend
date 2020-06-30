@@ -2,8 +2,6 @@
 
 import { Api } from './api';
 
-import { User } from './User';
-
 class AuthApi{
   constructor() {}
 
