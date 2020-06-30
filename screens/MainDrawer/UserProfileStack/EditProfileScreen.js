@@ -1,16 +1,25 @@
 import React, { Component, useContext} from 'react';
 import { Card, ListItem, Button, Icon, Input} from 'react-native-elements';
-import { SafeAreaView, StyleSheet, View, Text, Image, TextInput, ScrollView, TouchableOpacity, Dimensions} from 'react-native';
-import { UserContext } from '../../../context/UserContext';
-import { UserApi, ReviewApi} from '../../../api';
+import { SafeAreaView, StyleSheet, View, Text, Image, Picker, TextInput, ScrollView, TouchableOpacity, Dimensions} from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
+//import { Constants } from 'expo';
 
 class EditProfileComponent extends Component {
-  constructor() {
+  constructor(){
     super();
+
     this.state = {
-      user: {},
+      user,
+      name: "Alfredo",
+      lastName: "Rotta",
+      email: "alfredorotta@gmail.com",
+      birthDate : "13/02/1999",
+      gender: "Undefined",
+      date: new Date(),
+      showDatePicker: false,
     }
+
   }
 
   async fetchUser() {
@@ -29,75 +38,75 @@ class EditProfileComponent extends Component {
     await this.fetchUser();
   }
 
-  async changeImage() {
-    
-  }
-
-  async saveChanges() {
-    
-  }
-
-  async changePass() {
-    
-  }
-
-  async setAlergies() {
-    
-  }
-
   render() {
-    const { navigation, context } = this.props;
-    const { authState, setAuthState } = context;
 
+    const {navigation} = this.props;
+    const date = this.state.date;
+    
     return (
       <ScrollView>
       <View style={styles.backgroundContainer}>
         <View style={styles.mainPage}>
-            <Image style={styles.logoImage} source={{ uri: this.state.user.a_image_url }}/>
-            <TouchableOpacity style={styles.small_button} onPress={() => this.changeImage()} >
-              <Text>EDIT IMAGE</Text>
-            </TouchableOpacity>
-            
+            <Image style={styles.logoImage} source={require('../../../assets/images/Po.jpg')}/>
+            <Text style={styles.logoEditText}>Edit image</Text>
         </View>
-        <Text style={styles.subtitle}>Personal Information</Text>
+        <Text style={styles.subtitle}> Personal Information</Text>
         <View style={styles.inputView}>
           <Text style={styles.inputTitle}>Name</Text>
           <View style={styles.inputBox}>
-              <Input placeholder='Name'>{this.state.user.a_name}</Input>  
+              <Input placeholder='Name'>{this.state.name}</Input>  
+          </View>
+        </View>
+        <View style={styles.inputView}>
+          <Text style={styles.inputTitle}>Last Name</Text>
+          <View style={styles.inputBox}>
+              <Input placeholder='Last Name'>{this.state.lastName}</Input>  
           </View>
         </View>
         <View style={styles.inputView}>
           <Text style={styles.inputTitle}>Email</Text>
           <View style={styles.inputBox}>
-              <Input placeholder='Email'>{this.state.user.a_email}</Input>  
+              <Input placeholder='Email'>{this.state.email}</Input>  
           </View>
         </View>
+
+        <Text style={styles.genderTitle}>Gender</Text>
+        <View style={styles.genderContainer}>          
+          <Picker
+            
+            selectedValue={this.state.gender}
+            style={{ height: 50, width: 150,  }}
+            onValueChange={(itemValue, itemIndex) => this.setState({ gender: itemValue })}>
+            <Picker.Item label="Female" value="Female" />
+            <Picker.Item label="Male" value="Male" />
+            <Picker.Item label="Other" value="Other" />
+          </Picker>
+        </View>        
         <View style={styles.inputView}>
           <Text style={styles.inputTitle}>Birth Date</Text>
           <View style={styles.inputBox}>
-              <Input placeholder='Birth Date'>{this.state.BirthDate}</Input>  
+              <Input placeholder='Birth Date'>{this.state.birthDate}</Input>  
           </View>
         </View>
-        <View style={styles.inputView}>
-          <Text style={styles.inputTitle}>Gender</Text>
-          <View style={styles.inputBox}>
-              <Input placeholder='Gender'>{this.state.Gender}</Input>  
-          </View>
-        </View>
-        
+
+        <Button onPress={() => this.setState({showDatePicker: true})} title="Show date picker!" />
+        {this.state.showDatePicker && (
+          <DateTimePicker 
+            value={ date }
+            mode='default'
+            display='default'
+            onChange={ () => this.setState({ date: date, showDatePicker: false })} />
+        )}
+        <Text>{JSON.stringify(this.state)} </Text>
+        <Text>{JSON.stringify(date)} </Text>
         <View>
-          <TouchableOpacity style={styles.button} onPress={() => this.changePass()} >
+          <TouchableOpacity style={styles.button} onPress={() => this.making_api_call()} >
               <Text>CHANGE PASSWORD</Text>
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity style={styles.button} onPress={() => this.setAlergies()} >
+          <TouchableOpacity style={styles.button} onPress={() => this.making_api_call()} >
               <Text>SET ALLERGIES</Text>
-          </TouchableOpacity>
-        </View> 
-        <View>
-          <TouchableOpacity style={styles.button} onPress={() => this.saveChanges()} >
-              <Text>SAVE CHANGES</Text>
           </TouchableOpacity>
         </View> 
       </View>
@@ -151,59 +160,67 @@ const styles = StyleSheet.create({
     },
 
     titleText:{
-        color: 'black',
-        fontSize: 20,
-        fontFamily: 'Roboto', 
-        fontWeight: 'bold',
-        paddingLeft: 0,
-        paddingBottom: 100,
+      color: 'black',
+      fontSize: 20,
+      fontFamily: 'Roboto', 
+      fontWeight: 'bold',
+      paddingLeft: 0,
+      paddingBottom: 100,
     },
   
     inputView: {
-        position: 'relative',
-        padding: 0,
-        
+      position: 'relative',
+      padding: 0,
+      
       },
     
     inputBox:{
-        paddingTop: 15,
-        paddingLeft:10
+      paddingTop: 15,
+      paddingLeft:10
 
     },
       
     subtitle:{
-        color: 'black',
-        fontSize: 20,
-        paddingLeft:15,
-        fontFamily: 'Roboto', 
-        fontWeight: 'bold',
-        paddingBottom: 5,
+      color: 'black',
+      fontSize: 20,
+      paddingLeft:15,
+      fontFamily: 'Roboto', 
+      fontWeight: 'bold',
+      paddingBottom: 5,
     },
 
     input: {
-    elevation: 15,
-    position: 'relative',
-    width: WIDTH - 100 ,
-    height: 60,
-    borderTopLeftRadius: 6,
-    borderTopRightRadius: 6,
-    paddingTop: 25,
-    paddingLeft: 10,
-    fontSize: 16,
-    backgroundColor: 'white',
-    color: '#000000',
-    marginHorizontal: 25,
+      elevation: 15,
+      position: 'relative',
+      width: WIDTH - 100 ,
+      height: 60,
+      borderTopLeftRadius: 6,
+      borderTopRightRadius: 6,
+      paddingTop: 25,
+      paddingLeft: 10,
+      fontSize: 16,
+      backgroundColor: 'white',
+      color: '#000000',
+      marginHorizontal: 25,
     },
 
     inputTitle:{
-    elevation: 15,
-    position: "absolute",
-    color: '#FC987E',
-    paddingLeft: 20,
-    fontSize: 17,
-    fontWeight: '500',
-    opacity: 1,
+      elevation: 15,
+      position: "absolute",
+      color: '#FC987E',
+      paddingLeft: 20,
+      fontSize: 17,
+      fontWeight: '500',
+      opacity: 1,
     
+    },
+
+    genderTitle:{
+      color: '#FC987E',
+      paddingLeft: 20,
+      fontSize: 17,
+      fontWeight: '500',
+      opacity: 1,
     },
 
     button: {
@@ -217,7 +234,16 @@ const styles = StyleSheet.create({
       height: 48,
       alignSelf: "center",
       marginBottom: 20
-    },
+      },
+
+    genderContainer:{
+      paddingLeft: 15,
+      borderColor: 'black',
+      borderWidth:1,
+      marginRight:220,
+      marginLeft: 15,
+      borderRadius: 5
+    }
     
     small_button:{
       elevation: 5,
@@ -234,3 +260,5 @@ const styles = StyleSheet.create({
     },
   
   });
+
+
