@@ -1,8 +1,7 @@
 import { Api } from './api';
 
 class Review {
-  constructor(data) {
-    const {userId, foodId, desc, score} = data;
+  constructor({userId, foodId, desc, score}) {
     this.userId = userId;
     this.foodId = foodId;
     if (desc)
