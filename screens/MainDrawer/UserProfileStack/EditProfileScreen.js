@@ -101,16 +101,16 @@ class EditProfileComponent extends Component {
     })) 
   }
 
-  handleDateChanged(date){
-    console.log(date);
-
-    console.log(this.state.date);
-    // this.setState({
-    //   date: date,
-    //   showDatePicker: false}
-    // );
+  handleDateChanged(timeStamp){
+    var newDate = new Date(timeStamp)
+    this.setState({
+      date: newDate,
+      showDatePicker: false}
+    );
     const isoDate = this.state.date.toISOString();
+    console.log("----------------------------------------------------------");
     console.log(isoDate);
+    console.log("----------------------------------------------------------");
     // this.setState(prevState => ({
     //   user: {                    
     //       ...prevState.user,   
@@ -179,7 +179,7 @@ class EditProfileComponent extends Component {
               value={ this.state.date }
               mode='default'
               display='default'
-              onChange={ date => { this.handleDateChanged(date) }}/>
+              onChange={ date => { this.handleDateChanged(date.nativeEvent.timestamp)}}/>
           )}
         <View>
           <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("EditProfilePassword") }} >
