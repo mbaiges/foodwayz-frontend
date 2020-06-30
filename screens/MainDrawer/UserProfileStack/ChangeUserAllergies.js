@@ -1,5 +1,6 @@
-import React, { Component } from "react";
-
+import React, { Component, useContext } from "react";
+import { CharacteristicApi } from '../../../api';
+import { UserContext } from '../../../context/UserContext';
 import {
   StyleSheet,
   View,
@@ -20,42 +21,60 @@ import { UserApi } from '../../../api';
 const { width } = Dimensions.get("window");
 
 
+
 class EditProfileAllergiesComponent extends Component {
     constructor() {
         super();
-
-
         this.state = {
-            checked: false,
-            values:[false,false,false,false]
+            chars: [],
+            values:[]
         }
 
-        this.options = [{name :"Vegano", value: false},
-                    {name :"Vegetariano", value: false},
-                    {name :"Celiaco", value: false},
-                    {name :"Intolerancia a las nueces", value: false}];
   }
 
-  changeValues(i){
+  changeValue(i){
     let newValues = this.state.values;
     newValues[i] = !newValues[i];
     this.setState({values: newValues})
   }
 
   saveAlergies(){
-
+    
   }
-  
+
+  async fetchUserChars(){
+    const resp = await CharacteristicApi.getAll();
+  }
+
+  async fetchChars(){
+    const resp = await CharacteristicApi.getAll();
+    console.log(resp)
+    this.setState({ chars: resp.result });
+    for(let i = 0; i < this.state.chars.length ; i++){
+      values.push(false);                        
+    } 
+  }
+
+  async componentDidMount() {
+    console.log('mounting');
+    await this.fetchUserChars();
+    await this.fetchChars();
+  }
+
+
   render() {
-    const { navigation } = this.props;
+    
+    const { navigation, context } = this.props;
+    const date = this.state.date;
+
     var optionButtons = [];
-    for(let i = 0; i < this.options.length ; i++){
+    for(let i = 0; i < this.state.chars.length ; i++){
         optionButtons.push(
             <View key={i}>
                 <CheckBox
-                    title = {this.options[i].name}
+                    title = {this.state.chars[i].a_char_name}
                     checked = {this.state.values[i]}
-                    onPress={() => this.changeValues(i)}
+                    onPress={() => this.changeValue(i)}
                 />
             </View>
         )                        
@@ -88,9 +107,9 @@ class EditProfileAllergiesComponent extends Component {
   
 };
 
-
-export default function EditProfileAllergies({ navigation }) {
-    return <EditProfileAllergiesComponent navigation={navigation} />;
+export default function EditProfileAllergies(props) {
+  const { authState, setAuthState } = useContext(UserContext);
+  return <EditProfileAllergiesComponent {...props} context={{ authState, setAuthState }} />;
 }
 const { width: WIDTH } = Dimensions.get("window");
 

@@ -25,6 +25,9 @@ class EditProfileComponent extends Component {
     this.setState({
       user: resp.result
     })
+    this.setState({
+      date: this.state.user.a_birthdate != "null" ? new Date(this.state.user.a_birthdate) : new Date()
+    })
     console.log('done fetching user');
     console.log(this.state.user);
   }
@@ -111,12 +114,12 @@ class EditProfileComponent extends Component {
     console.log("----------------------------------------------------------");
     console.log(isoDate);
     console.log("----------------------------------------------------------");
-    // this.setState(prevState => ({
-    //   user: {
-    //       ...prevState.user,
-    //       a_birthdate: isoDate
-    //   }
-    // }))
+    this.setState(prevState => ({
+      user: {
+          ...prevState.user,
+          a_birthdate: isoDate
+      }
+    }))
   }
 
   async saveChanges(){
