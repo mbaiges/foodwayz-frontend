@@ -38,9 +38,9 @@ class RegisterScreenComponent extends Component {
     */
 
     const user = new User({
-      name: state.username,
-      email: state.email,
-      password: state.password1
+      a_name: state.username,
+      a_email: state.email,
+      a_password: state.password1
     });
 
     try {

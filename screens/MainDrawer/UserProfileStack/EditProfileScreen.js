@@ -68,9 +68,9 @@ class EditProfileComponent extends Component {
 
       firebase.storage().ref().child(`images/users/${newStr}.jpg`).getDownloadURL().then(async (url) => {
         this.setState(prevState => ({
-          user: {                     // object that we want to update
-              ...prevState.jasper,    // keep all other key-value pairs
-              a_image_url: url        // update the value of specific key
+          user: {                    
+              ...prevState.jasper,   
+              a_image_url: url       
           }
         }))
         console.log(this.state.user);
@@ -109,7 +109,6 @@ class EditProfileComponent extends Component {
         <Text style={styles.genderTitle}>Gender</Text>
         <View style={styles.genderContainer}>          
           <Picker
-            
             selectedValue={this.state.gender}
             style={{ height: 50, width: 150,  }}
             onValueChange={(itemValue, itemIndex) => this.setState({ gender: itemValue })}>
