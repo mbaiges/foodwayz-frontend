@@ -14,7 +14,7 @@ class EditProfileComponent extends Component {
       name: "Alfredo",
       lastName: "Rotta",
       email: "alfredorotta@gmail.com",
-      birthDate : "13/02/1999",
+      
       gender: "Undefined",
       date: new Date(),
       showDatePicker: false,
@@ -84,28 +84,30 @@ class EditProfileComponent extends Component {
         </View>        
         <View style={styles.inputView}>
           <Text style={styles.inputTitle}>Birth Date</Text>
-          <View style={styles.inputBox}>
-              <Input placeholder='Birth Date'>{this.state.birthDate}</Input>  
+          <View>
+              <Text style={styles.dateStyle}>{this.state.date.getDate()} / {this.state.date.getMonth()} / {this.state.date.getFullYear()}</Text>  
           </View>
         </View>
 
-        <Button onPress={() => this.setState({showDatePicker: true})} title="Show date picker!" />
-        {this.state.showDatePicker && (
-          <DateTimePicker 
-            value={ date }
-            mode='default'
-            display='default'
-            onChange={ () => this.setState({ date: date, showDatePicker: false })} />
-        )}
-        <Text>{JSON.stringify(this.state)} </Text>
-        <Text>{JSON.stringify(date)} </Text>
+        <TouchableOpacity style={styles.button} onPress={() => this.setState({showDatePicker: true})} title="Show date picker!">
+          <Text>CHANGE DATE</Text>
+        </TouchableOpacity>  
+          {this.state.showDatePicker && (
+            <DateTimePicker 
+              value={ date }
+              mode='default'
+              display='default'
+              onChange={ () => this.setState({ date: date, showDatePicker: false })} />
+          )}
+        {/* <Text>{JSON.stringify(this.state)} </Text>
+        <Text>{JSON.stringify(date)} </Text> */}
         <View>
-          <TouchableOpacity style={styles.button} onPress={() => this.making_api_call()} >
+          <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("EditProfilePassword") }} >
               <Text>CHANGE PASSWORD</Text>
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity style={styles.button} onPress={() => this.making_api_call()} >
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("EditProfileAllergies")} >
               <Text>SET ALLERGIES</Text>
           </TouchableOpacity>
         </View> 
@@ -243,6 +245,16 @@ const styles = StyleSheet.create({
       marginRight:220,
       marginLeft: 15,
       borderRadius: 5
+    },
+
+    dateStyle: {
+      color: 'black',
+      fontSize: 20,
+      paddingTop: 22,
+      paddingLeft:20,
+      fontFamily: 'Roboto', 
+      fontWeight: 'bold',
+      
     }
     
     small_button:{

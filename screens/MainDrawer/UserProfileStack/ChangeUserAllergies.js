@@ -14,7 +14,13 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import { CheckBox } from "react-native-elements";
 
-class FilterScreenComponent extends Component {
+import { UserApi } from '../../../api';
+
+
+const { width } = Dimensions.get("window");
+
+
+class EditProfileAllergiesComponent extends Component {
     constructor() {
         super();
 
@@ -25,9 +31,9 @@ class FilterScreenComponent extends Component {
         }
 
         this.options = [{name :"Vegano", value: false},
+                    {name :"Vegetariano", value: false},
                     {name :"Celiaco", value: false},
-                    {name :"Bajo en calorias", value: true},
-                    {name :"Barato", value: true}];
+                    {name :"Intolerancia a las nueces", value: false}];
   }
 
   changeValues(i){
@@ -57,20 +63,31 @@ class FilterScreenComponent extends Component {
             <ScrollView vertical = {true}>
                 <View style={styles.inner}>
                     <View style={styles.mainPage}>
-                        <Text style={styles.text}>Select filters</Text>
+                        <Text style={styles.title}>Select Allergies</Text>
                     </View>
                 </View>
                 { optionButtons }
+
+                <View style={styles.applyButtonContainer}>
+                  <TouchableOpacity style={styles.button} onPress={() => { 
+                      //HANDLE DE LA API
+                      navigation.goBack()
+                  }} >
+                      <Text>APPLY CHANGES</Text>
+                  </TouchableOpacity>
+                </View>
+
             </ScrollView>
         </SafeAreaView>
     );
   }
-}
-
-export default FilterScreen = (props) => {
-  return <FilterScreenComponent {...props} />;
+  
 };
 
+
+export default function EditProfileAllergies({ navigation }) {
+    return <EditProfileAllergiesComponent navigation={navigation} />;
+}
 const { width: WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
@@ -82,9 +99,9 @@ const styles = StyleSheet.create({
     flex: 1,
     width: null,
     height: null,
-    backgroundColor: "#FC987E",
-    paddingBottom: 30,
-    paddingTop: 30,
+    backgroundColor: "white",
+    paddingBottom: 0,
+    paddingTop: 0,
   },
 
   inner: {
@@ -92,36 +109,45 @@ const styles = StyleSheet.create({
     padding: 24,
     flex: 1,
     justifyContent: "space-around",
-    alignItems: "center",
+    //alignItems: "center",
   },
 
   mainPage: {
     flex: 1,
     position: "relative",
-    paddingTop: 40,
-    paddingBottom: 40,
-    alignItems: "center",
-  },
-
-
-
-  title: {
-    position: "relative",
-    color: "white",
-    fontSize: 40,
-    paddingTop: 0,
+    paddingTop: 10,
     paddingBottom: 10,
-    fontWeight: "500",
-    opacity: 1,
+    //alignItems: "center",
   },
 
-  text: {
-    position: "relative",
+
+  title:{
+    color: 'black',
     fontSize: 20,
-    paddingLeft: 15,
+    paddingLeft:15,
+    paddingTop: 20,
+    fontFamily: 'Roboto', 
+    fontWeight: 'bold',
+    paddingBottom: 5,
+  },
+ 
+  button: {
+    elevation: 5,
+    borderRadius: 25,
+    backgroundColor: "#FC987E",
     color: "black",
+    width: 217,
+    alignItems: "center",
+    padding: 13,
+    height: 48,
+    alignSelf: "center",
+    marginBottom: 20
+    },
+
+  applyButtonContainer: {
+    paddingTop: 20,
   },
 
- 
 });
+
 
