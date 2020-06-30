@@ -3,7 +3,7 @@ import * as React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
 import DefaultNavBar from "./NavBars/DefaultNavBar";
-import { ContactUs } from "../screens/MainDrawer";
+import { ContactUs} from "../screens/MainDrawer";
 
 import { Ionicons } from "@expo/vector-icons";
 

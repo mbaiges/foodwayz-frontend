@@ -14,10 +14,12 @@ import {
 
 import { Image, ListItem, Icon, Input, Rating} from 'react-native-elements';
 
-class FoodScreenComponent extends Component {
+class AboutUsComponent extends Component {
   constructor() {
     super();
   }
+
+  //comment
 
   render() {
     const { navigation } = this.props;
@@ -55,8 +57,12 @@ class FoodScreenComponent extends Component {
             experience.
           </Text>
         </View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity 
+          style={styles.button}
+          onPress={() => {navigation.navigate("Home");}}
+          >
           <Text style={styles.back}>BACK</Text>
+        
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -64,8 +70,8 @@ class FoodScreenComponent extends Component {
 }
 }
 
-export default function FoodScreen({ navigation }) {
-  return <FoodScreenComponent navigation={navigation} />;
+export default function AboutUscreen({ navigation }) {
+  return <AboutUsComponent navigation={navigation} />;
 }
 
 const styles = StyleSheet.create({
