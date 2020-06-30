@@ -29,9 +29,14 @@ class UserProfileComponent extends Component {
   async fetchUser() {
     console.log('fetching user');
     const resp = await UserApi.getMe();
+    let user = resp.result;
+    if(!user.a_image_url || user.a_image_url == null){
+      user.a_image_url = "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser5%40email_com.jpg?alt=media&token=9cfe6b05-ff65-448b-b089-8f93109a89ae"
+    }
     this.setState({
-      user: resp.result
+      user: user
     })
+    
     console.log('done fetching user');
     console.log(this.state.user);
     console.log(JSON.stringify(resp.result));
@@ -136,9 +141,9 @@ class UserProfileComponent extends Component {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => { navigation.navigate("RestaurantStatisticsProfile") }}
+              onPress={() => { navigation.navigate("CreateRestaurant") }}
             >
-              <Text style={styles.buttonText}>Statistics</Text>
+              <Text style={styles.buttonText}>Register Restaurant</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
