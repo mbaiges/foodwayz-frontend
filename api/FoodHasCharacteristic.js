@@ -14,16 +14,16 @@ class FoodHasCharacteristicApi{
     return Api.baseUrl;
   }
 
-  static add(obj) {
-  return Api.post(`${FoodHasCharacteristicApi.url}/${id}`, obj);
+  static addCharToFood(foodId, charId) {
+    return Api.post(`${FoodHasCharacteristicApi.url}/food/${foodId}/characteristic/${charId}`);
   }
 
-  static delete(id) {
-    return Api.delete(`${FoodHasCharacteristicApi.url}/${id}`);
+  static removeCharFromFood(foodId, charId) {
+    return Api.delete(`${FoodHasCharacteristicApi.url}/food/${foodId}/characteristic/${charId}`);
   }
 
   static get(id) {
-    return Api.get(`${FoodHasCharacteristicApi.url}/${id}`);
+    return Api.get(`${FoodHasCharacteristicApi.url}/food/${foodId}/characteristic`);
   }
 }
 
