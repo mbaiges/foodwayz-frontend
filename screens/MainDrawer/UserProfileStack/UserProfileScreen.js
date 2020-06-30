@@ -33,7 +33,7 @@ class UserProfileComponent extends Component {
       user: resp.result
     })
     console.log('done fetching user');
-    console.log("User is: " + JSON.stringify(this.state.user));
+    console.log("User is: " + this.state.user);
     console.log(JSON.stringify(resp.result));
   }
 
