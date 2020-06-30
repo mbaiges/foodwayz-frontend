@@ -103,7 +103,9 @@ class EditProfileComponent extends Component {
 
   handleDateChanged(date){
     console.log(date);
-
+    let newdate = new Date(date);
+    console.log(newdate);
+    console.log(timestamp);
     console.log(this.state.date);
     // this.setState({
     //   date: date,
@@ -179,7 +181,7 @@ class EditProfileComponent extends Component {
               value={ this.state.date }
               mode='default'
               display='default'
-              onChange={ date => { this.handleDateChanged(date) }}/>
+              onChange={ date => { this.handleDateChanged(date.toISOString()) }}/>
           )}
         <View>
           <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("EditProfilePassword") }} >
