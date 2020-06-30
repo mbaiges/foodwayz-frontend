@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "dychromatic",
-    "slug": "dychromatic",
+    "name": "foodwayz",
+    "slug": "foodwayz",
     "platforms": [
       "ios",
       "android",
@@ -22,6 +22,24 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "android": {
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "https",
+              "host": "*.foodwayz.io",
+              "pathPrefix": "/records"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ]
+    },
     "ios": {
       "supportsTablet": true
     },
