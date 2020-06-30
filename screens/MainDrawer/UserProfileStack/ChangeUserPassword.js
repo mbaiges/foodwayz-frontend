@@ -31,7 +31,10 @@ class EditProfilePasswordComponent extends Component {
 
   }
 
+  changePass(){
 
+  }
+  
   render() {
 
     const {navigation} = this.props;
@@ -76,8 +79,8 @@ class EditProfilePasswordComponent extends Component {
             </View>
 
             <View>
-                <TouchableOpacity style={styles.button} onPress={() => { 
-                    //HANDLE DE LA API
+                <TouchableOpacity style={styles.button} onPress={async() => { 
+                    await this.changePass();
                     navigation.goBack()
                  }} >
                     <Text>CHANGE PASSWORD</Text>

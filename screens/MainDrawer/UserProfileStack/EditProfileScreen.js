@@ -13,10 +13,10 @@ class EditProfileComponent extends Component {
     super();
     this.state = {
       user: {},
-      gender: "Undefined",
       date: new Date(),
       showDatePicker: false,
     }
+    this.handleNameChange= this.handleNameChange.bind(this);
   }
 
   async fetchUser() {
@@ -30,7 +30,10 @@ class EditProfileComponent extends Component {
   }
 
   async updateUser(){
-
+    //const { route } = this.props;
+    let result = await UserApi.modifyMe(this.state.user);
+    console.log("api updated" +  this.state.user);
+    ///route.params.setState({user: this.state.user});
   }
     
   onChooseImagePress = async () => {
@@ -69,7 +72,7 @@ class EditProfileComponent extends Component {
       firebase.storage().ref().child(`images/users/${newStr}.jpg`).getDownloadURL().then(async (url) => {
         this.setState(prevState => ({
           user: {                    
-              ...prevState.jasper,   
+              ...prevState.user,   
               a_image_url: url       
           }
         }))
@@ -80,7 +83,50 @@ class EditProfileComponent extends Component {
       });
   }
 
+  handleNameChange(text) {    
+    this.setState(prevState => ({
+      user: {                    
+          ...prevState.user,   
+          a_name: text       
+      }
+    })) 
+  }
+
+  handleGenderChange(text) {    
+    this.setState(prevState => ({
+      user: {                    
+          ...prevState.user,   
+          a_gender: text       
+      }
+    })) 
+  }
+
+  handleDateChanged(date){
+    console.log(date);
+
+    console.log(this.state.date);
+    // this.setState({
+    //   date: date,
+    //   showDatePicker: false}
+    // );
+    const isoDate = this.state.date.toISOString();
+    console.log(isoDate);
+    // this.setState(prevState => ({
+    //   user: {                    
+    //       ...prevState.user,   
+    //       a_birthdate: isoDate      
+    //   }
+    // })) 
+  }
+
+  async saveChanges(){
+    const { navigation } = this.props;
+    await this.updateUser();
+    navigation.goBack();
+  }
+
   async componentDidMount() {
+    console.log(JSON.stringify(this.updateProfile));
     console.log('mounting');
     await this.fetchUser();
   }
@@ -103,15 +149,16 @@ class EditProfileComponent extends Component {
         <View style={styles.inputView}>
           <Text style={styles.inputTitle}>Name</Text>
           <View style={styles.inputBox}>
-              <Input placeholder='Name'>{this.state.user.a_name}</Input>  
+              <Input type="text" value={this.state.user.a_name} onChangeText={ text => this.handleNameChange(text) } placeholder='Name'></Input>  
           </View>
         </View>
         <Text style={styles.genderTitle}>Gender</Text>
         <View style={styles.genderContainer}>          
           <Picker
-            selectedValue={this.state.gender}
+            selectedValue={this.state.user.a_gender}
             style={{ height: 50, width: 150,  }}
-            onValueChange={(itemValue, itemIndex) => this.setState({ gender: itemValue })}>
+            onValueChange={(itemValue, itemIndex) => this.handleGenderChange(itemValue)}>
+            <Picker.Item label="Unknown" value="Undefined" />
             <Picker.Item label="Female" value="Female" />
             <Picker.Item label="Male" value="Male" />
             <Picker.Item label="Other" value="Other" />
@@ -129,13 +176,11 @@ class EditProfileComponent extends Component {
         </TouchableOpacity>  
           {this.state.showDatePicker && (
             <DateTimePicker 
-              value={ date }
+              value={ this.state.date }
               mode='default'
               display='default'
-              onChange={ () => this.setState({ date: date, showDatePicker: false })} />
+              onChange={ date => { this.handleDateChanged(date) }}/>
           )}
-        {/* <Text>{JSON.stringify(this.state)} </Text>
-        <Text>{JSON.stringify(date)} </Text> */}
         <View>
           <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("EditProfilePassword") }} >
               <Text>CHANGE PASSWORD</Text>
@@ -144,6 +189,11 @@ class EditProfileComponent extends Component {
         <View>
           <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("EditProfileAllergies")} >
               <Text>SET ALLERGIES</Text>
+          </TouchableOpacity>
+        </View> 
+        <View>
+          <TouchableOpacity style={styles.button} onPress={async() => { await this.saveChanges()}} >
+              <Text>SAVE CHANGES</Text>
           </TouchableOpacity>
         </View> 
       </View>
