@@ -16,16 +16,16 @@ class OwnsApi{
     return Api.baseUrl;
   }
 
-  static add(owns) {
-  return Api.post(`${OwnsApi.url}/owner/${owns.a_user_id}/restaurant/${owns.a_rest_id}`, owns);
+  static add(restId) {
+  return Api.post(`${OwnsApi.url}/owner/restaurant/${restId}`);
   }
 
-  static delete(id) {
-    return Api.delete(`${OwnsApi.url}/owner/${owns.a_user_id}/restaurant/${owns.a_rest_id}`);
+  static delete(restId) {
+    return Api.delete(`${OwnsApi.url}/owner/restaurant/${restId}`);
   }
 
-  static getOwnerRestaurants(ownerId) {
-    return Api.get(`${OwnsApi.url}/owner/${ownerId}/restaurant`);
+  static getMyRestaurants() {
+    return Api.get(`${OwnsApi.url}/owner/restaurant`);
   }
 
   static getRestaurantOwners(restId) {
