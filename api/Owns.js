@@ -16,6 +16,7 @@ class OwnsApi{
     return Api.baseUrl;
   }
 
+  
   static add(restId) {
   return Api.post(`${OwnsApi.url}/owner/restaurant/${restId}`);
   }
