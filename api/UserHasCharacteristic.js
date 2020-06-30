@@ -28,8 +28,8 @@ class UserHasCharacteristicApi{
     return Api.get(`${UserHasCharacteristicApi.url}/user/${userId}/characteristic`);
   }
 
-  static getUsersByCharacteristic(ingrId) {
-    return Api.get(`${UserHasCharacteristicApi.url}/ingredient/${ingrId}/user`);
+  static getUsersByCharacteristic(userId) {
+    return Api.get(`${UserHasCharacteristicApi.url}/characteristic/${userId}/user`);
   }
 }
 
