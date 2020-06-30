@@ -218,15 +218,6 @@ const styles = StyleSheet.create({
       paddingEnd:10
     } ,
 
-    pickers:{
-      flexDirection:"row"
-  },
-  picker: {
-    margin:10,
-    height: 40,
-    paddingTop:8,
-    paddingEnd:10
-  } 
     
 });
 
