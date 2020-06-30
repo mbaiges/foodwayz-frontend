@@ -57,7 +57,6 @@ class FilterScreenComponent extends Component {
             <ScrollView vertical = {true}>
                 <View style={styles.inner}>
                     <View style={styles.mainPage}>
-                        <Text style={styles.title}>Filter Dishes</Text>
                         <Text style={styles.text}>Select filters</Text>
                     </View>
                 </View>
