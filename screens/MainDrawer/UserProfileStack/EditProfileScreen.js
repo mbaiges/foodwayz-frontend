@@ -2,24 +2,22 @@ import React, { Component, useContext} from 'react';
 import { Card, ListItem, Button, Icon, Input} from 'react-native-elements';
 import { SafeAreaView, StyleSheet, View, Text, Image, Picker, TextInput, ScrollView, TouchableOpacity, Dimensions} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
-//import { Constants } from 'expo';
+import { UserContext } from '../../../context/UserContext';
+import { UserApi } from '../../../api';
 
 class EditProfileComponent extends Component {
+  
   constructor(){
     super();
-
     this.state = {
-      user,
+      user: {},
       name: "Alfredo",
       lastName: "Rotta",
       email: "alfredorotta@gmail.com",
-      
       gender: "Undefined",
       date: new Date(),
       showDatePicker: false,
     }
-
   }
 
   async fetchUser() {
@@ -40,7 +38,7 @@ class EditProfileComponent extends Component {
 
   render() {
 
-    const {navigation} = this.props;
+    const { navigation, context } = this.props;
     const date = this.state.date;
     
     return (
@@ -253,23 +251,8 @@ const styles = StyleSheet.create({
       paddingTop: 22,
       paddingLeft:20,
       fontFamily: 'Roboto', 
-      fontWeight: 'bold',
-      
+      fontWeight: 'bold'
     }
-    
-    small_button:{
-      elevation: 5,
-      borderRadius: 25,
-      backgroundColor: "#FC987E",
-      color: "black",
-      width: 120,
-      alignItems: "center",
-      height: 30,
-      padding: 5,
-      alignSelf: "center",
-      marginBottom: 20,
-      marginTop: 20
-    },
   
   });
 
