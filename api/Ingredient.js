@@ -1,12 +1,13 @@
+// Checked / Not Tested
+
 import { Api } from './api';
 
 class Ingredient {
-  constructor(data) {
-    const {id, name} = data;
-    if (id) {
-      this.id = id;
+  constructor({a_ingr_id, a_ingr_name}) {
+    if (a_ingr_id) {
+      this.a_ingr_id = a_ingr_id;
     }
-    this.name = name;
+    this.a_ingr_name = a_ingr_name;
   }
 }
 
@@ -22,7 +23,7 @@ class IngredientApi{
   }
 
   static modify(ingr) {
-    return Api.put(`${IngredientApi.url}/${ingr.id}`, ingr);
+    return Api.put(`${IngredientApi.url}/${ingr.a_ingr_id}`, ingr);
   }
 
   static delete(id) {

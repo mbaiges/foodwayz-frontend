@@ -3,16 +3,16 @@
 import { Api } from './api';
 
 class User {
-  constructor(data) {
-    const { id, name, email, password } = data;
-    if (id) {
-      this.id = id;
+  constructor({ a_user_id, a_name, a_email, a_password, a_gender, a_birthdate, a_image_url }) {
+    if (a_user_id) {
+      this.a_user_id = a_user_id;
     }
-    if (name) {
-      this.name = name;
-    }
-    this.email = email;
-    this.password = password;
+    this.a_name = a_name;
+    this.a_email = a_email;
+    this.a_password = a_password;
+    this.a_gender = a_gender;
+    this.a_birthdate = a_birthdate;
+    this.a_image_url = a_image_url;
   }
 }
 

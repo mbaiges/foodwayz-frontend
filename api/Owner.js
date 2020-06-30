@@ -1,9 +1,11 @@
+// Checked / Not Tested
+
 import { Api } from './api';
 
 class Owner {
-  constructor(data) {
-    const {id} = data;
-    this.id = id;
+  constructor({a_user_id, a_premium_level}) {
+    this.a_user_id = a_user_id;
+    this.a_premium_level = a_premium_level;
   }
 }
 
@@ -14,20 +16,16 @@ class OwnerApi{
     return `${Api.baseUrl}/owner`;
   }
 
-  static add(user) {
-  return Api.post(OwnerApi.url, user);
+  static makeMeOwner() {
+    return Api.post(OwnerApi.url);
   }
 
-  static delete(id) {
-    return Api.delete(`${OwnerApi.url}/${id}`);
+  static removeMyOwnership() {
+    return Api.delete(OwnerApi.url);
   }
 
-  static get(id) {
-    return Api.get(`${OwnerApi.url}/${id}`);
-  }
-
-  static getAll() {
-    return Api.get(OwnerApi.url);
+  static updatePremiumStatus({a_premium_level}) {
+    return Api.get(OwnerApi.url, {a_premium_level});
   }
 }
 

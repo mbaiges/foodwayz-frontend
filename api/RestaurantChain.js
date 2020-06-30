@@ -1,15 +1,15 @@
 import { Api } from './api';
 
 class RestaurantChain {
-  constructor(data) {
-    const {id, name, score} = data;
-    
-    this.id = id;
-    this.name = name;
-    if (score)
-      this.score = score;
+  constructor({a_rest_chain_id, a_name, a_score, a_image_url}) {
+    if (a_rest_chain_id)
+      this.a_rest_chain_id = a_rest_chain_id;
+    this.a_name = a_name;
+    if (a_score)
+      this.a_score = a_score;
     else
-      this.score = 0;
+      this.a_score = 0;
+    this.a_image_url = a_image_url;
   }
 }
 
@@ -17,7 +17,7 @@ class RestaurantChainApi{
   constructor() {}
 
   static get url() {
-    return `${Api.baseUrl}/restaurant-chain`;
+    return `${Api.baseUrl}/restaurant_chain`;
   }
 
   static add(rest_chain) {
@@ -25,7 +25,7 @@ class RestaurantChainApi{
   }
 
   static modify(rest_chain) {
-    return Api.put(`${RestaurantChainApi.url}/${rest_chain.id}`, rest_chain);
+    return Api.put(`${RestaurantChainApi.url}/${rest_chain.a_rest_chain_id}`, rest_chain);
   }
 
   static delete(id) {
