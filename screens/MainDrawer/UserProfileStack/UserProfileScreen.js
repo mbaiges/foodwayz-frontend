@@ -1,4 +1,4 @@
-import React, { Component, useContext } from "react";
+import React, { Component, useContext, u } from "react";
 import { Card, ListItem, Button, Icon, Rating } from "react-native-elements";
 import { UserContext } from '../../../context/UserContext';
 import {
@@ -38,30 +38,11 @@ class UserProfileComponent extends Component {
     })
     
     console.log('done fetching user');
-    console.log(this.state.user);
+    console.log("User is: " + JSON.stringify(this.state.user));
     console.log(JSON.stringify(resp.result));
   }
 
   async fetchReviews() {
-    // this.setState({
-    //   reviews: [
-    //     {
-    //       name: 'Ribs',
-    //       imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
-    //       score: 3
-    //     },
-    //     {
-    //       name: 'guanacos',
-    //       imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
-    //       score: 4
-    //     },
-    //     {
-    //       name: 'fritas',
-    //       imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',
-    //       score: 1.5
-    //     }
-    //   ]
-    // });
     const resp = await ReviewApi.getReviewsByUser(this.state.user.a_user_id);
     this.setState({
       reviews: resp.result
@@ -74,6 +55,10 @@ class UserProfileComponent extends Component {
     console.log('mounting');
     await this.fetchUser();
     await this.fetchReviews();
+  }
+
+  async componentDidUpdate(){
+    console.log("updating")
   }
 
   render() {
@@ -133,7 +118,7 @@ class UserProfileComponent extends Component {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={async () => { navigation.navigate("EditProfile") }}
+              onPress={async () => { navigation.navigate("EditProfile", {setState: this.setState}) }}
             >
               <Text style={styles.buttonText}>Edit Profile</Text>
             </TouchableOpacity>
