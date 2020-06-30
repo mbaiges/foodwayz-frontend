@@ -35,7 +35,7 @@ class EditProfileComponent extends Component {
     console.log("api updated" +  this.state.user);
     ///route.params.setState({user: this.state.user});
   }
-    
+
   onChooseImagePress = async () => {
     let result = await ImagePicker.launchCameraAsync();
     //let result = await ImagePicker.launchImageLibraryAsync();
@@ -71,9 +71,9 @@ class EditProfileComponent extends Component {
 
       firebase.storage().ref().child(`images/users/${newStr}.jpg`).getDownloadURL().then(async (url) => {
         this.setState(prevState => ({
-          user: {                    
-              ...prevState.user,   
-              a_image_url: url       
+          user: {
+              ...prevState.user,
+              a_image_url: url
           }
         }))
         console.log(this.state.user);
@@ -83,22 +83,22 @@ class EditProfileComponent extends Component {
       });
   }
 
-  handleNameChange(text) {    
+  handleNameChange(text) {
     this.setState(prevState => ({
-      user: {                    
-          ...prevState.user,   
-          a_name: text       
+      user: {
+          ...prevState.user,
+          a_name: text
       }
-    })) 
+    }))
   }
 
-  handleGenderChange(text) {    
+  handleGenderChange(text) {
     this.setState(prevState => ({
-      user: {                    
-          ...prevState.user,   
-          a_gender: text       
+      user: {
+          ...prevState.user,
+          a_gender: text
       }
-    })) 
+    }))
   }
 
   handleDateChanged(timeStamp){
@@ -112,11 +112,11 @@ class EditProfileComponent extends Component {
     console.log(isoDate);
     console.log("----------------------------------------------------------");
     // this.setState(prevState => ({
-    //   user: {                    
-    //       ...prevState.user,   
-    //       a_birthdate: isoDate      
+    //   user: {
+    //       ...prevState.user,
+    //       a_birthdate: isoDate
     //   }
-    // })) 
+    // }))
   }
 
   async saveChanges(){
@@ -135,7 +135,7 @@ class EditProfileComponent extends Component {
 
     const { navigation, context } = this.props;
     const date = this.state.date;
-    
+
     return (
       <ScrollView>
       <View style={styles.backgroundContainer}>
@@ -149,11 +149,11 @@ class EditProfileComponent extends Component {
         <View style={styles.inputView}>
           <Text style={styles.inputTitle}>Name</Text>
           <View style={styles.inputBox}>
-              <Input type="text" value={this.state.user.a_name} onChangeText={ text => this.handleNameChange(text) } placeholder='Name'></Input>  
+              <Input type="text" value={this.state.user.a_name} onChangeText={ text => this.handleNameChange(text) } placeholder='Name'></Input>
           </View>
         </View>
         <Text style={styles.genderTitle}>Gender</Text>
-        <View style={styles.genderContainer}>          
+        <View style={styles.genderContainer}>
           <Picker
             selectedValue={this.state.user.a_gender}
             style={{ height: 50, width: 150,  }}
@@ -163,19 +163,19 @@ class EditProfileComponent extends Component {
             <Picker.Item label="Male" value="Male" />
             <Picker.Item label="Other" value="Other" />
           </Picker>
-        </View>        
+        </View>
         <View style={styles.inputView}>
           <Text style={styles.inputTitle}>Birth Date</Text>
           <View>
-              <Text style={styles.dateStyle}>{this.state.date.getDate()} / {this.state.date.getMonth()} / {this.state.date.getFullYear()}</Text>  
+              <Text style={styles.dateStyle}>{this.state.date.getDate()} / {this.state.date.getMonth()} / {this.state.date.getFullYear()}</Text>
           </View>
         </View>
 
         <TouchableOpacity style={styles.button} onPress={() => this.setState({showDatePicker: true})} title="Show date picker!">
           <Text>CHANGE DATE</Text>
-        </TouchableOpacity>  
+        </TouchableOpacity>
           {this.state.showDatePicker && (
-            <DateTimePicker 
+            <DateTimePicker
               value={ this.state.date }
               mode='default'
               display='default'
@@ -190,12 +190,12 @@ class EditProfileComponent extends Component {
           <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("EditProfileAllergies")} >
               <Text>SET ALLERGIES</Text>
           </TouchableOpacity>
-        </View> 
+        </View>
         <View>
           <TouchableOpacity style={styles.button} onPress={async() => { await this.saveChanges()}} >
               <Text>SAVE CHANGES</Text>
           </TouchableOpacity>
-        </View> 
+        </View>
       </View>
       </ScrollView>
     );
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
       height: null,
       backgroundColor: 'white',
     },
-  
+
     mainPage: {
       //flex: 1,
       position: 'relative',
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
       //paddingBottom: 40,
       alignItems: 'center',
     },
-  
+
     logoImage: {
       position: 'relative',
       width: 120,
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
       borderRadius: 120/2,
     },
 
-  
+
     logoEditText:{
       position: "relative",
       color: 'black',
@@ -249,29 +249,29 @@ const styles = StyleSheet.create({
     titleText:{
       color: 'black',
       fontSize: 20,
-      fontFamily: 'Roboto', 
+      fontFamily: 'Roboto',
       fontWeight: 'bold',
       paddingLeft: 0,
       paddingBottom: 100,
     },
-  
+
     inputView: {
       position: 'relative',
       padding: 0,
-      
+
       },
-    
+
     inputBox:{
       paddingTop: 15,
       paddingLeft:10
 
     },
-      
+
     subtitle:{
       color: 'black',
       fontSize: 20,
       paddingLeft:15,
-      fontFamily: 'Roboto', 
+      fontFamily: 'Roboto',
       fontWeight: 'bold',
       paddingBottom: 5,
     },
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
       fontSize: 17,
       fontWeight: '500',
       opacity: 1,
-    
+
     },
 
     genderTitle:{
@@ -337,10 +337,8 @@ const styles = StyleSheet.create({
       fontSize: 20,
       paddingTop: 22,
       paddingLeft:20,
-      fontFamily: 'Roboto', 
+      fontFamily: 'Roboto',
       fontWeight: 'bold'
     }
-  
+
   });
-
-

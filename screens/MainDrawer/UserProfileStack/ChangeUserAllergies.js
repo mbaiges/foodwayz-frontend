@@ -42,6 +42,10 @@ class EditProfileAllergiesComponent extends Component {
     this.setState({values: newValues})
   }
 
+  saveAlergies(){
+
+  }
+  
   render() {
     const { navigation } = this.props;
     var optionButtons = [];
@@ -70,7 +74,7 @@ class EditProfileAllergiesComponent extends Component {
 
                 <View style={styles.applyButtonContainer}>
                   <TouchableOpacity style={styles.button} onPress={() => { 
-                      //HANDLE DE LA API
+                      this.saveAlergies();
                       navigation.goBack()
                   }} >
                       <Text>APPLY CHANGES</Text>
