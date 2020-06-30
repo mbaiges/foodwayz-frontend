@@ -20,51 +20,68 @@ import { UserApi } from '../../../api';
 const { width } = Dimensions.get("window");
 
 class EditProfileAllergiesComponent extends Component {
-    constructor() {
-        super();
-        this.state = {
-            chars: [],
-            values:[]
-        }
-
+  constructor() {
+      super();
+      this.state = {
+          user: {},
+          chars: [],
+          values:[]
+      }
   }
 
-  changeValue(i){
+  async changeValue(i){
     let newValues = this.state.values;
     newValues[i] = !newValues[i];
     this.setState({values: newValues})
+    if(this.state.values[i]){
+      const resp = await UserHasCharacteristicApi.addCharacteristicToUser(this.state.user.a_user_id, this.state.chars[i].a_char_id);
+    }else{
+      const resp = await UserHasCharacteristicApi.removeCharacteristicFromUser(this.state.user.a_user_id, this.state.chars[i].a_char_id);
+    }
   }
 
-  saveAlergies(){
-    
+  setValue( id ){
+    for(let i = 0; i < this.state.chars.length ; i++){
+      if(this.state.chars[i].a_char_id == id){
+        let newValues = this.state.values;
+        newValues[i] = true;
+        this.setState({values: newValues})
+      }                        
+    } 
   }
 
   async fetchUserChars(){
-
-    const { route } = this.props
-    const  { user } = route.params
-
-    console.log(user.a_user_id);
-
-    // const resp = await UserHasCharacteristicApi.getCharactersticsByUser(user.a_user_id);
-
-    // console.log(resp);
-
+    const resp = await UserHasCharacteristicApi.getCharactersticsByUser(this.state.user.a_user_id);
+    for (let userChar of resp.result) {
+      this.setValue(userChar.a_char_id);
+    }
   }
 
   async fetchChars(){
     const resp = await CharacteristicApi.getAll();
-    console.log(resp)
     this.setState({ chars: resp.result });
     for(let i = 0; i < this.state.chars.length ; i++){
-      values.push(false);                        
+      this.state.values.push(false);                        
     } 
+  }
+  
+  async fetchUser() {
+    const resp = await UserApi.getMe();
+    this.setState({
+      user: resp.result
+    })
   }
 
   async componentDidMount() {
+    // const { route } = this.props
+    // const  { user } = route.params
+    // this.setState({ user: user }); 
+    // console.log(this.state.user);
+
     console.log('mounting');
-    await this.fetchUserChars();
+    await this.fetchUser();
     await this.fetchChars();
+    await this.fetchUserChars();
   }
 
   render() {
@@ -79,7 +96,7 @@ class EditProfileAllergiesComponent extends Component {
                 <CheckBox
                     title = {this.state.chars[i].a_char_name}
                     checked = {this.state.values[i]}
-                    onPress={() => this.changeValue(i)}
+                    onPress={async () => await this.changeValue(i)}
                 />
             </View>
         )                        
@@ -91,17 +108,16 @@ class EditProfileAllergiesComponent extends Component {
             <ScrollView vertical = {true}>
                 <View style={styles.inner}>
                     <View style={styles.mainPage}>
-                        <Text style={styles.title}>Select Allergies</Text>
+                        <Text style={styles.title}>Select Characteristics</Text>
                     </View>
                 </View>
                 { optionButtons }
 
                 <View style={styles.applyButtonContainer}>
                   <TouchableOpacity style={styles.button} onPress={() => { 
-                      this.saveAlergies();
                       navigation.goBack()
                   }} >
-                      <Text>APPLY CHANGES</Text>
+                      <Text>BACK</Text>
                   </TouchableOpacity>
                 </View>
 
