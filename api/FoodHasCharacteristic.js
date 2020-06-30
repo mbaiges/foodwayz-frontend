@@ -1,3 +1,5 @@
+// Checked / Not Tested
+
 import { Api } from './api';
 
 class FoodHasCharacteristic {
@@ -14,16 +16,20 @@ class FoodHasCharacteristicApi{
     return Api.baseUrl;
   }
 
-  static addCharToFood(foodId, charId) {
+  static addCharacteristicToFood(foodId, charId) {
     return Api.post(`${FoodHasCharacteristicApi.url}/food/${foodId}/characteristic/${charId}`);
   }
 
-  static removeCharFromFood(foodId, charId) {
+  static removeCharacteristicFromFood(foodId, charId) {
     return Api.delete(`${FoodHasCharacteristicApi.url}/food/${foodId}/characteristic/${charId}`);
   }
 
-  static get(id) {
+  static getCharacteristicsByFood(foodId) {
     return Api.get(`${FoodHasCharacteristicApi.url}/food/${foodId}/characteristic`);
+  }
+
+  static getFoodsByCharacteristic(charId) {
+    return Api.get(`${FoodHasCharacteristicApi.url}/characteristic/${charId}/food`);
   }
 }
 

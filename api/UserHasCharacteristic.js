@@ -1,10 +1,11 @@
+// Checked / Not Tested
+
 import { Api } from './api';
 
 class UserHasCharacteristic {
-  constructor(data) {
-    const {userId, charId} = data;
-    this.userId = userId;
-    this.charId = charId;
+  constructor({a_user_id, a_char_id}) {
+    this.a_user_id = a_user_id;
+    this.a_char_id = a_char_id;
   }
 }
 
@@ -12,19 +13,23 @@ class UserHasCharacteristicApi{
   constructor() {}
 
   static get url() {
-    return `${Api.baseUrl}/user_characteristic`;
+    return Api.baseUrl;
   }
 
-  static add(obj) {
-    return Api.post(UserHasCharacteristicApi.url, obj);
+  static addCharacteristicToUser(userId, charId) {
+    return Api.post(`${UserHasCharacteristicApi.url}/user/${userId}/characteristic/${charId}`);
   }
 
-  static delete(id) {
-    return Api.delete(`${UserHasCharacteristicApi.url}/${id}`);
+  static removeCharacteristicFromUser(userId, charId) {
+    return Api.delete(`${UserHasCharacteristicApi.url}/user/${userId}/characteristic/${charId}`);
   }
 
-  static get(id) {
-    return Api.get(`${UserHasCharacteristicApi.url}/${id}`);
+  static getCharactersticsByUser(userId) {
+    return Api.get(`${UserHasCharacteristicApi.url}/user/${userId}/characteristic`);
+  }
+
+  static getUsersByCharacteristic(ingrId) {
+    return Api.get(`${UserHasCharacteristicApi.url}/ingredient/${ingrId}/user`);
   }
 }
 
