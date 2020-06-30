@@ -1,10 +1,11 @@
+// Checked / Not Tested
+
 import { Api } from './api';
 
 class FoodHasIngredient {
-  constructor(data) {
-    const {foodId, ingrId} = data;
-    this.foodId = foodId;
-    this.ingrId = ingrId;
+  constructor({a_food_id, a_ingr_id}) {
+    this.a_food_id = a_food_id;
+    this.a_ingr_id = a_ingr_id;
   }
 }
 
@@ -12,21 +13,24 @@ class FoodHasIngredientApi{
   constructor() {}
 
   static get url() {
-    return `${Api.baseUrl}/food-ingredient`;
+    return Api.baseUrl;
   }
 
-  static add(obj) {
-  return Api.post(FoodHasIngredientApi.url, obj);
+  static addIngredientToFood(foodId, ingrId) {
+    return Api.post(`${FoodHasIngredientApi.url}/food/${foodId}/ingredient/${ingrId}`);
   }
 
-  static delete(id) {
-    return Api.delete(`${FoodHasIngredientApi.url}/${id}`);
+  static removeIngredientFromFood(foodId, ingrId) {
+    return Api.delete(`${FoodHasIngredientApi.url}/food/${foodId}/ingredient/${ingrId}`);
   }
 
-  static get(id) {
-    return Api.get(`${FoodHasIngredientApi.url}/${id}`);
+  static getIngredientsByFood(foodId) {
+    return Api.get(`${FoodHasIngredientApi.url}/food/${foodId}/ingredient`);
   }
 
+  static getFoodsByIngredient(ingrId) {
+    return Api.get(`${FoodHasIngredientApi.url}/ingredient/${ingrId}/food`);
+  }
 }
 
 export { FoodHasIngredient, FoodHasIngredientApi };
