@@ -1,19 +1,18 @@
 import React, { Component, useContext} from 'react';
 import { Card, ListItem, Button, Icon, Input} from 'react-native-elements';
-import { SafeAreaView, StyleSheet, View, Text, Image, Picker, TextInput, ScrollView, TouchableOpacity, Dimensions} from 'react-native';
+import { SafeAreaView, StyleSheet, View, Text, Image, Picker, TextInput, ScrollView, TouchableOpacity, Dimensions, Alert} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { UserContext } from '../../../context/UserContext';
 import { UserApi } from '../../../api';
+import * as ImagePicker from 'expo-image-picker';
+import * as firebase from 'firebase';
 
 class EditProfileComponent extends Component {
-  
+
   constructor(){
     super();
     this.state = {
       user: {},
-      name: "Alfredo",
-      lastName: "Rotta",
-      email: "alfredorotta@gmail.com",
       gender: "Undefined",
       date: new Date(),
       showDatePicker: false,
@@ -24,11 +23,61 @@ class EditProfileComponent extends Component {
     console.log('fetching user');
     const resp = await UserApi.getMe();
     this.setState({
-      user: resp.result[0]
+      user: resp.result
     })
     console.log('done fetching user');
     console.log(this.state.user);
-    console.log(JSON.stringify(resp.result[0]));
+  }
+
+  async updateUser(){
+
+  }
+    
+  onChooseImagePress = async () => {
+    let result = await ImagePicker.launchCameraAsync();
+    //let result = await ImagePicker.launchImageLibraryAsync();
+
+    if (!result.cancelled) {
+        this.uploadImage(result.uri)
+            .then(async () => {
+                Alert.alert("Success");
+                await this.getImage();
+            })
+            .catch((error) => {
+                Alert.alert(error.message);
+            });
+    }
+  }
+
+  uploadImage = async (uri) => {
+      const response = await fetch(uri);
+      const blob = await response.blob();
+
+      var myStr = this.state.user.a_email;
+      var newStr = myStr.replace(/\./g, "_");
+
+      console.log("imageName: " + newStr);
+
+      var ref = firebase.storage().ref().child(`images/users/${newStr}.jpg`);
+      return ref.put(blob);
+  }
+
+  getImage = async () => {
+      var myStr = this.state.user.a_email;
+      var newStr = myStr.replace(/\./g, "_");
+
+      firebase.storage().ref().child(`images/users/${newStr}.jpg`).getDownloadURL().then(async (url) => {
+        this.setState(prevState => ({
+          user: {                     // object that we want to update
+              ...prevState.jasper,    // keep all other key-value pairs
+              a_image_url: url        // update the value of specific key
+          }
+        }))
+        console.log(this.state.user);
+        await this.updateUser();
+      }).catch(function (error) {
+          Alert.alert(error.message);
+      });
   }
 
   async componentDidMount() {
@@ -45,29 +94,18 @@ class EditProfileComponent extends Component {
       <ScrollView>
       <View style={styles.backgroundContainer}>
         <View style={styles.mainPage}>
-            <Image style={styles.logoImage} source={require('../../../assets/images/Po.jpg')}/>
-            <Text style={styles.logoEditText}>Edit image</Text>
+            <Image style={styles.logoImage} source={{ uri: this.state.user.a_image_url }}/>
+            <TouchableOpacity style={styles.button} onPress={() => { this.onChooseImagePress() }} >
+              <Text>Edit Image</Text>
+          </TouchableOpacity>
         </View>
         <Text style={styles.subtitle}> Personal Information</Text>
         <View style={styles.inputView}>
           <Text style={styles.inputTitle}>Name</Text>
           <View style={styles.inputBox}>
-              <Input placeholder='Name'>{this.state.name}</Input>  
+              <Input placeholder='Name'>{this.state.user.a_name}</Input>  
           </View>
         </View>
-        <View style={styles.inputView}>
-          <Text style={styles.inputTitle}>Last Name</Text>
-          <View style={styles.inputBox}>
-              <Input placeholder='Last Name'>{this.state.lastName}</Input>  
-          </View>
-        </View>
-        <View style={styles.inputView}>
-          <Text style={styles.inputTitle}>Email</Text>
-          <View style={styles.inputBox}>
-              <Input placeholder='Email'>{this.state.email}</Input>  
-          </View>
-        </View>
-
         <Text style={styles.genderTitle}>Gender</Text>
         <View style={styles.genderContainer}>          
           <Picker
