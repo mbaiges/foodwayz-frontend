@@ -12,11 +12,11 @@ class UserHasCharacteristicApi{
   constructor() {}
 
   static get url() {
-    return `${Api.baseUrl}/user-characteristic`;
+    return `${Api.baseUrl}/user_characteristic`;
   }
 
   static add(obj) {
-  return Api.post(UserHasCharacteristicApi.url, obj);
+    return Api.post(UserHasCharacteristicApi.url, obj);
   }
 
   static delete(id) {
