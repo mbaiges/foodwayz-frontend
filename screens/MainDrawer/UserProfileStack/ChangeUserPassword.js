@@ -13,11 +13,9 @@ import {
   Dimensions,
 } from "react-native";
 
-import { UserApi } from '../../../api';
-
+import { AuthApi } from '../../../api';
 
 const { width } = Dimensions.get("window");
-
 
 class EditProfilePasswordComponent extends Component {
   constructor(){
@@ -32,10 +30,10 @@ class EditProfilePasswordComponent extends Component {
   }
 
   async changePass(){
-    if(this.state.newPass != ""){
+    if(this.state.newPass != "" || this.state.newPass2 != "" || this.state.oldPass != ""){
       if(this.state.newPass == this.state.newPass2){
-        //const resp = await AuthApi.changePass(this.state.oldPass, this.state.newPass);
-
+        const resp = await AuthApi.changePassword(this.state.oldPass, this.state.newPass);
+        console.log(resp)
         console.log("password changed")
       }else{  
         console.log("passwords dont match")
@@ -132,14 +130,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         paddingLeft: 0,
         paddingBottom: 100,
-      },
+    },
     
     inputView: {
         position: 'relative',
         padding: 0,
     
     },
-
     
     title:{
         color: 'black',
@@ -151,8 +148,6 @@ const styles = StyleSheet.create({
         paddingBottom: 5,
     },
 
-
-
     inputTitle:{
         elevation: 15,
         position: "absolute",
@@ -163,7 +158,6 @@ const styles = StyleSheet.create({
         opacity: 1,
     
     },
-  
     
     input: {
         elevation: 15,
@@ -183,7 +177,7 @@ const styles = StyleSheet.create({
     inputBox:{
         paddingTop: 20,
         paddingLeft:10
-      },
+    },
 
     button: {
         elevation: 5,
@@ -197,8 +191,6 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginBottom: 20
     },
-   
-
   
   });
 
