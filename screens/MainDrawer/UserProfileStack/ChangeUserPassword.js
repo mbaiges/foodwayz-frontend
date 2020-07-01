@@ -31,8 +31,16 @@ class EditProfilePasswordComponent extends Component {
 
   }
 
-  changePass(){
-    
+  async changePass(){
+    if(this.state.newPass != ""){
+      if(this.state.newPass == this.state.newPass2){
+        //await 
+      }else{  
+        //passwords dont match
+      }
+    }else{
+      //fill fields
+    }
   }
   
   render() {
