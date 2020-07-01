@@ -26,8 +26,8 @@ class AuthApi{
     200 - la cantidad de usuarios que se borraron (debría ser siempre 1)
     401 - Invalid Password
   */
-  static changePassword(last_password, new_password) {
-    return Api.put(`${AuthApi.url}/change_password`, {a_password_last: last_password, a_password_new: new_password});
+  static changePassword(old_password, new_password) {
+    return Api.put(`${AuthApi.url}/change_password`, {a_password_old: old_password, a_password_new: new_password});
   }
 
   /*
