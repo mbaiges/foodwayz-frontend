@@ -24,7 +24,7 @@ class UserProfileComponent extends Component {
     this.state = {
       user: {},
       reviews: [],
-      restaurants: [ 
+      restaurants: [
         {a_name: "Resto Piola"},
         {a_name: "Resto no tan piola"}],
       restaurantsModalVisible: false,
@@ -99,8 +99,8 @@ class UserProfileComponent extends Component {
         <View key={i}>
             <TouchableOpacity
                 style={styles.restaurantButton}
-                onPress={() => { 
-                  
+                onPress={() => {
+
                   this.setState({restaurantsModalVisible: false});
                   //IR AL RESTO CORRESPONDIENTE
                   navigation.navigate("RestaurantProfile"//, {restaurant: this.state.restaurants[i]}
@@ -108,16 +108,16 @@ class UserProfileComponent extends Component {
                 }}
             >
                 <Text style={styles.buttonRestaurantsText}>{this.state.restaurants[i].a_name}</Text>
-            </TouchableOpacity>  
+            </TouchableOpacity>
         </View>
       )
     }
 
-    
-    
-    
-    
-    
+
+
+
+
+
     return (
       <SafeAreaView style={styles.backgroundContainer}>
         <ScrollView>
@@ -163,9 +163,9 @@ class UserProfileComponent extends Component {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={async () => { 
+              onPress={async () => {
                 this.openRestaurant();
-                //navigation.navigate("RestaurantProfile"); 
+                //navigation.navigate("RestaurantProfile");
               }}
             >
               <Text style={styles.buttonText}>My Restaurants</Text>

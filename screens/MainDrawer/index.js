@@ -26,6 +26,7 @@ import RateFood from './RateFoodScreen';
 import RestaurantProfile from './RestaurantProfileScreen';
 import Reviews from './ReviewsScreen';
 import AddDish from './AddDishScreen';
+import ReviewInfo from './ReviewInfoScreen';
 
 export {
     // About Us Stack
@@ -51,5 +52,6 @@ export {
     RestaurantProfile,
     Reviews,
     AddDish,
+    ReviewInfo,
 
 }

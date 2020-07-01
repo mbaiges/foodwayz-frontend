@@ -9,7 +9,7 @@ class ReviewsComponent extends Component {
 
     constructor() {
         super();
-    
+
         this.state = {
           reviews: [],
           food: {}
@@ -39,10 +39,10 @@ class ReviewsComponent extends Component {
         await this.fetchFood();
         await this.fetchReviews();
     }
-    
+
     render() {
         const { navigation } = this.props;
-        
+
         var reviewCards = [];
 
         for(let i = 0; i < this.state.reviews.length ; i++){
@@ -50,15 +50,18 @@ class ReviewsComponent extends Component {
             let date = new Date(review.a_created_at)
         reviewCards.push(
             <View key={i}>
+                <TouchableOpacity onPress={() => {navigation.navigate("ReviewInfo");}}   >
                 <ReviewCard
-                    name = {review.a_user.a_name}
-                    date = {date.toLocaleString()}
-                    rating = {review.a_score}
-                    comment = {review.a_desc}                   
+                    name = {this.reviews[i].name}
+                    date = {this.reviews[i].date}
+                    rating = {this.reviews[i].rating}
+                    comment = {this.reviews[i].comment}
+
                 />
+                </TouchableOpacity>
             </View>
             )
-        }                  
+        }
 
         return (
             <SafeAreaView style={styles.backgroundContainer}>
