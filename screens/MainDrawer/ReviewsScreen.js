@@ -54,13 +54,15 @@ class Reviews extends Component {
         for(let i = 0; i < this.reviews.length ; i++){
         reviewCards.push(
             <View key={i}>
+                <TouchableOpacity onPress={() => {navigation.navigate("ReviewInfo");}}   >
                 <ReviewCard
                     name = {this.reviews[i].name}
                     date = {this.reviews[i].date}
                     rating = {this.reviews[i].rating}
-                    comment = {this.reviews[i].comment}                   
+                    comment = {this.reviews[i].comment}   
+                                 
                 />
-                
+                </TouchableOpacity>
             </View>
             )
         }                  
