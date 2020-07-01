@@ -55,7 +55,7 @@ class PremiumComponent extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.cancelButton}
-                    onPress={() => {navigation.navigate("Home");}}
+                    onPress={() => {navigation.navigate("UserProfile");}}
                 >
                     <Text style={styles.cancel}>Cancel</Text>
                  
@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     buttons: {
         flexDirection:"row",
         paddingTop:10,
+        marginTop:230
     },
     saveButton: {
         marginLeft:180,
@@ -158,8 +159,11 @@ const styles = StyleSheet.create({
         borderWidth: 1,
       },
       opacity: {
+        marginTop:20,
         backgroundColor: "#FC987E",
         width: 200,
+        alignSelf:"center",
+        marginBottom:50,
         alignItems: "center",
         paddingTop:8,
         borderRadius:20,
@@ -168,4 +172,3 @@ const styles = StyleSheet.create({
     
 });
 
-export default Premium;

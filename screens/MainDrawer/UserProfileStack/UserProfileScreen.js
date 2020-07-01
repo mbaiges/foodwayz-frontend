@@ -130,6 +130,12 @@ class UserProfileComponent extends Component {
             >
               <Text style={styles.buttonText}>Sign Out</Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={async () => { navigation.navigate("Premium") }}
+            >
+              <Text style={styles.buttonText}>Become a premium user</Text>
+            </TouchableOpacity>
           </View>
           
         </ScrollView>
