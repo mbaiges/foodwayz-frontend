@@ -54,11 +54,11 @@ class UserProfileComponent extends Component {
   }
 
   async fetchRestaurants() { // ESTO LO TENGO QUE HACER CUANDO ME DIGAN COMO SACAR LOS RESTAURANTES DEBIDO A UN ID
-    
+
     console.log("-----------------------------------------------------------------------------------");
     const resp = await OwnsApi.getMyRestaurants();
     console.log(resp);
-    
+
     console.log("-----------------------------------------------------------------------------------");
     this.setState({
       restaurants: resp.result
@@ -95,7 +95,7 @@ class UserProfileComponent extends Component {
 
     for(var i = 0 ; i < this.state.restaurants.length ; i++){
       const rest = this.state.restaurants[i];
-      
+
       console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
       console.log(rest);
       console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -238,6 +238,15 @@ class UserProfileComponent extends Component {
               <Text style={styles.buttonText}>Sign Out</Text>
             </TouchableOpacity>
           </View>
+          <View style={styles.buttonContainer}>
+
+          <TouchableOpacity
+              style={styles.button}
+              onPress={async () => { navigation.navigate("Premium") }}
+            >
+              <Text style={styles.buttonText}>Become premium</Text>
+            </TouchableOpacity>
+            </View>
 
         </ScrollView>
       </SafeAreaView>
@@ -337,16 +346,7 @@ const styles = StyleSheet.create({
   },
 
 
-  button: {
-    elevation: 15,
-    borderRadius: 25,
-    backgroundColor: "white",
-    color: "black",
-    width: 217,
-    alignItems: "center",
-    padding: 13,
-    height: 48,
-  },
+
 
   reviewContainer: {
     flex: 2,
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     backgroundColor: "#FC987E",
     color: "black",
-    width: 130,
+    width: 150,
     alignItems: "center",
     padding: 13,
     height: 48,

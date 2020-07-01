@@ -66,28 +66,27 @@ class ReviewInfoComponent extends Component {
             <Rating imageSize={30} readonly startingValue={4} style={styles.rating} />
 
             <Text style={styles.subtitle}>Comments</Text>    
-            <Text style={styles.text}>Muy rico todo</Text>   
-
-                        <Text style={styles.subtitle}>Food reviewed</Text>
-            <TouchableOpacity
-                      
-                        onPress={async () => {
-                          navigation.navigate("Food");
-                          console.log("I want to navigate to Dish page");
-                        }}>
-                        <FoodCard
-                            
-                            image={require("../../assets/images/Po.jpg")}
-                            title="Po"
-                            brand="El gran Po"
+            <Text style={styles.text}>Muy rico todo</Text> 
+                <Text style={styles.subtitle}>Food reviewed</Text>
+                <TouchableOpacity
+                        
                             onPress={async () => {
+                            navigation.navigate("Food");
+                            console.log("I want to navigate to Dish page");
+                            }}>
+                            <FoodCard
                                 
-                                console.log("I want to navigate to Dish page");
-                            }}
-                            rating={3}
-                        />
-            </TouchableOpacity>
-     
+                                image={require("../../assets/images/Po.jpg")}
+                                title="Po"
+                                brand="El gran Po"
+                                onPress={async () => {
+                                    
+                                    console.log("I want to navigate to Dish page");
+                                }}
+                                rating={3}
+                            />
+                </TouchableOpacity>
+ 
             </ScrollView>
         </SafeAreaView>
     );
