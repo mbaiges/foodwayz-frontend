@@ -32,19 +32,29 @@ class PremiumComponent extends Component {
           <ScrollView>
             <Text style={styles.logoText}>Sign up for premium</Text>
             
-            <TouchableOpacity style={styles.opacity}>
-              <Text style={styles.subtitle}>Basic</Text>
-              <Text style={styles.text}>$100 a month!</Text>
+            <TouchableOpacity >
+              <Card style={styles.card}>
+                <Text style={styles.subtitle}>Basic - $100 a month!</Text>
+                <Text style={styles.text}>- Statistics on the average age of users</Text>
+              </Card>
+              
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.opacity}>
-              <Text style={styles.subtitle}>Standard</Text>
-              <Text style={styles.text}>$300 a month!</Text>
+            <TouchableOpacity>
+            <Card style={styles.card}>
+                <Text style={styles.subtitle}>Standard - $300 a month!</Text>
+                <Text style={styles.text}>- Statistics on the average age of users</Text>
+                <Text style={styles.text}>- Statistics on the best-selling dishes</Text>
+              </Card>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.opacity}>
-              <Text style={styles.subtitle}>Premium</Text>
-              <Text style={styles.text}>$500 a month!</Text>
+            <TouchableOpacity>
+            <Card style={styles.card}>
+                <Text style={styles.subtitle}>Premium - $500 a month!</Text>
+                <Text style={styles.text}>- Statistics on the average age of users</Text>
+                <Text style={styles.text}>- Statistics on the best-selling dishes</Text>
+                <Text style={styles.text}>- Statistics on popular days and times</Text>
+              </Card>
             </TouchableOpacity>
 
             <View style={styles.buttons}>
@@ -158,16 +168,14 @@ const styles = StyleSheet.create({
         borderColor: "#FC987E",
         borderWidth: 1,
       },
-      opacity: {
+      card: {
         marginTop:20,
-        backgroundColor: "#FC987E",
-        width: 200,
+
         alignSelf:"center",
         marginBottom:50,
         alignItems: "center",
         paddingTop:8,
-        borderRadius:20,
-        height: 50,
+
       },
     
 });
