@@ -28,7 +28,7 @@ class HomeScreenComponent extends Component {
   async fetchFoods() {
     const resp = await FoodApi.getAll();
     this.setState({
-      foods: resp.result.map((food) => {
+      foods: resp.response.result.map((food) => {
         return {
           id: food.a_food_id,
           imageUrl: food.a_image_url,
@@ -38,9 +38,7 @@ class HomeScreenComponent extends Component {
           rating: food.a_score,
         }
       })
-    })
-    console.log(this.state.foods);
-    console.log(JSON.stringify(resp.result));
+    });
   }
 
   componentDidMount() {
