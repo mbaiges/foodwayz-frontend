@@ -138,7 +138,7 @@ class UserProfileComponent extends Component {
                       <TouchableOpacity
                         key={idx}
                         onPress={async () => {
-                          navigation.navigate("Food");
+                          navigation.navigate("ReviewInfo", { review: review, food: null, user: this.state.user });
                           console.log("I want to navigate to Dish page");
                         }}>
                         <Card

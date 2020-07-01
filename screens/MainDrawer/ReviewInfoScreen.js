@@ -12,7 +12,7 @@ import {
   Dimensions,
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
-
+import { FoodApi } from '../../api';
 //import { Constants } from 'expo';
 
 import FoodCard from "../components/FoodCard.js";
@@ -33,18 +33,28 @@ class ReviewInfoComponent extends Component {
 
   async fetchInfo() {
     const { route } = this.props;
-    const { review, food } = route.params;
+    const { review, food, user } = route.params;
     console.log(review);
     this.setState({
       review: review,
-      food: food,
-      user: review.a_user,
-      rest: food.a_rest
     })
+    if(food){
+      this.setState({
+        user: review.a_user,
+        food: food,
+        rest: food.a_rest
+      })
+    }else{
+      this.setState({
+        user: user,
+        food: review.a_food,
+        rest: review.a_food.a_rest.a_name,
+      })
+    }
   }
 
-  componentDidMount() {
-    this.fetchInfo();
+  async componentDidMount() {
+    await this.fetchInfo();
   }
   
   render() {
