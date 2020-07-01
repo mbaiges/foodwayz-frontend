@@ -47,18 +47,6 @@ class UserApi {
   BODY:
     --
   RESULTADOS:
-    200 - la cantidad de usuarios que se borraron (debría ser siempre 1)
-    404 - No se encontró el usuario con el ID especificado
-  */
-  static deleteMe() {
-    return Api.delete(`${UserApi.url}`);
-  }
-
-  /*
-  USA EL ID DEL MIDDLEWARE
-  BODY:
-    --
-  RESULTADOS:
     200 - Datos del usuario
       EJEMPLO:
       {

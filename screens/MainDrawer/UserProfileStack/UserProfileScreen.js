@@ -231,14 +231,16 @@ class UserProfileComponent extends Component {
             >
               <Text style={styles.buttonText}>Sign Out</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+          </View>
+          <View style={styles.buttonContainer}>
+
+          <TouchableOpacity
               style={styles.button}
               onPress={async () => { navigation.navigate("Premium") }}
             >
-              <Text style={styles.buttonText}>Become a premium user</Text>
+              <Text style={styles.buttonText}>Become premium</Text>
             </TouchableOpacity>
           </View>
-
         </ScrollView>
       </SafeAreaView>
     );
@@ -337,16 +339,7 @@ const styles = StyleSheet.create({
   },
 
 
-  button: {
-    elevation: 15,
-    borderRadius: 25,
-    backgroundColor: "white",
-    color: "black",
-    width: 217,
-    alignItems: "center",
-    padding: 13,
-    height: 48,
-  },
+
 
   reviewContainer: {
     flex: 2,
@@ -367,7 +360,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     backgroundColor: "#FC987E",
     color: "black",
-    width: 130,
+    width: 150,
     alignItems: "center",
     padding: 13,
     height: 48,
