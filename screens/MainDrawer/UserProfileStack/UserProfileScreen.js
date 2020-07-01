@@ -11,9 +11,10 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  Modal
 } from "react-native";
 
-import { UserApi, ReviewApi } from '../../../api';
+import { UserApi, ReviewApi, RestaurantApi } from '../../../api';
 
 const { width } = Dimensions.get("window");
 
@@ -23,6 +24,10 @@ class UserProfileComponent extends Component {
     this.state = {
       user: {},
       reviews: [],
+      restaurants: [ 
+        {a_name: "Resto Piola"},
+        {a_name: "Resto no tan piola"}],
+      restaurantsModalVisible: false,
     }
   }
 
@@ -38,8 +43,9 @@ class UserProfileComponent extends Component {
     })
 
     console.log('done fetching user');
-    console.log("User is: " + this.state.user);
-    console.log(JSON.stringify(resp.result));
+    console.log(resp);
+    //console.log("User is: " + this.state.user);
+    //console.log(JSON.stringify(resp.result));
   }
 
   async fetchReviews() {
@@ -51,6 +57,15 @@ class UserProfileComponent extends Component {
     console.log(this.state.review)
   }
 
+  // async fetchRestaurants() {  ESTO LO TENGO QUE HACER CUANDO ME DIGAN COMO SACAR LOS RESTAURANTES DEBIDO A UN ID
+  //   const resp = await RestaurantApi.getRestaurantsFromUser(this.state.user.a_)
+  //   this.setState({
+  //     reviews: resp.result
+  //   })
+  //   console.log(resp.result)
+  //   console.log(this.state.review)
+  // }
+
   async componentDidMount() {
     console.log('mounting');
     await this.fetchUser();
@@ -61,10 +76,48 @@ class UserProfileComponent extends Component {
     console.log("updating")
   }
 
+  openRestaurant(){
+    if(this.state.restaurants.length === 1){
+      this.props.navigation.navigate("RestaurantProfile"//, {restaurant: this.state.restaurants[0]}
+      )
+    }else if(this.state.restaurants.length > 1){
+      this.setState({restaurantsModalVisible: true});
+    }
+  }
+
   render() {
     const { navigation, context } = this.props;
     const { authState, setAuthState } = context;
+    var restaurantOptions = [];
 
+
+
+
+
+    for(var i = 0 ; i < this.state.restaurants.length ; i++){
+      restaurantOptions.push(
+        <View key={i}>
+            <TouchableOpacity
+                style={styles.restaurantButton}
+                onPress={() => { 
+                  
+                  this.setState({restaurantsModalVisible: false});
+                  //IR AL RESTO CORRESPONDIENTE
+                  navigation.navigate("RestaurantProfile"//, {restaurant: this.state.restaurants[i]}
+                  )
+                }}
+            >
+                <Text style={styles.buttonRestaurantsText}>{this.state.restaurants[i].a_name}</Text>
+            </TouchableOpacity>  
+        </View>
+      )
+    }
+
+    
+    
+    
+    
+    
     return (
       <SafeAreaView style={styles.backgroundContainer}>
         <ScrollView>
@@ -110,11 +163,47 @@ class UserProfileComponent extends Component {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={async () => { navigation.navigate("RestaurantProfile") }}
+              onPress={async () => { 
+                this.openRestaurant();
+                //navigation.navigate("RestaurantProfile"); 
+              }}
             >
               <Text style={styles.buttonText}>My Restaurants</Text>
             </TouchableOpacity>
           </View>
+
+          <View style={styles.centeredView}>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={this.state.restaurantsModalVisible}
+              onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+              }}
+            >
+
+              <View style = {styles.centeredView}>
+                <View style = {styles.modalRestaurantsView}>
+                  <View flexDirection='row'>
+                    <Icon
+                      name='add'
+                      onPress={() => {
+                        this.setState({restaurantsModalVisible: false});
+                        navigation.navigate("CreateRestaurant");
+                      }}/>
+                    <Icon
+                      name='close'
+                      onPress={() => this.setState({restaurantsModalVisible: false})} />
+                  </View>
+                  <ScrollView>
+                    {restaurantOptions}
+                  </ScrollView>
+                </View>
+              </View>
+
+            </Modal>
+          </View>
+
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.button}
@@ -284,5 +373,49 @@ const styles = StyleSheet.create({
     color: "white",
 
   },
+
+  buttonRestaurantsText: {
+    color: "black"
+  },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    //alignItems: "center",
+    marginTop: 22
+  },
+
+  modalRestaurantsView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 10,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    height: 300,
+  },
+
+  restaurantButton: {
+    borderColor: 'black',
+    borderWidth:1,
+    elevation: 5,
+    borderRadius: 5,
+    backgroundColor: "white",
+    color: "black",
+    width: 217,
+    alignItems: "center",
+    padding: 13,
+    height: 48,
+    alignSelf: "center",
+    marginBottom: 5
+},
+
 
 });
