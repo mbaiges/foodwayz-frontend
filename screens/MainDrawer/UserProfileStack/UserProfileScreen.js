@@ -45,7 +45,6 @@ class UserProfileComponent extends Component {
     console.log(resp.result)
     console.log(this.state.review)
   }
-  
 
   async componentDidMount() {
     console.log('mounting');
