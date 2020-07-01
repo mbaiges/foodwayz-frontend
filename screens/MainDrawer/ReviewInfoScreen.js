@@ -33,24 +33,21 @@ class ReviewInfoComponent extends Component {
 
   async fetchInfo() {
     const { route } = this.props;
-    const { review, food, user } = route.params;
+    const { review } = route.params;
     console.log(review);
+    let food = review.a_food;
+    let user = review.a_user;
+    let rest = food.a_rest
     this.setState({
       review: review,
+      food: food,
+      rest: rest,
+      user: user,
     })
-    if(food){
-      this.setState({
-        user: review.a_user,
-        food: food,
-        rest: food.a_rest
-      })
-    }else{
-      this.setState({
-        user: user,
-        food: review.a_food,
-        rest: review.a_food.a_rest.a_name,
-      })
-    }
+  }
+
+  async fetchFood(){
+    const resp = FoodApi.get()
   }
 
   async componentDidMount() {

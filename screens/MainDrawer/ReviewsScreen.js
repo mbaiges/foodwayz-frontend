@@ -51,7 +51,7 @@ class ReviewsComponent extends Component {
             reviewCards.push(
                 <View key={i}>
                     <TouchableOpacity
-                        onPress={() => {navigation.navigate("ReviewInfo", { review: review, food: this.state.food });}}  
+                        onPress={() => {navigation.navigate("ReviewInfo", { review: review });}}  
                     >
                         <ReviewCard
                             name = {review.a_user.a_name}
