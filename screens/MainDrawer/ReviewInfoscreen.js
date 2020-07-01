@@ -21,10 +21,28 @@ class ReviewInfo extends Component {
 
     constructor() {
         super();
+        this.state = {
+          review: {},
+        }
       }
     
-      render() {
-        const { navigation, signIn } = this.props;
+      async fetchReview() {
+        const { route } = this.props;
+        const { review } = route.params;
+        console.log(review);
+        this.setState({
+        review: review,
+        })
+      }
+    
+      componentDidMount() {
+        this.fetchReview();
+      }
+      
+    render() {
+    
+    const { navigation } = this.props;
+    
 
     return (
         <SafeAreaView style={styles.backgroundContainer}>
