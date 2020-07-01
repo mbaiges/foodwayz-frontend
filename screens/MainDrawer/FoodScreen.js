@@ -19,7 +19,9 @@ class FoodScreenComponent extends Component {
     super();
     this.state = {
       food: {},
-      tags: [],
+      ingrs: [],
+      chars: [],
+      rest: {}
     }
   }
 
@@ -29,17 +31,11 @@ class FoodScreenComponent extends Component {
     console.log(food);
     this.setState({
       food: food,
-      tags: [
-        {
-          name: 'Tag1'
-        },
-        {
-          name: 'Tag2'
-        },
-        {
-          name: 'Tag3'
-        }
-      ]
+    })
+    this.setState({
+      ingrs: food.a_ingredients,
+      chars: food.a_characteristics,
+      rest: food.a_rest
     })
   }
 
@@ -55,27 +51,46 @@ class FoodScreenComponent extends Component {
       <SafeAreaView style={styles.backgroundContainer}>
         <ScrollView justifyContent='flex-start'>
           <View style={{ alignItems: 'center' }}>
-            <Image source={{ uri: this.state.food.imageUrl }}
+            <Image source={{ uri: this.state.food.a_image_url }}
               style={styles.imageStyle} />
           </View>
-          <Text style={styles.primaryText}>{this.state.food.title}</Text>
-          <Text style={styles.secondaryText}>{this.state.food.brand}</Text>
+          <Text style={styles.primaryText}>{this.state.food.a_title}</Text>
+          <Text style={styles.secondaryText}>{this.state.rest.a_name}</Text>
 
           <Text style={styles.primaryText}>Description</Text>
-          <Text style={styles.secondaryText}>{this.state.food.desc}</Text>
+          <Text style={styles.secondaryText}>{this.state.food.a_description}</Text>
 
           <View>
-            <Text style={styles.primaryText}>Tags</Text>
+            <Text style={styles.primaryText}>Ingredients</Text>
             <View style={styles.tagsList}>
               {
-                this.state.tags.map((tag, idx) => {
+                this.state.ingrs.map((tag, idx) => {
                   return (
                     <TouchableOpacity
                       key={idx}
                       style={styles.buttonTag}
                       onPress={() => Alert.alert('Simple Button pressed')}
                     >
-                      <Text>{tag.name}</Text>
+                      <Text>{tag.a_ingr_name}</Text>
+                    </TouchableOpacity>
+                  )
+                })
+              }
+            </View>
+          </View>
+
+          <View>
+            <Text style={styles.primaryText}>Characteristics</Text>
+            <View style={styles.tagsList}>
+              {
+                this.state.chars.map((tag, idx) => {
+                  return (
+                    <TouchableOpacity
+                      key={idx}
+                      style={styles.buttonTag}
+                      onPress={() => Alert.alert('Simple Button pressed')}
+                    >
+                      <Text>{tag.a_char_name}</Text>
                     </TouchableOpacity>
                   )
                 })
@@ -86,7 +101,7 @@ class FoodScreenComponent extends Component {
           <View style={styles.showAll} flexDirection='row' justifyContent='space-between'  >
             <Text style={styles.primaryText}>Rate:</Text>
             <View>
-              <TouchableOpacity onPress={() => {navigation.navigate("Reviews");}}>
+              <TouchableOpacity onPress={() => {navigation.navigate("Reviews", {food: this.state.food});}}>
                 <Text style={styles.secondaryText}>SHOW ALL</Text>
                 <Icon
                       name='arrow-right'
@@ -98,8 +113,8 @@ class FoodScreenComponent extends Component {
           </View>
 
           <View style={styles.ratingContainer}>
-            <Text style={styles.ratingText}>{this.state.food.rating}</Text>
-            <Rating imageSize={30} readonly startingValue={this.state.food.rating} style={styles.rating} />
+            <Text style={styles.ratingText}>{this.state.food.a_score}</Text>
+            <Rating imageSize={30} readonly startingValue={this.state.food.a_score} style={styles.rating} />
           </View>
 
           

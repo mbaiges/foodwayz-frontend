@@ -33,17 +33,17 @@ export default function MainDrawerNavigator({ navigation, route }) {
       <Drawer.Screen name="Home" component={HomeStack} />
       <Drawer.Screen
         label="Discover"
-        name="DiscoverStack"
+        name="Discover"
         component={DiscoverStack}
       />
       <Drawer.Screen
         label="Categories"
-        name="CategoriesStack"
+        name="Categories"
         component={CategoriesStack}
       />
-      <Drawer.Screen name="UserProfileStack" component={UserProfileStack} />
-      <Drawer.Screen name="ContactUsStack" component={ContactUsStack} />
-      <Drawer.Screen name="AboutUsStack" component={AboutUsStack} />
+      <Drawer.Screen name="Profile" component={UserProfileStack} />
+      <Drawer.Screen name="Contact Us" component={ContactUsStack} />
+      <Drawer.Screen name="About Us" component={AboutUsStack} />
     </Drawer.Navigator>
   );
 }

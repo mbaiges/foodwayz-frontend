@@ -36,9 +36,9 @@ class UserProfileComponent extends Component {
     this.setState({
       user: user
     })
-    
+
     console.log('done fetching user');
-    console.log("User is: " + JSON.stringify(this.state.user));
+    console.log("User is: " + this.state.user);
     console.log(JSON.stringify(resp.result));
   }
 
@@ -144,7 +144,7 @@ class UserProfileComponent extends Component {
               <Text style={styles.buttonText}>Sign Out</Text>
             </TouchableOpacity>
           </View>
-          
+
         </ScrollView>
       </SafeAreaView>
     );
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
   },
 
-  
+
   buttonContainer:{
     alignItems:"center",
     paddingTop: 10,
@@ -286,4 +286,3 @@ const styles = StyleSheet.create({
   },
 
 });
-

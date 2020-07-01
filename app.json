@@ -28,9 +28,9 @@
           "action": "VIEW",
           "data": [
             {
-              "scheme": "https",
+              "scheme": "http",
               "host": "*.foodwayz.io",
-              "pathPrefix": "/records"
+              "pathPrefix": "/confirmation"
             }
           ],
           "category": [

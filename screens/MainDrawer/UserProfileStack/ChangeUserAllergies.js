@@ -1,5 +1,6 @@
-import React, { Component } from "react";
-
+import React, { Component, useContext } from "react";
+import { CharacteristicApi, UserHasCharacteristicApi } from '../../../api';
+import { UserContext } from '../../../context/UserContext';
 import {
   StyleSheet,
   View,
@@ -16,46 +17,86 @@ import { CheckBox } from "react-native-elements";
 
 import { UserApi } from '../../../api';
 
-
 const { width } = Dimensions.get("window");
 
-
 class EditProfileAllergiesComponent extends Component {
-    constructor() {
-        super();
-
-
-        this.state = {
-            checked: false,
-            values:[false,false,false,false]
-        }
-
-        this.options = [{name :"Vegano", value: false},
-                    {name :"Vegetariano", value: false},
-                    {name :"Celiaco", value: false},
-                    {name :"Intolerancia a las nueces", value: false}];
+  constructor() {
+      super();
+      this.state = {
+          user: {},
+          chars: [],
+          values:[]
+      }
   }
 
-  changeValues(i){
+  async changeValue(i){
     let newValues = this.state.values;
     newValues[i] = !newValues[i];
     this.setState({values: newValues})
+    if(this.state.values[i]){
+      const resp = await UserHasCharacteristicApi.addCharacteristicToUser(this.state.user.a_user_id, this.state.chars[i].a_char_id);
+    }else{
+      const resp = await UserHasCharacteristicApi.removeCharacteristicFromUser(this.state.user.a_user_id, this.state.chars[i].a_char_id);
+    }
   }
 
-  saveAlergies(){
+  setValue( id ){
+    for(let i = 0; i < this.state.chars.length ; i++){
+      if(this.state.chars[i].a_char_id == id){
+        let newValues = this.state.values;
+        newValues[i] = true;
+        this.setState({values: newValues})
+      }                        
+    } 
+  }
 
+  async fetchUserChars(){
+    const resp = await UserHasCharacteristicApi.getCharactersticsByUser(this.state.user.a_user_id);
+    for (let userChar of resp.result) {
+      this.setValue(userChar.a_char_id);
+    }
+  }
+
+  async fetchChars(){
+    const resp = await CharacteristicApi.getAll();
+    this.setState({ chars: resp.result });
+    for(let i = 0; i < this.state.chars.length ; i++){
+      this.state.values.push(false);                        
+    } 
   }
   
+  async fetchUser() {
+    const resp = await UserApi.getMe();
+    this.setState({
+      user: resp.result
+    })
+  }
+
+  async componentDidMount() {
+    // const { route } = this.props
+    // const  { user } = route.params
+    // this.setState({ user: user }); 
+    // console.log(this.state.user);
+
+    console.log('mounting');
+    await this.fetchUser();
+    await this.fetchChars();
+    await this.fetchUserChars();
+  }
+
   render() {
-    const { navigation } = this.props;
+    
+    const { navigation, context } = this.props;
+    const date = this.state.date;
+
     var optionButtons = [];
-    for(let i = 0; i < this.options.length ; i++){
+    for(let i = 0; i < this.state.chars.length ; i++){
         optionButtons.push(
             <View key={i}>
                 <CheckBox
-                    title = {this.options[i].name}
+                    title = {this.state.chars[i].a_char_name}
                     checked = {this.state.values[i]}
-                    onPress={() => this.changeValues(i)}
+                    onPress={async () => await this.changeValue(i)}
                 />
             </View>
         )                        
@@ -67,17 +108,16 @@ class EditProfileAllergiesComponent extends Component {
             <ScrollView vertical = {true}>
                 <View style={styles.inner}>
                     <View style={styles.mainPage}>
-                        <Text style={styles.title}>Select Allergies</Text>
+                        <Text style={styles.title}>Select Characteristics</Text>
                     </View>
                 </View>
                 { optionButtons }
 
                 <View style={styles.applyButtonContainer}>
                   <TouchableOpacity style={styles.button} onPress={() => { 
-                      this.saveAlergies();
                       navigation.goBack()
                   }} >
-                      <Text>APPLY CHANGES</Text>
+                      <Text>BACK</Text>
                   </TouchableOpacity>
                 </View>
 
@@ -88,9 +128,9 @@ class EditProfileAllergiesComponent extends Component {
   
 };
 
-
-export default function EditProfileAllergies({ navigation }) {
-    return <EditProfileAllergiesComponent navigation={navigation} />;
+export default function EditProfileAllergies(props) {
+  const { authState, setAuthState } = useContext(UserContext);
+  return <EditProfileAllergiesComponent {...props} context={{ authState, setAuthState }} />;
 }
 const { width: WIDTH } = Dimensions.get("window");
 
