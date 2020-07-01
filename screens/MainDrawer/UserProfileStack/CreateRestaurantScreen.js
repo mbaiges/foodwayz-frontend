@@ -80,13 +80,6 @@ class CreateRestaurantComponent extends Component {
             for(var i = 0 ; i < this.state.imagesUrl.length ; i++){
                 const response = await fetch(this.state.imagesUrl[i]);
                 const blob = await response.blob();
-                //CAMBIAR LO QUE VIENE ABAJO PARA QUE NO CAMBIE LA FOTO DEL USER
-                // var auxName = this.state.name.replace(/ /g, "_");
-                // var auxCountry = this.state.countryState.replace(/ /g, "_");
-                // var auxCity = this.state.city.replace(/ /g, "_");
-                // var auxAddress = this.state.address.replace(/ /g, "_");
-
-                // var myStr = auxName + "_" + auxCountry + "_" + auxCity + "_" + this.state.postalCode + "_" + auxAddress + "_" + i.toString();
                 var myStr = rest.a_rest_id + "_" + i;
                 console.log("imageName: " + myStr);
           
@@ -122,8 +115,8 @@ class CreateRestaurantComponent extends Component {
                 }
                     
                 const resp = await RestaurantApi.add(restaurant);
-
-                if(resp.message == "Successfully added restaurant"){
+                console.log(resp);
+                if(resp.message === "Successfully added restaurant"){
                     await this.uploadImagesToFirebase(resp.result[0]);
                     await this.uploadImagesToDB(resp.result[0]);
                 }
