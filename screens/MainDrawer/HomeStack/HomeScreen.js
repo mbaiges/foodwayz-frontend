@@ -28,10 +28,10 @@ class HomeScreenComponent extends Component {
   async fetchFoods() {
     const resp = await FoodApi.getAll();
     this.setState({
-      foods: resp.result
+      foods: resp.response.result
     })
     console.log(this.state.foods);
-    console.log(JSON.stringify(resp.result));
+    console.log(JSON.stringify(resp.response.result));
   }
 
   componentDidMount() {

@@ -34,7 +34,7 @@ class UserProfileComponent extends Component {
   async fetchUser() {
     console.log('fetching user');
     const resp = await UserApi.getMe();
-    let user = resp.result;
+    let user = resp.response.result;
     if(!user.a_image_url || user.a_image_url == null){
       user.a_image_url = "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser5%40email_com.jpg?alt=media&token=9cfe6b05-ff65-448b-b089-8f93109a89ae"
     }
@@ -59,9 +59,9 @@ class UserProfileComponent extends Component {
   // async fetchRestaurants() {  ESTO LO TENGO QUE HACER CUANDO ME DIGAN COMO SACAR LOS RESTAURANTES DEBIDO A UN ID
   //   const resp = await RestaurantApi.getRestaurantsFromUser(this.state.user.a_)
   //   this.setState({
-  //     reviews: resp.result
+  //     reviews: resp.response.result
   //   })
-  //   console.log(resp.result)
+  //   console.log(resp.response.result)
   //   console.log(this.state.review)
   // }
 

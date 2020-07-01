@@ -117,8 +117,8 @@ class CreateRestaurantComponent extends Component {
                 const resp = await RestaurantApi.add(restaurant);
                 console.log(resp);
                 if(resp.message === "Successfully added restaurant"){
-                    await this.uploadImagesToFirebase(resp.result[0]);
-                    await this.uploadImagesToDB(resp.result[0]);
+                    await this.uploadImagesToFirebase(resp.response.result[0]);
+                    await this.uploadImagesToDB(resp.response.result[0]);
                 }
 
                 console.log(resp);
@@ -133,7 +133,7 @@ class CreateRestaurantComponent extends Component {
 
         async fetchChains(){
             const resp = await RestaurantChainApi.getAll();
-            this.setState({ chains: resp.result });
+            this.setState({ chains: resp.response.result });
             console.log(resp);
         }
 

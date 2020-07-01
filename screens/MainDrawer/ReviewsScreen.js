@@ -30,7 +30,7 @@ class ReviewsComponent extends Component {
         let resp = await ReviewApi.getReviewsByFood(this.state.food.a_food_id);
         console.log(resp);
         this.setState({
-            reviews: resp.result
+            reviews: resp.response.result
         })
     }
 

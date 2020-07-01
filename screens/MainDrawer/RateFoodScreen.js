@@ -40,10 +40,10 @@ class RateFoodComponent extends Component {
         console.log('fetching user');
         const resp = await UserApi.getMe();
         this.setState({
-          user: resp.result
+          user: resp.response.result
         })
         console.log('done fetching user');
-        console.log("User is: " + resp.result);
+        console.log("User is: " + resp.response.result);
     }
 
     async fetchFood(){
