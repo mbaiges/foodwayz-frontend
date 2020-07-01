@@ -69,6 +69,8 @@ class RestaurantProfileComponent extends Component {
   render(){
     const {navigation} = this.props;
 
+
+
     return (
       <SafeAreaView style={styles.backgroundContainer}>
         
@@ -76,18 +78,16 @@ class RestaurantProfileComponent extends Component {
         <ScrollView>
         <View style={styles.mainPage}>
           <ScrollView horizontal={true}>
-            <Card>
-              <Image
-                style={styles.logoImage}
-                source={{uri: 'https://i.pinimg.com/originals/eb/80/87/eb80873b89dcc92228712b6257ac05d0.jpg'}}
-              />
-            </Card>
-            <Card>
-              <Image
-                style={styles.logoImage}
-                source={{uri: 'https://media-cdn.tripadvisor.com/media/photo-s/12/3f/af/ba/ambience.jpg'}}
-              />
-            </Card>
+            {this.state.images.map(image =>{
+              // return(
+              //   <Card>
+              //     <Image
+              //       style={styles.logoImage}
+              //       source={{uri: image}}
+              //     />
+              //   </Card>
+              // )
+            })}
           </ScrollView>
           <Text style={styles.logoText}>{this.state.restaurant.a_name}</Text>
   
@@ -119,36 +119,31 @@ class RestaurantProfileComponent extends Component {
           <Text style={styles.subtitleText}>Our most popular dishes</Text>
           <View style={styles.popular}>
             <ScrollView horizontal={true}>
-              <TouchableOpacity onPress={async () => {navigation.navigate("Food");
-                      console.log("I want to navigate to Dish page");
-                    }}>
-                <Card>
-                  <Image
-                    style={styles.popularImage}
-                    resizeMode="cover"
-                    source={{uri: 'https://s1.eestatic.com/2020/01/08/cocinillas/recetas/sopas-y-cremas/Caldo-Pollo-Fideos-Sin_Lactosa-Sopas_y_cremas_458216170_142008613_1706x960.jpg'}}
-                  />
-                  <View style={styles.cardFooter}>
-                    <Text style={styles.foodName}>Rica Sopa</Text>
-                  </View>
-                </Card>
-              </TouchableOpacity>
-              <Card>
-                <Image
-                  style={styles.popularImage}
-                  resizeMode="cover"
-                  source={{uri: 'https://i.pinimg.com/originals/e6/b0/6f/e6b06fc8b9901993fae74c34bcff2e09.jpg'}}
-                />
-                <Text style={styles.foodName}>Tallarines Po</Text>
-              </Card>
-              <Card>
-                <Image
-                  style={styles.popularImage}
-                  resizeMode="cover"
-                  source={{uri: 'https://img.culturacolectiva.com/cdn-cgi/image/f=auto,w=1600,q=80,fit=contain/content_image/2019/5/2/1556836847320-recetas-de-comida-china-para-preparar-facil-y-rapido.001.jpeg'}}
-                />
-                <Text style={styles.foodName}>Parrillada Panda</Text>
-              </Card>
+              {this.state.dishes.map(dish =>{
+                return(
+                  <TouchableOpacity onPress={async () => {navigation.navigate("Food"); //falta pasar los params para que pase a la pag correcta
+                  }}>
+                    <Card
+                      image={{ uri: dish.a_image_url }}
+                      imageStyle={{
+                        height: 100,
+                      }}
+                    >
+                      {/* <Image
+                        style={styles.popularImage}
+                        resizeMode="cover"
+                        source={{uri: dish.a_image_url}}
+                      /> */}
+                      <View style={styles.cardFooter}>
+                        <Text style={styles.foodName}>{dish.a_title}</Text>
+                      </View>
+                    </Card>
+                  </TouchableOpacity>
+
+                )
+              })}
+              
+              
             </ScrollView>
           </View>
         </View>    

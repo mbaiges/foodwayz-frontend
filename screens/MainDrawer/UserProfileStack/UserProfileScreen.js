@@ -96,9 +96,6 @@ class UserProfileComponent extends Component {
     for(var i = 0 ; i < this.state.restaurants.length ; i++){
       const rest = this.state.restaurants[i];
 
-      console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-      console.log(rest);
-      console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
       restaurantOptions.push(
         <View key={i}>
             <TouchableOpacity
