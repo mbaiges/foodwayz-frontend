@@ -14,6 +14,9 @@ import {
   Modal
 } from "react-native";
 
+
+import * as ImagePicker from 'expo-image-picker';
+import * as firebase from 'firebase';
 import { UserApi } from '../../../api';
 
 const { width } = Dimensions.get("window");
@@ -25,14 +28,17 @@ class CreateRestaurantComponent extends Component {
         super();
     
         this.state = {
-          name: "",
-          countryState: "",
-          city: "",
-          postalCode: "",
-          isChain: false,
-          selectedChain: {name: "None"},
-          modalVisible: false,
-          chainSelected: false,
+            name: "",
+            countryState: "",
+            city: "",
+            postalCode: "",
+            address: "",
+            isChain: false,
+            selectedChain: {name: "None"},
+            modalVisible: false,
+            modalImageVisible: false,
+            chainSelected: false,
+            imagesUrl: []
         }
 
         this.chainOptions = [{name :"McRondals"},
@@ -44,48 +50,84 @@ class CreateRestaurantComponent extends Component {
     
       }
 
-      setModalVisible = (visible) => {
-        this.setState({ modalVisible: visible });
-      }
-    
-      tickPressed = () =>{
-        this.setModalVisible(!this.state.isChain);
-        this.setState({isChain: !this.state.isChain});
-        if(this.state.isChain){
-            this.setState({chainSelected: false});
+        setModalVisible = (visible) => {
+            this.setState({ modalVisible: visible });
         }
-      }
-    
-      render() {
-    
-        const {navigation} = this.props;
-        var modalInput = "";
-        var chainOptionButtons = [];
-        for(let i = 0; i < this.chainOptions.length ; i++){
-            chainOptionButtons.push(
-                <View key={i}>
-                    
-                    <TouchableOpacity
-                        style={styles.chainButton}
-                        onPress={() => { 
-                        this.setModalVisible(false);
-                        this.setState({
-                            selectedChain: this.chainOptions[i],
-                            chainSelected: true,
-                        });
-                        modalInput = "";
-                        }}
-                    >
-                        <Text style={styles.buttonText}>{this.chainOptions[i].name}</Text>
-                    </TouchableOpacity>
-                
-                </View>
-            )
-        }
-
-
-
         
+        tickPressed = () =>{
+            this.setModalVisible(!this.state.isChain);
+            this.setState({isChain: !this.state.isChain});
+            if(this.state.isChain){
+                this.setState({chainSelected: false});
+            }
+        }
+
+
+        onChooseImagePress = async () => {
+            let result = await ImagePicker.launchCameraAsync();
+            //let result = await ImagePicker.launchImageLibraryAsync();
+        
+            if (!result.cancelled) {
+                let aux = this.state.imagesUrl;
+                aux.push(result.uri);
+                this.setState({imagesUrl: aux});
+            }
+        }
+
+        onChooseGalleryImagePress = async () => {
+            //let result = await ImagePicker.launchCameraAsync();
+            let result = await ImagePicker.launchImageLibraryAsync();
+        
+            if (!result.cancelled) {
+                let aux = this.state.imagesUrl;
+                aux.push(result.uri);
+                this.setState({imagesUrl: aux});
+            }
+        }
+
+        uploadImages = async () => {
+            for(var i = 0 ; i < imagesUrl.length ; i++){
+                const response = await fetch(imagesUrl[i]);
+                const blob = await response.blob();
+                //CAMBIAR LO QUE VIENE ABAJO PARA QUE NO CAMBIE LA FOTO DEL USER
+                var auxName = this.state.name.replace(/ /g, "_");
+                var auxCountry = this.state.countryState.replace(/ /g, "_");
+                var auxCity = this.state.city.replace(/ /g, "_");
+                var auxAddress = this.state.address.replace(/ /g, "_");
+
+                var myStr = auxName + "_" + auxCountry + "_" + auxCity + "_" + this.state.postalCode + "_" + auxAddress + "_" + i.toString();
+                console.log("imageName: " + myStr);
+          
+                var ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);
+                ref.put(blob);                
+            }
+        }
+   
+        render() {
+            const {navigation} = this.props;
+            var modalInput = "";
+            var chainOptionButtons = [];
+            for(let i = 0; i < this.chainOptions.length ; i++){
+                chainOptionButtons.push(
+                    <View key={i}>             
+                        <TouchableOpacity
+                            style={styles.chainButton}
+                            onPress={() => { 
+                            this.setModalVisible(false);
+                            this.setState({
+                                selectedChain: this.chainOptions[i],
+                                chainSelected: true,
+                            });
+                            modalInput = "";
+                            }}
+                        >
+                            <Text style={styles.buttonText}>{this.chainOptions[i].name}</Text>
+                        </TouchableOpacity>
+                    
+                    </View>
+                )
+            }
+
         var chainSelectedAndChange = [];
         chainSelectedAndChange.push(
             <View>
@@ -106,6 +148,75 @@ class CreateRestaurantComponent extends Component {
             <View style={styles.backgroundContainer}>
                 
                 <Text style={styles.title}> Register Restaurant</Text>
+                
+                
+                <ScrollView horizontal={true}>
+                    {this.state.imagesUrl.map(foodUrl => {
+                        return(
+                            <Card>
+                                <Image
+                                    style={styles.logoImage}
+                                    source={{uri: foodUrl}}
+                                />
+                            </Card>
+                        )
+                    })}
+                </ScrollView>
+
+                
+                
+                <View>
+                    <TouchableOpacity style={styles.button} onPress={() => { 
+                        this.setState({modalImageVisible: true});
+                    }}>
+                        <Text>Add Photo</Text>
+                    </TouchableOpacity>
+                </View>
+                
+
+
+
+
+                <View style={styles.centeredView}>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={this.state.modalImageVisible}
+                        onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        }}
+                    >
+                        <View style = {styles.centeredView}>
+                            <View style = {styles.modalImageView}>
+                                <TouchableOpacity
+                                    style={styles.chainButton}
+                                    onPress={() => { 
+                                         //Ir a la camara y sacar la foto
+                                        this.onChooseImagePress();
+                                        this.setState({modalImageVisible: false});
+                                     }}
+                                >
+                                    <Text style={styles.buttonText}>Camera</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.chainButton}
+                                    onPress={() => { 
+
+                                        this.onChooseGalleryImagePress();
+                                        this.setState({modalImageVisible: false});
+                                        //Ir a la galería
+                                    }}
+                                >
+                                    <Text style={styles.buttonText}>Gallery</Text>
+                                </TouchableOpacity>
+                            </View>             
+                            
+                        </View>
+
+                    </Modal>
+                </View>
+
+                
                 <View style={styles.inputView}>
                     <Text style={styles.inputTitle}>Restaurant Name</Text>
                     <View style={styles.inputBox}>
@@ -144,6 +255,16 @@ class CreateRestaurantComponent extends Component {
                             style={styles.input}
                             underLineColorAndroid="transparent"
                             onChangeText={(value) => { this.setState({postalCode: value})}}
+                        />   
+                    </View>
+                </View>
+                <View style={styles.inputView}>
+                    <Text style={styles.inputTitle}>Address</Text>
+                    <View style={styles.inputBox}>
+                        <Input
+                            style={styles.input}
+                            underLineColorAndroid="transparent"
+                            onChangeText={(value) => { this.setState({address: value})}}
                         />   
                     </View>
                 </View>
@@ -190,6 +311,7 @@ class CreateRestaurantComponent extends Component {
 
                 <View>
                     <TouchableOpacity style={styles.button} onPress={() => { 
+                        this.uploadImages();
                         //HANDLE DE LA API
                         navigation.goBack()
                      }} >
@@ -339,6 +461,23 @@ const styles = StyleSheet.create({
         height: 400,
     },
 
+    modalImageView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 10,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        height: 120,
+    },
+
     modalTitle: {
         position: "relative",
         fontSize: 20,
@@ -348,6 +487,16 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         paddingBottom: 10,
       },
+
+
+      logoImage: {
+        position: "relative",
+        width: 240,
+        height: 240,
+        justifyContent: "center",
+        margin: 15,
+      },
+    
   
   });
 
