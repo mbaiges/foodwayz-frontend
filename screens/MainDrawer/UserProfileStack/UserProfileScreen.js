@@ -32,9 +32,10 @@ class UserProfileComponent extends Component {
     this.setState({
       user: resp.result
     })
+
     console.log('done fetching user');
     console.log("User is: " + this.state.user);
-    console.log(JSON.stringify(resp.result));
+    console.log(resp.result);
   }
 
   async fetchReviews() {
