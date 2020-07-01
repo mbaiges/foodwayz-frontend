@@ -11,137 +11,197 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
+import { RestaurantApi } from "../../api";
 
 //import { Constants } from 'expo';
 
 const { width } = Dimensions.get("window");
 
-const RestaurantProfile = ({ navigation }) => {
-  return (
-    <SafeAreaView style={styles.backgroundContainer}>
-      
+class RestaurantProfileComponent extends Component {
+  constructor() {
+    super();
 
-      <ScrollView>
-      <View style={styles.mainPage}>
-        <ScrollView horizontal={true}>
-          <Card>
-            <Image
-              style={styles.logoImage}
-              source={{uri: 'https://i.pinimg.com/originals/eb/80/87/eb80873b89dcc92228712b6257ac05d0.jpg'}}
-            />
-          </Card>
-          <Card>
-            <Image
-              style={styles.logoImage}
-              source={{uri: 'https://media-cdn.tripadvisor.com/media/photo-s/12/3f/af/ba/ambience.jpg'}}
-            />
-          </Card>
-        </ScrollView>
-        <Text style={styles.logoText}>Restaurante El Panda Guerrero</Text>
+    this.state = {
+      restaurant: {},
+      images: [],
+      dishes: [],
+    }
+  }
 
-        <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => { navigation.navigate("RestaurantStatisticsProfile") }}
-            >
-              <Text style={styles.buttonText}>Statistics</Text>
-            </TouchableOpacity>
-        </View>
+
+  async fetchRestaurants() {
+    const { route } = this.props;
+    console.log(route);
+    
+    const { restaurant } = route.params;
+    console.log(restaurant);
+    this.setState({ restaurant: restaurant});
+  }
+
+  async fetchImages() {
+    const aux = this.state.restaurant;
+
+    const resp = await RestaurantApi.getImages(aux.a_rest_id);
+    console.log("-----------------------------------------------------------------------------------------");
+    console.log(resp);
+    this.setState({
+      images: resp.result,
+    })
+  }
+
+  async fetchDishes() {
+    const aux = this.state.restaurant;
+    const resp = await RestaurantApi.getFoods(aux.a_rest_id);
+    console.log("-----------------------------------------------------------------------------------------");
+    console.log(resp);
+    this.setState({
+      dishes: resp.result,
+    })
+  }
+
+  async componentDidMount() {
+    console.log("Mounting");
+    await this.fetchRestaurants();
+    await this.fetchImages();
+    await this.fetchDishes();
+  }
+
+  render(){
+    const {navigation} = this.props;
+
+    return (
+      <SafeAreaView style={styles.backgroundContainer}>
         
-        <Text style={styles.primaryText}>About us</Text>
-        <Text style={styles.secondaryText}>Somos un restaurante asiático basado en la película Kung Fu Panda.
-        Nuestros cocineros panda trabajan las 24h sin descansar para que tú puedas comer
-        una sopa a las 2 de la madrugada si así lo deseas!</Text>
-      </View>
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-            style={styles.button}
-            onPress={async () => {navigation.navigate("AddDish")}}
-        >
-            <Text style={styles.buttonText}>ADD NEW DISH</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.popularContainer} >
-        <Text style={styles.subtitleText}>Our most popular dishes</Text>
-        <View style={styles.popular}>
+  
+        <ScrollView>
+        <View style={styles.mainPage}>
           <ScrollView horizontal={true}>
-            <TouchableOpacity onPress={async () => {navigation.navigate("Food");
-                    console.log("I want to navigate to Dish page");
-                  }}>
+            <Card>
+              <Image
+                style={styles.logoImage}
+                source={{uri: 'https://i.pinimg.com/originals/eb/80/87/eb80873b89dcc92228712b6257ac05d0.jpg'}}
+              />
+            </Card>
+            <Card>
+              <Image
+                style={styles.logoImage}
+                source={{uri: 'https://media-cdn.tripadvisor.com/media/photo-s/12/3f/af/ba/ambience.jpg'}}
+              />
+            </Card>
+          </ScrollView>
+          <Text style={styles.logoText}>{this.state.restaurant.a_name}</Text>
+  
+          <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => { navigation.navigate("RestaurantStatisticsProfile") }}
+              >
+                <Text style={styles.buttonText}>Statistics</Text>
+              </TouchableOpacity>
+          </View>
+          
+          {/* <Text style={styles.primaryText}>About us</Text>
+          <Text style={styles.secondaryText}>Somos un restaurante asiático basado en la película Kung Fu Panda.
+          Nuestros cocineros panda trabajan las 24h sin descansar para que tú puedas comer
+          una sopa a las 2 de la madrugada si así lo deseas!</Text> */}
+        </View>
+  
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+              style={styles.button}
+              onPress={async () => {navigation.navigate("AddDish")}}
+          >
+              <Text style={styles.buttonText}>ADD NEW DISH</Text>
+          </TouchableOpacity>
+        </View>
+  
+        <View style={styles.popularContainer} >
+          <Text style={styles.subtitleText}>Our most popular dishes</Text>
+          <View style={styles.popular}>
+            <ScrollView horizontal={true}>
+              <TouchableOpacity onPress={async () => {navigation.navigate("Food");
+                      console.log("I want to navigate to Dish page");
+                    }}>
+                <Card>
+                  <Image
+                    style={styles.popularImage}
+                    resizeMode="cover"
+                    source={{uri: 'https://s1.eestatic.com/2020/01/08/cocinillas/recetas/sopas-y-cremas/Caldo-Pollo-Fideos-Sin_Lactosa-Sopas_y_cremas_458216170_142008613_1706x960.jpg'}}
+                  />
+                  <View style={styles.cardFooter}>
+                    <Text style={styles.foodName}>Rica Sopa</Text>
+                  </View>
+                </Card>
+              </TouchableOpacity>
               <Card>
                 <Image
                   style={styles.popularImage}
                   resizeMode="cover"
-                  source={{uri: 'https://s1.eestatic.com/2020/01/08/cocinillas/recetas/sopas-y-cremas/Caldo-Pollo-Fideos-Sin_Lactosa-Sopas_y_cremas_458216170_142008613_1706x960.jpg'}}
+                  source={{uri: 'https://i.pinimg.com/originals/e6/b0/6f/e6b06fc8b9901993fae74c34bcff2e09.jpg'}}
+                />
+                <Text style={styles.foodName}>Tallarines Po</Text>
+              </Card>
+              <Card>
+                <Image
+                  style={styles.popularImage}
+                  resizeMode="cover"
+                  source={{uri: 'https://img.culturacolectiva.com/cdn-cgi/image/f=auto,w=1600,q=80,fit=contain/content_image/2019/5/2/1556836847320-recetas-de-comida-china-para-preparar-facil-y-rapido.001.jpeg'}}
+                />
+                <Text style={styles.foodName}>Parrillada Panda</Text>
+              </Card>
+            </ScrollView>
+          </View>
+        </View>    
+  
+  
+        <View style={styles.popularContainer}>
+          <Text style={styles.subtitleText}>All of our dishes</Text>
+  
+          <Text style={styles.subsubtitleText}>Go vegan!</Text>
+          <View style={styles.popular}>
+            <ScrollView horizontal={true}>
+              <Card>
+                <Image
+                  style={styles.popularImage}
+                  resizeMode="cover"
+                  source={require("../../assets/images/Po.jpg")}
                 />
                 <View style={styles.cardFooter}>
-                  <Text style={styles.foodName}>Rica Sopa</Text>
+                  <Text style={styles.foodName}>Ensalada</Text>
                 </View>
               </Card>
-            </TouchableOpacity>
-            <Card>
-              <Image
-                style={styles.popularImage}
-                resizeMode="cover"
-                source={{uri: 'https://i.pinimg.com/originals/e6/b0/6f/e6b06fc8b9901993fae74c34bcff2e09.jpg'}}
-              />
-              <Text style={styles.foodName}>Tallarines Po</Text>
-            </Card>
-            <Card>
-              <Image
-                style={styles.popularImage}
-                resizeMode="cover"
-                source={{uri: 'https://img.culturacolectiva.com/cdn-cgi/image/f=auto,w=1600,q=80,fit=contain/content_image/2019/5/2/1556836847320-recetas-de-comida-china-para-preparar-facil-y-rapido.001.jpeg'}}
-              />
-              <Text style={styles.foodName}>Parrillada Panda</Text>
-            </Card>
-          </ScrollView>
+            </ScrollView>
+          </View>
+  
+          <Text style={styles.subsubtitleText}>Meat yourself</Text>
+          <View style={styles.popular}>
+            <ScrollView horizontal={true}>
+              <Card>
+                <Image
+                  style={styles.popularImage}
+                  resizeMode="cover"
+                  source={require("../../assets/images/Po.jpg")}
+                />
+                <View style={styles.cardFooter}>
+                  <Text style={styles.foodName}>Costillar</Text>
+                </View>
+              </Card>
+            </ScrollView>
+          </View>
+          
         </View>
-      </View>    
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+
+}
+
+export  default function RestaurantProfile( props ){
+  return <RestaurantProfileComponent {...props}/>
+}
 
 
-      <View style={styles.popularContainer}>
-        <Text style={styles.subtitleText}>All of our dishes</Text>
-
-        <Text style={styles.subsubtitleText}>Go vegan!</Text>
-        <View style={styles.popular}>
-          <ScrollView horizontal={true}>
-            <Card>
-              <Image
-                style={styles.popularImage}
-                resizeMode="cover"
-                source={require("../../assets/images/Po.jpg")}
-              />
-              <View style={styles.cardFooter}>
-                <Text style={styles.foodName}>Ensalada</Text>
-              </View>
-            </Card>
-          </ScrollView>
-        </View>
-
-        <Text style={styles.subsubtitleText}>Meat yourself</Text>
-        <View style={styles.popular}>
-          <ScrollView horizontal={true}>
-            <Card>
-              <Image
-                style={styles.popularImage}
-                resizeMode="cover"
-                source={require("../../assets/images/Po.jpg")}
-              />
-              <View style={styles.cardFooter}>
-                <Text style={styles.foodName}>Costillar</Text>
-              </View>
-            </Card>
-          </ScrollView>
-        </View>
-        
-      </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
 
 const { width: WIDTH } = Dimensions.get("window");
 
@@ -285,5 +345,3 @@ const styles = StyleSheet.create({
   },
 
 });
-
-export default RestaurantProfile;
