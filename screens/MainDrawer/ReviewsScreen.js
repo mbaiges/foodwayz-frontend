@@ -58,7 +58,8 @@ class Reviews extends Component {
                     name = {this.reviews[i].name}
                     date = {this.reviews[i].date}
                     rating = {this.reviews[i].rating}
-                    comment = {this.reviews[i].comment}                   
+                    comment = {this.reviews[i].comment} 
+                    onPress={() => {navigation.navigate("ReviewScreen");}}                  
                 />
                 
             </View>

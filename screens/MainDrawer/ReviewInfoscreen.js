@@ -17,7 +17,7 @@ import CheckBox from "@react-native-community/checkbox";
 
 const { width } = Dimensions.get("window");
 
-class ReviewInfo extends Component {
+class ReviewInfoComponent extends Component {
 
     constructor() {
         super();
@@ -52,10 +52,11 @@ class ReviewInfo extends Component {
             <Text style={styles.subtitle}>Review by</Text>
        
             <View style={styles.userInfo}>
-            <Text style={styles.text}>{this.review.a_user.a_name}</Text>
+            <Text style={styles.text}>Mati</Text>
             <Image
               style={styles.userImage}
-              source={{ uri: this.state.user.a_image_url }}
+              resizeMode="cover"
+              source={require("../../assets/images/Po.jpg")}
             />
             </View>
 
@@ -67,29 +68,33 @@ class ReviewInfo extends Component {
                           console.log("I want to navigate to Dish page");
                         }}>
                         <Card
-                          image={{ uri: review.a_food.a_image_url }}
+                          resizeMode="cover"
+                          source={require("../../assets/images/Po.jpg")}
                           imageStyle={{
                             height: 100,
                           }}
                         >
                           <View style={styles.cardFooter}>
-                            <Text style={styles.foodName}>{review.a_food.a_title}</Text>
+                            <Text style={styles.foodName}>Comida</Text>
                           </View>
-                          <Rating imageSize={20} readonly startingValue={review.a_food.a_score} style={styles.rating} />
+                          <Rating imageSize={20} readonly startingValue={3} style={styles.rating} />
                         </Card>
             </TouchableOpacity>
 
             <Text style={styles.subtitle}>User rating</Text>
-            <Rating imageSize={50} readonly startingValue={review.a_score} style={styles.rating} />
+            <Rating imageSize={50} readonly startingValue={4} style={styles.rating} />
 
             <Text style={styles.subtitle}>Comments</Text>    
-            <Text style={styles.text}>{review.a_description}</Text>        
+            <Text style={styles.text}>Muy rico todo</Text>        
             </ScrollView>
         </SafeAreaView>
     );
     };
 }
 
+export default function ReviewInfoScreen( props ) {
+  return <ReviewInfoComponent {...props} />;
+}
 
 const styles = StyleSheet.create({
     backgroundContainer: {
@@ -230,4 +235,3 @@ const styles = StyleSheet.create({
     
 });
 
-export default ReviewInfo;
