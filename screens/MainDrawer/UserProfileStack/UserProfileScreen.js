@@ -139,13 +139,17 @@ class UserProfileComponent extends Component {
             >
               <Text style={styles.buttonText}>Become premium</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+
+            </View>
+            
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
               style={styles.button}
               onPress={async () => { navigation.navigate("RestaurantStatisticsProfile") }}
             >
               <Text style={styles.buttonText}>Stats</Text>
           </TouchableOpacity>
-            </View>
+          </View>
 
         </ScrollView>
       </SafeAreaView>

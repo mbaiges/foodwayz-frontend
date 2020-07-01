@@ -120,18 +120,33 @@ class RestaurantStatisticsProfileComponent extends Component {
                             </View>
                         </TouchableOpacity>
                     </View>
-                    <View flexDirection='row'>
-                        <Text style={styles.reviewText}>Good: </Text>
-                        <Text style={styles.reviewText}>{this.goodReviews}</Text>
-                    </View>
-                    <View flexDirection='row'>
-                        <Text style={styles.reviewText}>Neural: </Text>
-                        <Text style={styles.reviewText}>{this.neutralReviews}</Text>
-                    </View>
-                    <View flexDirection='row'>
-                        <Text style={styles.reviewText}>Bad: </Text>
-                        <Text style={styles.reviewText}>{this.badReviews}</Text>
-                    </View>
+                    <BarChart
+                            width={screenWidth}
+                            height={220}
+                            verticalLabelRotation={30}
+                            data={{
+                                labels: ["Bad", "Neutral", "Good"],
+                                datasets: [
+                                    {
+                                    data: [70, 85, 120]
+                                    }
+                                ]
+                              }}
+                            chartConfig={{
+                                backgroundColor: "#FC987E",
+                                backgroundGradientFrom: "white",
+                                backgroundGradientTo: "#white",
+                                color: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
+                                labelColor: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
+                                decimalPlaces: 0, // optional, defaults to 2dp
+                                color: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
+                                style: {
+                                    borderRadius: 16
+                                }
+                            }}
+                            verticalLabelRotation={0}
+                              
+                        />
                 </View>
                 <View style={styles.reviewContainer} >
                     <Text style={styles.subtitleText}>Favourite Dishes</Text>
@@ -156,40 +171,99 @@ class RestaurantStatisticsProfileComponent extends Component {
                     <Text style={styles.buttonTitle}> Want More?</Text>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={async () => { }}
+                        onPress={async () => { navigation.navigate("Premium") }}
                     >
                         <Text style={styles.buttonText}>UPGRADE TO A BETTER PLAN</Text>
                     </TouchableOpacity>
                 </View>
                 <View>
-                    <Text>
-                        Bezier Line Chart
+                    <Text style={styles.subtitleText}>
+                        Reviews by date
                     </Text>
                     <LineChart
                         data={{
-                        labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
                         datasets: [{
-                            data: [
-                            Math.random() * 100,
-                            Math.random() * 100,
-                            Math.random() * 100,
-                            Math.random() * 100,
-                            Math.random() * 100,
-                            Math.random() * 100
-                            ]
+                            data: [20, 10, 50, 25, 63, 90, 11, 70, 56, 40, 80, 100]
                         }]
                         }}
                         width={Dimensions.get('window').width} // from react-native
                         height={220}
                         chartConfig={{
-                        backgroundColor: '#e26a00',
-                        backgroundGradientFrom: '#fb8c00',
-                        backgroundGradientTo: '#ffa726',
-                        decimalPlaces: 2, // optional, defaults to 2dp
-                        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                        style: {
-                            borderRadius: 16
-                        }
+                            backgroundColor: "#FC987E",
+                            backgroundGradientFrom: "white",
+                            backgroundGradientTo: "#white",
+                            color: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
+                            labelColor: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
+                            decimalPlaces: 0, // optional, defaults to 2dp
+                            color: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
+                            style: {
+                                borderRadius: 16
+                            }
+                        }}
+                        bezier={true}
+                        style={{
+                        marginVertical: 8,
+                        borderRadius: 16
+                        }}
+                    />
+                </View>
+
+                <View>
+                <Text style={styles.subtitleText}>
+                        Good Reviews by date
+                    </Text>
+                <BarChart
+                            width={screenWidth}
+                            height={220}
+                            verticalLabelRotation={30}
+                            data={{
+                                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
+                                datasets: [{
+                                    data: [20, 10, 50, 25, 63, 90, 11, 70, 56, 40, 80, 100]
+                                }]
+                                }}
+                            chartConfig={{
+                                backgroundColor: "#FC987E",
+                                backgroundGradientFrom: "white",
+                                backgroundGradientTo: "#white",
+                                color: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
+                                labelColor: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
+                                decimalPlaces: 0, // optional, defaults to 2dp
+                                color: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
+                                style: {
+                                    borderRadius: 16
+                                }
+                            }}
+                            verticalLabelRotation={30}
+                              
+                        />
+                </View>
+
+                <View>
+                <Text style={styles.subtitleText}>
+                        Average user age
+                    </Text>
+                    <LineChart
+                        data={{
+                        labels: ['0','10', '20', '30', '40', '50', '60', '70', '80', '90'],
+                        datasets: [{
+                            data: [20, 10, 50, 25, 63, 90, 11, 70, 56, 40]
+                        }]
+                        }}
+                        width={Dimensions.get('window').width} // from react-native
+                        height={220}
+                        chartConfig={{
+                            backgroundColor: "#FC987E",
+                            backgroundGradientFrom: "white",
+                            backgroundGradientTo: "#white",
+                            color: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
+                            labelColor: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
+                            decimalPlaces: 0, // optional, defaults to 2dp
+                            color: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
+                            style: {
+                                borderRadius: 16
+                            }
                         }}
                         bezier={true}
                         style={{
