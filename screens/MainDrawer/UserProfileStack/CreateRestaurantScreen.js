@@ -14,13 +14,12 @@ import {
   Modal
 } from "react-native";
 
-
 import * as ImagePicker from 'expo-image-picker';
 import * as firebase from 'firebase';
-import { UserApi } from '../../../api';
+import { UserApi, RestaurantChainApi, RestaurantApi } from '../../../api';
+import { makeUrl } from "expo-linking";
 
 const { width } = Dimensions.get("window");
-
 
 class CreateRestaurantComponent extends Component {
 
@@ -34,21 +33,15 @@ class CreateRestaurantComponent extends Component {
             postalCode: "",
             address: "",
             isChain: false,
-            selectedChain: {name: "None"},
+            selectedChain: {},
             modalVisible: false,
             modalImageVisible: false,
             chainSelected: false,
-            imagesUrl: []
+            imagesUrl: [],
+            chains: [],
         }
-
-        this.chainOptions = [{name :"McRondals"},
-                    {name :"Kansas"},
-                    {name :"Ms Burger"},
-                    {name :"Mc Burger"},
-                    {name :"Burger Queen"},
-                    {name :"Lo de tocarli"}];
     
-      }
+    } 
 
         setModalVisible = (visible) => {
             this.setState({ modalVisible: visible });
@@ -65,7 +58,6 @@ class CreateRestaurantComponent extends Component {
 
         onChooseImagePress = async () => {
             let result = await ImagePicker.launchCameraAsync();
-            //let result = await ImagePicker.launchImageLibraryAsync();
         
             if (!result.cancelled) {
                 let aux = this.state.imagesUrl;
@@ -75,7 +67,6 @@ class CreateRestaurantComponent extends Component {
         }
 
         onChooseGalleryImagePress = async () => {
-            //let result = await ImagePicker.launchCameraAsync();
             let result = await ImagePicker.launchImageLibraryAsync();
         
             if (!result.cancelled) {
@@ -85,43 +76,98 @@ class CreateRestaurantComponent extends Component {
             }
         }
 
-        uploadImages = async () => {
-            for(var i = 0 ; i < imagesUrl.length ; i++){
-                const response = await fetch(imagesUrl[i]);
+        uploadImagesToFirebase = async (rest) => {
+            for(var i = 0 ; i < this.state.imagesUrl.length ; i++){
+                const response = await fetch(this.state.imagesUrl[i]);
                 const blob = await response.blob();
                 //CAMBIAR LO QUE VIENE ABAJO PARA QUE NO CAMBIE LA FOTO DEL USER
-                var auxName = this.state.name.replace(/ /g, "_");
-                var auxCountry = this.state.countryState.replace(/ /g, "_");
-                var auxCity = this.state.city.replace(/ /g, "_");
-                var auxAddress = this.state.address.replace(/ /g, "_");
+                // var auxName = this.state.name.replace(/ /g, "_");
+                // var auxCountry = this.state.countryState.replace(/ /g, "_");
+                // var auxCity = this.state.city.replace(/ /g, "_");
+                // var auxAddress = this.state.address.replace(/ /g, "_");
 
-                var myStr = auxName + "_" + auxCountry + "_" + auxCity + "_" + this.state.postalCode + "_" + auxAddress + "_" + i.toString();
+                // var myStr = auxName + "_" + auxCountry + "_" + auxCity + "_" + this.state.postalCode + "_" + auxAddress + "_" + i.toString();
+                var myStr = rest.a_rest_id + "_" + i;
                 console.log("imageName: " + myStr);
           
                 var ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);
                 ref.put(blob);                
             }
         }
+
+        async uploadImagesToDB(rest){
+            for(var i = 0 ; i < this.state.imagesUrl.length ; i++){
+                var myStr = rest.a_rest_id + "_" + i;
+                console.log("imageName: " + myStr);
+                const url = await firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`).getDownloadURL();
+                await RestaurantApi.addImage(rest.a_rest_id, url);
+            }
+        }
+
+        async uploadRestaurant(){
+            const {navigation} = this.props;
+
+            if(this.state.name != "" && this.state.selectedChain != "" && this.state.city != "" && this.state.postalCode != "" && this.state.address != ""){
+            
+                let restaurant = {
+                    a_name:this.state.name,
+                    a_state:this.state.countryState,
+                    a_city:this.state.city,
+                    a_postal_code:this.state.postalCode,
+                    a_address:this.state.address
+                }
+    
+                if (this.state.isChain){
+                    restaurant.a_rest_chain_id = this.state.selectedChain.a_rest_chain_id;
+                }
+                    
+                const resp = await RestaurantApi.add(restaurant);
+
+                if(resp.message == "Successfully added restaurant"){
+                    await this.uploadImagesToFirebase(resp.result[0]);
+                    await this.uploadImagesToDB(resp.result[0]);
+                }
+
+                console.log(resp);
+
+                console.log("status: " + resp.status);
+
+                navigation.goBack();
+            }else{
+                console.log("fill fields")
+            }
+        }
+
+        async fetchChains(){
+            const resp = await RestaurantChainApi.getAll();
+            this.setState({ chains: resp.result });
+            console.log(resp);
+        }
+
+        async componentDidMount() {
+            console.log('mounting');
+            await this.fetchChains();
+        }
    
         render() {
             const {navigation} = this.props;
             var modalInput = "";
             var chainOptionButtons = [];
-            for(let i = 0; i < this.chainOptions.length ; i++){
+            for(let i = 0; i < this.state.chains.length ; i++){
                 chainOptionButtons.push(
                     <View key={i}>             
                         <TouchableOpacity
                             style={styles.chainButton}
                             onPress={() => { 
-                            this.setModalVisible(false);
-                            this.setState({
-                                selectedChain: this.chainOptions[i],
-                                chainSelected: true,
-                            });
+                                this.setModalVisible(false);
+                                this.setState({
+                                    selectedChain: this.state.chains[i],
+                                    chainSelected: true,
+                                });
                             modalInput = "";
                             }}
                         >
-                            <Text style={styles.buttonText}>{this.chainOptions[i].name}</Text>
+                            <Text style={styles.buttonText}>{this.state.chains[i].a_name}</Text>
                         </TouchableOpacity>
                     
                     </View>
@@ -131,7 +177,7 @@ class CreateRestaurantComponent extends Component {
         var chainSelectedAndChange = [];
         chainSelectedAndChange.push(
             <View>
-                <Text style={styles.title}>Chain selected: {this.state.selectedChain.name}</Text>
+                <Text style={styles.title}>Chain selected: { this.state.selectedChain.a_name ? this.state.selectedChain.a_name : "none"} </Text>
                 <View>
                     <TouchableOpacity style={styles.button} onPress={() => { 
                         this.setModalVisible(true);
@@ -310,11 +356,7 @@ class CreateRestaurantComponent extends Component {
 
 
                 <View>
-                    <TouchableOpacity style={styles.button} onPress={() => { 
-                        this.uploadImages();
-                        //HANDLE DE LA API
-                        navigation.goBack()
-                     }} >
+                    <TouchableOpacity style={styles.button} onPress={async() => { await this.uploadRestaurant() }} >
                         <Text>Register</Text>
                     </TouchableOpacity>
                 </View>
