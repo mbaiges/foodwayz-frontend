@@ -28,7 +28,7 @@ export default function DefaultNavBar({ title, navigation }) {
           name="md-person"
           size={38}
           style={styles.icon}
-          onPress={() => navigation.navigate("UserProfileStack")}
+          onPress={() => navigation.navigate("UserProfile")}
         />
       </View>
     ),
