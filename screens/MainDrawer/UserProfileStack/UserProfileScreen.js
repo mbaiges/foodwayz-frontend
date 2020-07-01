@@ -30,19 +30,19 @@ class UserProfileComponent extends Component {
     console.log('fetching user');
     const resp = await UserApi.getMe();
     this.setState({
-      user: resp.result
+      user: resp.response.result
     })
     console.log('done fetching user');
     console.log("User is: " + this.state.user);
-    console.log(JSON.stringify(resp.result));
+    console.log(JSON.stringify(resp.response.result));
   }
 
   async fetchReviews() {
     const resp = await ReviewApi.getReviewsByUser(this.state.user.a_user_id);
     this.setState({
-      reviews: resp.result
+      reviews: resp.response.result
     })
-    console.log(resp.result)
+    console.log(resp.response.result)
     console.log(this.state.review)
   }
 

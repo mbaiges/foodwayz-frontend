@@ -52,14 +52,14 @@ class EditProfileAllergiesComponent extends Component {
 
   async fetchUserChars(){
     const resp = await UserHasCharacteristicApi.getCharactersticsByUser(this.state.user.a_user_id);
-    for (let userChar of resp.result) {
+    for (let userChar of resp.response.result) {
       this.setValue(userChar.a_char_id);
     }
   }
 
   async fetchChars(){
     const resp = await CharacteristicApi.getAll();
-    this.setState({ chars: resp.result });
+    this.setState({ chars: resp.response.result });
     for(let i = 0; i < this.state.chars.length ; i++){
       this.state.values.push(false);                        
     } 
@@ -68,7 +68,7 @@ class EditProfileAllergiesComponent extends Component {
   async fetchUser() {
     const resp = await UserApi.getMe();
     this.setState({
-      user: resp.result
+      user: resp.response.result
     })
   }
 
