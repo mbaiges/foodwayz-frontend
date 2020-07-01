@@ -30,11 +30,26 @@ class EditProfilePasswordComponent extends Component {
   }
 
   async changePass(){
-    if(this.state.newPass != "" || this.state.newPass2 != "" || this.state.oldPass != ""){
+    const {navigation} = this.props;
+    
+    if(this.state.newPass != "" && this.state.newPass2 != "" && this.state.oldPass != ""){
       if(this.state.newPass == this.state.newPass2){
         const resp = await AuthApi.changePassword(this.state.oldPass, this.state.newPass);
         console.log(resp)
-        console.log("password changed")
+
+        switch(resp.code){
+          case "password-changed":
+            console.log("password changed")
+            navigation.goBack();
+          break;
+          case "invalid-auth":
+            console.log("incorrect old password");
+          break;
+          default : 
+            console.log("an error ocurred");
+          break;
+        }
+
       }else{  
         console.log("passwords dont match")
       }
@@ -87,10 +102,7 @@ class EditProfilePasswordComponent extends Component {
             </View>
 
             <View>
-                <TouchableOpacity style={styles.button} onPress={async() => { 
-                    await this.changePass();
-                    navigation.goBack()
-                 }} >
+                <TouchableOpacity style={styles.button} onPress={async() => { await this.changePass() }} >
                     <Text>CHANGE PASSWORD</Text>
                 </TouchableOpacity>
             </View>
