@@ -34,12 +34,14 @@ class EditProfilePasswordComponent extends Component {
   async changePass(){
     if(this.state.newPass != ""){
       if(this.state.newPass == this.state.newPass2){
-        //await 
+        //const resp = await AuthApi.changePass(this.state.oldPass, this.state.newPass);
+
+        console.log("password changed")
       }else{  
-        //passwords dont match
+        console.log("passwords dont match")
       }
     }else{
-      //fill fields
+      console.log("fill fields")
     }
   }
   
