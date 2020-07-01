@@ -18,15 +18,9 @@ class Api {
       init.signal = controller.signal
 
       fetch(url, init)
-        .then(response => {
-          return response.json();
-        })
-        .then(data => {
-          if (data.error)
-            reject(data.error);
-          else
-            resolve(data);
-        })
+        .then(response => Promise.all([Promise.resolve(response.status), response.json()]))
+        .then(data => resolve(({ status: data[0], response: data[1] })))
+        .then(data => resolve(console.log(data.status)))
         .catch(error => {
           reject({ "code": 99, "description": error.message.toLowerCase() });
         });
@@ -53,7 +47,6 @@ class Api {
   }
 
   static put(url, data, controller) {
-    console.log(JSON.stringify(data));
     return Api.fetch(url, {
       method: 'PUT',
       headers: {

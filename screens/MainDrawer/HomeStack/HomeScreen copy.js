@@ -23,7 +23,7 @@ const fetchFoods = () => {
   return new Promise((resolve, reject) => {
     FoodApi.getAll()
       .then(resp => {
-        resolve(resp.result.map((food) => {
+        resolve(resp.response.result.map((food) => {
           return {
             id: food.a_food_id,
             imageUrl: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg',

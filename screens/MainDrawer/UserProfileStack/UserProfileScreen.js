@@ -39,20 +39,20 @@ class UserProfileComponent extends Component {
       user.a_image_url = "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser5%40email_com.jpg?alt=media&token=9cfe6b05-ff65-448b-b089-8f93109a89ae"
     }
     this.setState({
-      user: user
+      user: resp.response.result
     })
 
     console.log('done fetching user');
     console.log("User is: " + this.state.user);
-    console.log(resp.result);
+    console.log(JSON.stringify(resp.response.result));
   }
 
   async fetchReviews() {
     const resp = await ReviewApi.getReviewsByUser(this.state.user.a_user_id);
     this.setState({
-      reviews: resp.result
+      reviews: resp.response.result
     })
-    console.log(resp.result)
+    console.log(resp.response.result)
     console.log(this.state.review)
   }
 

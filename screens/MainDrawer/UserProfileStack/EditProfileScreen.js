@@ -23,7 +23,7 @@ class EditProfileComponent extends Component {
     console.log('fetching user');
     const resp = await UserApi.getMe();
     this.setState({
-      user: resp.result
+      user: resp.response.result
     })
     this.setState({
       date: this.state.user.a_birthdate != "null" ? new Date(this.state.user.a_birthdate) : new Date()
