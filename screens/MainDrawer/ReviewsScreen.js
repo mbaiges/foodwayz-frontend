@@ -48,15 +48,15 @@ class ReviewsComponent extends Component {
         for(let i = 0; i < this.state.reviews.length ; i++){
             let review = this.state.reviews[i];
             let date = new Date(review.a_created_at)
-        reviewCards.push(
-            <View key={i}>
-                <ReviewCard
-                    name = {review.a_user.a_name}
-                    date = {date.toLocaleString()}
-                    rating = {review.a_score}
-                    comment = {review.a_desc}                   
-                />
-            </View>
+            reviewCards.push(
+                <View key={i}>
+                    <ReviewCard
+                        name = {review.a_user.a_name}
+                        date = {date.toLocaleString()}
+                        rating = {review.a_score}
+                        comment = {review.a_desc}                   
+                    />
+                </View>
             )
         }                  
 
