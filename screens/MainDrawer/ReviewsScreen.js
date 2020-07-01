@@ -9,7 +9,7 @@ class ReviewsComponent extends Component {
 
     constructor() {
         super();
-    
+
         this.state = {
           reviews: [],
           food: {}
@@ -39,10 +39,10 @@ class ReviewsComponent extends Component {
         await this.fetchFood();
         await this.fetchReviews();
     }
-    
+
     render() {
         const { navigation } = this.props;
-        
+
         var reviewCards = [];
 
         for(let i = 0; i < this.state.reviews.length ; i++){
@@ -62,7 +62,7 @@ class ReviewsComponent extends Component {
                     </TouchableOpacity>
                 </View>
             )
-        }                  
+        }
 
         return (
             <SafeAreaView style={styles.backgroundContainer}>
