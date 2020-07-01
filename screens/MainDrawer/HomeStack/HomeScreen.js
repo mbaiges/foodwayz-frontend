@@ -28,16 +28,7 @@ class HomeScreenComponent extends Component {
   async fetchFoods() {
     const resp = await FoodApi.getAll();
     this.setState({
-      foods: resp.result.map((food) => {
-        return {
-          id: food.a_food_id,
-          imageUrl: food.a_image_url,
-          title: food.a_title,
-          desc: food.a_description,
-          brand: food.a_rest.a_name,
-          rating: food.a_score,
-        }
-      })
+      foods: resp.result
     })
     console.log(this.state.foods);
     console.log(JSON.stringify(resp.result));
@@ -61,15 +52,15 @@ class HomeScreenComponent extends Component {
                 this.state.foods.map(food => {
                   return (
                     <FoodCard
-                      key={food.id}
-                      image={{ uri: food.imageUrl }}
-                      title={food.title}
-                      brand={food.brand}
+                      key={food.a_food_id}
+                      image={{ uri: food.a_image_url }}
+                      title={food.a_title}
+                      brand={food.a_rest.a_name}
                       onPress={async () => {
                         navigation.navigate("Food", { food: food });
                         console.log("I want to navigate to Dish page");
                       }}
-                      rating={food.rating}
+                      rating={food.a_score}
                     />
                   )
                 })

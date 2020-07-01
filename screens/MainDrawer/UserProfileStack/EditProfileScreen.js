@@ -129,6 +129,11 @@ class EditProfileComponent extends Component {
   }
 
   async componentDidMount() {
+
+    const { route } = this.props;
+    const { food } = route.params;
+    console.log(food);
+    
     console.log(JSON.stringify(this.updateProfile));
     console.log('mounting');
     await this.fetchUser();
