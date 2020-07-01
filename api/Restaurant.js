@@ -191,6 +191,17 @@ class RestaurantApi{
   BODY:
     --
   RESULTADOS:
+    200 - Comidas del restaurant especificado
+    404 - No hay comidas del restaurant especificado
+  */
+  static getFoods(restId) {
+    return Api.get(`${RestaurantApi.url}/${restId}/food`);
+  }
+
+  /*
+  BODY:
+    --
+  RESULTADOS:
     200 - Imágenes del restaurant especificado
     404 - No hay imágenes del restaurant especificado
   */
@@ -208,7 +219,7 @@ class RestaurantApi{
     401 - El user no es dueño del restaurant
     404 - No hay imágenes del restaurant especificado
   */
-  static addImage(restId, image) {
+  static addImages(restId, image) {
     return Api.post(`${RestaurantApi.url}/${restId}/image`, image);
   }
 
