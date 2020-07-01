@@ -138,7 +138,13 @@ class UserProfileComponent extends Component {
               onPress={async () => { navigation.navigate("Premium") }}
             >
               <Text style={styles.buttonText}>Become premium</Text>
-            </TouchableOpacity>
+          </TouchableOpacity>
+          <TouchableOpacity
+              style={styles.button}
+              onPress={async () => { navigation.navigate("RestaurantStatisticsProfile") }}
+            >
+              <Text style={styles.buttonText}>Stats</Text>
+          </TouchableOpacity>
             </View>
 
         </ScrollView>
