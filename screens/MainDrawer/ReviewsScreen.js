@@ -50,12 +50,16 @@ class ReviewsComponent extends Component {
             let date = new Date(review.a_created_at)
             reviewCards.push(
                 <View key={i}>
-                    <ReviewCard
-                        name = {review.a_user.a_name}
-                        date = {date.toLocaleString()}
-                        rating = {review.a_score}
-                        comment = {review.a_desc}                   
-                    />
+                    <TouchableOpacity
+                        onPress={() => {navigation.navigate("ReviewInfo", { review: review, food: this.state.food });}}  
+                    >
+                        <ReviewCard
+                            name = {review.a_user.a_name}
+                            date = {date.toLocaleString()}
+                            rating = {review.a_score}
+                            comment = {review.a_desc}                   
+                        />
+                    </TouchableOpacity>
                 </View>
             )
         }                  

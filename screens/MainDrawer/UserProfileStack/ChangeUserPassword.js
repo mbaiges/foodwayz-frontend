@@ -32,7 +32,7 @@ class EditProfilePasswordComponent extends Component {
   }
 
   changePass(){
-
+    
   }
   
   render() {
