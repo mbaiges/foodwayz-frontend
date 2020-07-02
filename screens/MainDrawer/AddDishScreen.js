@@ -30,8 +30,10 @@ class AddDishComponent extends Component {
           dishDesc: "",
           tagsVisible: false,
           requestVisible: false,
+          requestIngrVisible: false,
           ingredientsVisible: false,
           newRequest: "",
+          newIngrRequest: "",
           tags: [],
           ingredientsChosen: [],
           allIngredients: [],
@@ -55,6 +57,10 @@ class AddDishComponent extends Component {
 
   setRequestVisible = (visible) => {
     this.setState({ requestVisible: visible });
+  }
+
+  setRequestIngrVisible = (visible) => {
+    this.setState({ requestIngrVisible: visible });
   }
 
   changeValues(i){
@@ -326,9 +332,9 @@ class AddDishComponent extends Component {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                    </Modal>
+                        </Modal>
             
-
+                    
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity
                       style={styles.button}
@@ -342,6 +348,50 @@ class AddDishComponent extends Component {
                   </View>
                 </View>
                 </View>
+
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                      style={styles.buttonChar}
+                      onPress={() => { 
+                        this.setRequestIngrVisible(true);
+                      }}
+                    >
+                     
+                      <Text style={styles.buttonText}>This dish has other ingredients</Text>
+                    </TouchableOpacity>
+                      </View>
+                      <View style={styles.centeredView}>
+                      <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={this.state.requestIngrVisible}
+                        onRequestClose={() => {
+                          Alert.alert("Modal has been closed.");
+                        }}
+                      >
+                        <View style={styles.centeredView}>
+                          <View style={styles.modalView}>
+                            <Text style={styles.inputTitle}>Request a new ingredient</Text>
+                            <Input
+                              placeholder={""}
+                              onChangeText={(value) => (this.newIngrRequest = value)}
+                            />
+
+                            <View style={styles.buttonContainer}>
+                              <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => { 
+                                  this.setRequestIngrVisible(false)
+                                }}
+                              >
+                                <Text style={styles.buttonText}>Send</Text>
+                              </TouchableOpacity>
+                            </View>
+                          </View>
+                        </View>
+                      </Modal>
+                      </View>
+                        
                 
               </View>
               <View style={styles.allergiesContainer}>
