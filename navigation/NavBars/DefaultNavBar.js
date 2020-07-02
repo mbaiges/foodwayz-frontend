@@ -11,7 +11,7 @@ export default function DefaultNavBar({ title, navigation }) {
           name="md-menu"
           size={38}
           style={styles.l_icon}
-          onPress={navigation.goBack}
+          onPress={navigation.openDrawer}
         />
       </View>
     ),

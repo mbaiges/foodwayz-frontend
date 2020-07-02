@@ -11,7 +11,7 @@ export default function BackButtonSearchProfileNavBar({ title, navigation }) {
           name="md-arrow-back"
           size={38}
           style={styles.l_icon}
-          onPress={navigation.openDrawer}
+          onPress={navigation.goBack}
         />
       </View>
     ),

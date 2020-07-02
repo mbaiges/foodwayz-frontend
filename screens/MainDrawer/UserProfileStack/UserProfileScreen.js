@@ -1,4 +1,6 @@
 import React, { Component, useContext, u } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import Colors from "../../../constants/Colors";
 import { Card, ListItem, Button, Icon, Rating } from "react-native-elements";
 import { UserContext } from '../../../context/UserContext';
 import {
@@ -82,7 +84,21 @@ class UserProfileComponent extends Component {
   render() {
     const { navigation, context } = this.props;
     const { authState, setAuthState } = context;
-    var restaurantOptions = [];
+    
+    let restaurantOptions = [];
+
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={styles.navbar_r_icons}>
+          <Ionicons
+            name="md-create"
+            size={38}
+            style={styles.navbar_r_icon}
+            onPress={() => navigation.navigate("UserProfile")}
+          />
+        </View>
+      ),
+    });
 
     for(var i = 0 ; i < this.state.restaurants.length ; i++){
       const rest = this.state.restaurants[i];
@@ -245,6 +261,16 @@ const styles = StyleSheet.create({
     width: null,
     height: null,
     backgroundColor: "white",
+  },
+
+  navbar_r_icons: {
+    flexDirection: "row",
+    right: 16,
+  },
+
+  navbar_r_icon: {
+    color: Colors.noticeText,
+    marginLeft: 16,
   },
 
   mainPage: {
