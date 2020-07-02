@@ -14,7 +14,7 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import { CheckBox,Input, Icon} from "react-native-elements";
 import * as ImagePicker from 'expo-image-picker';
-import {IngredientApi } from '../../api';
+import {IngredientApi, CharacteristicApi, Characteristic } from '../../api';
 import { makeUrl } from "expo-linking";
 
 class AddDishComponent extends Component {
@@ -32,19 +32,16 @@ class AddDishComponent extends Component {
           requestVisible: false,
           requestIngrVisible: false,
           ingredientsVisible: false,
+          characteristicsVisible:false,
           newRequest: "",
           newIngrRequest: "",
           tags: [],
           ingredientsChosen: [],
+          characteristicsChosen: [],
           allIngredients: [],
+          allCharacteristics: [],
         }
 
-        this.options = [{name :"Vegan", value: false},
-                    {name :"celiac fit", value: false},
-                    {name :"Low fat", value: false},
-                    {name :"Cheap", value: false},
-                    {name :"Vegetarian", value: false}
-                  ];
   }
 
   setTagsVisible = (visible) => {
@@ -61,6 +58,10 @@ class AddDishComponent extends Component {
 
   setRequestIngrVisible = (visible) => {
     this.setState({ requestIngrVisible: visible });
+  }
+
+  setCharacteristicsVisible = (visible) => {
+    this.setState({characteristicsVisible: visible });
   }
 
   changeValues(i){
@@ -85,6 +86,12 @@ class AddDishComponent extends Component {
     const resp = await IngredientApi.getAll();
     this.setState({ allIngredients: resp.response.result });
     console.log(resp);
+}
+
+async fetchCharacteristics(){
+  const resp = await CharacteristicApi.getAll();
+  this.setState({ allCharacteristics: resp.response.result });
+  console.log(resp);
 }
 
   onChooseImagePress = async () => {
@@ -137,24 +144,13 @@ class AddDishComponent extends Component {
   async componentDidMount() {
     console.log('mounting');
     await this.fetchIngredients();
+    await this.fetchCharacteristics();
 }
 
   render() {
     const { navigation } = this.props;
     
-    var modalInput = "";
-    var optionButtons = [];
-    for(let i = 0; i < this.options.length ; i++){
-        optionButtons.push(
-            <View key={i}>
-                <CheckBox
-                    title = {this.options[i].name}
-                    checked = {this.state.values[i]}
-                    onPress={() => this.changeValues(i)}
-                />
-            </View>
-        )                        
-    }
+    
 
     var ingredients = [];
             for(let i = 0; i < this.state.allIngredients.length ; i++){
@@ -170,6 +166,26 @@ class AddDishComponent extends Component {
                             }}
                         >
                             <Text style={styles.ingredient}>{this.state.allIngredients[i].a_ingr_name}</Text>
+                        </TouchableOpacity>
+                    
+                    </View>
+                )
+            }
+      
+            var characteristics = [];
+            for(let i = 0; i < this.state.allCharacteristics.length ; i++){
+                characteristics.push(
+                    <View key={i}>             
+                        <TouchableOpacity
+                            style={styles.ingredientsButton}
+                            onPress={() => { 
+                              let aux = this.state.characteristicsChosen;
+                              aux.push(this.state.allIngredients[i]);
+                              this.setState({characteristicsChosen: aux});
+                            modalInput = "";
+                            }}
+                        >
+                            <Text style={styles.ingredient}>{this.state.allCharacteristics[i].a_char_name}</Text>
                         </TouchableOpacity>
                     
                     </View>
@@ -200,13 +216,17 @@ class AddDishComponent extends Component {
                   onChangeText={(value) => (this.state.dishTitle = value)}
                 />
                 
-                <Text style={styles.inputTitle}> Description </Text>
+                <Text style={styles.inputTitle} > 
+                  Description </Text>
                 <Input
+                  multiline
+                  numberOfLines={5}
                   placeholder={""}
+                  style={styles.desc}
                   onChangeText={(value) => (this.state.dishDesc = value)}
                 />
               </View>
-              <View>
+             {/* <View>
                 <Text style={styles.text}>Tags</Text>
                 <View style={styles.tagsList}>
                   {this.state.tags.map((tag, idx) => {
@@ -270,12 +290,12 @@ class AddDishComponent extends Component {
                         this.setTagsVisible(true);
                       }}
                     >
-                      {/* getState((state) => {//Code here}) */}
+                      
                       <Text style={styles.buttonText}>ADD TAG</Text>
                     </TouchableOpacity>
                   </View>
                  
-                </View>
+                    </View> */} 
 
                 <View>
                 <Text style={styles.text}>Ingredients</Text>
@@ -393,10 +413,60 @@ class AddDishComponent extends Component {
                       </View>
                         
                 
-              </View>
+              
               <View style={styles.allergiesContainer}>
                 <Text style={styles.text}>Select allergies / characteristics</Text>
-                { optionButtons }
+                <View style={styles.centeredView}>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={this.state.characteristicsVisible}
+                        onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        }}
+                    >
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <Text style={styles.modalTitle}>Choose allergies / characteristics</Text>
+                                <Input
+                                    placeholder={"Search"}
+                                    rightIcon={
+                                        <Icon
+                                        name='search'
+                                        />
+                                      }
+                                    onChangeText={(value) => (modalInput = value)}
+                                />
+                                <ScrollView>
+                                    {characteristics}
+                                </ScrollView>    
+                                <TouchableOpacity
+                                  style={styles.button}
+                                  onPress={() => { 
+                                    this.setCharacteristicsVisible(false);
+                                  }}
+                                >
+                                  {/* getState((state) => {//Code here}) */}
+                                  <Text style={styles.buttonText}>Done</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        </Modal>
+            
+                    
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                      style={styles.button}
+                      onPress={() => { 
+                        this.setCharacteristicsVisible(true);
+                      }}
+                    >
+                      {/* getState((state) => {//Code here}) */}
+                      <Text style={styles.buttonText}>ADD CHARACTERISTIC</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                       style={styles.buttonChar}
@@ -439,7 +509,7 @@ class AddDishComponent extends Component {
                     </View>
                   </Modal>
                   </View>
-              </View>
+              
 
               
 
@@ -565,6 +635,10 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
 
+  desc:{
+    paddingTop: 0,
+    paddingBottom: 0
+  },
 
   buttonContainer:{
     alignItems:"center",
