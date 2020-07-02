@@ -108,13 +108,12 @@ class RestaurantProfileComponent extends Component {
     
     var myStr = "" + imageToDelete.a_rest_id + "_" + imageToDelete.a_image_extra;
     console.log(myStr);
+    
     var ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);
     await ref.delete();
 
     await RestaurantApi.removeImage(this.state.restaurant.a_rest_id, imageToDelete.a_image_id);
     
-    //NI PUTA IDEA DE COMO BORRAR DE FIREBASE
-
     await this.fetchImages();
   }
 
@@ -141,7 +140,7 @@ class RestaurantProfileComponent extends Component {
 
     console.log("?////////////////////////////////////////////////////////////////////////////////////////////////////");
     console.log(biggestNumber);
-    biggestNumber = biggestNumber + 1;
+    biggestNumber = +biggestNumber + +1;
     console.log(biggestNumber);
     console.log("?////////////////////////////////////////////////////////////////////////////////////////////////////");
 
