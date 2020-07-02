@@ -48,14 +48,14 @@ class UserProfileComponent extends Component {
   async fetchReviews() {
     const resp = await ReviewApi.getReviewsByUser(this.state.user.a_user_id);
     this.setState({
-      reviews: resp.result
+      reviews: resp.response.result
     })}
 
-  async fetchRestaurants() { // ESTO LO TENGO QUE HACER CUANDO ME DIGAN COMO SACAR LOS RESTAURANTES DEBIDO A UN ID
+  async fetchRestaurants() {
 
     const resp = await OwnsApi.getMyRestaurants();
     this.setState({
-      restaurants: resp.result
+      restaurants: resp.response.result
     })
   }
 
@@ -97,8 +97,6 @@ class UserProfileComponent extends Component {
                 onPress={() => {
 
                   this.setState({restaurantsModalVisible: false});
-                  //IR AL RESTO CORRESPONDIENTE
-
                   navigation.navigate("RestaurantProfile", {restaurant: rest});
                 }}
             >
@@ -111,7 +109,7 @@ class UserProfileComponent extends Component {
 
 
 
-
+    let reviews = this.state.reviews;
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
@@ -129,7 +127,8 @@ class UserProfileComponent extends Component {
             <View style={styles.review}>
               <ScrollView horizontal={true}>
                 {
-                  this.state.reviews.map((review, idx) => {
+
+                  reviews.map((review, idx) => {
                     return (
                       <TouchableOpacity
                         key={idx}
