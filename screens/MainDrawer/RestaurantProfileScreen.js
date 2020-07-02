@@ -33,7 +33,9 @@ class RestaurantProfileComponent extends Component {
       verificationModal: false,
       verificationModalImage: false,
       modalImageVisible: false,
-      lastItemClicked: "",
+      lastDishClicked: {},
+      lastImageClicked: {},
+      theBiggestExtra: 0,
     }
   }
 
@@ -51,10 +53,12 @@ class RestaurantProfileComponent extends Component {
     const aux = this.state.restaurant;
 
     const resp = await RestaurantApi.getImages(aux.a_rest_id);
+    
     console.log("-----------------------------------------------------------------------------------------");
     console.log(resp);
+    const theBiggestExtra = resp.response.result.reduce((a,b) => (a<b)? b : a);
     this.setState({
-      images: resp.result,
+      images: resp.response.result,
     })
   }
 
@@ -64,7 +68,7 @@ class RestaurantProfileComponent extends Component {
     console.log("-----------------------------------------------------------------------------------------");
     console.log(resp);
     this.setState({
-      dishes: resp.result,
+      dishes: resp.response.result,
     })
   }
 
@@ -78,21 +82,21 @@ class RestaurantProfileComponent extends Component {
 
 
   async deleteDish(){
-    let foodToDelete = this.state.lastItemClicked;
-    await FoodApi.delete(foodToDelete);
+    let foodToDelete = this.state.lastDishClicked;
+    await FoodApi.delete(foodToDelete.a_food_id);
     await this.fetchDishes();
   }
 
 
   async deleteImage(){
-    let imageToDelete = this.state.lastItemClicked;
-    await RestaurantApi.removeImage(this.state.restaurant.a_rest_id,imageToDelete);
+    let imageToDelete = this.state.lastImageClicked;
+    await RestaurantApi.removeImage(this.state.restaurant.a_rest_id,imageToDelete.a_image_id);
+
     await this.fetchImages();
   }
 
   onChooseImagePress = async () => {
       let result = await ImagePicker.launchCameraAsync();
-      //let result = await ImagePicker.launchImageLibraryAsync();
 
       if (!result.cancelled) {
           let image = { a_image_url: result.uri};
@@ -104,7 +108,6 @@ class RestaurantProfileComponent extends Component {
   }
 
   onChooseGalleryImagePress = async () => {
-      //let result = await ImagePicker.launchCameraAsync();
       let result = await ImagePicker.launchImageLibraryAsync();
 
       if (!result.cancelled) {
@@ -119,7 +122,6 @@ class RestaurantProfileComponent extends Component {
   uploadImage = async (uri) => {
         const response = await fetch(uri);
         const blob = await response.blob();
-        //CAMBIAR LO QUE VIENE ABAJO PARA QUE NO CAMBIE LA FOTO DEL USER
         //SETEAR EL NAME DE ALGUNA FORMA
         //var myStr = ......;
         //console.log("imageName: " + myStr);
@@ -157,7 +159,7 @@ class RestaurantProfileComponent extends Component {
                   <View style={styles.iconContainer}>
                     <Icon
                       name='close'
-                      onPress={() => this.setState({verificationModalImage: true, lastItemClicked: image.a_image_id})} />
+                      onPress={() => this.setState({verificationModalImage: true, lastImageClicked: image})} />
                   </View> 
                   <Card>
                     <Image
@@ -211,7 +213,6 @@ class RestaurantProfileComponent extends Component {
             transparent={true}
             visible={this.state.verificationModal}
             onRequestClose={() => {
-              Alert.alert("Modal has been closed.");
             }}
           >
 
@@ -253,7 +254,6 @@ class RestaurantProfileComponent extends Component {
             transparent={true}
             visible={this.state.verificationModalImage}
             onRequestClose={() => {
-              Alert.alert("Modal has been closed.");
             }}
           >
 
@@ -295,7 +295,6 @@ class RestaurantProfileComponent extends Component {
                 transparent={true}
                 visible={this.state.modalImageVisible}
                 onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
                 }}
             >
                 <View style = {styles.centeredView}>
@@ -345,7 +344,7 @@ class RestaurantProfileComponent extends Component {
                     <View style={styles.iconContainer}>
                       <Icon
                         name='close'
-                        onPress={() => this.setState({verificationModal: true, lastItemClicked: dish.a_food_id})} />
+                        onPress={() => this.setState({verificationModal: true, lastDishClicked: dish})} />
                     </View>  
                     <Card
                       image={{ uri: dish.a_image_url }}
