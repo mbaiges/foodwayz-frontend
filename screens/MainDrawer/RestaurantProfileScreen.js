@@ -172,20 +172,20 @@ class RestaurantProfileComponent extends Component {
     return (
       <SafeAreaView style={styles.backgroundContainer}>
         
-        <View>
+        
+          
+
+        <ScrollView>
+        <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={() => { 
                 this.setState({modalImageVisible: true});
             }}>
               <View flexDirection='row'>
-                <Icon
-                  name='add_a_photo' />
-                <Text>Add Photo</Text>
+                {/* <Icon name='add_a_photo'/> */}
+                <Text style={styles.buttonText} >Add Photo</Text>
               </View>  
             </TouchableOpacity>
         </View>
-          
-
-        <ScrollView>
         <View style={styles.mainPage}>
           <ScrollView horizontal={true}>
             {this.state.images.map(image =>{
@@ -207,7 +207,7 @@ class RestaurantProfileComponent extends Component {
             })}
           </ScrollView>
           <Text style={styles.logoText}>{this.state.restaurant.a_name}</Text>
-  
+            
           <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.button}
@@ -228,7 +228,7 @@ class RestaurantProfileComponent extends Component {
               style={styles.button}
               onPress={async () => {navigation.navigate("AddDish")}}
           >
-              <Text style={styles.buttonText}>ADD NEW DISH</Text>
+              <Text style={styles.buttonText}>Add New Dish!</Text>
           </TouchableOpacity>
         </View>
 
@@ -240,6 +240,16 @@ class RestaurantProfileComponent extends Component {
               <Text style={styles.buttonText}>Edit Restaurant</Text>
           </TouchableOpacity>
         </View>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+              style={styles.button}
+              onPress={async () => { navigation.navigate("Premium") }}
+            >
+            <Text style={styles.buttonText}>Change Plan</Text>
+          </TouchableOpacity>
+        </View>
+
 {/* ------------------------------------MODALS-------------------------------------------- */}
 
         <View style={styles.centeredView}>

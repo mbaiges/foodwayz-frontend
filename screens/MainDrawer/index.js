@@ -4,8 +4,12 @@ import { Home } from './HomeStack';
 
 import {
     CreateRestaurant,
+    EditRestaurant,
     EditProfile,
     UserProfile,
+    EditProfilePassword, 
+    EditProfileAllergies,
+    Premium,
     RestaurantStatisticsProfile,
 } from './UserProfileStack';
 
@@ -29,8 +33,12 @@ export {
 
     // User Profile Stack
     CreateRestaurant,
+    EditRestaurant,
     EditProfile,
     UserProfile,
+    EditProfilePassword, 
+    EditProfileAllergies,
+    Premium,
     RestaurantStatisticsProfile,
 
     // Shared

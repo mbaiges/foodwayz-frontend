@@ -1,4 +1,6 @@
 import React, { Component, useContext, u } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import Colors from "../../../constants/Colors";
 import { Card, ListItem, Button, Icon, Rating } from "react-native-elements";
 import { UserContext } from '../../../context/UserContext';
 import {
@@ -34,7 +36,7 @@ class UserProfileComponent extends Component {
     const resp = await UserApi.getMe();
     let user = resp.response.result;
     if(!user.a_image_url || user.a_image_url == null){
-      user.a_image_url = "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser5%40email_com.jpg?alt=media&token=9cfe6b05-ff65-448b-b089-8f93109a89ae"
+      user.a_image_url = "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Funknown.png?alt=media&token=7bec299d-aefa-486e-8aa1-6f11c874ee2f"
     }
     this.setState({
       user: resp.response.result
@@ -49,10 +51,11 @@ class UserProfileComponent extends Component {
     const resp = await ReviewApi.getReviewsByUser(this.state.user.a_user_id);
     this.setState({
       reviews: resp.response.result
-    })}
+    })
+    console.log(resp);
+  }
 
-  async fetchRestaurants() {
-
+  async fetchRestaurants() { 
     const resp = await OwnsApi.getMyRestaurants();
     this.setState({
       restaurants: resp.response.result
@@ -81,11 +84,21 @@ class UserProfileComponent extends Component {
   render() {
     const { navigation, context } = this.props;
     const { authState, setAuthState } = context;
-    var restaurantOptions = [];
+    
+    let restaurantOptions = [];
 
-
-
-
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={styles.navbar_r_icons}>
+          <Ionicons
+            name="md-create"
+            size={38}
+            style={styles.navbar_r_icon}
+            onPress={() => navigation.navigate("EditProfile", {setState: this.setState})}
+          />
+        </View>
+      ),
+    });
 
     for(var i = 0 ; i < this.state.restaurants.length ; i++){
       const rest = this.state.restaurants[i];
@@ -95,7 +108,6 @@ class UserProfileComponent extends Component {
             <TouchableOpacity
                 style={styles.restaurantButton}
                 onPress={() => {
-
                   this.setState({restaurantsModalVisible: false});
                   navigation.navigate("RestaurantProfile", {restaurant: rest});
                 }}
@@ -105,11 +117,6 @@ class UserProfileComponent extends Component {
         </View>
       )
     }
-
-
-
-
-    let reviews = this.state.reviews;
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
@@ -128,7 +135,7 @@ class UserProfileComponent extends Component {
               <ScrollView horizontal={true}>
                 {
 
-                  reviews.map((review, idx) => {
+                  this.state.reviews.map((review, idx) => {
                     return (
                       <TouchableOpacity
                         key={idx}
@@ -154,18 +161,22 @@ class UserProfileComponent extends Component {
               </ScrollView>
             </View>
           </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={async () => {
-                this.openRestaurant();
-                //navigation.navigate("RestaurantProfile");
-              }}
-            >
-              <Text style={styles.buttonText}>My Restaurants</Text>
-            </TouchableOpacity>
-          </View>
-
+          { 
+              (this.state.restaurants.length > 0) ? 
+              (<View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={async () => {
+                    this.openRestaurant();
+                    //navigation.navigate("RestaurantProfile");
+                  }}
+                >
+                  <Text style={styles.buttonText}>My Restaurants</Text>
+                </TouchableOpacity>
+              </View>) 
+              :
+              (<View/>)
+          }
           <View style={styles.centeredView}>
             <Modal
               animationType="slide"
@@ -197,23 +208,19 @@ class UserProfileComponent extends Component {
 
             </Modal>
           </View>
-
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={async () => { navigation.navigate("EditProfile", {setState: this.setState}) }}
-            >
-              <Text style={styles.buttonText}>Edit Profile</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => { navigation.navigate("CreateRestaurant") }}
-            >
-              <Text style={styles.buttonText}>Register Restaurant</Text>
-            </TouchableOpacity>
-          </View>
+          { 
+              (this.state.restaurants.length == 0) ? 
+              (<View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => { navigation.navigate("CreateRestaurant") }}
+                >
+                  <Text style={styles.buttonText}>Add Restaurant</Text>
+                </TouchableOpacity>
+              </View>) 
+              :
+              (<View/>)
+          }
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               onPress={() => {
@@ -225,15 +232,6 @@ class UserProfileComponent extends Component {
               style={styles.button}
             >
               <Text style={styles.buttonText}>Sign Out</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.buttonContainer}>
-
-          <TouchableOpacity
-              style={styles.button}
-              onPress={async () => { navigation.navigate("Premium") }}
-            >
-              <Text style={styles.buttonText}>Become premium</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -255,6 +253,16 @@ const styles = StyleSheet.create({
     width: null,
     height: null,
     backgroundColor: "white",
+  },
+
+  navbar_r_icons: {
+    flexDirection: "row",
+    right: 16,
+  },
+
+  navbar_r_icon: {
+    color: Colors.noticeText,
+    marginLeft: 16,
   },
 
   mainPage: {

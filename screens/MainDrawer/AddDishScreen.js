@@ -13,7 +13,9 @@ import {
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { CheckBox,Input, Icon} from "react-native-elements";
-
+import * as ImagePicker from 'expo-image-picker';
+import {IngredientApi } from '../../api';
+import { makeUrl } from "expo-linking";
 
 class AddDishComponent extends Component {
     constructor() {
@@ -22,22 +24,43 @@ class AddDishComponent extends Component {
 
         this.state = {
           checked: false,
-          values:[false,false,false,false],
+          values:[false,false,false,false, false],
           dishImage: "../../assets/images/dishPlaceholder.png",
           dishTitle: "",
           dishDesc: "",
-          modalVisible: false,
+          tagsVisible: false,
+          requestVisible: false,
+          requestIngrVisible: false,
+          ingredientsVisible: false,
+          newRequest: "",
+          newIngrRequest: "",
           tags: [],
+          ingredientsChosen: [],
+          allIngredients: [],
         }
 
-        this.options = [{name :"Vegano", value: false},
-                    {name :"Celiaco", value: false},
-                    {name :"Bajo en calorias", value: true},
-                    {name :"Barato", value: true}];
+        this.options = [{name :"Vegan", value: false},
+                    {name :"celiac fit", value: false},
+                    {name :"Low fat", value: false},
+                    {name :"Cheap", value: false},
+                    {name :"Vegetarian", value: false}
+                  ];
   }
 
-  setModalVisible = (visible) => {
-    this.setState({ modalVisible: visible });
+  setTagsVisible = (visible) => {
+    this.setState({ tagsVisible: visible });
+  }
+
+  setIngredientsVisible = (visible) => {
+    this.setState({ ingredientsVisible: visible });
+  }
+
+  setRequestVisible = (visible) => {
+    this.setState({ requestVisible: visible });
+  }
+
+  setRequestIngrVisible = (visible) => {
+    this.setState({ requestIngrVisible: visible });
   }
 
   changeValues(i){
@@ -51,6 +74,70 @@ class AddDishComponent extends Component {
     aux.splice(idx,1);
     this.setState({tags: aux});
   }
+
+  deleteInredient(idx){
+    let aux = this.state.ingredientsChosen;
+    aux.splice(idx,1);
+    this.setState({ingredientsChosen: aux});
+  }
+
+  async fetchIngredients(){
+    const resp = await IngredientApi.getAll();
+    this.setState({ allIngredients: resp.response.result });
+    console.log(resp);
+}
+
+  onChooseImagePress = async () => {
+    let result = await ImagePicker.launchCameraAsync();
+    //let result = await ImagePicker.launchImageLibraryAsync();
+
+    if (!result.cancelled) {
+        this.uploadImage(result.uri)
+            .then(async () => {
+                Alert.alert("Success");
+                await this.getImage();
+            })
+            .catch((error) => {
+                Alert.alert(error.message);
+            });
+    }
+  }
+
+  uploadImage = async (uri) => {
+      const response = await fetch(uri);
+      const blob = await response.blob();
+
+      var myStr = this.state.user.a_email;
+      var newStr = myStr.replace(/\./g, "_");
+
+      console.log("imageName: " + newStr);
+
+      var ref = firebase.storage().ref().child(`images/users/${newStr}.jpg`);
+      return ref.put(blob);
+  }
+
+  getImage = async () => {
+      var myStr = this.state.user.a_email;
+      var newStr = myStr.replace(/\./g, "_");
+
+      firebase.storage().ref().child(`images/users/${newStr}.jpg`).getDownloadURL().then(async (url) => {
+        this.setState(prevState => ({
+          user: {
+              ...prevState.user,
+              a_image_url: url
+          }
+        }))
+        console.log(this.state.user);
+        await this.updateUser();
+      }).catch(function (error) {
+          Alert.alert(error.message);
+      });
+  }
+
+  async componentDidMount() {
+    console.log('mounting');
+    await this.fetchIngredients();
+}
 
   render() {
     const { navigation } = this.props;
@@ -69,13 +156,33 @@ class AddDishComponent extends Component {
         )                        
     }
 
+    var ingredients = [];
+            for(let i = 0; i < this.state.allIngredients.length ; i++){
+                ingredients.push(
+                    <View key={i}>             
+                        <TouchableOpacity
+                            style={styles.ingredientsButton}
+                            onPress={() => { 
+                              let aux = this.state.ingredientsChosen;
+                              aux.push(this.state.allIngredients[i]);
+                              this.setState({ingredientsChosen: aux});
+                            modalInput = "";
+                            }}
+                        >
+                            <Text style={styles.ingredient}>{this.state.allIngredients[i].a_ingr_name}</Text>
+                        </TouchableOpacity>
+                    
+                    </View>
+                )
+            }
+
     return (
         
         <SafeAreaView style={styles.backgroundContainer}>
             <ScrollView vertical = {true}>
               <Text style={styles.addDishTitle}> Add Dish </Text>
-              <TouchableOpacity onPress={
-                async () => {}} //esto tiene que hacer lo de la foto (lo que habia hecho andy y guardarla en el this.state.dishImage)
+              <TouchableOpacity onPress={() => { this.onChooseImagePress() }}
+                 //esto tiene que hacer lo de la foto (lo que habia hecho andy y guardarla en el this.state.dishImage)
               > 
                 <View style={styles.mainImage}>
                   <Image
@@ -120,12 +227,11 @@ class AddDishComponent extends Component {
                   })}
                 </View>
 
-
                 <View style={styles.centeredView}>
                   <Modal
                     animationType="slide"
                     transparent={true}
-                    visible={this.state.modalVisible}
+                    visible={this.state.tagsVisible}
                     onRequestClose={() => {
                       Alert.alert("Modal has been closed.");
                     }}
@@ -142,7 +248,7 @@ class AddDishComponent extends Component {
                           <TouchableOpacity
                             style={styles.button}
                             onPress={() => { 
-                              this.setModalVisible(false);
+                              this.setTagsVisible(false);
                               let ans = [...this.state.tags, modalInput];
                               this.setState({
                                 tags: ans,
@@ -161,7 +267,7 @@ class AddDishComponent extends Component {
                     <TouchableOpacity
                       style={styles.button}
                       onPress={() => { 
-                        this.setModalVisible(true);
+                        this.setTagsVisible(true);
                       }}
                     >
                       {/* getState((state) => {//Code here}) */}
@@ -171,13 +277,171 @@ class AddDishComponent extends Component {
                  
                 </View>
 
+                <View>
+                <Text style={styles.text}>Ingredients</Text>
+                <View style={styles.tagsList}>
+                  {this.state.ingredientsChosen.map((ingredient, idx) => {
+                    return(
+                      <View
+                        key={idx}
+                      >
+                        <TouchableOpacity style={styles.buttonTag}
+                          onPress={() => this.deleteIngredient(idx)}
+                        >
+                          <View style={styles.rowItemsContainer}>
+                            <Text style={styles.tagText}>{ingredient}</Text>
+                            <Icon name='clear' />
+                          </View>
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  })}
+                </View>
+                <View style={styles.centeredView}>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={this.state.ingredientsVisible}
+                        onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        }}
+                    >
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <Text style={styles.modalTitle}>Choose ingredients</Text>
+                                <Input
+                                    placeholder={"Search"}
+                                    rightIcon={
+                                        <Icon
+                                        name='search'
+                                        />
+                                      }
+                                    onChangeText={(value) => (modalInput = value)}
+                                />
+                                <ScrollView>
+                                    {ingredients}
+                                </ScrollView>    
+                                <TouchableOpacity
+                                  style={styles.button}
+                                  onPress={() => { 
+                                    this.setIngredientsVisible(false);
+                                  }}
+                                >
+                                  {/* getState((state) => {//Code here}) */}
+                                  <Text style={styles.buttonText}>Done</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        </Modal>
+            
+                    
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                      style={styles.button}
+                      onPress={() => { 
+                        this.setIngredientsVisible(true);
+                      }}
+                    >
+                      {/* getState((state) => {//Code here}) */}
+                      <Text style={styles.buttonText}>ADD INGREDIENT</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                </View>
 
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                      style={styles.buttonChar}
+                      onPress={() => { 
+                        this.setRequestIngrVisible(true);
+                      }}
+                    >
+                     
+                      <Text style={styles.buttonText}>This dish has other ingredients</Text>
+                    </TouchableOpacity>
+                      </View>
+                      <View style={styles.centeredView}>
+                      <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={this.state.requestIngrVisible}
+                        onRequestClose={() => {
+                          Alert.alert("Modal has been closed.");
+                        }}
+                      >
+                        <View style={styles.centeredView}>
+                          <View style={styles.modalView}>
+                            <Text style={styles.inputTitle}>Request a new ingredient</Text>
+                            <Input
+                              placeholder={""}
+                              onChangeText={(value) => (this.newIngrRequest = value)}
+                            />
+
+                            <View style={styles.buttonContainer}>
+                              <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => { 
+                                  this.setRequestIngrVisible(false)
+                                }}
+                              >
+                                <Text style={styles.buttonText}>Send</Text>
+                              </TouchableOpacity>
+                            </View>
+                          </View>
+                        </View>
+                      </Modal>
+                      </View>
+                        
                 
               </View>
               <View style={styles.allergiesContainer}>
-                <Text style={styles.text}>Select Allergies</Text>
+                <Text style={styles.text}>Select allergies / characteristics</Text>
                 { optionButtons }
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                      style={styles.buttonChar}
+                      onPress={() => { 
+                        this.setRequestVisible(true);
+                      }}
+                    >
+                      {/* getState((state) => {//Code here}) */}
+                      <Text style={styles.buttonText}>This dish has other characteristics</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.centeredView}>
+                  <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={this.state.requestVisible}
+                    onRequestClose={() => {
+                      Alert.alert("Modal has been closed.");
+                    }}
+                  >
+                    <View style={styles.centeredView}>
+                      <View style={styles.modalView}>
+                        <Text style={styles.inputTitle}>Request a new characteristic</Text>
+                        <Input
+                          placeholder={""}
+                          onChangeText={(value) => (this.newRequest = value)}
+                        />
+
+                        <View style={styles.buttonContainer}>
+                          <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => { 
+                              this.setRequestVisible(false)
+                            }}
+                          >
+                            <Text style={styles.buttonText}>Send</Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+                  </Modal>
+                  </View>
               </View>
+
+              
 
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
@@ -320,18 +584,51 @@ const styles = StyleSheet.create({
   },
 
 
+  buttonChar: {
+    elevation: 15,
+    borderRadius: 25,
+    backgroundColor: "#FC987E",
+    color: "black",
+    width: 300,
+    alignItems: "center",
+    padding: 13,
+    height: 48,
+  },
+
+  ingredients: {
+    color: "black",
+    fontSize: 15,  
+    fontWeight: "bold",    
+  },
+
   buttonText:{
     color: "white",
     fontWeight: "bold",    
     fontSize: 15,      
   },
 
+  ingredientsButton: {
+    borderColor: 'black',
+    borderWidth:1,
+    elevation: 5,
+    borderRadius: 5,
+    backgroundColor: "white",
+    color: "black",
+    width: 217,
+    alignItems: "center",
+    padding: 13,
+    height: 48,
+    alignSelf: "center",
+    marginBottom: 5
+},
+
 
   centeredView: {
     flex: 1,
     justifyContent: "center",
     //alignItems: "center",
-    marginTop: 22
+    marginTop: 22,
+    marginBottom:30,
   },
   modalView: {
     margin: 20,
