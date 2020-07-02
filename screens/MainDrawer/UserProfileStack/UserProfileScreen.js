@@ -36,7 +36,7 @@ class UserProfileComponent extends Component {
     const resp = await UserApi.getMe();
     let user = resp.response.result;
     if(!user.a_image_url || user.a_image_url == null){
-      user.a_image_url = "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser5%40email_com.jpg?alt=media&token=9cfe6b05-ff65-448b-b089-8f93109a89ae"
+      user.a_image_url = "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Funknown.png?alt=media&token=7bec299d-aefa-486e-8aa1-6f11c874ee2f"
     }
     this.setState({
       user: resp.response.result
