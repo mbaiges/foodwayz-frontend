@@ -51,14 +51,24 @@ class RestaurantProfileComponent extends Component {
 
   async fetchImages() {
     const aux = this.state.restaurant;
-
+    var theBiggestExtra = 0;
     const resp = await RestaurantApi.getImages(aux.a_rest_id);
     
     console.log("-----------------------------------------------------------------------------------------");
     console.log(resp);
-    const theBiggestExtra = resp.response.result.reduce((a,b) => (a<b)? b : a);
+    // if(resp.response.result.length != 0){
+    //   theBiggestExtra = resp.response.result.reduce((a,b) => (a<b) ? b : a);  
+    // }
+    for(var i = 0 ; i < resp.response.result.length ; i++){
+      if(resp.response.result[i].a_image_extra > theBiggestExtra){
+        theBiggestExtra = resp.response.result[i].a_image_extra;
+      }
+    }
+    
+
     this.setState({
       images: resp.response.result,
+      theBiggestExtra: theBiggestExtra,
     })
   }
 
@@ -89,9 +99,21 @@ class RestaurantProfileComponent extends Component {
 
 
   async deleteImage(){
+    
     let imageToDelete = this.state.lastImageClicked;
-    await RestaurantApi.removeImage(this.state.restaurant.a_rest_id,imageToDelete.a_image_id);
+    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    console.log(this.state.images);
+    console.log(imageToDelete);
+    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    
+    var myStr = "" + imageToDelete.a_rest_id + "_" + imageToDelete.a_image_extra;
+    console.log(myStr);
+    
+    var ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);
+    await ref.delete();
 
+    await RestaurantApi.removeImage(this.state.restaurant.a_rest_id, imageToDelete.a_image_id);
+    
     await this.fetchImages();
   }
 
@@ -99,11 +121,7 @@ class RestaurantProfileComponent extends Component {
       let result = await ImagePicker.launchCameraAsync();
 
       if (!result.cancelled) {
-          let image = { a_image_url: result.uri};
-          let aux = this.state.images;
-          aux.push(image);
-          this.setState({images: aux});
-          //this.uploadImage(result.uri);
+        await this.uploadImage(result.uri);
       }
   }
 
@@ -111,23 +129,39 @@ class RestaurantProfileComponent extends Component {
       let result = await ImagePicker.launchImageLibraryAsync();
 
       if (!result.cancelled) {
-        let image = { a_image_url: result.uri};
-        let aux = this.state.images;
-        aux.push(image);
-        this.setState({images: aux});
-        //this.uploadImage(result.uri);
+        await this.uploadImage(result.uri);
+        
       }
   }
 
-  uploadImage = async (uri) => {
-        const response = await fetch(uri);
-        const blob = await response.blob();
-        //SETEAR EL NAME DE ALGUNA FORMA
-        //var myStr = ......;
-        //console.log("imageName: " + myStr);
-  
-        //var ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);
-        //ref.put(blob);                
+  async uploadImage(uri){
+    let a_image = [];
+    let biggestNumber = this.state.theBiggestExtra;
+
+    console.log("?////////////////////////////////////////////////////////////////////////////////////////////////////");
+    console.log(biggestNumber);
+    biggestNumber = +biggestNumber + +1;
+    console.log(biggestNumber);
+    console.log("?////////////////////////////////////////////////////////////////////////////////////////////////////");
+
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    //SETEAR EL NAME DE ALGUNA FORMA
+    this.setState({theBiggestExtra: biggestNumber});
+    var myStr = this.state.restaurant.a_rest_id + "_" + biggestNumber;
+    console.log("imageName: " + myStr);
+
+    var ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);
+    let snapshot = await ref.put(blob)          
+
+    downloadURL = await snapshot.ref.getDownloadURL();
+    console.log("-------------------------url: ");
+    console.log(downloadURL);
+    a_image.push({ a_image_url: downloadURL, a_image_extra: this.state.theBiggestExtra.toString()});
+
+    console.log(a_image)
+    await RestaurantApi.addImages(this.state.restaurant.a_rest_id,a_image);
+    await this.fetchImages();
   }
 
 
