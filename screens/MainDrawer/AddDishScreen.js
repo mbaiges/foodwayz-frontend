@@ -32,7 +32,7 @@ class AddDishComponent extends Component {
           ingredientsVisible: false,
           newRequest: "",
           tags: [],
-          ingredients: [],
+          ingredientsChosen: [],
         }
 
         this.options = [{name :"Vegan", value: false},
@@ -67,11 +67,6 @@ class AddDishComponent extends Component {
     this.setState({tags: aux});
   }
 
-  deleteIngredient(idx){
-    let aux = this.state.ingredients;
-    aux.splice(idx,1);
-    this.setState({ingredients: aux});
-  }
 
   onChooseImagePress = async () => {
     let result = await ImagePicker.launchCameraAsync();
@@ -136,6 +131,27 @@ class AddDishComponent extends Component {
             </View>
         )                        
     }
+
+    var ingredients = [];
+            for(let i = 0; i < this.state.chains.length ; i++){
+                ingredients.push(
+                    <View key={i}>             
+                        <TouchableOpacity
+                            style={styles.ingredientsButton}
+                            onPress={() => { 
+                                this.setIngredientsVisible(false);
+                                this.setState({
+                                    ingredientsChosen: this.state.ingredients,
+                                });
+                            modalInput = "";
+                            }}
+                        >
+                            <Text style={styles.buttonText}>{this.state.ingredients[i].a_name}</Text>
+                        </TouchableOpacity>
+                    
+                    </View>
+                )
+            }
 
     return (
         
