@@ -256,8 +256,8 @@ class RestaurantApi{
     401 - El user no es dueño del restaurant
     404 - No hay imágenes del restaurant especificado
   */
-  static addImages(restId, image) {
-    return Api.post(`${RestaurantApi.url}/${restId}/image`, image);
+  static addImages(restId, a_images) {
+    return Api.post(`${RestaurantApi.url}/${restId}/image`, {a_images});
   }
 
   /*
