@@ -3,15 +3,15 @@ import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, View, Button } from "react-native";
 import Colors from "../../constants/Colors";
 
-export default function DefaultNavBar({ title, navigation }) {
+export default function BackButtonEditNavBar({ title, navigation }) {
   return {
     headerLeft: () => (
       <View style={styles.l_icons}>
         <Ionicons
-          name="md-menu"
+          name="md-arrow-back"
           size={38}
           style={styles.l_icon}
-          onPress={navigation.goBack}
+          onPress={navigation.openDrawer}
         />
       </View>
     ),
@@ -19,16 +19,10 @@ export default function DefaultNavBar({ title, navigation }) {
     headerRight: () => (
       <View style={styles.r_icons}>
         <Ionicons
-          name="md-search"
+          name="md-edit"
           size={38}
           style={styles.r_icon}
-          onPress={navigation.openDrawer}
-        />
-        <Ionicons
-          name="md-person"
-          size={38}
-          style={styles.r_icon}
-          onPress={() => navigation.navigate("Profile")}
+          onPress={() => navigation.navigate("UserProfile")}
         />
       </View>
     ),
@@ -63,3 +57,4 @@ const styles = StyleSheet.create({
     marginLeft: 16,
   },
 });
+

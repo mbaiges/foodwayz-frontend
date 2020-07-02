@@ -119,7 +119,7 @@ class UserProfileComponent extends Component {
               <ScrollView horizontal={true}>
                 {
 
-                  reviews.map((review, idx) => {
+                  this.state.reviews.map((review, idx) => {
                     return (
                       <TouchableOpacity
                         key={idx}

@@ -2,17 +2,23 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
-import DefaultNavBar from "./NavBars/DefaultNavBar";
+import BackButtonNavBar from "./NavBars/BackButtonNavBar";
+import BackButtonEditNavBar from "./NavBars/BackButtonEditNavBar";
+
 import {
   UserProfile,
   RestaurantProfile,
   EditProfile,
   RestaurantStatisticsProfile,
   AddDish,
+  EditProfilePassword, 
+  EditProfileAllergies, 
+  CreateRestaurant, 
+  Premium, 
+  EditRestaurant 
 } from "../screens/MainDrawer";
 
 import { Ionicons } from "@expo/vector-icons";
-import { EditProfilePassword, EditProfileAllergies, CreateRestaurant, Premium, EditRestaurant } from "../screens/MainDrawer/UserProfileStack";
 
 const Stack = createStackNavigator();
 const INITIAL_ROUTE_NAME = "UserProfile";
@@ -26,10 +32,10 @@ export default function StackNavigator({ navigation, route }) {
     <Stack.Navigator
       initialRouteName={INITIAL_ROUTE_NAME}
       screenOptions={() =>
-        DefaultNavBar({ title: getHeaderTitle(route), navigation })
+        BackButtonNavBar({ title: getHeaderTitle(route), navigation })
       }
     >
-      <Stack.Screen name="UserProfile" component={UserProfile} />
+      <Stack.Screen name="UserProfile" component={UserProfile} options={BackButtonEditNavBar} />
       <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} />
       <Stack.Screen name="CreateRestaurant" component={CreateRestaurant} />
       <Stack.Screen name="EditProfile" component={EditProfile} />

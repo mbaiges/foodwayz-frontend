@@ -3,14 +3,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, View, Button } from "react-native";
 import Colors from "../../constants/Colors";
 
-export default function DefaultNavBar({ title, navigation }) {
+export default function BackButtonProfileNavBar({ title, navigation }) {
   return {
     headerLeft: () => (
-      <View style={styles.l_icon}>
+      <View style={styles.l_icons}>
         <Ionicons
-          name="md-menu"
+          name="md-arrow-back"
           size={38}
-          style={styles.icon}
+          style={styles.l_icon}
           onPress={navigation.openDrawer}
         />
       </View>
@@ -19,16 +19,10 @@ export default function DefaultNavBar({ title, navigation }) {
     headerRight: () => (
       <View style={styles.r_icons}>
         <Ionicons
-          name="md-search"
-          size={38}
-          style={styles.icon}
-          onPress={navigation.openDrawer}
-        />
-        <Ionicons
           name="md-person"
           size={38}
-          style={styles.icon}
-          onPress={() => navigation.navigate("UserProfile")}
+          style={styles.r_icon}
+          onPress={() => navigation.navigate("Profile")}
         />
       </View>
     ),
@@ -47,14 +41,20 @@ const styles = StyleSheet.create({
     color: Colors.noticeText,
     letterSpacing: 1,
   },
-  l_icon: {
+  l_icons: {
+    color: Colors.noticeText,
     left: 16,
+  },
+  l_icon: {
+    color: Colors.noticeText,
   },
   r_icons: {
     flexDirection: "row",
     right: 16,
   },
-  icon: {
+  r_icon: {
     color: Colors.noticeText,
+    marginLeft: 16,
   },
 });
+
