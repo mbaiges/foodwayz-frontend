@@ -216,7 +216,7 @@ class UserProfileComponent extends Component {
               style={styles.button}
               onPress={() => { navigation.navigate("CreateRestaurant") }}
             >
-              <Text style={styles.buttonText}>Register Restaurant</Text>
+              <Text style={styles.buttonText}>Add Restaurant</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
