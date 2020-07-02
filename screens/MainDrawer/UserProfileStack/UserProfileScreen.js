@@ -32,13 +32,17 @@ class UserProfileComponent extends Component {
   async fetchUser() {
     console.log('fetching user');
     const resp = await UserApi.getMe();
-    let user = resp.result;
+    let user = resp.response.result;
     if(!user.a_image_url || user.a_image_url == null){
       user.a_image_url = "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser5%40email_com.jpg?alt=media&token=9cfe6b05-ff65-448b-b089-8f93109a89ae"
     }
     this.setState({
-      user: user
+      user: resp.response.result
     })
+
+    console.log('done fetching user');
+    console.log("User is: " + this.state.user);
+    console.log(JSON.stringify(resp.response.result));
   }
 
   async fetchReviews() {
@@ -130,7 +134,8 @@ class UserProfileComponent extends Component {
                       <TouchableOpacity
                         key={idx}
                         onPress={async () => {
-                          navigation.navigate("Food");
+                          navigation.navigate("ReviewInfo", { review: review });
+                          console.log("I want to navigate to Dish page");
                         }}>
                         <Card
                           image={{ uri: review.a_food.a_image_url }}
@@ -231,8 +236,7 @@ class UserProfileComponent extends Component {
             >
               <Text style={styles.buttonText}>Become premium</Text>
             </TouchableOpacity>
-            </View>
-
+          </View>
         </ScrollView>
       </SafeAreaView>
     );

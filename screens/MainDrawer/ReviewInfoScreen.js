@@ -12,7 +12,7 @@ import {
   Dimensions,
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
-
+import { FoodApi } from '../../api';
 //import { Constants } from 'expo';
 
 import FoodCard from "../components/FoodCard.js";
@@ -21,76 +21,82 @@ const { width } = Dimensions.get("window");
 
 class ReviewInfoComponent extends Component {
 
-    constructor() {
-        super();
-        this.state = {
-          review: {},
-        }
-      }
-    
-      async fetchReview() {
-        const { route } = this.props;
-        const { review } = route.params;
-        console.log(review);
-        this.setState({
-        review: review,
-        })
-      }
-    
-      componentDidMount() {
-        this.fetchReview();
-      }
-      
-    render() {
-    
-    const { navigation } = this.props;
-    
+  constructor() {
+    super();
+    this.state = {
+      review: {},
+      user: {},
+      food: {},
+      rest: {}
+    }
+  }
 
+  async fetchInfo() {
+    const { route } = this.props;
+    const { review } = route.params;
+    console.log(review);
+    let food = review.a_food;
+    let user = review.a_user;
+    let rest = food.a_rest
+    this.setState({
+      review: review,
+      food: food,
+      rest: rest,
+      user: user,
+    })
+  }
+
+  async fetchFood(){
+    const resp = FoodApi.get()
+  }
+
+  async componentDidMount() {
+    await this.fetchInfo();
+  }
+  
+  render() {
+  
+    const { navigation } = this.props;
     return (
         <SafeAreaView style={styles.backgroundContainer}>
           <ScrollView>
             <Text style={styles.logoText}>Review</Text>
 
             <Text style={styles.subtitle}>Review by</Text>
-       
+      
             <View style={styles.userInfo}>
-            <Text style={styles.text}>Mati</Text>
+            <Text style={styles.text}>{this.state.user.a_name}</Text>
             <Image
               style={styles.userImage}
               resizeMode="cover"
-              source={require("../../assets/images/Po.jpg")}
+              source={{ uri: this.state.user.a_image_url }}
             />
             </View>
 
             <Text style={styles.subtitle}>User rating</Text>
-            <Rating imageSize={30} readonly startingValue={4} style={styles.rating} />
+            <Rating imageSize={30} readonly startingValue={this.state.review.a_score} style={styles.rating} />
 
             <Text style={styles.subtitle}>Comments</Text>    
-            <Text style={styles.text}>Muy rico todo</Text> 
-                <Text style={styles.subtitle}>Food reviewed</Text>
-                <TouchableOpacity
-                        
-                            onPress={async () => {
-                            navigation.navigate("Food");
-                            console.log("I want to navigate to Dish page");
-                            }}>
-                            <FoodCard
-                                
-                                image={require("../../assets/images/Po.jpg")}
-                                title="Po"
-                                brand="El gran Po"
-                                onPress={async () => {
-                                    
-                                    console.log("I want to navigate to Dish page");
-                                }}
-                                rating={3}
-                            />
-                </TouchableOpacity>
- 
+            <Text style={styles.text}>{this.state.review.a_desc}</Text>   
+            <Text style={styles.subtitle}>Food reviewed</Text>
+            <TouchableOpacity       
+              onPress={async () => {
+                navigation.navigate("Food");
+                console.log("I want to navigate to Dish page");
+              }}>
+              <FoodCard
+                  image={{ uri: this.state.food.a_image_url }}
+                  title={this.state.food.a_title}
+                  brand={this.state.rest.a_name}
+                  onPress={async () => { navigation.navigate("Food", { food: this.state.food }) }}
+                  rating={this.state.food.a_score}
+              />
+          </TouchableOpacity>
+    
             </ScrollView>
         </SafeAreaView>
     );
-    };
+  };
 }
 
 export default function ReviewInfoScreen( props ) {

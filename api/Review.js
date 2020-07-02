@@ -95,7 +95,9 @@ class ReviewApi{
   BODY:
     {
       "a_desc":"BuEnArDoOo bREOoO",
+      "a_food_id": 1
       "a_score": 1
+      "a_user_id": 1
     }
   RESULTADOS:
     200 - Se agregó la review

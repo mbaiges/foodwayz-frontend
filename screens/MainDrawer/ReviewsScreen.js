@@ -30,7 +30,7 @@ class ReviewsComponent extends Component {
         let resp = await ReviewApi.getReviewsByFood(this.state.food.a_food_id);
         console.log(resp);
         this.setState({
-            reviews: resp.result
+            reviews: resp.response.result
         })
     }
 
@@ -48,18 +48,19 @@ class ReviewsComponent extends Component {
         for(let i = 0; i < this.state.reviews.length ; i++){
             let review = this.state.reviews[i];
             let date = new Date(review.a_created_at)
-        reviewCards.push(
-            <View key={i}>
-                <TouchableOpacity onPress={() => {navigation.navigate("ReviewInfo");}}   >
-                <ReviewCard
-                    name = {this.reviews[i].name}
-                    date = {this.reviews[i].date}
-                    rating = {this.reviews[i].rating}
-                    comment = {this.reviews[i].comment}
-
-                />
-                </TouchableOpacity>
-            </View>
+            reviewCards.push(
+                <View key={i}>
+                    <TouchableOpacity
+                        onPress={() => {navigation.navigate("ReviewInfo", { review: review });}}  
+                    >
+                        <ReviewCard
+                            name = {review.a_user.a_name}
+                            date = {date.toLocaleString()}
+                            rating = {review.a_score}
+                            comment = {review.a_desc}                   
+                        />
+                    </TouchableOpacity>
+                </View>
             )
         }
 

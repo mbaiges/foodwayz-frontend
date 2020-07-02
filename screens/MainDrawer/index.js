@@ -1,23 +1,12 @@
-import {
-    AboutUs
-} from './AboutUsStack';
-
-import {
-    ContactUs
-} from './ContactUsStack';
-
-import {
-    Home
-} from './HomeStack';
-
-
+import { AboutUs } from './AboutUsStack';
+import { ContactUs } from './ContactUsStack';
+import { Home } from './HomeStack';
 
 import {
     CreateRestaurant,
     EditProfile,
     UserProfile,
     RestaurantStatisticsProfile,
-
 } from './UserProfileStack';
 
 import Filter from './FilterScreen';
@@ -43,7 +32,6 @@ export {
     EditProfile,
     UserProfile,
     RestaurantStatisticsProfile,
-
 
     // Shared
     Filter,

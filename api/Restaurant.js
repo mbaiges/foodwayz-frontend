@@ -188,6 +188,35 @@ class RestaurantApi{
   }
 
   /*
+  USA EL ID DEL MIDDLEWARE
+  BODY:
+    {
+      "a_premium_level": 2
+    }
+  RESULTADOS:
+    200 - Cantidad de restaurants que se updatearon (debería ser 1 siempre)
+      EJEMPLO:
+      {
+        "message": "Successfully modified premium level",
+        "result": 1
+      }
+    400 - el valor de premium en el body no es integer
+      EJEMPLO:
+      {
+        "message": "Bad request at premium level with id 1",
+        "description": [
+          {
+            "params": "asdasd"
+          }
+        ]
+      }
+    404 - El user no es owner
+  */
+ static updatePremiumStatus(id, a_premium_level) {
+  return Api.put(`${RestaurantApi.url}/${id}`, {a_premium_level});
+}
+
+  /*
   BODY:
     --
   RESULTADOS:
@@ -212,15 +241,23 @@ class RestaurantApi{
   /*
   BODY:
     {
-      "a_image_url": "url"
+      a_images: [
+        {
+          "a_image_url": "url1",
+          "a_image_extra": "extra1"
+        },
+        {
+          "a_image_url": "url2",
+          "a_image_extra": "extra2"
+        },
     }
   RESULTADOS:
     200 - Imagen agregada al restaurant especificado
     401 - El user no es dueño del restaurant
     404 - No hay imágenes del restaurant especificado
   */
-  static addImage(restId, image) {
-    return Api.post(`${RestaurantApi.url}/${restId}/image`, image);
+  static addImages(restId, a_images) {
+    return Api.post(`${RestaurantApi.url}/${restId}/image`, {a_images});
   }
 
   /*

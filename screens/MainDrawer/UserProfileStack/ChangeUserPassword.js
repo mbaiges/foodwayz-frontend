@@ -13,11 +13,9 @@ import {
   Dimensions,
 } from "react-native";
 
-import { UserApi } from '../../../api';
-
+import { AuthApi } from '../../../api';
 
 const { width } = Dimensions.get("window");
-
 
 class EditProfilePasswordComponent extends Component {
   constructor(){
@@ -31,8 +29,33 @@ class EditProfilePasswordComponent extends Component {
 
   }
 
-  changePass(){
+  async changePass(){
+    const {navigation} = this.props;
+    
+    if(this.state.newPass != "" && this.state.newPass2 != "" && this.state.oldPass != ""){
+      if(this.state.newPass == this.state.newPass2){
+        const resp = await AuthApi.changePassword(this.state.oldPass, this.state.newPass);
+        console.log(resp)
 
+        switch(resp.code){
+          case "password-changed":
+            console.log("password changed")
+            navigation.goBack();
+          break;
+          case "invalid-auth":
+            console.log("incorrect old password");
+          break;
+          default : 
+            console.log("an error ocurred");
+          break;
+        }
+
+      }else{  
+        console.log("passwords dont match")
+      }
+    }else{
+      console.log("fill fields")
+    }
   }
   
   render() {
@@ -79,10 +102,7 @@ class EditProfilePasswordComponent extends Component {
             </View>
 
             <View>
-                <TouchableOpacity style={styles.button} onPress={async() => { 
-                    await this.changePass();
-                    navigation.goBack()
-                 }} >
+                <TouchableOpacity style={styles.button} onPress={async() => { await this.changePass() }} >
                     <Text>CHANGE PASSWORD</Text>
                 </TouchableOpacity>
             </View>
@@ -122,14 +142,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         paddingLeft: 0,
         paddingBottom: 100,
-      },
+    },
     
     inputView: {
         position: 'relative',
         padding: 0,
     
     },
-
     
     title:{
         color: 'black',
@@ -141,8 +160,6 @@ const styles = StyleSheet.create({
         paddingBottom: 5,
     },
 
-
-
     inputTitle:{
         elevation: 15,
         position: "absolute",
@@ -153,7 +170,6 @@ const styles = StyleSheet.create({
         opacity: 1,
     
     },
-  
     
     input: {
         elevation: 15,
@@ -173,7 +189,7 @@ const styles = StyleSheet.create({
     inputBox:{
         paddingTop: 20,
         paddingLeft:10
-      },
+    },
 
     button: {
         elevation: 5,
@@ -187,8 +203,6 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginBottom: 20
     },
-   
-
   
   });
 

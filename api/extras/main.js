@@ -36,7 +36,7 @@ window.addEventListener('load', () => {
 
     RoomApi.add(currentRoom)
       .then(data => {
-        currentRoom.id = data.result.id;
+        currentRoom.id = data.response.result.id;
         showResult(data);
         toggleButtons(true);
       })
