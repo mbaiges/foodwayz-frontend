@@ -150,7 +150,7 @@ class CreateRestaurantComponent extends Component {
                 const resp = await RestaurantApi.add(restaurant);
                 console.log(resp);
                 if(resp.status == 200){
-                    await this.uploadImages(resp.response.result[0]);
+                    await this.uploadImages(resp.response.result);
                 }
 
                 navigation.goBack();
