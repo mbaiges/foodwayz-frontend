@@ -14,7 +14,8 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import { CheckBox,Input, Icon} from "react-native-elements";
 import * as ImagePicker from 'expo-image-picker';
-
+import {IngredientApi } from '../../api';
+import { makeUrl } from "expo-linking";
 
 class AddDishComponent extends Component {
     constructor() {
@@ -33,6 +34,7 @@ class AddDishComponent extends Component {
           newRequest: "",
           tags: [],
           ingredientsChosen: [],
+          allIngredients: [],
         }
 
         this.options = [{name :"Vegan", value: false},
@@ -67,6 +69,17 @@ class AddDishComponent extends Component {
     this.setState({tags: aux});
   }
 
+  deleteInredient(idx){
+    let aux = this.state.ingredientsChosen;
+    aux.splice(idx,1);
+    this.setState({ingredientsChosen: aux});
+  }
+
+  async fetchIngredients(){
+    const resp = await IngredientApi.getAll();
+    this.setState({ allIngredients: resp.response.result });
+    console.log(resp);
+}
 
   onChooseImagePress = async () => {
     let result = await ImagePicker.launchCameraAsync();
@@ -115,6 +128,11 @@ class AddDishComponent extends Component {
       });
   }
 
+  async componentDidMount() {
+    console.log('mounting');
+    await this.fetchIngredients();
+}
+
   render() {
     const { navigation } = this.props;
     
@@ -133,20 +151,19 @@ class AddDishComponent extends Component {
     }
 
     var ingredients = [];
-            for(let i = 0; i < this.state.chains.length ; i++){
+            for(let i = 0; i < this.state.allIngredients.length ; i++){
                 ingredients.push(
                     <View key={i}>             
                         <TouchableOpacity
                             style={styles.ingredientsButton}
                             onPress={() => { 
-                                this.setIngredientsVisible(false);
-                                this.setState({
-                                    ingredientsChosen: this.state.ingredients,
-                                });
+                              let aux = this.state.ingredientsChosen;
+                              aux.push(this.state.allIngredients[i]);
+                              this.setState({ingredientsChosen: aux});
                             modalInput = "";
                             }}
                         >
-                            <Text style={styles.buttonText}>{this.state.ingredients[i].a_name}</Text>
+                            <Text style={styles.ingredient}>{this.state.allIngredients[i].a_ingr_name}</Text>
                         </TouchableOpacity>
                     
                     </View>
@@ -257,7 +274,7 @@ class AddDishComponent extends Component {
                 <View>
                 <Text style={styles.text}>Ingredients</Text>
                 <View style={styles.tagsList}>
-                  {this.state.ingredients.map((ingredient, idx) => {
+                  {this.state.ingredientsChosen.map((ingredient, idx) => {
                     return(
                       <View
                         key={idx}
@@ -278,7 +295,7 @@ class AddDishComponent extends Component {
                     <Modal
                         animationType="slide"
                         transparent={true}
-                        visible={this.state.modalVisible}
+                        visible={this.state.ingredientsVisible}
                         onRequestClose={() => {
                         Alert.alert("Modal has been closed.");
                         }}
@@ -296,8 +313,17 @@ class AddDishComponent extends Component {
                                     onChangeText={(value) => (modalInput = value)}
                                 />
                                 <ScrollView>
-                                    {chainOptionButtons}
+                                    {ingredients}
                                 </ScrollView>    
+                                <TouchableOpacity
+                                  style={styles.button}
+                                  onPress={() => { 
+                                    this.setIngredientsVisible(false);
+                                  }}
+                                >
+                                  {/* getState((state) => {//Code here}) */}
+                                  <Text style={styles.buttonText}>Done</Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </Modal>
@@ -519,6 +545,11 @@ const styles = StyleSheet.create({
     height: 48,
   },
 
+  ingredients: {
+    color: "black",
+    fontSize: 15,  
+    fontWeight: "bold",    
+  },
 
   buttonText:{
     color: "white",
@@ -526,12 +557,28 @@ const styles = StyleSheet.create({
     fontSize: 15,      
   },
 
+  ingredientsButton: {
+    borderColor: 'black',
+    borderWidth:1,
+    elevation: 5,
+    borderRadius: 5,
+    backgroundColor: "white",
+    color: "black",
+    width: 217,
+    alignItems: "center",
+    padding: 13,
+    height: 48,
+    alignSelf: "center",
+    marginBottom: 5
+},
+
 
   centeredView: {
     flex: 1,
     justifyContent: "center",
     //alignItems: "center",
-    marginTop: 22
+    marginTop: 22,
+    marginBottom:30,
   },
   modalView: {
     margin: 20,
