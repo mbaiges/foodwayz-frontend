@@ -51,14 +51,18 @@ class RestaurantProfileComponent extends Component {
 
   async fetchImages() {
     const aux = this.state.restaurant;
-
+    var theBiggestExtra = 0;
     const resp = await RestaurantApi.getImages(aux.a_rest_id);
     
     console.log("-----------------------------------------------------------------------------------------");
     console.log(resp);
-    const theBiggestExtra = resp.response.result.reduce((a,b) => (a<b)? b : a);
+    if(resp.response.result.length != 0){
+      theBiggestExtra = resp.response.result.reduce((a,b) => (a<b) ? b : a);  
+    }
+    
     this.setState({
       images: resp.response.result,
+      theBiggestExtra: theBiggestExtra,
     })
   }
 
@@ -89,8 +93,17 @@ class RestaurantProfileComponent extends Component {
 
 
   async deleteImage(){
+    
     let imageToDelete = this.state.lastImageClicked;
-    await RestaurantApi.removeImage(this.state.restaurant.a_rest_id,imageToDelete.a_image_id);
+    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    console.log(imageToDelete);
+    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    
+    
+
+    await RestaurantApi.removeImage(this.state.restaurant.a_rest_id, imageToDelete.a_image_id);
+    
+    //NI PUTA IDEA DE COMO BORRAR DE FIREBASE
 
     await this.fetchImages();
   }
@@ -103,7 +116,7 @@ class RestaurantProfileComponent extends Component {
           let aux = this.state.images;
           aux.push(image);
           this.setState({images: aux});
-          //this.uploadImage(result.uri);
+          await this.uploadImage(result.uri);
       }
   }
 
@@ -115,19 +128,30 @@ class RestaurantProfileComponent extends Component {
         let aux = this.state.images;
         aux.push(image);
         this.setState({images: aux});
-        //this.uploadImage(result.uri);
+        await this.uploadImage(result.uri);
+        
       }
   }
 
-  uploadImage = async (uri) => {
-        const response = await fetch(uri);
-        const blob = await response.blob();
-        //SETEAR EL NAME DE ALGUNA FORMA
-        //var myStr = ......;
-        //console.log("imageName: " + myStr);
-  
-        //var ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);
-        //ref.put(blob);                
+  async uploadImage(uri){
+    let a_image = [];
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    //SETEAR EL NAME DE ALGUNA FORMA
+    this.setState({theBiggestExtra: this.state.theBiggestExtra+1});
+    var myStr = this.state.restaurant.a_rest_id + "_" + (this.state.theBiggestExtra);
+    console.log("imageName: " + myStr);
+
+    var ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);
+    let snapshot = await ref.put(blob)          
+
+    downloadURL = await snapshot.ref.getDownloadURL();
+    console.log("-------------------------url: ");
+    console.log(downloadURL);
+    a_image.push({ a_image_url: downloadURL, a_image_extra: this.state.theBiggestExtra.toString()});
+
+    console.log(a_image)
+    await RestaurantApi.addImages(this.state.restaurant.a_rest_id,a_image);
   }
 
 
