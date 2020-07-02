@@ -75,7 +75,7 @@ class UserProfileComponent extends Component {
 
   openRestaurant(){
     if(this.state.restaurants.length === 1){
-      this.props.navigation.navigate("RestaurantProfile", {restaurant: this.state.restaurants[0]});
+      this.props.navigation.navigate("OwnerRestaurantProfile", {restaurant: this.state.restaurants[0]});
     }else if(this.state.restaurants.length > 1){
       this.setState({restaurantsModalVisible: true});
     }
@@ -109,7 +109,7 @@ class UserProfileComponent extends Component {
                 style={styles.restaurantButton}
                 onPress={() => {
                   this.setState({restaurantsModalVisible: false});
-                  navigation.navigate("RestaurantProfile", {restaurant: rest});
+                  navigation.navigate("OwnerRestaurantProfile", {restaurant: rest});
                 }}
             >
                 <Text style={styles.buttonRestaurantsText}>{this.state.restaurants[i].a_name}</Text>
