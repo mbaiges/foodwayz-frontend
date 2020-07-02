@@ -1,4 +1,6 @@
 import React, { Component, useContext, u } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import Colors from "../../../constants/Colors";
 import { Card, ListItem, Button, Icon, Rating } from "react-native-elements";
 import { UserContext } from '../../../context/UserContext';
 import {
@@ -82,7 +84,21 @@ class UserProfileComponent extends Component {
   render() {
     const { navigation, context } = this.props;
     const { authState, setAuthState } = context;
-    var restaurantOptions = [];
+    
+    let restaurantOptions = [];
+
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={styles.navbar_r_icons}>
+          <Ionicons
+            name="md-create"
+            size={38}
+            style={styles.navbar_r_icon}
+            onPress={() => navigation.navigate("EditProfile", {setState: this.setState})}
+          />
+        </View>
+      ),
+    });
 
     for(var i = 0 ; i < this.state.restaurants.length ; i++){
       const rest = this.state.restaurants[i];
@@ -119,7 +135,7 @@ class UserProfileComponent extends Component {
               <ScrollView horizontal={true}>
                 {
 
-                  reviews.map((review, idx) => {
+                  this.state.reviews.map((review, idx) => {
                     return (
                       <TouchableOpacity
                         key={idx}
@@ -191,14 +207,6 @@ class UserProfileComponent extends Component {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={async () => { navigation.navigate("EditProfile", {setState: this.setState}) }}
-            >
-              <Text style={styles.buttonText}>Edit Profile</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.button}
               onPress={() => { navigation.navigate("CreateRestaurant") }}
             >
               <Text style={styles.buttonText}>Add Restaurant</Text>
@@ -245,6 +253,16 @@ const styles = StyleSheet.create({
     width: null,
     height: null,
     backgroundColor: "white",
+  },
+
+  navbar_r_icons: {
+    flexDirection: "row",
+    right: 16,
+  },
+
+  navbar_r_icon: {
+    color: Colors.noticeText,
+    marginLeft: 16,
   },
 
   mainPage: {

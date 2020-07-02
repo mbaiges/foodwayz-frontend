@@ -14,7 +14,6 @@ class AuthApi{
   }
 
   static signIn(user) {
-    console.log(user);
     return Api.post(`${AuthApi.url}/login`, user);
   }
 
