@@ -56,10 +56,16 @@ class RestaurantProfileComponent extends Component {
     
     console.log("-----------------------------------------------------------------------------------------");
     console.log(resp);
-    if(resp.response.result.length != 0){
-      theBiggestExtra = resp.response.result.reduce((a,b) => (a<b) ? b : a);  
+    // if(resp.response.result.length != 0){
+    //   theBiggestExtra = resp.response.result.reduce((a,b) => (a<b) ? b : a);  
+    // }
+    for(var i = 0 ; i < resp.response.result.length ; i++){
+      if(resp.response.result[i].a_image_extra > theBiggestExtra){
+        theBiggestExtra = resp.response.result[i].a_image_extra;
+      }
     }
     
+
     this.setState({
       images: resp.response.result,
       theBiggestExtra: theBiggestExtra,
@@ -96,10 +102,14 @@ class RestaurantProfileComponent extends Component {
     
     let imageToDelete = this.state.lastImageClicked;
     console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    console.log(this.state.images);
     console.log(imageToDelete);
     console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
     
-    
+    var myStr = "" + imageToDelete.a_rest_id + "_" + imageToDelete.a_image_extra;
+    console.log(myStr);
+    var ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);
+    await ref.delete();
 
     await RestaurantApi.removeImage(this.state.restaurant.a_rest_id, imageToDelete.a_image_id);
     
@@ -112,11 +122,7 @@ class RestaurantProfileComponent extends Component {
       let result = await ImagePicker.launchCameraAsync();
 
       if (!result.cancelled) {
-          let image = { a_image_url: result.uri};
-          let aux = this.state.images;
-          aux.push(image);
-          this.setState({images: aux});
-          await this.uploadImage(result.uri);
+        await this.uploadImage(result.uri);
       }
   }
 
@@ -124,10 +130,6 @@ class RestaurantProfileComponent extends Component {
       let result = await ImagePicker.launchImageLibraryAsync();
 
       if (!result.cancelled) {
-        let image = { a_image_url: result.uri};
-        let aux = this.state.images;
-        aux.push(image);
-        this.setState({images: aux});
         await this.uploadImage(result.uri);
         
       }
@@ -135,11 +137,19 @@ class RestaurantProfileComponent extends Component {
 
   async uploadImage(uri){
     let a_image = [];
+    let biggestNumber = this.state.theBiggestExtra;
+
+    console.log("?////////////////////////////////////////////////////////////////////////////////////////////////////");
+    console.log(biggestNumber);
+    biggestNumber = biggestNumber + 1;
+    console.log(biggestNumber);
+    console.log("?////////////////////////////////////////////////////////////////////////////////////////////////////");
+
     const response = await fetch(uri);
     const blob = await response.blob();
     //SETEAR EL NAME DE ALGUNA FORMA
-    this.setState({theBiggestExtra: this.state.theBiggestExtra+1});
-    var myStr = this.state.restaurant.a_rest_id + "_" + (this.state.theBiggestExtra);
+    this.setState({theBiggestExtra: biggestNumber});
+    var myStr = this.state.restaurant.a_rest_id + "_" + biggestNumber;
     console.log("imageName: " + myStr);
 
     var ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);
@@ -152,6 +162,7 @@ class RestaurantProfileComponent extends Component {
 
     console.log(a_image)
     await RestaurantApi.addImages(this.state.restaurant.a_rest_id,a_image);
+    await this.fetchImages();
   }
 
 
