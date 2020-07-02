@@ -14,7 +14,7 @@ import {
   Modal
 } from "react-native";
 
-import { UserApi, ReviewApi, RestaurantApi } from '../../../api';
+import { UserApi, ReviewApi, RestaurantApi, Owns, OwnsApi } from '../../../api';
 
 const { width } = Dimensions.get("window");
 
@@ -24,9 +24,7 @@ class UserProfileComponent extends Component {
     this.state = {
       user: {},
       reviews: [],
-      restaurants: [
-        {a_name: "Resto Piola"},
-        {a_name: "Resto no tan piola"}],
+      restaurants: [],
       restaurantsModalVisible: false,
     }
   }
@@ -50,25 +48,22 @@ class UserProfileComponent extends Component {
   async fetchReviews() {
     const resp = await ReviewApi.getReviewsByUser(this.state.user.a_user_id);
     this.setState({
-      reviews: resp.response.result
-    })
-    console.log(resp.response.result)
-    console.log(this.state.review)
-  }
+      reviews: resp.result
+    })}
 
-  // async fetchRestaurants() {  ESTO LO TENGO QUE HACER CUANDO ME DIGAN COMO SACAR LOS RESTAURANTES DEBIDO A UN ID
-  //   const resp = await RestaurantApi.getRestaurantsFromUser(this.state.user.a_)
-  //   this.setState({
-  //     reviews: resp.response.result
-  //   })
-  //   console.log(resp.response.result)
-  //   console.log(this.state.review)
-  // }
+  async fetchRestaurants() { // ESTO LO TENGO QUE HACER CUANDO ME DIGAN COMO SACAR LOS RESTAURANTES DEBIDO A UN ID
+
+    const resp = await OwnsApi.getMyRestaurants();
+    this.setState({
+      restaurants: resp.result
+    })
+  }
 
   async componentDidMount() {
     console.log('mounting');
     await this.fetchUser();
     await this.fetchReviews();
+    await this.fetchRestaurants();
   }
 
   async componentDidUpdate(){
@@ -77,8 +72,7 @@ class UserProfileComponent extends Component {
 
   openRestaurant(){
     if(this.state.restaurants.length === 1){
-      this.props.navigation.navigate("RestaurantProfile"//, {restaurant: this.state.restaurants[0]}
-      )
+      this.props.navigation.navigate("RestaurantProfile", {restaurant: this.state.restaurants[0]});
     }else if(this.state.restaurants.length > 1){
       this.setState({restaurantsModalVisible: true});
     }
@@ -94,6 +88,8 @@ class UserProfileComponent extends Component {
 
 
     for(var i = 0 ; i < this.state.restaurants.length ; i++){
+      const rest = this.state.restaurants[i];
+
       restaurantOptions.push(
         <View key={i}>
             <TouchableOpacity
@@ -102,8 +98,8 @@ class UserProfileComponent extends Component {
 
                   this.setState({restaurantsModalVisible: false});
                   //IR AL RESTO CORRESPONDIENTE
-                  navigation.navigate("RestaurantProfile"//, {restaurant: this.state.restaurants[i]}
-                  )
+
+                  navigation.navigate("RestaurantProfile", {restaurant: rest});
                 }}
             >
                 <Text style={styles.buttonRestaurantsText}>{this.state.restaurants[i].a_name}</Text>

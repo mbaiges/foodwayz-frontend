@@ -9,11 +9,10 @@ import {
   EditProfile,
   RestaurantStatisticsProfile,
   AddDish,
-  CreateRestaurant
 } from "../screens/MainDrawer";
 
 import { Ionicons } from "@expo/vector-icons";
-import { EditProfilePassword, EditProfileAllergies, Premium, CreateRestaurant } from "../screens/MainDrawer/UserProfileStack";
+import { EditProfilePassword, EditProfileAllergies, CreateRestaurant, Premium, EditRestaurant } from "../screens/MainDrawer/UserProfileStack";
 
 const Stack = createStackNavigator();
 const INITIAL_ROUTE_NAME = "UserProfile";
@@ -34,6 +33,7 @@ export default function StackNavigator({ navigation, route }) {
       <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} />
       <Stack.Screen name="CreateRestaurant" component={CreateRestaurant} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="EditRestaurant" component={EditRestaurant} />
       <Stack.Screen name="EditProfilePassword" component={EditProfilePassword} />
       <Stack.Screen name="EditProfileAllergies" component={EditProfileAllergies} />
       <Stack.Screen name="Premium" component={Premium} />

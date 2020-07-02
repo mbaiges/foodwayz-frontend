@@ -10,138 +10,386 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  Modal
 } from "react-native";
+import { RestaurantApi, FoodApi } from "../../api";
+
+
+import * as ImagePicker from 'expo-image-picker';
+import * as firebase from 'firebase';
 
 //import { Constants } from 'expo';
 
 const { width } = Dimensions.get("window");
 
-const RestaurantProfile = ({ navigation }) => {
-  return (
-    <SafeAreaView style={styles.backgroundContainer}>
-      
+class RestaurantProfileComponent extends Component {
+  constructor() {
+    super();
 
-      <ScrollView>
-      <View style={styles.mainPage}>
-        <ScrollView horizontal={true}>
-          <Card>
-            <Image
-              style={styles.logoImage}
-              source={{uri: 'https://i.pinimg.com/originals/eb/80/87/eb80873b89dcc92228712b6257ac05d0.jpg'}}
-            />
-          </Card>
-          <Card>
-            <Image
-              style={styles.logoImage}
-              source={{uri: 'https://media-cdn.tripadvisor.com/media/photo-s/12/3f/af/ba/ambience.jpg'}}
-            />
-          </Card>
-        </ScrollView>
-        <Text style={styles.logoText}>Restaurante El Panda Guerrero</Text>
+    this.state = {
+      restaurant: {},
+      images: [],
+      dishes: [],
+      verificationModal: false,
+      verificationModalImage: false,
+      modalImageVisible: false,
+      lastItemClicked: "",
+    }
+  }
+
+
+  async fetchRestaurant() {
+    const { route } = this.props;
+    console.log(route);
+    
+    const { restaurant } = route.params;
+    console.log(restaurant);
+    this.setState({ restaurant: restaurant});
+  }
+
+  async fetchImages() {
+    const aux = this.state.restaurant;
+
+    const resp = await RestaurantApi.getImages(aux.a_rest_id);
+    console.log("-----------------------------------------------------------------------------------------");
+    console.log(resp);
+    this.setState({
+      images: resp.result,
+    })
+  }
+
+  async fetchDishes() {
+    const aux = this.state.restaurant;
+    const resp = await RestaurantApi.getFoods(aux.a_rest_id);
+    console.log("-----------------------------------------------------------------------------------------");
+    console.log(resp);
+    this.setState({
+      dishes: resp.result,
+    })
+  }
+
+  async componentDidMount() {
+    console.log("Mounting");
+    await this.fetchRestaurant();
+    await this.fetchImages();
+    await this.fetchDishes();
+  }
+
+
+
+  async deleteDish(){
+    let foodToDelete = this.state.lastItemClicked;
+    await FoodApi.delete(foodToDelete);
+    await this.fetchDishes();
+  }
+
+
+  async deleteImage(){
+    let imageToDelete = this.state.lastItemClicked;
+    await RestaurantApi.removeImage(this.state.restaurant.a_rest_id,imageToDelete);
+    await this.fetchImages();
+  }
+
+  onChooseImagePress = async () => {
+      let result = await ImagePicker.launchCameraAsync();
+      //let result = await ImagePicker.launchImageLibraryAsync();
+
+      if (!result.cancelled) {
+          let image = { a_image_url: result.uri};
+          let aux = this.state.images;
+          aux.push(image);
+          this.setState({images: aux});
+          //this.uploadImage(result.uri);
+      }
+  }
+
+  onChooseGalleryImagePress = async () => {
+      //let result = await ImagePicker.launchCameraAsync();
+      let result = await ImagePicker.launchImageLibraryAsync();
+
+      if (!result.cancelled) {
+        let image = { a_image_url: result.uri};
+        let aux = this.state.images;
+        aux.push(image);
+        this.setState({images: aux});
+        //this.uploadImage(result.uri);
+      }
+  }
+
+  uploadImage = async (uri) => {
+        const response = await fetch(uri);
+        const blob = await response.blob();
+        //CAMBIAR LO QUE VIENE ABAJO PARA QUE NO CAMBIE LA FOTO DEL USER
+        //SETEAR EL NAME DE ALGUNA FORMA
+        //var myStr = ......;
+        //console.log("imageName: " + myStr);
+  
+        //var ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);
+        //ref.put(blob);                
+  }
+
+
+  render(){
+    const {navigation} = this.props;
+
+    return (
+      <SafeAreaView style={styles.backgroundContainer}>
+        
+        <View>
+            <TouchableOpacity style={styles.button} onPress={() => { 
+                this.setState({modalImageVisible: true});
+            }}>
+              <View flexDirection='row'>
+                <Icon
+                  name='add_a_photo' />
+                <Text>Add Photo</Text>
+              </View>  
+            </TouchableOpacity>
+        </View>
+          
+
+        <ScrollView>
+        <View style={styles.mainPage}>
+          <ScrollView horizontal={true}>
+            {this.state.images.map(image =>{
+              return(
+                <View>
+                  <View style={styles.iconContainer}>
+                    <Icon
+                      name='close'
+                      onPress={() => this.setState({verificationModalImage: true, lastItemClicked: image.a_image_id})} />
+                  </View> 
+                  <Card>
+                    <Image
+                      style={styles.logoImage}
+                      source={{uri: image.a_image_url}}
+                    />
+                  </Card>
+                </View>
+              )
+            })}
+          </ScrollView>
+          <Text style={styles.logoText}>{this.state.restaurant.a_name}</Text>
+  
+          <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => { navigation.navigate("RestaurantStatisticsProfile") }}
+              >
+                <Text style={styles.buttonText}>Statistics</Text>
+              </TouchableOpacity>
+          </View>
+          
+          {/* <Text style={styles.primaryText}>About us</Text>
+          <Text style={styles.secondaryText}>Somos un restaurante asiático basado en la película Kung Fu Panda.
+          Nuestros cocineros panda trabajan las 24h sin descansar para que tú puedas comer
+          una sopa a las 2 de la madrugada si así lo deseas!</Text> */}
+        </View>
+  
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+              style={styles.button}
+              onPress={async () => {navigation.navigate("AddDish")}}
+          >
+              <Text style={styles.buttonText}>ADD NEW DISH</Text>
+          </TouchableOpacity>
+        </View>
 
         <View style={styles.buttonContainer}>
-            <TouchableOpacity
+          <TouchableOpacity
               style={styles.button}
-              onPress={() => { navigation.navigate("RestaurantStatisticsProfile") }}
-            >
-              <Text style={styles.buttonText}>Statistics</Text>
-            </TouchableOpacity>
+              onPress={async () => {navigation.navigate("EditRestaurant", {restaurant: this.state.restaurant})}}
+          >
+              <Text style={styles.buttonText}>Edit Restaurant</Text>
+          </TouchableOpacity>
         </View>
-        
-        <Text style={styles.primaryText}>About us</Text>
-        <Text style={styles.secondaryText}>Somos un restaurante asiático basado en la película Kung Fu Panda.
-        Nuestros cocineros panda trabajan las 24h sin descansar para que tú puedas comer
-        una sopa a las 2 de la madrugada si así lo deseas!</Text>
-      </View>
+{/* ------------------------------------MODALS-------------------------------------------- */}
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-            style={styles.button}
-            onPress={async () => {navigation.navigate("AddDish")}}
-        >
-            <Text style={styles.buttonText}>ADD NEW DISH</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.centeredView}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={this.state.verificationModal}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+            }}
+          >
 
-      <View style={styles.popularContainer} >
-        <Text style={styles.subtitleText}>Our most popular dishes</Text>
-        <View style={styles.popular}>
-          <ScrollView horizontal={true}>
-            <TouchableOpacity onPress={async () => {navigation.navigate("Food");
-                    console.log("I want to navigate to Dish page");
-                  }}>
-              <Card>
-                <Image
-                  style={styles.popularImage}
-                  resizeMode="cover"
-                  source={{uri: 'https://s1.eestatic.com/2020/01/08/cocinillas/recetas/sopas-y-cremas/Caldo-Pollo-Fideos-Sin_Lactosa-Sopas_y_cremas_458216170_142008613_1706x960.jpg'}}
-                />
-                <View style={styles.cardFooter}>
-                  <Text style={styles.foodName}>Rica Sopa</Text>
+            <View style = {styles.centeredView}>
+              <View style = {styles.modalView}>
+                <Text>Are you sure that you want to delete this dish. This action is irreversible</Text>
+                <View flexDirection = 'row'>
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        style={styles.cancelButton}
+                        onPress={async () => {this.setState({verificationModal: false})}}
+                    >
+                        <Text style={styles.blackButtonText}>Cancel</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        style={styles.deleteButton}
+                        onPress={async () => {
+                          this.setState({verificationModal: false})
+                          await this.deleteDish();
+                        }}
+                    >
+                        <Text style={styles.buttonText}>Delete</Text>
+                    </TouchableOpacity>
+                  </View>
+
                 </View>
-              </Card>
-            </TouchableOpacity>
-            <Card>
-              <Image
-                style={styles.popularImage}
-                resizeMode="cover"
-                source={{uri: 'https://i.pinimg.com/originals/e6/b0/6f/e6b06fc8b9901993fae74c34bcff2e09.jpg'}}
-              />
-              <Text style={styles.foodName}>Tallarines Po</Text>
-            </Card>
-            <Card>
-              <Image
-                style={styles.popularImage}
-                resizeMode="cover"
-                source={{uri: 'https://img.culturacolectiva.com/cdn-cgi/image/f=auto,w=1600,q=80,fit=contain/content_image/2019/5/2/1556836847320-recetas-de-comida-china-para-preparar-facil-y-rapido.001.jpeg'}}
-              />
-              <Text style={styles.foodName}>Parrillada Panda</Text>
-            </Card>
-          </ScrollView>
-        </View>
-      </View>    
-
-
-      <View style={styles.popularContainer}>
-        <Text style={styles.subtitleText}>All of our dishes</Text>
-
-        <Text style={styles.subsubtitleText}>Go vegan!</Text>
-        <View style={styles.popular}>
-          <ScrollView horizontal={true}>
-            <Card>
-              <Image
-                style={styles.popularImage}
-                resizeMode="cover"
-                source={require("../../assets/images/Po.jpg")}
-              />
-              <View style={styles.cardFooter}>
-                <Text style={styles.foodName}>Ensalada</Text>
+                
               </View>
-            </Card>
-          </ScrollView>
+            </View>
+
+          </Modal>
         </View>
 
-        <Text style={styles.subsubtitleText}>Meat yourself</Text>
-        <View style={styles.popular}>
-          <ScrollView horizontal={true}>
-            <Card>
-              <Image
-                style={styles.popularImage}
-                resizeMode="cover"
-                source={require("../../assets/images/Po.jpg")}
-              />
-              <View style={styles.cardFooter}>
-                <Text style={styles.foodName}>Costillar</Text>
+        <View style={styles.centeredView}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={this.state.verificationModalImage}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+            }}
+          >
+
+            <View style = {styles.centeredView}>
+              <View style = {styles.modalView}>
+                <Text>Are you sure that you want to delete this image. This action is irreversible</Text>
+                <View flexDirection = 'row'>
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        style={styles.cancelButton}
+                        onPress={async () => {this.setState({verificationModalImage: false})}}
+                    >
+                        <Text style={styles.blackButtonText}>Cancel</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        style={styles.deleteButton}
+                        onPress={async () => {
+                          this.setState({verificationModalImage: false})
+                          await this.deleteImage();
+                        }}
+                    >
+                        <Text style={styles.buttonText}>Delete</Text>
+                    </TouchableOpacity>
+                  </View>
+
+                </View>
+                
               </View>
-            </Card>
-          </ScrollView>
+            </View>
+
+          </Modal>
         </View>
-        
-      </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+
+        <View style={styles.centeredView}>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={this.state.modalImageVisible}
+                onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                }}
+            >
+                <View style = {styles.centeredView}>
+                    <View style = {styles.modalImageView}>
+                        <TouchableOpacity
+                            style={styles.modalItemButton}
+                            onPress={() => { 
+                                  //Ir a la camara y sacar la foto
+                                this.onChooseImagePress();
+                                this.setState({modalImageVisible: false});
+                              }}
+                        >
+                            <Text style={styles.blackButtonText}>Camera</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.modalItemButton}
+                            onPress={() => { 
+
+                                this.onChooseGalleryImagePress();
+                                this.setState({modalImageVisible: false});
+                                //Ir a la galería
+                            }}
+                        >
+                            <Text style={styles.blackButtonText}>Gallery</Text>
+                        </TouchableOpacity>
+                    </View>             
+                    
+                </View>
+
+            </Modal>
+        </View>
+  
+
+{/* -------------------------------------------------------------------------------------------- */}
+
+
+
+
+        <View style={styles.popularContainer} >
+          <Text style={styles.subtitleText}>Our most popular dishes</Text>
+          <View style={styles.popular}>
+            <ScrollView horizontal={true}>
+              {this.state.dishes.map(dish =>{
+                return(
+                  <TouchableOpacity onPress={async () => {navigation.navigate("Food"); //falta pasar los params para que pase a la pag correcta
+                  }}>
+                    <View style={styles.iconContainer}>
+                      <Icon
+                        name='close'
+                        onPress={() => this.setState({verificationModal: true, lastItemClicked: dish.a_food_id})} />
+                    </View>  
+                    <Card
+                      image={{ uri: dish.a_image_url }}
+                      imageStyle={{
+                        height: 100,
+                      }}
+                    >
+                      
+                      <View style={styles.cardFooter}>
+                        <Text style={styles.foodName}>{dish.a_title}</Text>
+                      </View>
+                    </Card>
+                  </TouchableOpacity>
+
+                )
+              })}
+              
+            </ScrollView>
+          </View>
+        </View>    
+  
+  
+        <View style={styles.popularContainer}>
+          <Text style={styles.subtitleText}>All of our dishes</Text>
+  
+          <Text style={styles.subsubtitleText}>Go vegan!</Text>
+          
+          
+          <Text style={styles.subsubtitleText}>Meat yourself</Text>
+  
+        </View>
+    
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+
+}
+
+export  default function RestaurantProfile( props ){
+  return <RestaurantProfileComponent {...props}/>
+}
+
+
 
 const { width: WIDTH } = Dimensions.get("window");
 
@@ -274,9 +522,35 @@ const styles = StyleSheet.create({
     height: 48,
   },
 
+  cancelButton: {
+    elevation: 15,
+    borderRadius: 5,
+    backgroundColor: "white",
+    color: "black",
+    width: 100,
+    alignItems: "center",
+    padding: 13,
+    height: 48,
+  },
+
+  deleteButton: {
+    elevation: 15,
+    borderRadius: 5,
+    backgroundColor: "red",
+    color: "white",
+    width: 100,
+    alignItems: "center",
+    padding: 13,
+    height: 48,
+  },
 
   buttonText:{
     color: "white",
+      
+  },
+
+  blackButtonText:{
+    color: "black",
       
   },
 
@@ -284,6 +558,74 @@ const styles = StyleSheet.create({
     flex: 2,
   },
 
-});
+  
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    //alignItems: "center",
+    marginTop: 22
+  },
 
-export default RestaurantProfile;
+  
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 10,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    height: 300,
+  },
+
+  iconContainer:{
+    position:"absolute",
+    marginTop: 0,
+    marginLeft: 0,
+    elevation:20
+  },
+
+  
+  modalImageView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 10,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    height: 120,
+  },
+
+  
+  modalItemButton: {
+    borderColor: 'black',
+    borderWidth:1,
+    elevation: 5,
+    borderRadius: 5,
+    backgroundColor: "white",
+    color: "black",
+    width: 217,
+    alignItems: "center",
+    padding: 13,
+    height: 48,
+    alignSelf: "center",
+    marginBottom: 5
+},
+
+
+
+
+});
