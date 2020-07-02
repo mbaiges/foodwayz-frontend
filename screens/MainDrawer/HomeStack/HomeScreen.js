@@ -30,8 +30,6 @@ class HomeScreenComponent extends Component {
     this.setState({
       foods: resp.response.result
     })
-    console.log(this.state.foods);
-    console.log(JSON.stringify(resp.response.result));
   }
 
   componentDidMount() {

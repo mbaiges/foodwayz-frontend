@@ -66,7 +66,7 @@ class CreateRestaurantComponent extends Component {
             }
         }
 
-        onChooseGalleryImagePress = async () => {
+        async onChooseGalleryImagePress(){
             let result = await ImagePicker.launchImageLibraryAsync();
         
             if (!result.cancelled) {
@@ -76,25 +76,61 @@ class CreateRestaurantComponent extends Component {
             }
         }
 
-        uploadImagesToFirebase = async (rest) => {
-            for(var i = 0 ; i < this.state.imagesUrl.length ; i++){
+        async uploadImages(rest){
+            let a_images = [];
+
+            for(let i = 0 ; i < this.state.imagesUrl.length ; i++){
                 const response = await fetch(this.state.imagesUrl[i]);
                 const blob = await response.blob();
-                var myStr = rest.a_rest_id + "_" + i;
+
+                let myStr = rest.a_rest_id + "_" + i;
                 console.log("imageName: " + myStr);
+
+
+
           
-                var ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);
-                ref.put(blob);                
+                let ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);   
+                let snapshot = await ref.put(blob)
+
+                downloadURL = await snapshot.ref.getDownloadURL();
+
+                console.log("-------------------------url: ");
+                console.log(downloadURL);
+                a_images.push({ a_image_url: downloadURL, a_image_extra: i.toString() });
+                
             }
+
+            console.log("URLS ");
+            console.log(urls);
+            await RestaurantApi.addImages(rest.a_rest_id, a_images);
+
         }
 
         async uploadImagesToDB(rest){
-            for(var i = 0 ; i < this.state.imagesUrl.length ; i++){
-                var myStr = rest.a_rest_id + "_" + i;
+
+            /*
+            let urls = []
+
+            for(let i = 0 ; i < this.state.imagesUrl.length ; i++){
+
+                let myStr = rest.a_rest_id + "_" + i;
                 console.log("imageName: " + myStr);
-                const url = await firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`).getDownloadURL();
-                await RestaurantApi.addImage(rest.a_rest_id, url);
+
+                const url = await firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`).getDownloadURL()
+
+                console.log("-------------------------url: ");
+                console.log(url);
+
+                urls.push({ a_image_url: url, a_image_extra: i.toString() });
             }
+
+            console.log("-------------------------urls: ");
+            console.log(urls);
+
+            await RestaurantApi.addImages(rest.a_rest_id, urls);
+            */
+
+            console.log("done")
         }
 
         async uploadRestaurant(){
@@ -116,16 +152,12 @@ class CreateRestaurantComponent extends Component {
                     
                 const resp = await RestaurantApi.add(restaurant);
                 console.log(resp);
-                if(resp.message === "Successfully added restaurant"){
-                    await this.uploadImagesToFirebase(resp.response.result[0]);
-                    await this.uploadImagesToDB(resp.response.result[0]);
+                if(resp.status == 200){
+                    await this.uploadImages(resp.response.result[0]);
                 }
 
-                console.log(resp);
-
-                console.log("status: " + resp.status);
-
                 navigation.goBack();
+
             }else{
                 console.log("fill fields")
             }

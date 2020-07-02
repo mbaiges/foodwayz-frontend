@@ -3,7 +3,6 @@ import { Food, FoodApi } from './Food';
 import { FoodHasCharacteristic, FoodHasCharacteristicApi } from './FoodHasCharacteristic';
 import { FoodHasIngredient, FoodHasIngredientApi } from './FoodHasIngredient';
 import { Ingredient, IngredientApi } from './Ingredient';
-import { Owner, OwnerApi } from './Owner';
 import { Owns, OwnsApi } from './Owns';
 import { Restaurant, RestaurantApi } from './Restaurant';
 import { RestaurantChain, RestaurantChainApi } from './RestaurantChain';
@@ -19,7 +18,6 @@ export {
     FoodHasCharacteristic,
     FoodHasIngredient,
     Ingredient,
-    Owner,
     Owns,
     Restaurant,
     RestaurantChain,
@@ -34,7 +32,6 @@ export {
     RestaurantChainApi,
     UserApi,
     ReviewApi,
-    OwnerApi,
     OwnsApi,
     CharacteristicApi,
     UserHasCharacteristicApi,
