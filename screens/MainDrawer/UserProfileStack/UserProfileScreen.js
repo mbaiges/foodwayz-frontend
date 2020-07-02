@@ -39,27 +39,17 @@ class UserProfileComponent extends Component {
     this.setState({
       user: user
     })
-
-    console.log('done fetching user');
-    console.log(resp);
   }
 
   async fetchReviews() {
     const resp = await ReviewApi.getReviewsByUser(this.state.user.a_user_id);
     this.setState({
       reviews: resp.result
-    })
-    console.log(resp.result)
-    console.log(this.state.review)
-  }
+    })}
 
   async fetchRestaurants() { // ESTO LO TENGO QUE HACER CUANDO ME DIGAN COMO SACAR LOS RESTAURANTES DEBIDO A UN ID
 
-    console.log("-----------------------------------------------------------------------------------");
     const resp = await OwnsApi.getMyRestaurants();
-    console.log(resp);
-
-    console.log("-----------------------------------------------------------------------------------");
     this.setState({
       restaurants: resp.result
     })
@@ -105,7 +95,6 @@ class UserProfileComponent extends Component {
                   this.setState({restaurantsModalVisible: false});
                   //IR AL RESTO CORRESPONDIENTE
 
-                  console.log(this.state.restaurants[i]);
                   navigation.navigate("RestaurantProfile", {restaurant: rest});
                 }}
             >
@@ -142,7 +131,6 @@ class UserProfileComponent extends Component {
                         key={idx}
                         onPress={async () => {
                           navigation.navigate("Food");
-                          console.log("I want to navigate to Dish page");
                         }}>
                         <Card
                           image={{ uri: review.a_food.a_image_url }}
