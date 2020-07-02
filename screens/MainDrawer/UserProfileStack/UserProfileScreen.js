@@ -48,14 +48,15 @@ class UserProfileComponent extends Component {
   async fetchReviews() {
     const resp = await ReviewApi.getReviewsByUser(this.state.user.a_user_id);
     this.setState({
-      reviews: resp.result
-    })}
+      reviews: resp.response.result
+    })
+    console.log(resp);
+  }
 
-  async fetchRestaurants() { // ESTO LO TENGO QUE HACER CUANDO ME DIGAN COMO SACAR LOS RESTAURANTES DEBIDO A UN ID
-
+  async fetchRestaurants() { 
     const resp = await OwnsApi.getMyRestaurants();
     this.setState({
-      restaurants: resp.result
+      restaurants: resp.response.result
     })
   }
 
@@ -83,10 +84,6 @@ class UserProfileComponent extends Component {
     const { authState, setAuthState } = context;
     var restaurantOptions = [];
 
-
-
-
-
     for(var i = 0 ; i < this.state.restaurants.length ; i++){
       const rest = this.state.restaurants[i];
 
@@ -95,10 +92,7 @@ class UserProfileComponent extends Component {
             <TouchableOpacity
                 style={styles.restaurantButton}
                 onPress={() => {
-
                   this.setState({restaurantsModalVisible: false});
-                  //IR AL RESTO CORRESPONDIENTE
-
                   navigation.navigate("RestaurantProfile", {restaurant: rest});
                 }}
             >
@@ -107,11 +101,6 @@ class UserProfileComponent extends Component {
         </View>
       )
     }
-
-
-
-
-
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
