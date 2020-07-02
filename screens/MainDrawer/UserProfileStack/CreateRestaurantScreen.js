@@ -86,9 +86,6 @@ class CreateRestaurantComponent extends Component {
                 let myStr = rest.a_rest_id + "_" + i;
                 console.log("imageName: " + myStr);
 
-
-
-          
                 let ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);   
                 let snapshot = await ref.put(blob)
 
@@ -101,7 +98,7 @@ class CreateRestaurantComponent extends Component {
             }
 
             console.log("URLS ");
-            console.log(urls);
+            console.log(a_images);
             await RestaurantApi.addImages(rest.a_rest_id, a_images);
 
         }
