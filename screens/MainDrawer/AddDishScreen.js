@@ -259,40 +259,33 @@ class AddDishComponent extends Component {
                   })}
                 </View>
                 <View style={styles.centeredView}>
-                  <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={this.state.ingredientsVisible}
-                    onRequestClose={() => {
-                      Alert.alert("Modal has been closed.");
-                    }}
-                  >
-                    <View style={styles.centeredView}>
-                      <View style={styles.modalView}>
-                        <Text style={styles.inputTitle}>Ingredient Name </Text>
-                        <Input
-                          placeholder={""}
-                          onChangeText={(value) => (modalInput = value)}
-                        />
-
-                        <View style={styles.buttonContainer}>
-                          <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => { 
-                              this.setIngredientsVisible(false)
-                              let ans = [...this.state.ingredients, modalInput];
-                              this.setState({
-                                ingredients: ans,
-                              });
-                              modalInput="";
-                            }}
-                          >
-                            <Text style={styles.buttonText}>ADD</Text>
-                          </TouchableOpacity>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={this.state.modalVisible}
+                        onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        }}
+                    >
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <Text style={styles.modalTitle}>Choose ingredients</Text>
+                                <Input
+                                    placeholder={"Search"}
+                                    rightIcon={
+                                        <Icon
+                                        name='search'
+                                        />
+                                      }
+                                    onChangeText={(value) => (modalInput = value)}
+                                />
+                                <ScrollView>
+                                    {chainOptionButtons}
+                                </ScrollView>    
+                            </View>
                         </View>
-                      </View>
-                    </View>
-                  </Modal>
+                    </Modal>
+            
 
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity
