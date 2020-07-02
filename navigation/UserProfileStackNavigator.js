@@ -9,7 +9,7 @@ import {
   EditProfile,
   RestaurantStatisticsProfile,
   AddDish,
-  
+  CreateRestaurant
 } from "../screens/MainDrawer";
 
 import { Ionicons } from "@expo/vector-icons";
