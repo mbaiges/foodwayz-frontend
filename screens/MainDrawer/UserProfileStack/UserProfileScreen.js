@@ -94,7 +94,7 @@ class UserProfileComponent extends Component {
             name="md-create"
             size={38}
             style={styles.navbar_r_icon}
-            onPress={() => navigation.navigate("UserProfile")}
+            onPress={() => navigation.navigate("EditProfile", {setState: this.setState})}
           />
         </View>
       ),
