@@ -9,7 +9,7 @@ import {
   EditProfile,
   RestaurantStatisticsProfile,
   AddDish,
-  
+  CreateRestaurant
 } from "../screens/MainDrawer";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -32,6 +32,7 @@ export default function StackNavigator({ navigation, route }) {
     >
       <Stack.Screen name="UserProfile" component={UserProfile} />
       <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} />
+      <Stack.Screen name="CreateRestaurant" component={CreateRestaurant} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="EditProfilePassword" component={EditProfilePassword} />
       <Stack.Screen name="EditProfileAllergies" component={EditProfileAllergies} />
