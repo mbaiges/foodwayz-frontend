@@ -78,12 +78,12 @@ class LoginScreenComponent extends Component {
 
     try {
       const ans = await AuthApi.signIn(user);
-      if (ans) {
-        console.log(ans);
+      if (ans && ans.status === 200) {
+        console.log(ans.response);
         console.log("User successfully logged");
         const auth = {
           state: 'SIGNED_IN',
-          token: ans.accessToken
+          token: ans.response.accessToken
         };
         await setAuthState(auth);
       }
