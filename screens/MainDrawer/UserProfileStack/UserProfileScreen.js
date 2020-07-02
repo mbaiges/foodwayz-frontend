@@ -74,11 +74,7 @@ class UserProfileComponent extends Component {
   }
 
   openRestaurant(){
-    if(this.state.restaurants.length === 1){
-      this.props.navigation.navigate("RestaurantProfile", {restaurant: this.state.restaurants[0]});
-    }else if(this.state.restaurants.length > 1){
-      this.setState({restaurantsModalVisible: true});
-    }
+    this.setState({restaurantsModalVisible: true});
   }
 
   render() {
