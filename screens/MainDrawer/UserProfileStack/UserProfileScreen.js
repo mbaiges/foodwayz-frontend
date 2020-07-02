@@ -226,11 +226,10 @@ class UserProfileComponent extends Component {
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-
-          <TouchableOpacity
-              style={styles.button}
-              onPress={async () => { navigation.navigate("Premium") }}
-            >
+            <TouchableOpacity
+                style={styles.button}
+                onPress={async () => { navigation.navigate("Premium") }}
+              >
               <Text style={styles.buttonText}>Become premium</Text>
             </TouchableOpacity>
           </View>
