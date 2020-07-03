@@ -44,6 +44,7 @@ export default function StackNavigator({ navigation, route }) {
       <Stack.Screen name="Premium" component={Premium} />
       <Stack.Screen name="RestaurantStatisticsProfile" component={RestaurantStatisticsProfile} />
       <Stack.Screen name="AddDish" component={AddDish} />
+      <Stack.Screen name="ReviewInfo" component={ReviewInfo} options={BackButtonSearchProfileNavBar}/>
     </Stack.Navigator>
   );
 }

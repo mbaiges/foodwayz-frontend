@@ -253,7 +253,7 @@ class OwnerRestaurantProfileComponent extends Component {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
               style={styles.button}
-              onPress={async () => { navigation.navigate("Premium") }}
+              onPress={async () => { navigation.navigate("Premium", {restaurant: this.state.restaurant}) }}
             >
             <Text style={styles.buttonText}>Change Plan</Text>
           </TouchableOpacity>
