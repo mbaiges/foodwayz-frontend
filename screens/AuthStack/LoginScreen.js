@@ -12,6 +12,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  Modal
 } from "react-native";
 import { UserContext } from '../../context/UserContext';
 import { User, AuthApi } from '../../api';

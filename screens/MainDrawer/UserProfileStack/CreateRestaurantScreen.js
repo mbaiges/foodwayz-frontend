@@ -221,9 +221,7 @@ class CreateRestaurantComponent extends Component {
                         animationType="slide"
                         transparent={true}
                         visible={this.state.modalImageVisible}
-                        onRequestClose={() => {
-                        Alert.alert("Modal has been closed.");
-                        }}
+                        
                     >
                         <View style = {styles.centeredView}>
                             <View style = {styles.modalImageView}>
@@ -321,9 +319,7 @@ class CreateRestaurantComponent extends Component {
                         animationType="slide"
                         transparent={true}
                         visible={this.state.modalVisible}
-                        onRequestClose={() => {
-                        Alert.alert("Modal has been closed.");
-                        }}
+                        
                     >
                         <View style={styles.centeredView}>
                             <View style={styles.modalView}>

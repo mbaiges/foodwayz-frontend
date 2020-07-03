@@ -182,9 +182,7 @@ class UserProfileComponent extends Component {
               animationType="slide"
               transparent={true}
               visible={this.state.restaurantsModalVisible}
-              onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-              }}
+              
             >
 
               <View style = {styles.centeredView}>

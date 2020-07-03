@@ -10,6 +10,7 @@ import {
   Dimensions,
   Keyboard,
   Modal,
+  Alert
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { CheckBox,Input, Icon} from "react-native-elements";
@@ -450,9 +451,7 @@ class AddDishComponent extends Component {
                 animationType="slide"
                 transparent={true}
                 visible={this.state.typesVisible}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                }}
+                
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -497,9 +496,7 @@ class AddDishComponent extends Component {
                 animationType="slide"
                 transparent={true}
                 visible={this.state.requestTypesVisible}
-                onRequestClose={() => {
-                  Alert.alert("Modal has been closed.");
-                }}
+                
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -529,9 +526,7 @@ class AddDishComponent extends Component {
                 animationType="slide"
                 transparent={true}
                 visible={this.state.ingredientsVisible}
-                onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-                }}
+                
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -578,9 +573,7 @@ class AddDishComponent extends Component {
                 animationType="slide"
                 transparent={true}
                 visible={this.state.requestIngrVisible}
-                onRequestClose={() => {
-                  Alert.alert("Modal has been closed.");
-                }}
+                
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -609,9 +602,7 @@ class AddDishComponent extends Component {
                 animationType="slide"
                 transparent={true}
                 visible={this.state.characteristicsVisible}
-                onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-                }}
+                
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -658,9 +649,7 @@ class AddDishComponent extends Component {
               animationType="slide"
               transparent={true}
               visible={this.state.requestVisible}
-              onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-              }}
+              
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -690,9 +679,7 @@ class AddDishComponent extends Component {
                 animationType="slide"
                 transparent={true}
                 visible={this.state.modalImageVisible}
-                onRequestClose={() => {
-                  Alert.alert("Modal has been closed.");
-                }}
+                
             >
                 <View style = {styles.centeredView}>
                     <View style = {styles.modalImageView}>
