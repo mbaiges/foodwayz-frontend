@@ -16,8 +16,8 @@ import {
 
 import DefaultNavBar from "./NavBars/DefaultNavBar";
 import BackButtonSearchProfileNavBar from "./NavBars/BackButtonSearchProfileNavBar";
+import BackButtonProfileNavBar from "./NavBars/BackButtonProfileNavBar";
 import BackButtonNavBar from "./NavBars/BackButtonNavBar";
-import SearchNavBar from "./SearchNavBar";
 
 import { Ionicons } from "@expo/vector-icons";
 
@@ -37,13 +37,15 @@ export default function StackNavigator({ navigation, route }) {
       }
     >
       <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} />
-      <Stack.Screen name="Reviews" component={Reviews} options={BackButtonSearchProfileNavBar}/>
-      <Stack.Screen name="RateFood" component={RateFood} options={BackButtonNavBar}/>
-      <Stack.Screen name="Food" component={Food} options={BackButtonSearchProfileNavBar}/>
       <Stack.Screen name="Filter" component={Filter} />
-      <Stack.Screen name="ReviewInfo" component={ReviewInfo} options={BackButtonSearchProfileNavBar}/>
-    
+
+      <Stack.Screen name="Food" component={Food} options={BackButtonProfileNavBar}/>
+      <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} options={BackButtonProfileNavBar} />
+      
+      <Stack.Screen name="Reviews" component={Reviews} options={BackButtonNavBar}/>
+      <Stack.Screen name="ReviewInfo" component={ReviewInfo} options={BackButtonNavBar}/>
+      <Stack.Screen name="RateFood" component={RateFood} options={BackButtonNavBar}/>
+      
       {/* <Stack.Screen name="Search" component={SearchScreen} options={() => SearchNavBar({ title: getHeaderTitle(route), navigation })} /> */}
       {/* <Stack.Screen name="Search" component={Search} /> */}
     </Stack.Navigator>

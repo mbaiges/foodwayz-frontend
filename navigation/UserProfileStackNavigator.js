@@ -19,6 +19,7 @@ import {
   Food, 
   RestaurantProfile,
   Reviews,
+  RateFood,
   
 } from "../screens/MainDrawer";
 
@@ -60,6 +61,8 @@ export default function StackNavigator({ navigation, route }) {
       <Stack.Screen name="Food" component={Food}/>
       <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} />
       <Stack.Screen name="Reviews" component={Reviews}/>
+      <Stack.Screen name="RateFood" component={RateFood}/>
+
     </Stack.Navigator>
   );
 }

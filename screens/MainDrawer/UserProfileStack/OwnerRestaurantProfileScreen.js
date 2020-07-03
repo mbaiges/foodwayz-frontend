@@ -460,7 +460,6 @@ class OwnerRestaurantProfileComponent extends Component {
                         height: 300,
                       }}
                     >
-                      
                       <View style={styles.cardFooter}>
                         <Text style={styles.foodName}>{dish.a_title}</Text>
                       </View>
