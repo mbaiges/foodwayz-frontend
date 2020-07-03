@@ -20,7 +20,7 @@ import {
   RestaurantProfile,
   Reviews,
   RateFood,
-  
+
 } from "../screens/MainDrawer";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -28,7 +28,6 @@ import { Ionicons } from "@expo/vector-icons";
 import DefaultNavBar from "./NavBars/DefaultNavBar";
 import BackButtonSearchProfileNavBar from "./NavBars/BackButtonSearchProfileNavBar";
 import BackButtonNavBar from "./NavBars/BackButtonNavBar";
-import SearchNavBar from "./SearchNavBar";
 
 const Stack = createStackNavigator();
 const INITIAL_ROUTE_NAME = "UserProfile";
