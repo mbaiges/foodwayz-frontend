@@ -40,6 +40,33 @@ class AuthApi{
   static deleteAccount(password) {
     return Api.put(`${AuthApi.url}/delete_account`, {a_password: password});
   }
+
+  /*
+  BODY:
+    --
+  RESULTADOS:
+    200 - se verificó el usuario
+      EJEMPLO:
+      {
+        "result": true
+      }
+    404 - No existe el usuario
+    400 - token expirado
+  */
+  static verifyEmail(token) {
+    return Api.get(`${AuthApi.url}/verify_email/${token}`);
+  }
+
+  /*
+  BODY:
+    --
+  RESULTADOS:
+    200 - se reenvió el mail
+    404 - No existe el usuario
+  */
+  static resendEmail(email) {
+    return Api.post(`${AuthApi.url}/resend_email`, {a_email: email});
+  }
 }
 
 export { AuthApi };
