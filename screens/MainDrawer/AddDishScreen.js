@@ -149,7 +149,7 @@ async onChooseGalleryImagePress(){
           console.log(resp);
 
           if(resp.status == 200){
-            await this.uploadImage(resp.response.result[0]);  
+            await this.uploadImage(resp.response.result);  
             await this.uploadIngredients();
             await this.uploadCharacteristics(); 
           }
