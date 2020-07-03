@@ -14,8 +14,9 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import { CheckBox,Input, Icon} from "react-native-elements";
 import * as ImagePicker from 'expo-image-picker';
-import {IngredientApi, CharacteristicApi, Characteristic } from '../../api';
+import {IngredientApi, CharacteristicApi, FoodApi, FoodHasCharacteristicApi, FoodHasIngredientApi, TypeApi } from '../../api';
 import { makeUrl } from "expo-linking";
+import * as firebase from 'firebase';
 
 class AddDishComponent extends Component {
     constructor() {
@@ -23,57 +24,75 @@ class AddDishComponent extends Component {
 
 
         this.state = {
-          checked: false,
-          values:[false,false,false,false, false],
-          dishImage: "../../assets/images/dishPlaceholder.png",
+          dishImage: undefined,
           dishTitle: "",
           dishDesc: "",
-          tagsVisible: false,
+          dishType: undefined,
+
           requestVisible: false,
           requestIngrVisible: false,
+          requestTypesVisible: false,
+
           ingredientsVisible: false,
           characteristicsVisible:false,
+          typesVisible: false,
+
+          modalImageVisible: false,
+
           newRequest: "",
           newIngrRequest: "",
-          tags: [],
+          newTypeRequest: "",
+
           ingredientsChosen: [],
           characteristicsChosen: [],
+          typeChosen: {},
+
           allIngredients: [],
           allCharacteristics: [],
+          allTypes: [],
+
+          ingrModalInput: "",
+          charModalInput: "",
+          typeModalInput: "",
+
+          dish: {},
+          rest: {},
         }
 
   }
 
-  setTagsVisible = (visible) => {
-    this.setState({ tagsVisible: visible });
+  //---------------------------OPEN ADD MODALS-----------------------------------
+
+  setTypesVisible = (visible) => {
+    this.setState({ typesVisible: visible });
   }
 
   setIngredientsVisible = (visible) => {
     this.setState({ ingredientsVisible: visible });
   }
 
-  setRequestVisible = (visible) => {
-    this.setState({ requestVisible: visible });
+  setCharacteristicsVisible = (visible) => {
+    this.setState({characteristicsVisible: visible });
+  }
+
+  //------------------------OPEN REQUEST MODALS---------------------------------
+
+  setRequestTypesVisible = (visible) => {
+    this.setState({ requestTypesVisible: visible });
   }
 
   setRequestIngrVisible = (visible) => {
     this.setState({ requestIngrVisible: visible });
   }
 
-  setCharacteristicsVisible = (visible) => {
-    this.setState({characteristicsVisible: visible });
+  setRequestCharsVisible = (visible) => {
+    this.setState({ setRequestCharsVisible: visible });
   }
 
-  changeValues(i){
-    let newValues = this.state.values;
-    newValues[i] = !newValues[i];
-    this.setState({values: newValues})
-  }
+  //----------------------------DELETE TAGS------------------------------------
 
-  deleteTag(idx){
-    let aux = this.state.tags;
-    aux.splice(idx,1);
-    this.setState({tags: aux});
+  deleteType(){
+    this.setState({ typeChosen: {} });
   }
 
   deleteInredient(idx){
@@ -82,450 +101,624 @@ class AddDishComponent extends Component {
     this.setState({ingredientsChosen: aux});
   }
 
+  deleteCharacteristic(idx){
+    let aux = this.state.characteristicsChosen;
+    aux.splice(idx,1);
+    this.setState({characteristicsChosen: aux});
+  }
+
+  //-------------------------IMAGE MANAGEMENT----------------------------------
+
+  async onChooseImagePress(){
+    let result = await ImagePicker.launchCameraAsync();
+
+    if (!result.cancelled) {
+      this.setState({dishImage: result.uri});
+    }
+  }
+
+  async onChooseGalleryImagePress(){
+      let result = await ImagePicker.launchImageLibraryAsync();
+
+      if (!result.cancelled) {
+          this.setState({dishImage: result.uri});
+      }
+  }
+
+  async uploadImage(dish){
+
+      const response = await fetch(this.state.dishImage);
+      const blob = await response.blob();
+
+      let myStr = dish.a_food_id;
+      console.log("imageName: " + myStr);
+
+      let ref = firebase.storage().ref().child(`images/foods/${myStr}.jpg`);   
+      let snapshot = await ref.put(blob)
+
+      let downloadURL = await snapshot.ref.getDownloadURL();
+
+      console.log("-------------------------url: ");
+      console.log(downloadURL);
+
+      this.setState({ dishImage: downloadURL });
+
+      await this.updateDishImage(dish, downloadURL);
+  }
+
+  //---------------------------DISH UPLOAD-----------------------------------
+
+  async uploadDish(){
+      const {navigation} = this.props;
+
+      if(this.state.dishTitle != "" && this.state.dishDesc != "" && this.state.dishImage != "" && this.state.typeChosen.a_type_id){
+      
+          let dish = {
+            a_title: this.state.dishTitle,
+            a_description: this.state.dishDesc,
+            a_type_id: this.state.typeChosen.a_type_id,
+            a_rest_id: this.state.rest.a_rest_id,
+            a_image_url: undefined
+          }
+              
+          const resp = await FoodApi.add(dish);
+          console.log(resp);
+
+          if(resp.status == 200){
+            await this.uploadImage(resp.response.result);  
+            await this.uploadIngredients(resp.response.result);
+            await this.uploadCharacteristics(resp.response.result); 
+          }
+
+          navigation.goBack();
+
+      }else{
+          console.log("fill fields")
+      }
+  }
+
+  async updateDishImage( food, url ){
+
+      let dish = {
+        a_food_id: food.a_food_id,
+        a_image_url: url
+      }
+
+      console.log("---------------------------------------")
+      console.log("---------------------------------------")
+      console.log(food);
+      console.log("---------------------------------------")
+      console.log(url);
+      console.log("---------------------------------------")
+      console.log(dish);
+      console.log("---------------------------------------")
+      console.log("---------------------------------------")
+
+      const resp = await FoodApi.modify(dish);
+      console.log(resp);
+  }
+
+  async uploadCharacteristics(food){
+    const resp = await FoodHasCharacteristicApi.addCharacteristicsToFood(food.a_food_id, this.state.characteristicsChosen);
+    console.log(resp);
+  }
+
+  async uploadIngredients(food){
+    const resp = await FoodHasIngredientApi.addIngredientsToFood(food.a_food_id, this.state.ingredientsChosen);
+    console.log(resp);
+  }
+
+  //------------------------------FETCHS------------------------------------------------
+
+  async fetchTypes(){
+    const resp = await TypeApi.getAll();
+    this.setState({ allTypes: resp.response.result });
+    console.log(resp);
+  }
+
   async fetchIngredients(){
     const resp = await IngredientApi.getAll();
     this.setState({ allIngredients: resp.response.result });
     console.log(resp);
-}
-
-async fetchCharacteristics(){
-  const resp = await CharacteristicApi.getAll();
-  this.setState({ allCharacteristics: resp.response.result });
-  console.log(resp);
-}
-
-  onChooseImagePress = async () => {
-    let result = await ImagePicker.launchCameraAsync();
-    //let result = await ImagePicker.launchImageLibraryAsync();
-
-    if (!result.cancelled) {
-        this.uploadImage(result.uri)
-            .then(async () => {
-                Alert.alert("Success");
-                await this.getImage();
-            })
-            .catch((error) => {
-                Alert.alert(error.message);
-            });
-    }
   }
 
-  uploadImage = async (uri) => {
-      const response = await fetch(uri);
-      const blob = await response.blob();
-
-      var myStr = this.state.user.a_email;
-      var newStr = myStr.replace(/\./g, "_");
-
-      console.log("imageName: " + newStr);
-
-      var ref = firebase.storage().ref().child(`images/users/${newStr}.jpg`);
-      return ref.put(blob);
+  async fetchCharacteristics(){
+    const resp = await CharacteristicApi.getAll();
+    this.setState({ allCharacteristics: resp.response.result });
+    console.log(resp);
   }
 
-  getImage = async () => {
-      var myStr = this.state.user.a_email;
-      var newStr = myStr.replace(/\./g, "_");
-
-      firebase.storage().ref().child(`images/users/${newStr}.jpg`).getDownloadURL().then(async (url) => {
-        this.setState(prevState => ({
-          user: {
-              ...prevState.user,
-              a_image_url: url
-          }
-        }))
-        console.log(this.state.user);
-        await this.updateUser();
-      }).catch(function (error) {
-          Alert.alert(error.message);
-      });
+  async fetchRest(){
+    const { route } = this.props;
+    const { restaurant } = route.params;
+    this.setState({rest: restaurant});
+    console.log(restaurant);
   }
+
+  //--------------------------------MOUNT---------------------------------------------
 
   async componentDidMount() {
     console.log('mounting');
+    await this.fetchRest();
+    await this.fetchTypes();
     await this.fetchIngredients();
     await this.fetchCharacteristics();
-}
+  }
 
   render() {
     const { navigation } = this.props;
-    
-    
-
-    var ingredients = [];
-            for(let i = 0; i < this.state.allIngredients.length ; i++){
-                ingredients.push(
-                    <View key={i}>             
-                        <TouchableOpacity
-                            style={styles.ingredientsButton}
-                            onPress={() => { 
-                              let aux = this.state.ingredientsChosen;
-                              aux.push(this.state.allIngredients[i]);
-                              this.setState({ingredientsChosen: aux});
-                            modalInput = "";
-                            }}
-                        >
-                            <Text style={styles.ingredient}>{this.state.allIngredients[i].a_ingr_name}</Text>
-                        </TouchableOpacity>
-                    
-                    </View>
-                )
-            }
-      
-            var characteristics = [];
-            for(let i = 0; i < this.state.allCharacteristics.length ; i++){
-                characteristics.push(
-                    <View key={i}>             
-                        <TouchableOpacity
-                            style={styles.ingredientsButton}
-                            onPress={() => { 
-                              let aux = this.state.characteristicsChosen;
-                              aux.push(this.state.allIngredients[i]);
-                              this.setState({characteristicsChosen: aux});
-                            modalInput = "";
-                            }}
-                        >
-                            <Text style={styles.ingredient}>{this.state.allCharacteristics[i].a_char_name}</Text>
-                        </TouchableOpacity>
-                    
-                    </View>
-                )
-            }
 
     return (
         
         <SafeAreaView style={styles.backgroundContainer}>
             <ScrollView vertical = {true}>
-              <Text style={styles.addDishTitle}> Add Dish </Text>
-              <TouchableOpacity onPress={() => { this.onChooseImagePress() }}
-                 //esto tiene que hacer lo de la foto (lo que habia hecho andy y guardarla en el this.state.dishImage)
-              > 
-                <View style={styles.mainImage}>
-                  <Image
-                    style={styles.logoImage}
-                    source={require("../../assets/images/dishPlaceholder.png")}//CAMBIARLO POR this.state.dishImage
-                    
-                  />
-                  <Text style={styles.logoText}>Add Image</Text>
-                </View>
-              </TouchableOpacity>
-              <View>
-                <Text style={styles.inputTitle}> Name </Text>
-                <Input
-                  placeholder={""}
-                  onChangeText={(value) => (this.state.dishTitle = value)}
-                />
-                
-                <Text style={styles.inputTitle} > 
-                  Description </Text>
-                <Input
-                  multiline
-                  numberOfLines={5}
-                  placeholder={""}
-                  style={styles.desc}
-                  onChangeText={(value) => (this.state.dishDesc = value)}
-                />
-              </View>
-             {/* <View>
-                <Text style={styles.text}>Tags</Text>
-                <View style={styles.tagsList}>
-                  {this.state.tags.map((tag, idx) => {
-                    return(
-                      <View
-                        key={idx}
-                      >
-                        <TouchableOpacity style={styles.buttonTag}
-                          onPress={() => this.deleteTag(idx)}
-                        >
-                          <View style={styles.rowItemsContainer}>
-                            <Text style={styles.tagText}>{tag}</Text>
-                            <Icon name='clear' />
-                          </View>
-                        </TouchableOpacity>
-                      </View>
-                    );
-                  })}
-                </View>
 
-                <View style={styles.centeredView}>
-                  <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={this.state.tagsVisible}
-                    onRequestClose={() => {
-                      Alert.alert("Modal has been closed.");
-                    }}
-                  >
-                    <View style={styles.centeredView}>
-                      <View style={styles.modalView}>
-                        <Text style={styles.inputTitle}>Tag Name </Text>
-                        <Input
-                          placeholder={""}
-                          onChangeText={(value) => (modalInput = value)}
+                <Text style={styles.addDishTitle}> Add Dish </Text>
+
+                <TouchableOpacity onPress={() => { this.setState({modalImageVisible: true});  }}> 
+                    <View style={styles.mainImage}>
+                        <Image
+                            style={styles.logoImage}
+                            source={ this.state.dishImage ? { uri: this.state.dishImage } : require("../../assets/images/dishPlaceholder.png")}
                         />
-
-                        <View style={styles.buttonContainer}>
-                          <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => { 
-                              this.setTagsVisible(false);
-                              let ans = [...this.state.tags, modalInput];
-                              this.setState({
-                                tags: ans,
-                              });
-                              modalInput="";
-                            }}
-                          >
-                            <Text style={styles.buttonText}>ADD</Text>
-                          </TouchableOpacity>
-                        </View>
-                      </View>
+                        <Text style={styles.logoText}>Add Image</Text>
                     </View>
-                  </Modal>
-
-                  <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                      style={styles.button}
-                      onPress={() => { 
-                        this.setTagsVisible(true);
-                      }}
-                    >
-                      
-                      <Text style={styles.buttonText}>ADD TAG</Text>
-                    </TouchableOpacity>
-                  </View>
-                 
-                    </View> */} 
+                </TouchableOpacity>
 
                 <View>
-                <Text style={styles.text}>Ingredients</Text>
-                <View style={styles.tagsList}>
-                  {this.state.ingredientsChosen.map((ingredient, idx) => {
-                    return(
-                      <View
-                        key={idx}
-                      >
-                        <TouchableOpacity style={styles.buttonTag}
-                          onPress={() => this.deleteIngredient(idx)}
-                        >
-                          <View style={styles.rowItemsContainer}>
-                            <Text style={styles.tagText}>{ingredient}</Text>
-                            <Icon name='clear' />
-                          </View>
-                        </TouchableOpacity>
-                      </View>
-                    );
-                  })}
+                    <Text style={styles.inputTitle}>Name</Text>
+                    <Input
+                        placeholder={""}
+                        onChangeText={(value) => ( this.setState({ dishTitle:value }))}
+                    />
+                    <Text style={styles.inputTitle}>Description</Text>
+                    <Input
+                        multiline
+                        numberOfLines={5}
+                        placeholder={""}
+                        style={styles.desc}
+                        onChangeText={(value) => ( this.setState({ dishDesc:value }))}
+                    />
                 </View>
-                <View style={styles.centeredView}>
-                    <Modal
-                        animationType="slide"
-                        transparent={true}
-                        visible={this.state.ingredientsVisible}
-                        onRequestClose={() => {
-                        Alert.alert("Modal has been closed.");
-                        }}
-                    >
-                        <View style={styles.centeredView}>
-                            <View style={styles.modalView}>
-                                <Text style={styles.modalTitle}>Choose ingredients</Text>
-                                <Input
-                                    placeholder={"Search"}
-                                    rightIcon={
-                                        <Icon
-                                        name='search'
-                                        />
-                                      }
-                                    onChangeText={(value) => (modalInput = value)}
-                                />
-                                <ScrollView>
-                                    {ingredients}
-                                </ScrollView>    
-                                <TouchableOpacity
-                                  style={styles.button}
-                                  onPress={() => { 
-                                    this.setIngredientsVisible(false);
-                                  }}
-                                >
-                                  {/* getState((state) => {//Code here}) */}
-                                  <Text style={styles.buttonText}>Done</Text>
-                                </TouchableOpacity>
-                            </View>
+
+
+                <View>
+
+                    <Text style={styles.text}>Type</Text>
+                    <View style={styles.tagsList}>
+                          { this.state.typeChosen.a_type_id ? 
+                          (
+                              <View>
+                                    <TouchableOpacity style={styles.buttonTag}>
+                                          <View style={styles.rowItemsContainer}>
+                                              <Text style={styles.tagText}>{ this.state.typeChosen.a_type_name}</Text>
+                                              <TouchableOpacity
+                                                  onPress={() => this.deleteType()}
+                                              >
+                                                  <Icon name='clear' />
+                                              </TouchableOpacity>
+                                          </View>
+                                    </TouchableOpacity>
+                              </View>
+                          ) 
+                          : 
+                          ( <View/> )
+                          }
+                    </View>
+
+                    <View style={styles.centeredView}>
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => { 
+                                  this.setTypesVisible(true);
+                                }}
+                            >
+                                <Text style={styles.buttonText}>ADD TYPE</Text>
+                            </TouchableOpacity>
                         </View>
-                        </Modal>
-            
-                    
-                  <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                      style={styles.button}
-                      onPress={() => { 
-                        this.setIngredientsVisible(true);
-                      }}
-                    >
-                      {/* getState((state) => {//Code here}) */}
-                      <Text style={styles.buttonText}>ADD INGREDIENT</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
+                    </View>
+
                 </View>
 
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
-                      style={styles.buttonChar}
-                      onPress={() => { 
-                        this.setRequestIngrVisible(true);
-                      }}
-                    >
-                     
-                      <Text style={styles.buttonText}>This dish has other ingredients</Text>
-                    </TouchableOpacity>
-                      </View>
-                      <View style={styles.centeredView}>
-                      <Modal
-                        animationType="slide"
-                        transparent={true}
-                        visible={this.state.requestIngrVisible}
-                        onRequestClose={() => {
-                          Alert.alert("Modal has been closed.");
+                        style={styles.buttonChar}
+                        onPress={() => { 
+                          this.setRequestTypesVisible(true);
                         }}
-                      >
-                        <View style={styles.centeredView}>
-                          <View style={styles.modalView}>
-                            <Text style={styles.inputTitle}>Request a new ingredient</Text>
-                            <Input
-                              placeholder={""}
-                              onChangeText={(value) => (this.newIngrRequest = value)}
-                            />
+                    >
+                        <Text style={styles.buttonText}>This dish has other type</Text>
+                    </TouchableOpacity>
+                </View>
 
-                            <View style={styles.buttonContainer}>
-                              <TouchableOpacity
+
+                <View>
+
+                    <Text style={styles.text}>Ingredients</Text>
+                    <View style={styles.tagsList}>
+                        {this.state.ingredientsChosen.map((ingredient, idx) => {
+                            return(
+                                <View key={idx}>
+                                    <TouchableOpacity style={styles.buttonTag}>
+                                        <View style={styles.rowItemsContainer}>
+                                            <Text style={styles.tagText}>{ingredient.a_ingr_name}</Text>
+                                            <TouchableOpacity
+                                                onPress={() => this.deleteInredient(idx)}
+                                            >
+                                                <Icon name='clear' />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            );
+                        })}
+                    </View>
+
+                    <View style={styles.centeredView}>
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => { 
+                                  this.setIngredientsVisible(true);
+                                }}
+                            >
+                                <Text style={styles.buttonText}>ADD INGREDIENT</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                </View>
+
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        style={styles.buttonChar}
+                        onPress={() => { 
+                          this.setRequestIngrVisible(true);
+                        }}
+                    >
+                        <Text style={styles.buttonText}>This dish has other ingredients</Text>
+                    </TouchableOpacity>
+                </View>
+          
+                <View style={styles.centeredView}></View>
+                        
+                <View style={styles.allergiesContainer}>
+                    <Text style={styles.text}>Select allergies / characteristics</Text>
+                
+                    <View style={styles.tagsList}>
+                          {this.state.characteristicsChosen.map((char, idx) => {
+                              return(
+                                  <View key={idx}>
+                                      <TouchableOpacity style={styles.buttonTag}>
+                                          <View style={styles.rowItemsContainer}>
+                                              <Text style={styles.tagText}>{char.a_char_name}</Text>
+                                              <TouchableOpacity
+                                                  onPress={() => this.deleteCharacteristic(idx)}
+                                              >
+                                                  <Icon name='clear' />
+                                              </TouchableOpacity>
+                                          </View>
+                                      </TouchableOpacity>
+                                  </View>
+                              );
+                          })}
+                    </View>
+                
+                    <View style={styles.centeredView}>
+                      <View style={styles.buttonContainer}>
+                          <TouchableOpacity
+                              style={styles.button}
+                              onPress={() => { 
+                                this.setCharacteristicsVisible(true);
+                              }}
+                          >
+                              <Text style={styles.buttonText}>ADD CHARACTERISTIC</Text>
+                          </TouchableOpacity>
+                      </View>
+                    </View>
+
+                </View>
+                
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        style={styles.buttonChar}
+                        onPress={() => { 
+                          this.setRequestVisible(true);
+                        }}
+                    >
+                        <Text style={styles.buttonText}>This dish has other characteristics</Text>
+                    </TouchableOpacity>
+                </View>
+                  
+                <View style={styles.centeredView}></View>
+
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => { this.uploadDish(); }}
+                    >
+                        <Text style={styles.buttonText}>Add Dish</Text>
+                    </TouchableOpacity>
+                </View>
+
+            </ScrollView>
+
+            
+            {/* --------------------------------------------------------- TYPES MODAL-------------------------------------------------------------- */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={this.state.typesVisible}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalTitle}>Choose Type</Text>
+                        <Input
+                            placeholder={"Search"}
+                            rightIcon={ <Icon name='search' /> }
+                            onChangeText={ (value) => ( this.setState({typeModalInput:value}) )} 
+                        />
+                        <ScrollView>
+                            {this.state.allTypes.map((type, idx) => {
+                                return(
+                                    <View key={idx}>             
+                                        <TouchableOpacity
+                                            style={styles.ingredientsButton}
+                                            onPress={() => { 
+                                              this.setState({typeChosen: type});
+                                              this.setTypesVisible(false);
+                                            }}
+                                        >
+                                            <Text style={styles.ingredient}>{type.a_type_name}</Text>
+                                        </TouchableOpacity>
+                                  </View>
+                                );
+                            })}
+                        </ScrollView>    
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => { 
+                              this.setTypesVisible(false);
+                            }}
+                        >
+                            <Text style={styles.buttonText}>Done</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+            {/* ------------------------------------------------------------------------------------------------------------------------------------------------ */}
+                        
+            {/* ----------------------------------------------------------- REQUEST TYPE MODAL----------------------------------------------------------- */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={this.state.requestTypesVisible}
+                onRequestClose={() => {
+                  Alert.alert("Modal has been closed.");
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.inputTitle}>Request a new food type</Text>
+                        <Input
+                            placeholder={""}
+                            onChangeText={(value) => (this.newTypeRequest = value)}
+                        />
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => { 
+                                  this.setRequestTypesVisible(false)
+                                }}
+                            >
+                                <Text style={styles.buttonText}>Send</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            {/* ------------------------------------------------------------------------------------------------------------------------------------------------- */}
+
+
+            {/* --------------------------------------------------------- INGREDIENTS MODAL-------------------------------------------------------------- */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={this.state.ingredientsVisible}
+                onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalTitle}>Choose ingredients</Text>
+                        <Input
+                            placeholder={"Search"}
+                            rightIcon={ <Icon name='search' /> }
+                            onChangeText={ (value) => ( this.setState({ingrModalInput:value}) )} 
+                        />
+                        <ScrollView>
+                            {this.state.allIngredients.map((ingr, idx) => {
+                                return(
+                                    <View key={idx}>             
+                                        <TouchableOpacity
+                                            style={styles.ingredientsButton}
+                                            onPress={() => { 
+                                              let aux = this.state.ingredientsChosen;
+                                              aux.push(ingr);
+                                              this.setState({ingredientsChosen: aux});
+                                              this.setIngredientsVisible(false);
+                                            }}
+                                        >
+                                            <Text style={styles.ingredient}>{ingr.a_ingr_name}</Text>
+                                        </TouchableOpacity>
+                                  </View>
+                                );
+                            })}
+                        </ScrollView>    
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => { 
+                              this.setIngredientsVisible(false);
+                            }}
+                        >
+                            <Text style={styles.buttonText}>Done</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+            {/* ------------------------------------------------------------------------------------------------------------------------------------------------ */}
+                        
+            {/* ----------------------------------------------------------- REQUEST INGREDIENTS MODAL----------------------------------------------------------- */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={this.state.requestIngrVisible}
+                onRequestClose={() => {
+                  Alert.alert("Modal has been closed.");
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.inputTitle}>Request a new ingredient</Text>
+                        <Input
+                            placeholder={""}
+                            onChangeText={(value) => (this.newIngrRequest = value)}
+                        />
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity
                                 style={styles.button}
                                 onPress={() => { 
                                   this.setRequestIngrVisible(false)
                                 }}
-                              >
+                            >
                                 <Text style={styles.buttonText}>Send</Text>
-                              </TouchableOpacity>
-                            </View>
-                          </View>
+                            </TouchableOpacity>
                         </View>
-                      </Modal>
-                      </View>
-                        
-                
-              
-              <View style={styles.allergiesContainer}>
-                <Text style={styles.text}>Select allergies / characteristics</Text>
-                <View style={styles.centeredView}>
-                    <Modal
-                        animationType="slide"
-                        transparent={true}
-                        visible={this.state.characteristicsVisible}
-                        onRequestClose={() => {
-                        Alert.alert("Modal has been closed.");
-                        }}
-                    >
-                        <View style={styles.centeredView}>
-                            <View style={styles.modalView}>
-                                <Text style={styles.modalTitle}>Choose allergies / characteristics</Text>
-                                <Input
-                                    placeholder={"Search"}
-                                    rightIcon={
-                                        <Icon
-                                        name='search'
-                                        />
-                                      }
-                                    onChangeText={(value) => (modalInput = value)}
-                                />
-                                <ScrollView>
-                                    {characteristics}
-                                </ScrollView>    
-                                <TouchableOpacity
-                                  style={styles.button}
-                                  onPress={() => { 
-                                    this.setCharacteristicsVisible(false);
-                                  }}
-                                >
-                                  {/* getState((state) => {//Code here}) */}
-                                  <Text style={styles.buttonText}>Done</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                        </Modal>
-            
+                    </View>
+                </View>
+            </Modal>
+            {/* ------------------------------------------------------------------------------------------------------------------------------------------------- */}
                     
-                  <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                      style={styles.button}
-                      onPress={() => { 
-                        this.setCharacteristicsVisible(true);
-                      }}
-                    >
-                      {/* getState((state) => {//Code here}) */}
-                      <Text style={styles.buttonText}>ADD CHARACTERISTIC</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                      style={styles.buttonChar}
-                      onPress={() => { 
-                        this.setRequestVisible(true);
-                      }}
-                    >
-                      {/* getState((state) => {//Code here}) */}
-                      <Text style={styles.buttonText}>This dish has other characteristics</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.centeredView}>
-                  <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={this.state.requestVisible}
-                    onRequestClose={() => {
-                      Alert.alert("Modal has been closed.");
-                    }}
-                  >
-                    <View style={styles.centeredView}>
-                      <View style={styles.modalView}>
-                        <Text style={styles.inputTitle}>Request a new characteristic</Text>
+            {/* -------------------------------------------------------------- CHARACTERISTIC MODAL-------------------------------------------------------------- */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={this.state.characteristicsVisible}
+                onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalTitle}>Choose allergies / characteristics</Text>
                         <Input
-                          placeholder={""}
-                          onChangeText={(value) => (this.newRequest = value)}
+                            placeholder={"Search"}
+                            rightIcon={ <Icon name='search' /> }
+                            onChangeText={ (value) => ( this.setState({charModalInput:value}) )} 
                         />
-
-                        <View style={styles.buttonContainer}>
-                          <TouchableOpacity
+                        <ScrollView>
+                            {this.state.allCharacteristics.map((char, idx) => {
+                                return(
+                                  <View key={idx}>             
+                                      <TouchableOpacity
+                                          style={styles.ingredientsButton}
+                                          onPress={() => { 
+                                              let aux = this.state.characteristicsChosen;
+                                              aux.push(char);
+                                              this.setState({characteristicsChosen: aux});
+                                              this.setCharacteristicsVisible(false);
+                                          }}
+                                      >
+                                          <Text style={styles.ingredient}>{char.a_char_name}</Text>
+                                      </TouchableOpacity>
+                                  </View>
+                                );
+                            })}
+                        </ScrollView>    
+                        <TouchableOpacity
                             style={styles.button}
                             onPress={() => { 
-                              this.setRequestVisible(false)
+                                this.setCharacteristicsVisible(false);
                             }}
-                          >
-                            <Text style={styles.buttonText}>Send</Text>
-                          </TouchableOpacity>
-                        </View>
-                      </View>
+                        >
+                            <Text style={styles.buttonText}>Done</Text>
+                        </TouchableOpacity>
                     </View>
-                  </Modal>
-                  </View>
-              
+                </View>
+            </Modal>
+            {/* -------------------------------------------------------------------------------------------------------------------------------------------------------- */}
+                              
+            {/* -------------------------------------------------------------- REQUEST CHARACTERISTIC MODAL------------------------------------------------------------- */}
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={this.state.requestVisible}
+              onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+              }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.inputTitle}>Request a new characteristic</Text>
+                        <Input
+                            placeholder={""}
+                            onChangeText={(value) => (this.newRequest = value)}
+                        />
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => { 
+                                    this.setRequestVisible(false)
+                                }}
+                            >
+                                <Text style={styles.buttonText}>Send</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            {/* -------------------------------------------------------------------------------------------------------------------------------------------------------- */}
 
-              
+        
+            {/* -------------------------------------------------------------- CHOOSE IMAGE MODAL----------------------------------------------------------------------- */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={this.state.modalImageVisible}
+                onRequestClose={() => {
+                  Alert.alert("Modal has been closed.");
+                }}
+            >
+                <View style = {styles.centeredView}>
+                    <View style = {styles.modalImageView}>
+                        <TouchableOpacity
+                            style={styles.chainButton}
+                            onPress={() => { 
+                                this.onChooseImagePress();
+                                this.setState({modalImageVisible: false});
+                              }}
+                        >
+                            <Text style={styles.buttonText}>Camera</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.chainButton}
+                            onPress={() => { 
+                                this.onChooseGalleryImagePress();
+                                this.setState({modalImageVisible: false});
+                            }}
+                        >
+                            <Text style={styles.buttonText}>Gallery</Text>
+                        </TouchableOpacity>
+                    </View>         
+                </View>
+            </Modal>
+            {/* -------------------------------------------------------------------------------------------------------------------------------------------------------- */}
 
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => { 
-                    //ACA SE ENVIA TODA LA DATA A LA API PARA QUE SE ALMACENE
-                   }}
-                >
-                  <Text style={styles.buttonText}>Add Dish</Text>
-                </TouchableOpacity>
-              </View>
-
-
-            </ScrollView>
         </SafeAreaView>
     );
   }
@@ -676,7 +869,7 @@ const styles = StyleSheet.create({
   },
 
   buttonText:{
-    color: "white",
+    color: "black",
     fontWeight: "bold",    
     fontSize: 15,      
   },
@@ -757,6 +950,38 @@ const styles = StyleSheet.create({
 
   tagText: {
     fontSize: 15, 
+  },
+
+  modalImageView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 10,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    height: 120,
+  },
+
+  chainButton: {
+    borderColor: 'black',
+    borderWidth:1,
+    elevation: 5,
+    borderRadius: 5,
+    backgroundColor: "white",
+    color: "black",
+    width: 217,
+    alignItems: "center",
+    padding: 13,
+    height: 48,
+    alignSelf: "center",
+    marginBottom: 5
   },
 
 });
