@@ -11,12 +11,13 @@ import {
     EditProfileAllergies,
     Premium,
     RestaurantStatisticsProfile,
+    OwnerRestaurantProfile,
 } from './UserProfileStack';
 
 import Filter from './FilterScreen';
 import Food from './FoodScreen';
 import RateFood from './RateFoodScreen';
-import RestaurantProfile from './RestaurantProfileScreen';
+//import RestaurantProfile from './RestaurantProfileScreen';
 import Reviews from './ReviewsScreen';
 import AddDish from './AddDishScreen';
 import ReviewInfo from './ReviewInfoScreen';
@@ -40,12 +41,13 @@ export {
     EditProfileAllergies,
     Premium,
     RestaurantStatisticsProfile,
+    OwnerRestaurantProfile,
 
     // Shared
     Filter,
     Food,
     RateFood,
-    RestaurantProfile,
+    //RestaurantProfile,
     Reviews,
     AddDish,
     ReviewInfo,

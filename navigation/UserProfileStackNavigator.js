@@ -6,7 +6,7 @@ import BackButtonNavBar from "./NavBars/BackButtonNavBar";
 
 import {
   UserProfile,
-  RestaurantProfile,
+  OwnerRestaurantProfile,
   EditProfile,
   RestaurantStatisticsProfile,
   AddDish,
@@ -14,7 +14,8 @@ import {
   EditProfileAllergies, 
   CreateRestaurant, 
   Premium, 
-  EditRestaurant 
+  EditRestaurant,
+
 } from "../screens/MainDrawer";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -35,7 +36,7 @@ export default function StackNavigator({ navigation, route }) {
       }
     >
       <Stack.Screen name="UserProfile" component={UserProfile} />
-      <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} />
+      <Stack.Screen name="OwnerRestaurantProfile" component={OwnerRestaurantProfile} />
       <Stack.Screen name="CreateRestaurant" component={CreateRestaurant} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="EditRestaurant" component={EditRestaurant} />
