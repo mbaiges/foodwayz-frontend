@@ -14,8 +14,7 @@ import {
   EditProfileAllergies, 
   CreateRestaurant, 
   Premium, 
-  EditRestaurant,
-
+  EditRestaurant ,
 } from "../screens/MainDrawer";
 
 import { Ionicons } from "@expo/vector-icons";
