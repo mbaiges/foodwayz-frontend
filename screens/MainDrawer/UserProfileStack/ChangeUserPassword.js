@@ -102,7 +102,7 @@ class EditProfilePasswordComponent extends Component {
             </View>
 
             <View>
-                <TouchableOpacity style={styles.button} onPress={async() => { await this.changePass() }} >
+                <TouchableOpacity style={styles.button} onPress={async() => { await this.changePass();}} >
                     <Text>CHANGE PASSWORD</Text>
                 </TouchableOpacity>
             </View>

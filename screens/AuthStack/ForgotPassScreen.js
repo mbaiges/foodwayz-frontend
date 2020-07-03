@@ -79,7 +79,7 @@ class ForgotPassScreenComponent extends Component {
         <View alignItems="center">
           <TouchableOpacity
             style={styles.button}
-            onPress={() => making_api_call()}
+            onPress={() => { navigation.navigate("ResetPassEmail") }}
           >
             <Text>RESET PASSWORD</Text>
           </TouchableOpacity>
