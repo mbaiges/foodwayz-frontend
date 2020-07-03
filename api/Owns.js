@@ -55,7 +55,52 @@ class OwnsApi{
       }
   */
   static add(restId) {
-  return Api.post(`${OwnsApi.url}/owner/restaurant/${restId}`);
+    return Api.post(`${OwnsApi.url}/owner/restaurant/${restId}`);
+  }
+
+  /*
+  USA EL ID DEL MIDDLEWARE
+  BODY:
+    --
+  RESULTADOS:
+    200 - se vinculó el nuevo owner id con restaurant id
+      EJEMPLO:
+      {
+        "message": "Successfully added owns",
+        "result": [
+          {
+            "a_user_id": 1,
+            "a_rest_id": 1
+          }
+        ]
+      }
+    409 - El usuario ya es owner del restaurant
+      EJEMPLO:
+      {
+        "message": "Conflict with giving ownership to user",
+        "description": [
+          {
+            "reason": "already exists",
+            "conflicting_obj": [
+              {
+                "a_user_id": 3,
+                "a_rest_id": 1
+              }
+            ]
+          }
+        ]
+      }
+    401 - El usuario que hizo el llamado no es owner del restaurant
+      EJEMPLO:
+      {
+        "message": "Unauthorize adding new owner to restaurant with id 2",
+        "description": [
+          "You are not an owner"
+        ]
+      }
+  */
+  static addOtherOwner(userId, restId) {
+    return Api.post(`${OwnsApi.url}/owner/${userId}/restaurant/${restId}`);
   }
 
   /*
@@ -84,6 +129,35 @@ class OwnsApi{
   */ 
   static delete(restId) {
     return Api.delete(`${OwnsApi.url}/owner/restaurant/${restId}`);
+  }
+
+  /*
+  USA EL ID DEL MIDDLEWARE
+  BODY:
+    --
+  RESULTADOS:
+    200 - se desvinculó el owner con el restaurant
+      EJEMPLO:
+      {
+        "message": "Successfully deleted ownership",
+        "result": 1
+      }
+    404 - El usuario no es owner del restaurant
+      EJEMPLO:
+      {
+        "message": "Unable to find ownership of the restaurant with id 1"
+      }
+    401 - El usuario que hizo el llamado no es owner del restaurant
+      EJEMPLO:
+      {
+        "message": "Unauthorize deleting owner from restaurant with id 2",
+        "description": [
+          "You are not an owner"
+        ]
+      }
+  */
+  static deleteOtherOwner(userId, restId) {
+    return Api.delete(`${OwnsApi.url}/owner/${userId}/restaurant/${restId}`);
   }
 
   /*
