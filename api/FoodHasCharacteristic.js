@@ -63,7 +63,7 @@ class FoodHasCharacteristicApi{
       }
   */
 
- static addIngredientsToFood(foodId, a_chars) {
+ static addCharacteristicsToFood(foodId, a_chars) {
   return Api.post(`${FoodHasCharacteristicApi.url}/food/${foodId}/characteristic`, {a_chars});
 }
 

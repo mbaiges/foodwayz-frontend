@@ -14,7 +14,7 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import { CheckBox,Input, Icon} from "react-native-elements";
 import * as ImagePicker from 'expo-image-picker';
-import {IngredientApi, CharacteristicApi, FoodApi } from '../../api';
+import {IngredientApi, CharacteristicApi, FoodApi, FoodHasCharacteristicApi, FoodHasIngredientApi } from '../../api';
 import { makeUrl } from "expo-linking";
 import * as firebase from 'firebase';
 
@@ -149,9 +149,9 @@ async onChooseGalleryImagePress(){
           console.log(resp);
 
           if(resp.status == 200){
-            await this.uploadImage(resp.response.result[0]);  
-            await this.uploadIngredients();
-            await this.uploadCharacteristics(); 
+            await this.uploadImage(resp.response.result);  
+            await this.uploadIngredients(resp.response.result);
+            await this.uploadCharacteristics(resp.response.result); 
           }
 
           navigation.goBack();
@@ -162,14 +162,6 @@ async onChooseGalleryImagePress(){
   }
 
   async updateDishImage( food, url ){
-      // let dish = {
-      //   a_food_id: food.a_food_id,
-      //   a_title: this.state.dishTitle,
-      //   a_description: this.state.dishDesc,
-      //   a_type_id: 1,
-      //   a_rest_id: this.state.rest.a_rest_id,
-      //   a_image_url: url
-      // }
 
       let dish = {
         a_food_id: food.a_food_id,
@@ -188,6 +180,16 @@ async onChooseGalleryImagePress(){
 
       const resp = await FoodApi.modify(dish);
       console.log(resp);
+  }
+
+  async uploadCharacteristics(food){
+    const resp = await FoodHasCharacteristicApi.addCharacteristicsToFood(food.a_food_id, this.state.characteristicsChosen);
+    console.log(resp);
+  }
+
+  async uploadIngredients(food){
+    const resp = await FoodHasIngredientApi.addIngredientsToFood(food.a_food_id, this.state.ingredientsChosen);
+    console.log(resp);
   }
 
   async fetchIngredients(){
