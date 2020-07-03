@@ -12,7 +12,7 @@ import {
   Dimensions,
   Modal
 } from "react-native";
-import { RestaurantApi, FoodApi } from "../../../api";
+import { RestaurantApi, FoodApi } from "../../api";
 
 
 import * as ImagePicker from 'expo-image-picker';

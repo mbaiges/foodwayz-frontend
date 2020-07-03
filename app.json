@@ -10,7 +10,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
-    "scheme": "myapp",
+    "scheme": "foodwayz",
     "splash": {
       "image": "./assets/images/logo.png",
       "resizeMode": "contain",
@@ -30,7 +30,7 @@
             {
               "scheme": "http",
               "host": "*.foodwayz.io",
-              "pathPrefix": "/confirmation"
+              "pathPrefix": "/verify_email"
             }
           ],
           "category": [

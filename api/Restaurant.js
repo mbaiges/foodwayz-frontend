@@ -213,7 +213,7 @@ class RestaurantApi{
     404 - El user no es owner
   */
  static updatePremiumStatus(id, a_premium_level) {
-  return Api.put(`${RestaurantApi.url}/${id}`, {a_premium_level});
+  return Api.put(`${RestaurantApi.url}/${id}/premium`, {a_premium_level});
 }
 
   /*

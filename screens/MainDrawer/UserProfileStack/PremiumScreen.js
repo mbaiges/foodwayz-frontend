@@ -12,6 +12,7 @@ import {
   Dimensions,
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
+import { RestaurantApi } from "../../../api";
 
 //import { Constants } from 'expo';
 
@@ -21,37 +22,63 @@ class PremiumComponent extends Component {
 
     constructor() {
         super();
+        this.state = {
+          chosenPlanIndex: undefined,
+          rest: {},
+        }
      }
     
     async uploadPrimium(){
-      
+      const { navigation } = this.props;
+
+      if(this.state.chosenPlanIndex){
+        const resp = await RestaurantApi.updatePremiumStatus(this.state.rest.a_rest_id, this.state.chosenPlanIndex)
+        console.log(resp)
+        if(resp.status == 200){
+          navigation.goBack();
+        }
+      }else{
+        console.log("you need to choose a plan")
+      }
     }
 
-    async fetchUser(){
-      
+    async fetchRestaurant(){
+      const { route } = this.props;
+      const { restaurant } = route.params;
+      this.setState({rest: restaurant});
+      console.log(restaurant);
+    }
+
+    changePlan(plan){
+      this.setState({ chosenPlanIndex: plan })
+      console.log("selecting plan: " + plan)
     }
 
     async componentDidMount() {
       console.log('mounting');
-      await this.fetchUser();
+      await this.fetchRestaurant();
     }
 
     render() {
-      const { navigation, signIn } = this.props;
+      const { navigation } = this.props;
 
       return (
         <SafeAreaView style={styles.backgroundContainer}>
           <ScrollView>
             <Text style={styles.logoText}>Sign up for premium</Text>
             
-            <TouchableOpacity>
+            <TouchableOpacity
+                onPress={() => { this.changePlan(1) }}
+            >
               <Card style={styles.card}>
                 <Text style={styles.subtitle}>Basic - $100 a month!</Text>
                 <Text style={styles.text}>- Feature 1</Text>
               </Card>
             </TouchableOpacity>
 
-            <TouchableOpacity>
+            <TouchableOpacity
+                onPress={() => { this.changePlan(2) }}
+            >
             <Card style={styles.card}>
                 <Text style={styles.subtitle}>Standard - $300 a month!</Text>
                 <Text style={styles.text}>- Feature 1</Text>
@@ -59,7 +86,9 @@ class PremiumComponent extends Component {
               </Card>
             </TouchableOpacity>
 
-            <TouchableOpacity>
+            <TouchableOpacity
+                onPress={() => { this.changePlan(3) }}
+            >
             <Card style={styles.card}>
                 <Text style={styles.subtitle}>Premium - $500 a month!</Text>
                 <Text style={styles.text}>- Feature 1</Text>
