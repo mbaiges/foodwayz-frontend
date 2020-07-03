@@ -149,7 +149,9 @@ async onChooseGalleryImagePress(){
           console.log(resp);
 
           if(resp.status == 200){
-            await this.uploadImage(resp.response.result[0]);   
+            await this.uploadImage(resp.response.result[0]);  
+            await this.uploadIngredients();
+            await this.uploadCharacteristics(); 
           }
 
           navigation.goBack();
@@ -160,14 +162,30 @@ async onChooseGalleryImagePress(){
   }
 
   async updateDishImage( food, url ){
+      // let dish = {
+      //   a_food_id: food.a_food_id,
+      //   a_title: this.state.dishTitle,
+      //   a_description: this.state.dishDesc,
+      //   a_type_id: 1,
+      //   a_rest_id: this.state.rest.a_rest_id,
+      //   a_image_url: url
+      // }
+
       let dish = {
         a_food_id: food.a_food_id,
-        a_title: this.state.dishTitle,
-        a_description: this.state.dishDesc,
-        a_type_id: 1,
-        a_rest_id: this.state.rest.a_rest_id,
         a_image_url: url
       }
+
+      console.log("---------------------------------------")
+      console.log("---------------------------------------")
+      console.log(food);
+      console.log("---------------------------------------")
+      console.log(url);
+      console.log("---------------------------------------")
+      console.log(dish);
+      console.log("---------------------------------------")
+      console.log("---------------------------------------")
+
       const resp = await FoodApi.modify(dish);
       console.log(resp);
   }

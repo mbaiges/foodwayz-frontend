@@ -46,25 +46,25 @@ class PremiumComponent extends Component {
             
             <TouchableOpacity>
               <Card style={styles.card}>
-                <Text style={styles.subtitle}>Copper - $100 a month!</Text>
-                <Text style={styles.text}>- Statistics on the average age of users</Text>
+                <Text style={styles.subtitle}>Basic - $100 a month!</Text>
+                <Text style={styles.text}>- Feature 1</Text>
               </Card>
             </TouchableOpacity>
 
             <TouchableOpacity>
-              <Card style={styles.card}>
-                <Text style={styles.subtitle}>Silver - $300 a month!</Text>
-                <Text style={styles.text}>- Statistics on the average age of users</Text>
-                <Text style={styles.text}>- Statistics on the best-selling dishes</Text>
+            <Card style={styles.card}>
+                <Text style={styles.subtitle}>Standard - $300 a month!</Text>
+                <Text style={styles.text}>- Feature 1</Text>
+                <Text style={styles.text}>- Feature 2</Text>
               </Card>
             </TouchableOpacity>
 
             <TouchableOpacity>
-              <Card style={styles.card}>
-                <Text style={styles.subtitle}>Gold - $500 a month!</Text>
-                <Text style={styles.text}>- Statistics on the average age of users</Text>
-                <Text style={styles.text}>- Statistics on the best-selling dishes</Text>
-                <Text style={styles.text}>- Statistics on popular days and times</Text>
+            <Card style={styles.card}>
+                <Text style={styles.subtitle}>Premium - $500 a month!</Text>
+                <Text style={styles.text}>- Feature 1</Text>
+                <Text style={styles.text}>- Feature 2</Text>
+                <Text style={styles.text}>- Feature 3</Text>
               </Card>
             </TouchableOpacity>
 
