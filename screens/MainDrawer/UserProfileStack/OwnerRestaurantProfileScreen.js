@@ -12,7 +12,7 @@ import {
   Dimensions,
   Modal
 } from "react-native";
-import { RestaurantApi, FoodApi } from "../../../api";
+import { RestaurantApi, FoodApi, UserApi } from "../../../api";
 
 
 import * as ImagePicker from 'expo-image-picker';
@@ -412,8 +412,11 @@ class OwnerRestaurantProfileComponent extends Component {
                                   style={styles.button}
                                   onPress={() => { 
                                     this.setState({modalInviteToBeOwner: false});
-
-                                    //HACER OWNER AL WACHIN.______________________________________________________________________________________
+                                    var body = {a_email: modalInput};
+                                    var resp = UserApi.findUsers(body);
+                                    console.log("????????????????????????????????????????????????????????");
+                                    console.log(resp);
+                                    console.log("????????????????????????????????????????????????????????");
                                     modalInput = "";
                                   }}
                                 >
