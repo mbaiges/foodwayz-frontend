@@ -16,6 +16,57 @@ class UserHasCharacteristicApi{
     return Api.baseUrl;
   }
 
+    /*
+  BODY:
+    {
+      "a_chars": [
+        {
+          "a_char_id": 1
+        },
+        {
+          "a_char_id": 2
+        }
+      ]
+    }
+  RESULTADOS:
+    200 - Se vinculó el char. con el usuario especificado
+      EJEMPLO:
+      {
+        "message": "Successfully added user has characteristic",
+        "result": [
+          {
+            "a_user_id": 2,
+            "a_char_id": 1
+          },
+          {
+            "a_user_id": 2,
+            "a_char_id": 2
+          }
+        ]
+      }
+    
+    409 - El vinculo especificado ya existe
+      EJEMPLO:
+      {
+        "message": "Conflict with userHasCharacteristic",
+        "description": [
+          {
+            "reason": "already exists",
+            "conflicting_obj": [
+              {
+                "a_user_id": 2,
+                "a_char_id": 1
+              }
+            ]
+          }
+        ]
+      }
+  */
+ 
+ static addIngredientsToUser(userId, a_chars) {
+  return Api.post(`${UserHasCharacteristicApi.url}/user/${userId}/characteristic`, {a_chars});
+}
+
   /*
   BODY:
     --

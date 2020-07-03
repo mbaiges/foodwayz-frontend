@@ -62,8 +62,8 @@ class FoodHasIngredientApi{
         ]
       }
   */
- static addIngredientsToFood(foodId, ingrs) {
-  return Api.post(`${FoodHasIngredientApi.url}/food/${foodId}/ingredient`, {a_ingrs: ingrs});
+ static addIngredientsToFood(foodId, a_ingrs) {
+  return Api.post(`${FoodHasIngredientApi.url}/food/${foodId}/ingredient`, {a_ingrs});
 }
 
   /*
