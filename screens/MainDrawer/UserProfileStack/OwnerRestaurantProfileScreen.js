@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, ListItem, Button, Icon, Rating} from "react-native-elements";
+import { Card, ListItem, Button, Icon, Input, Rating} from "react-native-elements";
 import {
   StyleSheet,
   View,
@@ -33,6 +33,7 @@ class OwnerRestaurantProfileComponent extends Component {
       verificationModal: false,
       verificationModalImage: false,
       modalImageVisible: false,
+      modalInviteToBeOwner: false,
       lastDishClicked: {},
       lastImageClicked: {},
       theBiggestExtra: 0,
@@ -93,6 +94,14 @@ class OwnerRestaurantProfileComponent extends Component {
 
   async deleteDish(){
     let foodToDelete = this.state.lastDishClicked;
+    console.log(".......................................................................");
+    console.log(foodToDelete);
+    console.log(".......................................................................");
+    var myStr = foodToDelete.a_food_id;
+    var ref = firebase.storage().ref().child(`images/foods/${myStr}.jpg`);
+    //var ref = firebase.storage().ref().child(`images/foods/18.jpg`);
+    
+    await ref.delete();
     await FoodApi.delete(foodToDelete.a_food_id);
     await this.fetchDishes();
   }
@@ -101,11 +110,6 @@ class OwnerRestaurantProfileComponent extends Component {
   async deleteImage(){
     
     let imageToDelete = this.state.lastImageClicked;
-    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-    console.log(this.state.images);
-    console.log(imageToDelete);
-    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-    
     var myStr = "" + imageToDelete.a_rest_id + "_" + imageToDelete.a_image_extra;
     console.log(myStr);
     
@@ -137,13 +141,8 @@ class OwnerRestaurantProfileComponent extends Component {
   async uploadImage(uri){
     let a_image = [];
     let biggestNumber = this.state.theBiggestExtra;
-
-    console.log("?////////////////////////////////////////////////////////////////////////////////////////////////////");
-    console.log(biggestNumber);
     biggestNumber = +biggestNumber + +1;
-    console.log(biggestNumber);
-    console.log("?////////////////////////////////////////////////////////////////////////////////////////////////////");
-
+    
     const response = await fetch(uri);
     const blob = await response.blob();
     //SETEAR EL NAME DE ALGUNA FORMA
@@ -167,6 +166,9 @@ class OwnerRestaurantProfileComponent extends Component {
 
   render(){
     const {navigation} = this.props;
+
+    var modalInput = "";
+
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
@@ -246,6 +248,15 @@ class OwnerRestaurantProfileComponent extends Component {
               onPress={async () => { navigation.navigate("Premium") }}
             >
             <Text style={styles.buttonText}>Change Plan</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+              style={styles.button}
+              onPress={async () => { this.setState({modalInviteToBeOwner: true }) }}
+            >
+            <Text style={styles.buttonText}>Add new owner</Text>
           </TouchableOpacity>
         </View>
 
@@ -371,6 +382,48 @@ class OwnerRestaurantProfileComponent extends Component {
             </Modal>
         </View>
   
+        <View style={styles.centeredView}>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={this.state.modalInviteToBeOwner}
+                    >
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <View flexDirection='row'>
+                                  <Text style={styles.modalTitle}>Add an Owner</Text>
+                                  <View style={styles.closeModalIconContainer}>
+                                    <Icon
+                                      name='close'
+                                      onPress={() => this.setState({modalInviteToBeOwner: false,})} />
+                                  </View> 
+                                </View>
+                                <Input
+                                    placeholder={"email"}
+                                    rightIcon={
+                                        <Icon
+                                          name='email'
+                                        />
+                                      }
+                                    onChangeText={(value) => (modalInput = value)}
+                                />
+                                   
+                                <TouchableOpacity
+                                  style={styles.button}
+                                  onPress={() => { 
+                                    this.setState({modalInviteToBeOwner: false});
+                                    //HACER OWNER AL WACHIN.______________________________________________________________________________________
+                                    modalInput = "";
+                                  }}
+                                >
+                                  {/* getState((state) => {//Code here}) */}
+                                  <Text style={styles.buttonText}>Done</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
+                </View>
+
 
 {/* -------------------------------------------------------------------------------------------- */}
 
@@ -634,6 +687,13 @@ const styles = StyleSheet.create({
     elevation:20
   },
 
+  closeModalIconContainer:{
+    position:"absolute",
+    marginTop: 0,
+    marginLeft: 200,
+    elevation:20,
+  },
+
   
   modalImageView: {
     margin: 20,
@@ -667,6 +727,17 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 5
 },
+
+modalTitle: {
+  position: "relative",
+  fontSize: 20,
+  paddingLeft: 15,
+  color: "black",
+  fontWeight: "500",
+  fontWeight: "bold",
+  paddingBottom: 10,
+},
+
 
 
 

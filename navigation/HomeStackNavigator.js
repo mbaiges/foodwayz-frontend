@@ -11,6 +11,7 @@ import {
   Reviews,
   Home,
   ReviewInfo,
+  RestaurantProfile,
 } from '../screens/MainDrawer';
 
 import DefaultNavBar from "./NavBars/DefaultNavBar";
@@ -36,11 +37,13 @@ export default function StackNavigator({ navigation, route }) {
       }
     >
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} />
       <Stack.Screen name="Reviews" component={Reviews} options={BackButtonSearchProfileNavBar}/>
       <Stack.Screen name="RateFood" component={RateFood} options={BackButtonNavBar}/>
       <Stack.Screen name="Food" component={Food} options={BackButtonSearchProfileNavBar}/>
       <Stack.Screen name="Filter" component={Filter} />
       <Stack.Screen name="ReviewInfo" component={ReviewInfo} options={BackButtonSearchProfileNavBar}/>
+    
       {/* <Stack.Screen name="Search" component={SearchScreen} options={() => SearchNavBar({ title: getHeaderTitle(route), navigation })} /> */}
       {/* <Stack.Screen name="Search" component={Search} /> */}
     </Stack.Navigator>
