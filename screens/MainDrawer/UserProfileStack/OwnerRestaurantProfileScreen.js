@@ -12,7 +12,7 @@ import {
   Dimensions,
   Modal
 } from "react-native";
-import { RestaurantApi, FoodApi, UserApi } from "../../../api";
+import { RestaurantApi, FoodApi, UserApi, OwnsApi } from "../../../api";
 
 
 import * as ImagePicker from 'expo-image-picker';
@@ -161,6 +161,14 @@ class OwnerRestaurantProfileComponent extends Component {
     console.log(a_image)
     await RestaurantApi.addImages(this.state.restaurant.a_rest_id,a_image);
     await this.fetchImages();
+  }
+
+
+  async insertNewOwner(modalInput){
+    let body = {a_email: modalInput};
+    let resp = await UserApi.findUsers(body);
+    let userId = resp.response.result[0].a_user_id;
+    await OwnsApi.addOtherOwner(userId,this.state.restaurant.a_rest_id)
   }
 
 
@@ -412,11 +420,8 @@ class OwnerRestaurantProfileComponent extends Component {
                                   style={styles.button}
                                   onPress={() => { 
                                     this.setState({modalInviteToBeOwner: false});
-                                    var body = {a_email: modalInput};
-                                    var resp = UserApi.findUsers(body);
-                                    console.log("????????????????????????????????????????????????????????");
-                                    console.log(resp);
-                                    console.log("????????????????????????????????????????????????????????");
+                                    this.insertNewOwner(modalInput);
+
                                     modalInput = "";
                                   }}
                                 >

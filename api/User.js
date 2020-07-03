@@ -149,7 +149,7 @@ class UserApi {
       }
   */
   static findUsers(properties) {
-    return Api.get(`${UserApi.url}/find`, properties);
+    return Api.post(`${UserApi.url}/find`, properties);
   }
 }
 
