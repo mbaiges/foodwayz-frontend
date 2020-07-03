@@ -225,7 +225,7 @@ class RestaurantProfileComponent extends Component {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
               style={styles.button}
-              onPress={async () => {navigation.navigate("AddDish")}}
+              onPress={async () => {navigation.navigate("AddDish", { restaurant: this.state.restaurant})}}
           >
               <Text style={styles.buttonText}>Add New Dish!</Text>
           </TouchableOpacity>
