@@ -14,7 +14,7 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import { CheckBox,Input, Icon} from "react-native-elements";
 import * as ImagePicker from 'expo-image-picker';
-import {IngredientApi, CharacteristicApi, FoodApi, FoodHasCharacteristicApi, FoodHasIngredientApi } from '../../api';
+import {IngredientApi, CharacteristicApi, FoodApi, FoodHasCharacteristicApi, FoodHasIngredientApi, TypeApi } from '../../api';
 import { makeUrl } from "expo-linking";
 import * as firebase from 'firebase';
 
@@ -63,7 +63,6 @@ class AddDishComponent extends Component {
 
   //---------------------------OPEN ADD MODALS-----------------------------------
 
-
   setTypesVisible = (visible) => {
     this.setState({ typesVisible: visible });
   }
@@ -93,7 +92,7 @@ class AddDishComponent extends Component {
   //----------------------------DELETE TAGS------------------------------------
 
   deleteType(){
-    this.setState({ type: {}});
+    this.setState({ typeChosen: {} });
   }
 
   deleteInredient(idx){
@@ -152,12 +151,12 @@ class AddDishComponent extends Component {
   async uploadDish(){
       const {navigation} = this.props;
 
-      if(this.state.dishTitle != "" && this.state.dishDesc != "" && this.state.dishImage != ""){
+      if(this.state.dishTitle != "" && this.state.dishDesc != "" && this.state.dishImage != "" && this.state.typeChosen.a_type_id){
       
           let dish = {
             a_title: this.state.dishTitle,
             a_description: this.state.dishDesc,
-            a_type_id: 1,
+            a_type_id: this.state.typeChosen.a_type_id,
             a_rest_id: this.state.rest.a_rest_id,
             a_image_url: undefined
           }
@@ -211,6 +210,12 @@ class AddDishComponent extends Component {
 
   //------------------------------FETCHS------------------------------------------------
 
+  async fetchTypes(){
+    const resp = await TypeApi.getAll();
+    this.setState({ allTypes: resp.response.result });
+    console.log(resp);
+  }
+
   async fetchIngredients(){
     const resp = await IngredientApi.getAll();
     this.setState({ allIngredients: resp.response.result });
@@ -235,6 +240,7 @@ class AddDishComponent extends Component {
   async componentDidMount() {
     console.log('mounting');
     await this.fetchRest();
+    await this.fetchTypes();
     await this.fetchIngredients();
     await this.fetchCharacteristics();
   }
@@ -282,10 +288,10 @@ class AddDishComponent extends Component {
                     <View style={styles.tagsList}>
                           { this.state.typeChosen.a_type_id ? 
                           (
-                              <View key={idx}>
+                              <View>
                                     <TouchableOpacity style={styles.buttonTag}>
                                           <View style={styles.rowItemsContainer}>
-                                              <Text style={styles.tagText}>{type.a_type_name}</Text>
+                                              <Text style={styles.tagText}>{ this.state.typeChosen.a_type_name}</Text>
                                               <TouchableOpacity
                                                   onPress={() => this.deleteType()}
                                               >
