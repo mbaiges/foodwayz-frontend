@@ -412,6 +412,7 @@ class OwnerRestaurantProfileComponent extends Component {
                                   style={styles.button}
                                   onPress={() => { 
                                     this.setState({modalInviteToBeOwner: false});
+
                                     //HACER OWNER AL WACHIN.______________________________________________________________________________________
                                     modalInput = "";
                                   }}
