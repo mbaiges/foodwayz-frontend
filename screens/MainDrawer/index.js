@@ -17,7 +17,7 @@ import {
 import Filter from './FilterScreen';
 import Food from './FoodScreen';
 import RateFood from './RateFoodScreen';
-//import RestaurantProfile from './RestaurantProfileScreen';
+import RestaurantProfile from './RestaurantProfileScreen';
 import Reviews from './ReviewsScreen';
 import AddDish from './AddDishScreen';
 import ReviewInfo from './ReviewInfoScreen';
@@ -31,6 +31,7 @@ export {
 
     // Home Stack
     Home,
+    RestaurantProfile,
 
     // User Profile Stack
     CreateRestaurant,
