@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import { Card, ListItem, Button, Icon, Input, Rating} from "react-native-elements";
+
+import { Ionicons } from "@expo/vector-icons";
+import Colors from "../../../constants/Colors";
+
 import {
   StyleSheet,
   View,
@@ -177,6 +181,18 @@ class OwnerRestaurantProfileComponent extends Component {
 
     var modalInput = "";
 
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={styles.navbar_r_icons}>
+          <Ionicons
+            name="md-create"
+            size={38}
+            style={styles.navbar_r_icon}
+            onPress={() => navigation.navigate("EditRestaurant", {restaurant: this.state.restaurant})}
+          />
+        </View>
+      ),
+    });
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
@@ -238,15 +254,6 @@ class OwnerRestaurantProfileComponent extends Component {
               onPress={async () => {navigation.navigate("AddDish", {restaurant: this.state.restaurant})}}
           >
               <Text style={styles.buttonText}>Add New Dish!</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-              style={styles.button}
-              onPress={async () => {navigation.navigate("EditRestaurant", {restaurant: this.state.restaurant})}}
-          >
-              <Text style={styles.buttonText}>Edit Restaurant</Text>
           </TouchableOpacity>
         </View>
 
@@ -440,9 +447,9 @@ class OwnerRestaurantProfileComponent extends Component {
 
 
         <View style={styles.popularContainer} >
-          <Text style={styles.subtitleText}>Our most popular dishes</Text>
+          <Text style={styles.subtitleText}>Our Dishes</Text>
           <View style={styles.popular}>
-            <ScrollView horizontal={true}>
+            <ScrollView>
               {this.state.dishes.map(dish =>{
                 return(
                   <TouchableOpacity onPress={async () => {navigation.navigate("Food", { food: dish }); 
@@ -455,7 +462,7 @@ class OwnerRestaurantProfileComponent extends Component {
                     <Card
                       image={{ uri: dish.a_image_url }}
                       imageStyle={{
-                        height: 100,
+                        height: 300,
                       }}
                     >
                       
@@ -471,18 +478,7 @@ class OwnerRestaurantProfileComponent extends Component {
             </ScrollView>
           </View>
         </View>    
-  
-  
-        <View style={styles.popularContainer}>
-          <Text style={styles.subtitleText}>All of our dishes</Text>
-  
-          <Text style={styles.subsubtitleText}>Go vegan!</Text>
-          
-          
-          <Text style={styles.subsubtitleText}>Meat yourself</Text>
-  
-        </View>
-    
+
         </ScrollView>
       </SafeAreaView>
     );
@@ -514,6 +510,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
+  navbar_r_icons: {
+    flexDirection: "row",
+    right: 16,
+  },
+
+  navbar_r_icon: {
+    color: Colors.noticeText,
+    marginLeft: 16,
+  },
   logoImage: {
     position: "relative",
     width: 240,
