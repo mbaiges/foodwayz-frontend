@@ -127,6 +127,15 @@ class FoodScreenComponent extends Component {
           </TouchableOpacity>
         </View>
 
+        <View alignItems="center">
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {navigation.navigate("RestaurantProfile", {restaurant: this.state.rest});}}
+          >
+            <Text style={styles.buttonItemsContainer}>GO TO RESTAURANT</Text>
+          </TouchableOpacity>
+        </View>
+
         </ScrollView>
 
       </SafeAreaView>
