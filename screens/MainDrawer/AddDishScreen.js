@@ -11,8 +11,11 @@ import {
   Keyboard,
   Modal,
 } from "react-native";
+
+import { Snackbar } from 'react-native-paper';
+
 import { ScrollView } from "react-native-gesture-handler";
-import { CheckBox,Input, Icon} from "react-native-elements";
+import { CheckBox, Input, Icon} from "react-native-elements";
 import * as ImagePicker from 'expo-image-picker';
 import {IngredientApi, CharacteristicApi, FoodApi, FoodHasCharacteristicApi, FoodHasIngredientApi, TypeApi } from '../../api';
 import { makeUrl } from "expo-linking";
@@ -59,6 +62,12 @@ class AddDishComponent extends Component {
           rest: {},
         }
 
+  }
+
+  dismissSnackBar = () => {
+    this.setState({
+      snackbarVisible: false
+    });
   }
 
   //---------------------------OPEN ADD MODALS-----------------------------------
@@ -173,6 +182,9 @@ class AddDishComponent extends Component {
           navigation.goBack();
 
       }else{
+          this.setState({
+            snackbarVisible: true
+          });
           console.log("fill fields")
       }
   }
@@ -718,6 +730,21 @@ class AddDishComponent extends Component {
                 </View>
             </Modal>
             {/* -------------------------------------------------------------------------------------------------------------------------------------------------------- */}
+
+            {/* -------------------------------------------------------------- CHOOSE IMAGE MODAL----------------------------------------------------------------------- */}
+            <Snackbar
+              visible={this.state.snackbarVisible}
+              onDismiss={this.dismissSnackBar}
+              action={{
+                label: 'Undo',
+                onPress: () => {
+                  // Do something
+                },
+              }}>
+              Hey there! I'm a Snackbar.
+            </Snackbar>
+            {/* -------------------------------------------------------------------------------------------------------------------------------------------------------- */}
+    
 
         </SafeAreaView>
     );
