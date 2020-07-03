@@ -21,7 +21,8 @@ class FoodScreenComponent extends Component {
       food: {},
       ingrs: [],
       chars: [],
-      rest: {}
+      rest: {},
+      type: {}
     }
   }
 
@@ -31,6 +32,7 @@ class FoodScreenComponent extends Component {
     console.log(food);
     this.setState({
       food: food,
+      type: food.a_type
     })
     this.setState({
       ingrs: food.a_ingredients ? food.a_ingredients : [] ,
@@ -55,10 +57,32 @@ class FoodScreenComponent extends Component {
               style={styles.imageStyle} />
           </View>
           <Text style={styles.primaryText}>{this.state.food.a_title}</Text>
-          <Text style={styles.secondaryText}>{this.state.rest.a_name}</Text>
+
+          <View style={styles.showAll} flexDirection='row' justifyContent='space-between'  >
+            <Text style={styles.secondaryText}>{this.state.rest.a_name}</Text>
+            <View>
+              <TouchableOpacity onPress={() => {navigation.navigate("RestaurantProfile", {restaurant: this.state.rest});}}>
+                <Text style={styles.secondaryText}>VISIT</Text>
+                <Icon name='arrow-right' type='material-community' />
+              </TouchableOpacity>
+            </View>
+          </View>
 
           <Text style={styles.primaryText}>Description</Text>
           <Text style={styles.secondaryText}>{this.state.food.a_description}</Text>
+
+
+          <View>
+            <Text style={styles.primaryText}>Type</Text>
+            <View style={styles.tagsList}>
+              <TouchableOpacity
+                style={styles.buttonTag}
+                onPress={() => Alert.alert('Simple Button pressed')}
+              >
+                <Text>{this.state.type.a_type_name}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
 
           <View>
             <Text style={styles.primaryText}>Ingredients</Text>
@@ -126,16 +150,7 @@ class FoodScreenComponent extends Component {
             <Text style={styles.buttonItemsContainer}>RATE DISH</Text>
           </TouchableOpacity>
         </View>
-
-        <View alignItems="center">
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {navigation.navigate("RestaurantProfile", {restaurant: this.state.rest});}}
-          >
-            <Text style={styles.buttonItemsContainer}>GO TO RESTAURANT</Text>
-          </TouchableOpacity>
-        </View>
-
+        
         </ScrollView>
 
       </SafeAreaView>
