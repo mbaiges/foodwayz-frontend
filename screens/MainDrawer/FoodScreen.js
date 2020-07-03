@@ -33,8 +33,8 @@ class FoodScreenComponent extends Component {
       food: food,
     })
     this.setState({
-      ingrs: food.a_ingredients,
-      chars: food.a_characteristics,
+      ingrs: food.a_ingredients ? food.a_ingredients : [] ,
+      chars: food.a_characteristics ? food.a_characteristics : [],
       rest: food.a_rest
     })
   }

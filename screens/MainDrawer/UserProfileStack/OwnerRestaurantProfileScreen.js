@@ -383,7 +383,7 @@ class OwnerRestaurantProfileComponent extends Component {
             <ScrollView horizontal={true}>
               {this.state.dishes.map(dish =>{
                 return(
-                  <TouchableOpacity onPress={async () => {navigation.navigate("Food"); //falta pasar los params para que pase a la pag correcta
+                  <TouchableOpacity onPress={async () => {navigation.navigate("Food", { food: dish }); 
                   }}>
                     <View style={styles.iconContainer}>
                       <Icon
