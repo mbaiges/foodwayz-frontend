@@ -18,6 +18,56 @@ class FoodHasIngredientApi{
 
   /*
   BODY:
+    {
+      "a_ingrs": [
+        {
+          "a_ingr_id": 1
+        },
+        {
+          "a_ingr_id": 2
+        }
+      ]
+    }
+  RESULTADOS:
+    200 - Se vinculó el ingr. con la comida especificada
+      EJEMPLO:
+      {
+        "message": "Successfully added food has ingredient",
+        "result": [
+          {
+            "a_food_id": 2,
+            "a_ingr_id": 1
+          },
+          {
+            "a_food_id": 2,
+            "a_ingr_id": 2
+          }
+        ]
+      }
+    
+    409 - El vinculo especificado ya existe
+      EJEMPLO:
+      {
+        "message": "Conflict with foodHasIngredient",
+        "description": [
+          {
+            "reason": "already exists",
+            "conflicting_obj": [
+              {
+                "a_food_id": 2,
+                "a_ingr_id": 1
+              }
+            ]
+          }
+        ]
+      }
+  */
+ static addIngredientsToFood(foodId, a_ingrs) {
+  return Api.post(`${FoodHasIngredientApi.url}/food/${foodId}/ingredient`, {a_ingrs});
+}
+
+  /*
+  BODY:
     --
   RESULTADOS:
     200 - Se vinculó el ingr. con la comida especificada

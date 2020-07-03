@@ -30,10 +30,11 @@ class HomeScreenComponent extends Component {
     this.setState({
       foods: resp.response.result
     })
+    console.log(resp);
   }
 
-  componentDidMount() {
-    this.fetchFoods();
+  async componentDidMount() {
+    await this.fetchFoods();
   }
 
   render() {

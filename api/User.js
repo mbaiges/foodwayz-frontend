@@ -119,6 +119,38 @@ class UserApi {
   static getAll() {
     return Api.get(`${UserApi.url}/all`);
   }
+
+  /*
+  BODY:
+    {
+      "a_name": (string Opcional),
+      "a_gender": (string Opcional),
+      "a_birthdate": (string Opcional),
+      "a_email": (string Opcional),
+      "a_is_verified": (boolean Opcional)
+    }
+  RESULTADOS:
+    200 - datos de los usuarios encontrados
+      EJEMPLO:
+      {
+        "message": "Successfully fetched users",
+        "result": [
+          {
+            "a_user_id": 1,
+            "a_name": "user1",
+            "a_gender": null,
+            "a_birthdate": null,
+            "a_email": "user1@email.com",
+            "a_created_at": "2020-07-03T13:54:40.982Z",
+            "a_image_url": (url),
+            "a_is_verified": true
+          }
+        ]
+      }
+  */
+  static findUsers(properties) {
+    return Api.get(`${UserApi.url}/find`, properties);
+  }
 }
 
 export { User, UserApi };

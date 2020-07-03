@@ -4,7 +4,9 @@ import * as React from "react";
 import {
   LoginScreen,
   ForgotPassScreen,
-  RegisterScreen
+  RegisterScreen,
+  ResetPassEmail,
+  EmailVerifiedScreen
 } from '../screens/AuthStack';
 import MainDrawer from "./MainDrawerNavigator";
 
@@ -21,6 +23,8 @@ export default function AuthStackNavigator({ navigation, route }) {
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="ForgotPass" component={ForgotPassScreen} />
       <Stack.Screen name="Register" component={RegisterScreen} />
+      <Stack.Screen name="EmailVerified" component={EmailVerifiedScreen} />
+      <Stack.Screen name="ResetPassEmail" component={ResetPassEmail} />
       <Stack.Screen name="Main" component={MainDrawer} />
     </Stack.Navigator>
   );

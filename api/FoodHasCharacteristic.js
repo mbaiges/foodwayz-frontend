@@ -18,6 +18,57 @@ class FoodHasCharacteristicApi{
 
   /*
   BODY:
+    {
+      "a_chars": [
+        {
+          "a_char_id": 1
+        },
+        {
+          "a_char_id": 2
+        }
+      ]
+    }
+  RESULTADOS:
+    200 - Se vinculó el char. con la comida especificada
+      EJEMPLO:
+      {
+        "message": "Successfully added food has characteristic",
+        "result": [
+          {
+            "a_food_id": 2,
+            "a_char_id": 1
+          },
+          {
+            "a_food_id": 2,
+            "a_char_id": 2
+          }
+        ]
+      }
+    
+    409 - El vinculo especificado ya existe
+      EJEMPLO:
+      {
+        "message": "Conflict with foodHasCharacteristic",
+        "description": [
+          {
+            "reason": "already exists",
+            "conflicting_obj": [
+              {
+                "a_food_id": 2,
+                "a_char_id": 1
+              }
+            ]
+          }
+        ]
+      }
+  */
+
+ static addCharacteristicsToFood(foodId, a_chars) {
+  return Api.post(`${FoodHasCharacteristicApi.url}/food/${foodId}/characteristic`, {a_chars});
+}
+
+  /*
+  BODY:
     --
   RESULTADOS:
     200 - se vinculó la comida con la carac. de IDs especificados

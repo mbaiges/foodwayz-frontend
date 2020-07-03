@@ -23,43 +23,55 @@ class PremiumComponent extends Component {
         super();
      }
     
-    
-      render() {
-        const { navigation, signIn } = this.props;
+    async uploadPrimium(){
+      
+    }
 
-    return (
+    async fetchUser(){
+      
+    }
+
+    async componentDidMount() {
+      console.log('mounting');
+      await this.fetchUser();
+    }
+
+    render() {
+      const { navigation, signIn } = this.props;
+
+      return (
         <SafeAreaView style={styles.backgroundContainer}>
           <ScrollView>
             <Text style={styles.logoText}>Sign up for premium</Text>
             
-            <TouchableOpacity >
+            <TouchableOpacity>
               <Card style={styles.card}>
                 <Text style={styles.subtitle}>Basic - $100 a month!</Text>
-                <Text style={styles.text}>- Statistics on the average age of users</Text>
+                <Text style={styles.text}>- Feature 1</Text>
               </Card>
-              
             </TouchableOpacity>
 
             <TouchableOpacity>
             <Card style={styles.card}>
                 <Text style={styles.subtitle}>Standard - $300 a month!</Text>
-                <Text style={styles.text}>- Statistics on the average age of users</Text>
-                <Text style={styles.text}>- Statistics on the best-selling dishes</Text>
+                <Text style={styles.text}>- Feature 1</Text>
+                <Text style={styles.text}>- Feature 2</Text>
               </Card>
             </TouchableOpacity>
 
             <TouchableOpacity>
             <Card style={styles.card}>
                 <Text style={styles.subtitle}>Premium - $500 a month!</Text>
-                <Text style={styles.text}>- Statistics on the average age of users</Text>
-                <Text style={styles.text}>- Statistics on the best-selling dishes</Text>
-                <Text style={styles.text}>- Statistics on popular days and times</Text>
+                <Text style={styles.text}>- Feature 1</Text>
+                <Text style={styles.text}>- Feature 2</Text>
+                <Text style={styles.text}>- Feature 3</Text>
               </Card>
             </TouchableOpacity>
 
             <View style={styles.buttons}>
                 <TouchableOpacity
                     style={styles.saveButton}
+                    onPress={() => { this.uploadPrimium() }}
                 >
                     <Text style={styles.save}>Send</Text>
                 </TouchableOpacity>
@@ -73,7 +85,7 @@ class PremiumComponent extends Component {
             </View>
             </ScrollView>
         </SafeAreaView>
-    );
+      );
     };
 }
 

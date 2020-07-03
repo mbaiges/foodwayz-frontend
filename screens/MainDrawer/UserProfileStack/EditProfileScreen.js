@@ -26,7 +26,7 @@ class EditProfileComponent extends Component {
       user: resp.response.result
     })
     this.setState({
-      date: this.state.user.a_birthdate != "null" ? new Date(this.state.user.a_birthdate) : new Date()
+      date: this.state.user.a_birthdate ? new Date(this.state.user.a_birthdate) : new Date()
     })
     console.log('done fetching user');
     console.log(this.state.user);
@@ -105,7 +105,7 @@ class EditProfileComponent extends Component {
   }
 
   handleDateChanged(timeStamp){
-    var newDate = new Date(timeStamp)
+    var newDate = timeStamp ? new Date(timeStamp) : new Date();
     this.setState({
       date: newDate,
       showDatePicker: false}
@@ -148,7 +148,7 @@ class EditProfileComponent extends Component {
       <ScrollView>
       <View style={styles.backgroundContainer}>
         <View style={styles.mainPage}>
-            <Image style={styles.logoImage} source={{ uri: this.state.user.a_image_url }}/>
+            <Image style={styles.logoImage} source={{ uri: this.state.user.a_image_url ? this.state.user.a_image_url : "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Funknown.png?alt=media&token=7bec299d-aefa-486e-8aa1-6f11c874ee2f" }}/>
             <TouchableOpacity style={styles.button} onPress={() => { this.onChooseImagePress() }} >
               <Text>Edit Image</Text>
           </TouchableOpacity>
@@ -175,7 +175,7 @@ class EditProfileComponent extends Component {
         <View style={styles.inputView}>
           <Text style={styles.inputTitle}>Birth Date</Text>
           <View>
-              <Text style={styles.dateStyle}>{this.state.date.getDate()} / {this.state.date.getMonth()} / {this.state.date.getFullYear()}</Text>
+              <Text style={styles.dateStyle}>{this.state.date.getDate()} / {this.state.date.getMonth() + 1} / {this.state.date.getFullYear()}</Text>
           </View>
         </View>
 

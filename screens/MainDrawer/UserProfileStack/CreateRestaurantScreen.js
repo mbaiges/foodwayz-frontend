@@ -56,7 +56,7 @@ class CreateRestaurantComponent extends Component {
         }
 
 
-        onChooseImagePress = async () => {
+        async onChooseImagePress(){
             let result = await ImagePicker.launchCameraAsync();
         
             if (!result.cancelled) {
@@ -101,33 +101,6 @@ class CreateRestaurantComponent extends Component {
             console.log(a_images);
             await RestaurantApi.addImages(rest.a_rest_id, a_images);
 
-        }
-
-        async uploadImagesToDB(rest){
-
-            /*
-            let urls = []
-
-            for(let i = 0 ; i < this.state.imagesUrl.length ; i++){
-
-                let myStr = rest.a_rest_id + "_" + i;
-                console.log("imageName: " + myStr);
-
-                const url = await firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`).getDownloadURL()
-
-                console.log("-------------------------url: ");
-                console.log(url);
-
-                urls.push({ a_image_url: url, a_image_extra: i.toString() });
-            }
-
-            console.log("-------------------------urls: ");
-            console.log(urls);
-
-            await RestaurantApi.addImages(rest.a_rest_id, urls);
-            */
-
-            console.log("done")
         }
 
         async uploadRestaurant(){
@@ -234,9 +207,7 @@ class CreateRestaurantComponent extends Component {
                 
                 
                 <View>
-                    <TouchableOpacity style={styles.button} onPress={() => { 
-                        this.setState({modalImageVisible: true});
-                    }}>
+                    <TouchableOpacity style={styles.button} onPress={() => { this.setState({modalImageVisible: true});  }}>
                         <Text>Add Photo</Text>
                     </TouchableOpacity>
                 </View>
