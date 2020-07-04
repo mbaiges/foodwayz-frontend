@@ -215,11 +215,15 @@ class CreateRestaurantComponent extends Component {
 
                 
                 
-                <View>
-                    <TouchableOpacity style={styles.button} onPress={() => { this.setState({modalImageVisible: true});  }}>
-                        <Text>Add Photo</Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={() => { this.setState({modalImageVisible: true});  }}> 
+                    <View style={styles.mainImage}>
+                        <Image
+                            style={styles.logoImage}
+                            source={ this.state.dishImage ? { uri: this.state.dishImage } : require("../../../assets/images/dishPlaceholder.png")}
+                        />
+                        <Text style={styles.titleText}>Add Image</Text>
+                    </View>
+                </TouchableOpacity>
                 
 
 
@@ -236,6 +240,8 @@ class CreateRestaurantComponent extends Component {
                     >
                         <View style = {styles.centeredView}>
                             <View style = {styles.modalImageView}>
+                                <View style={styles.close}>
+                                
                                 <TouchableOpacity
                                     style={styles.chainButton}
                                     onPress={() => { 
@@ -247,6 +253,22 @@ class CreateRestaurantComponent extends Component {
                                     <Text style={styles.buttonText}>Camera</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
+
+                                    style={styles.closeButton}
+                                    onPress={() => { 
+                                        this.setState({modalImageVisible: false});
+                                        //cerrar
+                                    }}
+                                >
+                                    <Icon
+                                        name='close'
+                                        type='material-community'  
+                                        
+                                    />
+                                </TouchableOpacity>
+                                </View>
+                                <TouchableOpacity
+                                   
                                     style={styles.chainButton}
                                     onPress={() => { 
 
@@ -257,6 +279,7 @@ class CreateRestaurantComponent extends Component {
                                 >
                                     <Text style={styles.buttonText}>Gallery</Text>
                                 </TouchableOpacity>
+
                             </View>             
                             
                         </View>
@@ -359,7 +382,7 @@ class CreateRestaurantComponent extends Component {
 
                 <View>
                     <TouchableOpacity style={styles.button} onPress={async() => { await this.uploadRestaurant() }} >
-                        <Text>Register</Text>
+                        <Text style={styles.buttonText}>REGISTER</Text>
                     </TouchableOpacity>
                 </View>
             </View>  
@@ -373,6 +396,8 @@ class CreateRestaurantComponent extends Component {
         >
              <Text style={styles.textSnack}> Please fill all the fields.</Text>
         </Snackbar>
+
+        
           </ScrollView>
         );
       }
@@ -408,7 +433,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto', 
         fontWeight: 'bold',
         paddingLeft: 0,
-        paddingBottom: 100,
+        paddingBottom: 15,
       },
     
     inputView: {
@@ -561,8 +586,29 @@ const styles = StyleSheet.create({
       snackBar:{
         backgroundColor: "#787777",
         height:70,
-      }  
+      },
+
+      mainImage: {
+        //flex: 1,
+        position: "relative",
+        paddingTop: 20,
+        //paddingBottom: 40,
+        alignItems: "center",
+      },  
   
+    close:{
+        flexDirection:"row",
+        marginLeft:74,
+    },
+
+    closeButton:{
+        marginLeft:50,
+    },
+
+    buttonText: {
+        color:"white",
+        textAlign:"center"
+      },
   });
 
 

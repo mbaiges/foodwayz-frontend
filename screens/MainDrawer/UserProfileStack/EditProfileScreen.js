@@ -150,7 +150,8 @@ class EditProfileComponent extends Component {
     navigation.setOptions({
       headerRight: () => (
         <View style={styles.navbar_r_icons}>
-          <Ionicons
+          <Icon
+            color="white"
             name='check'
             type='material-community'
             size={38}
@@ -166,8 +167,12 @@ class EditProfileComponent extends Component {
       <View style={styles.backgroundContainer}>
         <View style={styles.mainPage}>
             <Image style={styles.logoImage} source={{ uri: this.state.user.a_image_url ? this.state.user.a_image_url : "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Funknown.png?alt=media&token=7bec299d-aefa-486e-8aa1-6f11c874ee2f" }}/>
-            <TouchableOpacity style={styles.button} onPress={() => { this.onChooseImagePress() }} >
-              <Text>Edit Image</Text>
+            <TouchableOpacity style={styles.imageButton} onPress={() => { this.onChooseImagePress() }} >
+            <Icon
+                name='pencil'
+                type='material-community'  
+                color="white" 
+            />
           </TouchableOpacity>
         </View>
         <Text style={styles.subtitle}> Personal Information</Text>
@@ -189,6 +194,8 @@ class EditProfileComponent extends Component {
             <Picker.Item label="Other" value="Other" />
           </Picker>
         </View>
+
+        <View style={styles.showAll} flexDirection='row' justifyContent='space-between'  >
         <View style={styles.inputView}>
           <Text style={styles.inputTitle}>Birth Date</Text>
           <View>
@@ -196,9 +203,18 @@ class EditProfileComponent extends Component {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={() => this.setState({showDatePicker: true})} title="Show date picker!">
-          <Text>CHANGE DATE</Text>
-        </TouchableOpacity>
+        <View paddingTop={10}>
+              <TouchableOpacity onPress={() => this.setState({showDatePicker: true})}>
+                <Text style={styles.secondaryText}>CHANGE DATE</Text>
+                <Icon
+                      name='calendar-check-outline'
+                      type='material-community'
+                      
+                    />
+              </TouchableOpacity>
+            </View>
+        </View>
+
           {this.state.showDatePicker && (
             <DateTimePicker
               value={ this.state.date }
@@ -208,12 +224,12 @@ class EditProfileComponent extends Component {
           )}
         <View>
           <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("EditProfilePassword") }} >
-              <Text>CHANGE PASSWORD</Text>
+              <Text style={styles.buttonText}>CHANGE PASSWORD</Text>
           </TouchableOpacity>
         </View>
         <View>
           <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("EditProfileAllergies", { user: this.state.user })} >
-              <Text>SET ALLERGIES</Text>
+              <Text style={styles.buttonText}>SET ALLERGIES / FOOD PREFERENCES</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -232,9 +248,8 @@ export default function EditProfile(props) {
 const styles = StyleSheet.create({
     backgroundContainer: {
       flex: 1,
-      width: null,
-      height: null,
-      backgroundColor: 'white',
+
+      color: 'white',
     },
 
     navbar_r_icons: {
@@ -248,7 +263,7 @@ const styles = StyleSheet.create({
     },
 
     mainPage: {
-      //flex: 1,
+      flex: 3,
       position: 'relative',
       paddingTop: 20,
       //paddingBottom: 40,
@@ -350,6 +365,7 @@ const styles = StyleSheet.create({
       padding: 13,
       height: 48,
       alignSelf: "center",
+
       marginBottom: 20
       },
 
@@ -369,6 +385,30 @@ const styles = StyleSheet.create({
       paddingLeft:20,
       fontFamily: 'Roboto',
       fontWeight: 'bold'
-    }
+    },
 
+
+    showAll: {
+
+      marginRight:30,
+      marginTop: 20,
+      marginBottom:20
+
+    },
+
+    buttonText: {
+      color:"white",
+      textAlign:"center"
+    },
+
+    imageButton:{
+      width: 40,  
+      height: 40,
+      paddingTop:5,
+      alignItems:"center",   
+      borderRadius: 30,            
+      backgroundColor: '#FC987E',                                                                             
+      bottom: 25,                                                    
+      left: 30, 
+    }
   });

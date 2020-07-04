@@ -155,7 +155,7 @@ class EditRestaurantComponent extends Component {
                             this.saveChanges();
                             navigation.goBack();
                         }} >
-                            <Text>Save Changes</Text>
+                            <Text style={styles.buttonText}>Save Changes</Text>
                         </TouchableOpacity>
                     </View>
                 </View>  
@@ -246,6 +246,11 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginBottom: 20
     },
+
+    buttonText: {
+        color:"white",
+        textAlign:"center"
+      },
 
   });
 
