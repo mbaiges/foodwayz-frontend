@@ -24,6 +24,7 @@ class SearchScreenComponent extends React.Component {
   state = {
     search: '',
     timer: undefined,
+    filterTimer: undefined,
     queryResult: [],
 
     typesVisible: false,
@@ -88,26 +89,86 @@ class SearchScreenComponent extends React.Component {
   // ------------------------------- SEARCH IN FILTERS ------------------------------
 
   async updateTypeSearch(){
+    if (this.state.filterTimer) {
+      console.log("clearing");
+      clearTimeout(this.state.filterTimer);
+    }
+    const timer = setTimeout(() => {
+      console.log("calling")
+      this.filterTypeQuery(this.state.typeModalInput);
+    }, 500);
+
+    this.setState({
+      filterTimer: timer,
+    });
+  }
+
+  async updateIngrSearch(){
+    if (this.state.filterTimer) {
+      console.log("clearing");
+      clearTimeout(this.state.filterTimer);
+    }
+    const timer = setTimeout(() => {
+      console.log("calling")
+      this.filterIngrQuery(this.state.ingrModalInput);
+    }, 500);
+
+    this.setState({
+      filterTimer: timer,
+    });
+  }
+
+  async updateCharSearch(){
+    if (this.state.filterTimer) {
+      console.log("clearing");
+      clearTimeout(this.state.filterTimer);
+    }
+    const timer = setTimeout(() => {
+      console.log("calling")
+      this.filterCharQuery(this.state.charModalInput);
+    }, 500);
+
+    this.setState({
+      filterTimer: timer,
+    });
+  }
+
+  async filterTypeQuery(input){
     let auxFilterQueryBody = {
-      raw_input: this.state.typeModalInput
+      raw_input: input
     }
     const resp = await SearchApi.searchTypes(auxFilterQueryBody)
-    
     if(resp.status == 200){
       this.setState({ allTypes: resp.response.result });
     }else{
       console.log("error");
     }
-    
   }
 
-  async updateIngrSearch(){
-
+  async filterIngrQuery(input){
+    let auxFilterQueryBody = {
+      raw_input: input
+    }
+    const resp = await SearchApi.searchIngredients(auxFilterQueryBody)
+    if(resp.status == 200){
+      this.setState({ allIngredients: resp.response.result });
+    }else{
+      console.log("error");
+    }
   }
 
-  async updateCharSearch(){
-
+  async filterCharQuery(input){
+    let auxFilterQueryBody = {
+      raw_input: input
+    }
+    const resp = await SearchApi.searchCharacteristics(auxFilterQueryBody)
+    if(resp.status == 200){
+      this.setState({ allCharacteristics: resp.response.result });
+    }else{
+      console.log("error");
+    }
   }
+
 
   //--------------------------------- APPLY FILTERS ----------------------------------
 
