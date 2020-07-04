@@ -18,6 +18,8 @@ import { Api } from "./api/api"
 
 import Colors from "./constants/Colors";
 
+import * as Linking from 'expo-linking';
+
 const Stack = createStackNavigator();
 
 const INITIAL_ROUTE_NAME = "Home";
@@ -60,6 +62,8 @@ export default function App(props) {
   const [authState, setPersistedAuthState] = usePersistedAuthState(StorageKey, { state: 'SIGNED_OUT', token: '' });
   const providerAuthState = useMemo(() => ({ authState, setAuthState: setPersistedAuthState }), [authState, setPersistedAuthState]);
 
+  const [links, setLinks] = useState(null);
+
   //initialize firebase
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
@@ -87,6 +91,8 @@ export default function App(props) {
     })();
   }, [authState]);
 
+  printLink(links, setLinks);
+
   if (!isLoadingComplete) {
     return null;
   } else {
@@ -111,9 +117,20 @@ export default function App(props) {
             {/* <Text>{authState}</Text> */}
           </UserContext.Provider>
         </NavigationContainer>
+        <Text>{links}</Text>
       </View>
     );
   }
+}
+
+export async function printLink(links, setLinks) {
+  const link1 = await Linking.getInitialURL();
+  console.log("Initial URL ");
+  console.log(link1);
+  const link2 = Linking.makeUrl();
+  console.log("Make URL returned ");
+  console.log(link2);
+  setLinks("" + link1 + " / " + link2);
 }
 
 export async function signUpAsync(data) {

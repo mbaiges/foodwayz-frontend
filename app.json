@@ -23,13 +23,15 @@
       "**/*"
     ],
     "android": {
+      "package": "ar.edu.itba.dychromatic.foodwayz",
+      "versionCode": 1,
       "intentFilters": [
         {
           "action": "VIEW",
           "data": [
             {
               "scheme": "http",
-              "host": "*.foodwayz.io",
+              "host": "www.foodwayz.dychromatic.itba.edu.ar",
               "pathPrefix": "/verify_email"
             }
           ],
