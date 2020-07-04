@@ -86,6 +86,22 @@ class SearchScreenComponent extends React.Component {
     this.setState({ queryResult: resp.response.result });
   }
 
+  // ------------------------------- SEARCH IN FILTERS ------------------------------
+
+  async updateTypeSearch(){
+
+  }
+
+  async updateIngrSearch(){
+
+  }
+
+  async updateCharSearch(){
+
+  }
+
+  //--------------------------------- APPLY FILTERS ----------------------------------
+
   async applyTypeFiltersAndSearch(){
     let queryBody = this.state.queryBody;
     let aux = [];
@@ -254,8 +270,11 @@ class SearchScreenComponent extends React.Component {
                     <Text style={styles.modalTitle}>Choose Types</Text>
                     <Input
                         placeholder={"Search"}
-                        rightIcon={ <Icon name='search' /> }
-                        onChangeText={ (value) => ( this.setState({typeModalInput:value}) )} 
+                        rightIcon={ <Icon name='search' /> }                        
+                        onChangeText={ async(value) => {
+                          this.setState({typeModalInput:value})
+                          await this.updateTypeSearch();
+                        }} 
                     />
                     {(this.state.chosenTypes.length > 0) ? (<Text style={styles.text}>Chosen Types</Text>) : (<View/>)}
                     <View style={styles.tagScrollView}>
@@ -331,7 +350,10 @@ class SearchScreenComponent extends React.Component {
                     <Input
                         placeholder={"Search"}
                         rightIcon={ <Icon name='search' /> }
-                        onChangeText={ (value) => ( this.setState({ingrModalInput:value}) )} 
+                        onChangeText={ async(value) => {
+                          this.setState({ingrModalInput:value})
+                          await this.updateIngrSearch();
+                        }} 
                     />
                     {(this.state.chosenIngredients.length > 0) ? (<Text style={styles.text}>Chosen Ingredients</Text>) : (<View/>)}
                     <View style={styles.tagScrollView}>
@@ -408,7 +430,10 @@ class SearchScreenComponent extends React.Component {
                     <Input
                         placeholder={"Search"}
                         rightIcon={ <Icon name='search' /> }
-                        onChangeText={ (value) => ( this.setState({charModalInput:value}) )} 
+                        onChangeText={ async(value) => {
+                          this.setState({charModalInput:value})
+                          await this.updateCharSearch();
+                        }} 
                     />
                     {(this.state.chosenCharacteristics.length > 0) ? (<Text style={styles.text}>Chosen Characteristics</Text>) : (<View/>)}
                     <View style={styles.tagScrollView}>
@@ -480,7 +505,7 @@ class SearchScreenComponent extends React.Component {
         >
             <View style = {styles.centeredView}>
                 <View style = {styles.modalImageView}>
-
+                    <Text style={styles.modalTitle}>Filter By:</Text>
                     <TouchableOpacity
                         style={styles.chainButton}
                         onPress={() => { 
@@ -616,6 +641,16 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     fontWeight: "bold",
     opacity: 1,
+  },
+
+  modalTitle: {
+    position: "relative",
+    fontSize: 20,
+    paddingLeft: 15,
+    color: "black",
+    fontWeight: "500",
+    fontWeight: "bold",
+    paddingBottom: 10,
   },
 
   text: {
@@ -779,7 +814,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    height: 180,
+    height: 230,
   },
 
   chainButton: {
