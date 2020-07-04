@@ -19,7 +19,8 @@ import {
   Food, 
   RestaurantProfile,
   Reviews,
-  
+  RateFood,
+
 } from "../screens/MainDrawer";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -27,7 +28,6 @@ import { Ionicons } from "@expo/vector-icons";
 import DefaultNavBar from "./NavBars/DefaultNavBar";
 import BackButtonSearchProfileNavBar from "./NavBars/BackButtonSearchProfileNavBar";
 import BackButtonNavBar from "./NavBars/BackButtonNavBar";
-import SearchNavBar from "./SearchNavBar";
 
 const Stack = createStackNavigator();
 const INITIAL_ROUTE_NAME = "UserProfile";
@@ -60,6 +60,8 @@ export default function StackNavigator({ navigation, route }) {
       <Stack.Screen name="Food" component={Food}/>
       <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} />
       <Stack.Screen name="Reviews" component={Reviews}/>
+      <Stack.Screen name="RateFood" component={RateFood}/>
+
     </Stack.Navigator>
   );
 }
@@ -69,9 +71,38 @@ function getHeaderTitle(route) {
     route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 
   switch (routeName) {
-    case "Home":
-      return "Home";
-    case "Links":
-      return "Links to learn more";
+
+    case "UserProfile":
+      return "Profile";
+    case "EditProfile":
+      return "Edit Profile";
+    case "EditProfilePassword":
+      return "Change Password";
+    case "EditProfileAllergies":
+      return "Set Preferences";
+
+    case "CreateRestaurant":
+      return "Create Restaurant";
+    case "OwnerRestaurantProfile":
+      return "Restaurant";
+    case "RestaurantStatisticsProfile":
+      return "Statistics";
+    case "AddDish":
+      return "Add Dish";
+    case "EditRestaurant":
+      return "Edit Restaurant";
+    case "Premium":
+      return "Plans";
+
+    case "Food":
+      return "Dish";
+    case "RestaurantProfile":
+      return "Restaurant";
+    case "Reviews":
+      return "Reviews";
+    case "ReviewInfo":
+      return "Review";
+    case "RateFood":
+      return "Review";
   }
 }

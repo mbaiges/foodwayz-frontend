@@ -22,13 +22,13 @@ export default function BackButtonSearchProfileNavBar({ title, navigation }) {
           name="md-search"
           size={38}
           style={styles.r_icon}
-          onPress={navigation.openDrawer}
+          onPress={() => navigation.navigate("SearchStack")}
         />
         <Ionicons
           name="md-person"
           size={38}
           style={styles.r_icon}
-          onPress={() => navigation.navigate("Profile")}
+          onPress={() => navigation.navigate("ProfileStack")}
         />
       </View>
     ),

@@ -47,7 +47,7 @@ class FoodScreenComponent extends Component {
   }
 
   render() {
-    
+
     const { navigation } = this.props;
 
     return (
@@ -57,11 +57,12 @@ class FoodScreenComponent extends Component {
             <Image source={{ uri: this.state.food.a_image_url }}
               style={styles.imageStyle} />
           </View>
+
           <Text style={styles.primaryText}>{this.state.food.a_title}</Text>
 
-          <View style={styles.showAll} flexDirection='row' justifyContent='space-between'  >
-            <Text style={styles.secondaryText}>{this.state.rest.a_name}</Text>
-            <View>
+          <View style={styles.showAll} flexDirection='row' justifyContent='space-between' >
+            <Text style={styles.secondaryText}>from: {this.state.rest.a_name}</Text>
+            <View >
               <TouchableOpacity onPress={() => {navigation.navigate("RestaurantProfile", {restaurant: this.state.rest});}}>
                 <Text style={styles.secondaryText}>VISIT</Text>
                 <Icon name='arrow-right' type='material-community' />
@@ -78,7 +79,7 @@ class FoodScreenComponent extends Component {
             <View style={styles.tagsList}>
               <TouchableOpacity
                 style={styles.buttonTag}
-                onPress={() => Alert.alert('Simple Button pressed')}
+                onPress={() => {}}
               >
                 <Text>{this.state.type.a_type_name}</Text>
               </TouchableOpacity>
@@ -89,17 +90,21 @@ class FoodScreenComponent extends Component {
             <Text style={styles.primaryText}>Ingredients</Text>
             <View style={styles.tagsList}>
               {
-                this.state.ingrs.map((tag, idx) => {
+
+                (this.state.ingrs.length > 0) ?
+                (this.state.ingrs.map((tag, idx) => {
                   return (
                     <TouchableOpacity
                       key={idx}
                       style={styles.buttonTag}
-                      onPress={() => Alert.alert('Simple Button pressed')}
+                      onPress={() => {}}
                     >
                       <Text>{tag.a_ingr_name}</Text>
                     </TouchableOpacity>
                   )
-                })
+                }))
+                :
+                (<View/>)
               }
             </View>
           </View>
@@ -108,17 +113,20 @@ class FoodScreenComponent extends Component {
             <Text style={styles.primaryText}>Characteristics</Text>
             <View style={styles.tagsList}>
               {
-                this.state.chars.map((tag, idx) => {
+                (this.state.chars.length > 0) ?
+                (this.state.chars.map((tag, idx) => {
                   return (
                     <TouchableOpacity
                       key={idx}
                       style={styles.buttonTag}
-                      onPress={() => Alert.alert('Simple Button pressed')}
+                      onPress={() => {}}
                     >
                       <Text>{tag.a_char_name}</Text>
                     </TouchableOpacity>
                   )
-                })
+                }))
+                :
+                (<View/>)
               }
             </View>
           </View>
@@ -131,7 +139,7 @@ class FoodScreenComponent extends Component {
                 <Icon
                       name='arrow-right'
                       type='material-community'
-                      
+
                     />
               </TouchableOpacity>
             </View>
@@ -142,7 +150,7 @@ class FoodScreenComponent extends Component {
             <Rating imageSize={30} readonly startingValue={this.state.food.a_score} style={styles.rating} />
           </View>
 
-          
+
         <View alignItems="center">
           <TouchableOpacity
             style={styles.button}
@@ -151,7 +159,7 @@ class FoodScreenComponent extends Component {
             <Text style={styles.buttonItemsContainer}>RATE DISH</Text>
           </TouchableOpacity>
         </View>
-        
+
         </ScrollView>
 
       </SafeAreaView>
@@ -183,7 +191,7 @@ const styles = StyleSheet.create({
   },
 
   secondaryText: {
-    textAlign: "left",
+
     fontSize: 14,
     paddingLeft: 15,
   },
@@ -227,10 +235,12 @@ const styles = StyleSheet.create({
     padding: 13,
     height: 48,
     marginTop: 20,
+    marginBottom:20,
   },
 
   buttonItemsContainer: {
     marginLeft: "21%",
+    color:"white"
   },
 
   rating: {
@@ -239,6 +249,7 @@ const styles = StyleSheet.create({
 
   showAll: {
 
+    marginRight:30,
     marginTop: 22,
 
   },
@@ -254,5 +265,7 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
     paddingRight: 20,
 
-  }
+  },
+
+
 });

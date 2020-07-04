@@ -2,13 +2,13 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
-import DefaultNavBar from "./DefaultNavBar";
-// import { Search } from "../screens/MainDrawer";
+import { Search } from "../screens/MainDrawer";
 
 import { Ionicons } from "@expo/vector-icons";
+import BackButtonNavBar from "./NavBars/BackButtonNavBar";
 
 const Stack = createStackNavigator();
-const INITIAL_ROUTE_NAME = "Home";
+const INITIAL_ROUTE_NAME = "Search";
 
 export default function StackNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
@@ -19,10 +19,10 @@ export default function StackNavigator({ navigation, route }) {
     <Stack.Navigator
       initialRouteName={INITIAL_ROUTE_NAME}
       screenOptions={() =>
-        DefaultNavBar({ title: getHeaderTitle(route), navigation })
+        BackButtonNavBar({ title: getHeaderTitle(route), navigation })
       }
     >
-      {/* <Stack.Screen name="Search" component={Search} /> */}
+      <Stack.Screen name="Search" component={Search} />
     </Stack.Navigator>
   );
 }
@@ -32,9 +32,7 @@ function getHeaderTitle(route) {
     route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 
   switch (routeName) {
-    case "Home":
-      return "Home";
-    case "Links":
-      return "Links to learn more";
+    case "Search":
+      return "Search";
   }
 }

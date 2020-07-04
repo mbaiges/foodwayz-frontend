@@ -117,7 +117,7 @@ class EditProfileAllergiesComponent extends Component {
                   <TouchableOpacity style={styles.button} onPress={() => { 
                       navigation.goBack()
                   }} >
-                      <Text>BACK</Text>
+                      <Text style={styles.buttonText}>BACK</Text>
                   </TouchableOpacity>
                 </View>
 
@@ -190,6 +190,10 @@ const styles = StyleSheet.create({
 
   applyButtonContainer: {
     paddingTop: 20,
+  },
+
+  buttonText: {
+    color:"white"
   },
 
 });

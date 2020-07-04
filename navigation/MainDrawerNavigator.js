@@ -9,12 +9,13 @@ import DrawerContent from "./DrawerContent";
 import HomeStack from "./HomeStackNavigator";
 import DiscoverStack from "./DiscoverStackNavigator";
 import CategoriesStack from "./CategoriesStackNavigator";
+import SearchStack from "./SearchStackNavigator";
 import UserProfileStack from "./UserProfileStackNavigator";
 import ContactUsStack from "./ContactUsStackNavigator";
 import AboutUsStack from "./AboutUsStackNavigator";
 
 const Drawer = createDrawerNavigator();
-const INITIAL_ROUTE_NAME = "Home";
+const INITIAL_ROUTE_NAME = "HomeStack";
 
 export default function MainDrawerNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
@@ -30,20 +31,13 @@ export default function MainDrawerNavigator({ navigation, route }) {
         swipeEnabled: false,
       }}
     >
-      <Drawer.Screen name="Home" component={HomeStack} />
-      <Drawer.Screen
-        label="Discover"
-        name="Discover"
-        component={DiscoverStack}
-      />
-      <Drawer.Screen
-        label="Categories"
-        name="Categories"
-        component={CategoriesStack}
-      />
-      <Drawer.Screen name="Profile" component={UserProfileStack} />
-      <Drawer.Screen name="Contact Us" component={ContactUsStack} />
-      <Drawer.Screen name="About Us" component={AboutUsStack} />
+      <Drawer.Screen name="HomeStack" component={HomeStack} />
+      <Drawer.Screen label="Discover" name="DiscoverStack" component={DiscoverStack} />
+      <Drawer.Screen label="CategoriesStack" name="CategoriesStack" component={CategoriesStack} />
+      <Drawer.Screen name="SearchStack" component={SearchStack}/>
+      <Drawer.Screen name="ProfileStack" component={UserProfileStack} />
+      <Drawer.Screen name="ContactUsStack" component={ContactUsStack} />
+      <Drawer.Screen name="AboutUsStack" component={AboutUsStack} />
     </Drawer.Navigator>
   );
 }

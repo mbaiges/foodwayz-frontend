@@ -1,6 +1,7 @@
 import { AboutUs } from './AboutUsStack';
 import { ContactUs } from './ContactUsStack';
 import { Home } from './HomeStack';
+import { Search } from './SearchStack';
 
 import {
     CreateRestaurant,
@@ -32,6 +33,9 @@ export {
     // Home Stack
     Home,
     RestaurantProfile,
+
+    // Search Stack
+    Search,
 
     // User Profile Stack
     CreateRestaurant,

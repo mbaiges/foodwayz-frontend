@@ -15,6 +15,8 @@ import {
 
 import { AuthApi } from '../../../api';
 
+import { Snackbar } from 'react-native-paper';
+
 const { width } = Dimensions.get("window");
 
 class EditProfilePasswordComponent extends Component {
@@ -25,9 +27,29 @@ class EditProfilePasswordComponent extends Component {
       oldPass: "",
       newPass: "",
       newPass2: "",
+
     }
 
   }
+
+  dismissPassSnackBar = () => {
+    this.setState({
+      snackbarPassVisible: false
+    });
+  }
+
+  dismissFieldsSnackBar = () => {
+    this.setState({
+      snackbarFieldsVisible: false
+    });
+  }
+
+  dismissWrongPassSnackBar = () => {
+    this.setState({
+      snackbarWrongPassVisible: false
+    });
+  }
+
 
   async changePass(){
     const {navigation} = this.props;
@@ -44,6 +66,9 @@ class EditProfilePasswordComponent extends Component {
           break;
           case "invalid-auth":
             console.log("incorrect old password");
+            this.setState({
+              snackbarWrongPassVisible: true
+            });
           break;
           default : 
             console.log("an error ocurred");
@@ -51,9 +76,15 @@ class EditProfilePasswordComponent extends Component {
         }
 
       }else{  
+        this.setState({
+          snackbarPassVisible: true
+        });
         console.log("passwords dont match")
       }
     }else{
+      this.setState({
+        snackbarFieldsVisible: true
+      });
       console.log("fill fields")
     }
   }
@@ -63,7 +94,6 @@ class EditProfilePasswordComponent extends Component {
     const {navigation} = this.props;
     
     return (
-      <ScrollView>
         <View style={styles.backgroundContainer}>
             
             <Text style={styles.title}> Change Password</Text>
@@ -93,6 +123,7 @@ class EditProfilePasswordComponent extends Component {
                 <Text style={styles.inputTitle}>Repeat New Password</Text>
                 <View style={styles.inputBox}>
                     <Input
+                        value={this.state.newPass2}
                         secureTextEntry={true}
                         style={styles.input}
                         underLineColorAndroid="transparent"
@@ -103,11 +134,40 @@ class EditProfilePasswordComponent extends Component {
 
             <View>
                 <TouchableOpacity style={styles.button} onPress={async() => { await this.changePass();}} >
-                    <Text>CHANGE PASSWORD</Text>
+                    <Text style={styles.buttonText}>CHANGE PASSWORD</Text>
                 </TouchableOpacity>
             </View>
+
+            <Snackbar
+              duration={4000}
+              style={styles.snackBar}
+              visible={this.state.snackbarPassVisible}
+              onDismiss={this.dismissPassSnackBar}
+        >
+              <Text style={styles.textSnack}>Passwords dont match.</Text>
+        </Snackbar>
+
+        <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarFieldsVisible}
+              onDismiss={this.dismissFieldsSnackBar}
+        >
+             <Text style={styles.textSnack}> Please fill all the fields.</Text>
+        </Snackbar>
+
+        <Snackbar
+              duration={4000}
+              style={styles.snackBar}
+              visible={this.state.snackbarWrongPassVisible}
+              onDismiss={this.dismissWrongPassSnackBar}
+        >
+              <Text style={styles.textSnack}>Wrong password.</Text>
+        </Snackbar>
         </View>  
-      </ScrollView>
+
+
+
     );
   }
   
@@ -122,8 +182,7 @@ export default function EditProfilePassword({ navigation }) {
 const styles = StyleSheet.create({
     backgroundContainer: {
       flex: 1,
-      width: null,
-      height: null,
+
       backgroundColor: 'white',
     },
   
@@ -158,6 +217,13 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto', 
         fontWeight: 'bold',
         paddingBottom: 5,
+    },
+
+    textSnack:{
+      color: 'white',
+      fontSize: 20,
+      fontWeight: 'bold',
+      paddingBottom: 5,
     },
 
     inputTitle:{
@@ -201,7 +267,17 @@ const styles = StyleSheet.create({
         padding: 13,
         height: 48,
         alignSelf: "center",
-        marginBottom: 20
+        marginTop: 300,
+        marginBottom:70
+    },
+
+    snackBar:{
+      backgroundColor: "#787777",
+      height:70,
+    },
+
+    buttonText: {
+      color:"white"
     },
   
   });

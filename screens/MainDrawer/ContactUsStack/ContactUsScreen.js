@@ -12,6 +12,7 @@ import {
   Dimensions,
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
+import { Snackbar } from 'react-native-paper';
 
 //import { Constants } from 'expo';
 
@@ -29,22 +30,12 @@ class ContactUs extends Component {
         };
     
       }
-    
-      validate_signin_fields = ({ name, address }) => {
-        if (name === "") {
-          alert("Please fill name");
-          return false;
-        } else if (type === "") {
-          alert("Please fill message type");
-          return false;
-        }
-        else if (comment === "") {
-          alert("Please fill message");
-          return false;
-        }
-        return true;
-      };
-    
+
+      dismissFieldsSnackBar = () => {
+        this.setState({
+          snackbarFieldsVisible: false
+        });
+      }
     
       render() {
         const { navigation, signIn } = this.props;
