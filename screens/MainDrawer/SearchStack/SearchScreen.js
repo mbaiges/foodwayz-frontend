@@ -44,10 +44,10 @@ class SearchScreenComponent extends React.Component {
       }
     }
 
-    //const resp = await searchApi.searchFood(queryBody);
-    //console.log(resp);
+    const resp = await searchApi.searchFood(queryBody);
+    console.log(resp);
 
-    searchApi.searchFood(queryBody).then( (resp) => console.log(resp) ).catch( (msg) => console.log(msg) )
+    //searchApi.searchFood(queryBody).then( (resp) => console.log(resp) ).catch( (msg) => console.log(msg) )
     //this.setState({ queryResult: resp.response.result });
   }
 
