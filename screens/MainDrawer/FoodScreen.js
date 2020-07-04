@@ -15,6 +15,12 @@ import {
 
 import { Image, ListItem, Icon, Input, Rating } from 'react-native-elements';
 
+const screenWidth = Dimensions.get('window').width
+
+import {
+  BarChart,
+} from 'react-native-chart-kit'
+
 class FoodScreenComponent extends Component {
   constructor() {
     super();
@@ -40,6 +46,8 @@ class FoodScreenComponent extends Component {
       chars: food.a_characteristics ? food.a_characteristics : [],
       rest: food.a_rest
     })
+    console.log("INFO REVIEWS --> QUANTIFIED")
+    console.log(this.state.food.a_reviews_info.quantified);
   }
 
   componentDidMount() {
@@ -150,7 +158,52 @@ class FoodScreenComponent extends Component {
             <Rating imageSize={30} readonly startingValue={this.state.food.a_score} style={styles.rating} />
           </View>
 
-          
+          <View>
+            <View >
+                <Text style={styles.primaryText}>Reviews by score:</Text>
+            </View>
+            <View
+              style= {{
+                transform: [{ rotate: "90deg" }]
+              }}
+              height={400}
+              width={screenWidth}
+              marginBottom={100}
+              marginTop={20}
+            >
+            
+            <BarChart
+                width={500}
+                withInnerLines={false}
+                height={screenWidth}
+                verticalLabelRotation={270}
+                horizontalLabelRotation={270}
+                data={{
+                    labels: ["0 - 1", "1 - 2", "2 - 3", "3 - 4", "4 - 5"],
+                    datasets: [
+                        {
+                        data: (this.state && this.state.food && this.state.food.a_reviews_info && this.state.food.a_reviews_info.quantified) ? (this.state.food.a_reviews_info.quantified) : ([])
+                        }
+                    ]
+                  }}
+                chartConfig={{
+                    backgroundColor: "#FC987E",
+                    backgroundGradientFrom: "white",
+                    backgroundGradientTo: "#white",
+                    color: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
+                    labelColor: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
+                    decimalPlaces: 0, // optional, defaults to 2dp
+                    color: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
+                    style: {
+                        borderRadius: 16
+                    }
+                }}
+                verticalLabelRotation={0}
+            />
+            </View>
+          </View>
+
+
         <View alignItems="center">
           <TouchableOpacity
             style={styles.button}
@@ -159,6 +212,8 @@ class FoodScreenComponent extends Component {
             <Text style={styles.buttonItemsContainer}>RATE DISH</Text>
           </TouchableOpacity>
         </View>
+
+        
         
         </ScrollView>
 

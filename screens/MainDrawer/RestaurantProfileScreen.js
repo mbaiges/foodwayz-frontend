@@ -13,7 +13,6 @@ import {
   Modal
 } from "react-native";
 import { RestaurantApi, FoodApi } from "../../api";
-import RestaurantCard from "../components/RestaurantCard";
 
 
 //import { Constants } from 'expo';
