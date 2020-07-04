@@ -4,7 +4,7 @@ import {
   View,
   SafeAreaView,
   Text,
-  Animated,
+  Image,
   TextInput,
   TouchableOpacity,
   Dimensions,
@@ -31,9 +31,9 @@ class EmailVerifiedComponent extends Component {
   componentDidMount() {
     const {route} = this.props;
     const {params} = route;
-   //this.verifyEmail(params.token);
-    //this.verifyEmail("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkYWh3ZHd1YWRoYXd1aWRoYSIsInN1YiI6MTUsImV4cGlyYXRpb25fZGF0ZSI6IjIwMjAtMDctMDVUMTQ6NTE6MDkuNDY2WiIsImlhdCI6MTU5Mzg3NDI2OTQ2NiwiZXhwIjoxNTkzODc0MzU1ODY2fQ.u5iua2qcVcbM_qvwCdcSGTLohkNBtaigU5ms_h75W70");    
-    this.verifyEmail("");    
+    // ESTE DEBERíA IR CUANDO FUNCIONE //this.verifyEmail(params.token);
+   // ESTE TIRA TRUE //this.verifyEmail("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkYWh3ZHd1YWRoYXd1aWRoYSIsInN1YiI6MTUsImV4cGlyYXRpb25fZGF0ZSI6IjIwMjAtMDctMDVUMTQ6NTE6MDkuNDY2WiIsImlhdCI6MTU5Mzg3NDI2OTQ2NiwiZXhwIjoxNTkzODc0MzU1ODY2fQ.u5iua2qcVcbM_qvwCdcSGTLohkNBtaigU5ms_h75W70");    
+   // ESTE TIRA FALSE //this.verifyEmail("");    
  
   }
 
@@ -53,23 +53,19 @@ class EmailVerifiedComponent extends Component {
         <View style={styles.inner}>
       {
         (this.state.isVerified) ? (
-        <View>
+        <View alignItems= 'center'>
           <Text style={styles.logoText}>Email Verified!</Text>
-          <Icon
-              color="white"
-              name='emoticon-happy-outline'
-              type='material-community'
-              size={100}
+          <Image
+            style={{ height: 200, width: 200 }}
+            source={require("../../assets/images/HamburguesitaFeliz.png")}
           />
         </View>  
         ) : (
-        <View>
+        <View alignItems= 'center'>
           <Text style={styles.logoText}>Sorry, your email could not be verified</Text>
-          <Icon
-              color="white"
-              name='emoticon-sad-outline'
-              type='material-community'
-              size={100}
+          <Image
+            style={{ height: 200, width: 200 }}
+            source={require("../../assets/images/HamburguesitaTriste.png")}
           />
         </View>  
         ) 
