@@ -39,12 +39,12 @@ export default function StackNavigator({ navigation, route }) {
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Filter" component={Filter} />
 
-      <Stack.Screen name="Food" component={Food} options={BackButtonProfileNavBar}/>
-      <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} options={BackButtonProfileNavBar} />
+      <Stack.Screen name="Food" component={Food} options={BackButtonProfileNavBar({ title: getHeaderTitle(route), navigation })}/>
+      <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} options={BackButtonProfileNavBar({ title: getHeaderTitle(route), navigation })} />
       
-      <Stack.Screen name="Reviews" component={Reviews} options={BackButtonNavBar}/>
-      <Stack.Screen name="ReviewInfo" component={ReviewInfo} options={BackButtonNavBar}/>
-      <Stack.Screen name="RateFood" component={RateFood} options={BackButtonNavBar}/>
+      <Stack.Screen name="Reviews" component={Reviews} options={BackButtonNavBar({ title: getHeaderTitle(route), navigation })}/>
+      <Stack.Screen name="ReviewInfo" component={ReviewInfo} options={BackButtonNavBar({ title: getHeaderTitle(route), navigation })}/>
+      <Stack.Screen name="RateFood" component={RateFood} options={BackButtonNavBar({ title: getHeaderTitle(route), navigation })}/>
       
       {/* <Stack.Screen name="Search" component={SearchScreen} options={() => SearchNavBar({ title: getHeaderTitle(route), navigation })} /> */}
       {/* <Stack.Screen name="Search" component={Search} /> */}
@@ -59,7 +59,17 @@ function getHeaderTitle(route) {
   switch (routeName) {
     case "Home":
       return "Home";
-    case "Links":
-      return "Links to learn more";
+    case "Filter":
+      return "Filter";
+    case "Food":
+      return "Dish";
+    case "RestaurantProfile":
+      return "Restaurant";
+    case "Reviews":
+      return "Reviews";
+    case "ReviewInfo":
+      return "Review";
+    case "RateFood":
+      return "Review";
   }
 }

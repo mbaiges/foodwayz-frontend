@@ -87,9 +87,6 @@ class RestaurantProfileComponent extends Component {
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
-        
-        
-          
 
         <ScrollView>
         <View style={styles.mainPage}>

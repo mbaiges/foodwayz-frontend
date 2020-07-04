@@ -71,9 +71,38 @@ function getHeaderTitle(route) {
     route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 
   switch (routeName) {
-    case "Home":
-      return "Home";
-    case "Links":
-      return "Links to learn more";
+
+    case "UserProfile":
+      return "Profile";
+    case "EditProfile":
+      return "Edit Profile";
+    case "EditProfilePassword":
+      return "Change Password";
+    case "EditProfileAllergies":
+      return "Set Preferences";
+
+    case "CreateRestaurant":
+      return "Create Restaurant";
+    case "OwnerRestaurantProfile":
+      return "Restaurant";
+    case "RestaurantStatisticsProfile":
+      return "Statistics";
+    case "AddDish":
+      return "Add Dish";
+    case "EditRestaurant":
+      return "Edit Restaurant";
+    case "Premium":
+      return "Plans";
+
+    case "Food":
+      return "Dish";
+    case "RestaurantProfile":
+      return "Restaurant";
+    case "Reviews":
+      return "Reviews";
+    case "ReviewInfo":
+      return "Review";
+    case "RateFood":
+      return "Review";
   }
 }
