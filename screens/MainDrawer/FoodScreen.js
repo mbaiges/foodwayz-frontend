@@ -79,7 +79,7 @@ class FoodScreenComponent extends Component {
             <View style={styles.tagsList}>
               <TouchableOpacity
                 style={styles.buttonTag}
-                onPress={() => Alert.alert('Simple Button pressed')}
+                onPress={() => {}}
               >
                 <Text>{this.state.type.a_type_name}</Text>
               </TouchableOpacity>
@@ -97,7 +97,7 @@ class FoodScreenComponent extends Component {
                     <TouchableOpacity
                       key={idx}
                       style={styles.buttonTag}
-                      onPress={() => Alert.alert('Simple Button pressed')}
+                      onPress={() => {}}
                     >
                       <Text>{tag.a_ingr_name}</Text>
                     </TouchableOpacity>
@@ -119,7 +119,7 @@ class FoodScreenComponent extends Component {
                     <TouchableOpacity
                       key={idx}
                       style={styles.buttonTag}
-                      onPress={() => Alert.alert('Simple Button pressed')}
+                      onPress={() => {}}
                     >
                       <Text>{tag.a_char_name}</Text>
                     </TouchableOpacity>

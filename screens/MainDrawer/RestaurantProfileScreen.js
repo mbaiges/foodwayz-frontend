@@ -13,10 +13,8 @@ import {
   Modal
 } from "react-native";
 import { RestaurantApi, FoodApi } from "../../api";
+import RestaurantCard from "../components/RestaurantCard";
 
-
-import * as ImagePicker from 'expo-image-picker';
-import * as firebase from 'firebase';
 
 //import { Constants } from 'expo';
 
@@ -114,21 +112,25 @@ class RestaurantProfileComponent extends Component {
             <ScrollView horizontal={true}>
               {this.state.dishes.map(dish =>{
                 return(
+                  (dish.a_score >= 4) ? 
                   <TouchableOpacity onPress={async () => {navigation.navigate("Food"); //falta pasar los params para que pase a la pag correcta
                   }}>  
                     <Card
                       image={{ uri: dish.a_image_url }}
                       imageStyle={{
                         height: 100,
+                        width: 100
                       }}
                     >
                       
                       <View style={styles.cardFooter}>
                         <Text style={styles.foodName}>{dish.a_title}</Text>
+                        <Rating imageSize={20} readonly startingValue={dish.a_score} /> 
                       </View>
                     </Card>
                   </TouchableOpacity>
-
+                  :
+                  <View/>
                 )
               })}
               
@@ -137,13 +139,24 @@ class RestaurantProfileComponent extends Component {
         </View>    
   
   
-        <View style={styles.popularContainer}>
+        <View paddingTop={15}>
           <Text style={styles.subtitleText}>All of our dishes</Text>
-  
-          <Text style={styles.subsubtitleText}>Go vegan!</Text>
-          
-          
-          <Text style={styles.subsubtitleText}>Meat yourself</Text>
+          {this.state.dishes.map(dish =>{
+                return( 
+                  <ListItem
+                    onPress={async () => {navigation.navigate("Food");}}
+                    key={dish.a_food_id}
+                    leftAvatar={{ source: { uri: dish.a_image_url } }}
+                    title={dish.a_title}
+                    subtitle={
+                      <View style={styles.subtitleView}>
+                        <Text>{dish.a_description}</Text>
+                        <Rating imageSize={10} readonly startingValue={dish.a_score}  style={styles.rating}/> 
+                      </View>}
+                    bottomDivider
+                  />
+                )
+              })}
   
         </View>
     
@@ -168,6 +181,10 @@ const styles = StyleSheet.create({
     width: null,
     height: null,
     backgroundColor: "white",
+  },
+
+  rating: {
+    alignSelf: "flex-start",
   },
 
   mainPage: {
@@ -254,7 +271,7 @@ const styles = StyleSheet.create({
 
   cardFooter: {
     justifyContent: "space-between",
-    flexDirection: "row",
+    flexDirection: "column",
   },
 
   text: {
