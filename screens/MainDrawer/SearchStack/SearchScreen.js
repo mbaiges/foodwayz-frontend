@@ -50,8 +50,7 @@ class SearchScreenComponent extends React.Component {
         a_ingr_ids: [],
         a_char_ids: []
       }
-    }
-
+    },
   };
 
   async updateSearch(text){
@@ -81,7 +80,7 @@ class SearchScreenComponent extends React.Component {
   };
 
   async querySearch(){
-    const resp = await SearchApi.searchFood(this.state.queryBody);
+    const resp = await SearchApi.searchFoods(this.state.queryBody);
 
     this.setState({ queryResult: resp.response.result });
   }
@@ -89,7 +88,17 @@ class SearchScreenComponent extends React.Component {
   // ------------------------------- SEARCH IN FILTERS ------------------------------
 
   async updateTypeSearch(){
-
+    let auxFilterQueryBody = {
+      raw_input: this.state.typeModalInput
+    }
+    const resp = await SearchApi.searchTypes(auxFilterQueryBody)
+    
+    if(resp.status == 200){
+      this.setState({ allTypes: resp.response.result });
+    }else{
+      console.log("error");
+    }
+    
   }
 
   async updateIngrSearch(){
