@@ -63,6 +63,8 @@ class SearchScreenComponent extends React.Component {
     this.setState({ queryResult: resp.response.result });
   }
 
+
+
   async componentDidMount() {
     this.querySearch();
   }
