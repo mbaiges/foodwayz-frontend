@@ -20,11 +20,22 @@ const statusBarHeight = Constants.statusBarHeight;
 class SearchScreenComponent extends React.Component {
   state = {
     search: '',
+    querryResult: []
   };
 
-  updateSearch = search => {
-    this.setState({ search });
+  async updateSearch(text){
+    this.setState({ search: text });
+    await this.querySearch();
   };
+
+  async querySearch(){
+    const resp = await 
+  }
+
+  async componentDidMount() {
+    await this.querySearch();
+  }
+
 
   render() {
     const { navigation } = this.props;
@@ -39,19 +50,27 @@ class SearchScreenComponent extends React.Component {
           <SearchBar
             platform="android"
             placeholder="Type Here..."
-            onChangeText={this.updateSearch}
+            onChangeText={ async( text ) => await this.updateSearch(text) }
             value={this.state.search}
           />
         <ScrollView>
-          <FoodCard
-            image={{uri: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg'}}
-            title="Guiso muy rico"
-            brand= "El restaurante mas rico"
-            onPress={async () => {navigation.navigate("Food");
-              console.log("I want to navigate to Dish page");
-            }}
-            rating = {4.20}
-          />
+          {
+            this.state.querryResult.map(food => {
+              return (
+                <FoodCard
+                  key={food.a_food_id}
+                  image={{ uri: food.a_image_url }}
+                  title={food.a_title}
+                  brand={food.a_rest.a_name}
+                  onPress={async () => {
+                    navigation.navigate("Food", { food: food });
+                    console.log("I want to navigate to Dish page");
+                  }}
+                  rating={food.a_score}
+                />
+              )
+            })
+          }
         </ScrollView>
       </View>
     );
