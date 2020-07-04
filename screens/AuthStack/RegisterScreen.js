@@ -63,6 +63,11 @@ class RegisterScreenComponent extends Component {
     }
   }
 
+  async resendEmail(email){
+
+    await AuthApi.resendEmail(email);
+  }
+
   render() {
     const { navigation, context } = this.props;
     const { authState, setAuthState } = context;
@@ -112,8 +117,9 @@ class RegisterScreenComponent extends Component {
                         <View style={styles.buttonContainer}>
                           <TouchableOpacity
                               style={styles.deleteButton}
-                              onPress={async () => {
-                                //await AuthApi.resendEmail(this.state.a_email);
+                              onPress={() => {
+                                
+                                this.resendEmail(this.state.email);
 
                               }}
                           >

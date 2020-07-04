@@ -66,6 +66,12 @@ class LoginScreenComponent extends Component {
     }).start();
   };
 
+
+  
+  async resendEmail(email){
+    await AuthApi.resendEmail(email);
+  }
+
   signIn = async function ({ state, setAuthState, navigation }) {
     /*
     if (!validateSigninFields(state)) {
@@ -77,6 +83,7 @@ class LoginScreenComponent extends Component {
       a_email: state.email,
       a_password: state.password
     });
+
 
     try {
       const ans = await AuthApi.signIn(user);
@@ -90,7 +97,7 @@ class LoginScreenComponent extends Component {
         await setAuthState(auth);
       }else if(ans && ans.status === 401 && ans.response.code === "not-verified"){
         this.setState({emailVerificationModal: true});
-        //await AuthApi.resendEmail(this.state.a_email);
+
         
       }else if(ans && ans.status === 401 && ans.response.code === "invalid-auth"){
         //CONTRASEÑA INVALIDAAAAAAAA
@@ -149,8 +156,7 @@ class LoginScreenComponent extends Component {
                           <TouchableOpacity
                               style={styles.deleteButton}
                               onPress={async () => {
-                                //await AuthApi.resendEmail(this.state.a_email);
-
+                                this.resendEmail(this.state.email);
                               }}
                           >
                               <Text style={styles.buttonText}>Resend email</Text>
