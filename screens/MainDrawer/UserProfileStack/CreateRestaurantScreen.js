@@ -37,6 +37,7 @@ class CreateRestaurantComponent extends Component {
             selectedChain: {},
             modalVisible: false,
             modalImageVisible: false,
+            modalLoading:false,
             chainSelected: false,
             imagesUrl: [],
             chains: [],
@@ -46,6 +47,10 @@ class CreateRestaurantComponent extends Component {
 
         setModalVisible = (visible) => {
             this.setState({ modalVisible: visible });
+        }
+
+        setLoadingModalVisible = (visible) => {
+            this.setState({ modalLoading: visible });
         }
         
         tickPressed = () =>{
@@ -113,7 +118,8 @@ class CreateRestaurantComponent extends Component {
             const {navigation} = this.props;
 
             if(this.state.name != "" && this.state.selectedChain != "" && this.state.city != "" && this.state.postalCode != "" && this.state.address != ""){
-            
+                
+
                 let restaurant = {
                     a_name:this.state.name,
                     a_state:this.state.countryState,
@@ -126,10 +132,14 @@ class CreateRestaurantComponent extends Component {
                     restaurant.a_rest_chain_id = this.state.selectedChain.a_rest_chain_id;
                 }
                     
+                this.setLoadingModalVisible(true)
                 const resp = await RestaurantApi.add(restaurant);
+                this.setLoadingModalVisible(false)
                 console.log(resp);
                 if(resp.status == 200){
+                    this.setLoadingModalVisible(true);
                     await this.uploadImages(resp.response.result);
+                    this.setLoadingModalVisible(false);
                 }
 
                 navigation.goBack();
@@ -373,6 +383,23 @@ class CreateRestaurantComponent extends Component {
         >
              <Text style={styles.textSnack}> Please fill all the fields.</Text>
         </Snackbar>
+
+
+        <View style={styles.centeredView}>
+                    <Modal
+                        backdropColor={'grey'}
+                        backdropOpacity= {1}
+                        animationType="slide"
+                        transparent={true}
+                        visible={this.state.modalLoading}
+                        onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        }}
+                    >
+                       
+                    </Modal>
+                </View>
+
           </ScrollView>
         );
       }
@@ -561,7 +588,8 @@ const styles = StyleSheet.create({
       snackBar:{
         backgroundColor: "#787777",
         height:70,
-      }  
+      },
+      
   
   });
 
