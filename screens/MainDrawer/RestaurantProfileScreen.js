@@ -28,6 +28,7 @@ class RestaurantProfileComponent extends Component {
       restaurant: {},
       images: [],
       dishes: [],
+      hasPopularDishes:false,
     }
   }
 
@@ -64,11 +65,20 @@ class RestaurantProfileComponent extends Component {
     })
   }
 
+  chechPolularDishes(){
+    this.state.dishes.forEach( (dish) => {
+      if(dish.a_score >= 4){
+        this.setState({hasPopularDishes: true})
+      }
+    })
+  }
+
   async componentDidMount() {
     console.log("Mounting");
     await this.fetchRestaurant();
     await this.fetchImages();
     await this.fetchDishes();
+    this.chechPolularDishes();
   }
 
 
@@ -105,40 +115,47 @@ class RestaurantProfileComponent extends Component {
           una sopa a las 2 de la madrugada si así lo deseas!</Text> */}
         </View>
 
-
-        <View style={styles.popularContainer} >
-          <Text style={styles.subtitleText}>Our most popular dishes</Text>
-          <View style={styles.popular}>
-            <ScrollView horizontal={true}>
-              {this.state.dishes.map(dish =>{
-                return(
-                  (dish.a_score >= 4) ? 
-                  <TouchableOpacity onPress={async () => {navigation.navigate("Food"); //falta pasar los params para que pase a la pag correcta
-                  }}>  
-                    <Card
-                      image={{ uri: dish.a_image_url }}
-                      imageStyle={{
-                        height: 100,
-                        width: 100
-                      }}
-                    >
-                      
-                      <View style={styles.cardFooter}>
-                        <Text style={styles.foodName}>{dish.a_title}</Text>
-                        <Rating imageSize={20} readonly startingValue={dish.a_score} /> 
-                      </View>
-                    </Card>
-                  </TouchableOpacity>
-                  :
-                  <View/>
-                )
-              })}
-              
-            </ScrollView>
-          </View>
-        </View>    
-  
-  
+        {
+          (this.state.hasPopularDishes) ? 
+          (
+          <View style={styles.popularContainer} >
+            <Text style={styles.subtitleText}>Our most popular dishes</Text>
+            <View style={styles.popular}>
+              <ScrollView horizontal={true}>
+                {this.state.dishes.map(dish =>{
+                  return(
+                    (dish.a_score >= 4) ? 
+                    <TouchableOpacity onPress={async () => {navigation.navigate("Food"); //falta pasar los params para que pase a la pag correcta
+                    }}>  
+                      <Card
+                        image={{ uri: dish.a_image_url }}
+                        imageStyle={{
+                          height: 100,
+                          width: 100
+                        }}
+                      >
+                        
+                        <View style={styles.cardFooter}>
+                          <Text style={styles.foodName}>{dish.a_title}</Text>
+                          <Rating imageSize={20} readonly startingValue={dish.a_score} /> 
+                        </View>
+                      </Card>
+                    </TouchableOpacity>
+                    :
+                    <View/>
+                  )
+                })}
+                
+              </ScrollView>
+            </View>
+          </View>    
+          ) 
+          : 
+          (
+          <View/>
+          )
+        }
+        
         <View paddingTop={15}>
           <Text style={styles.subtitleText}>All of our dishes</Text>
             {this.state.dishes.map(dish =>{
@@ -159,7 +176,7 @@ class RestaurantProfileComponent extends Component {
               )
             })}
         </View>
-        
+
         </ScrollView>
       </SafeAreaView>
     );
