@@ -115,7 +115,6 @@ const styles = StyleSheet.create({
     width: 220,
     height: 180,
     justifyContent: "center",
-    //marginLeft: "18%",
   },
 
   foodName: {

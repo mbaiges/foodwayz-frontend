@@ -33,7 +33,5 @@ function getHeaderTitle(route) {
   switch (routeName) {
     case "Home":
       return "Home";
-    case "Links":
-      return "Links to learn more";
   }
 }
