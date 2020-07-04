@@ -142,6 +142,7 @@ class RestaurantProfileComponent extends Component {
         <View paddingTop={15}>
           <Text style={styles.subtitleText}>All of our dishes</Text>
           {this.state.dishes.map(dish =>{
+            
                 return( 
                   <ListItem
                     onPress={async () => {navigation.navigate("Food");}}
