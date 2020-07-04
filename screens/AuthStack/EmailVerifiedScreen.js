@@ -32,7 +32,7 @@ class EmailVerifiedComponent extends Component {
     const {route} = this.props;
     const {params} = route;
     // ESTE DEBERíA IR CUANDO FUNCIONE //this.verifyEmail(params.token);
-   // ESTE TIRA TRUE //this.verifyEmail("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkYWh3ZHd1YWRoYXd1aWRoYSIsInN1YiI6MTUsImV4cGlyYXRpb25fZGF0ZSI6IjIwMjAtMDctMDVUMTQ6NTE6MDkuNDY2WiIsImlhdCI6MTU5Mzg3NDI2OTQ2NiwiZXhwIjoxNTkzODc0MzU1ODY2fQ.u5iua2qcVcbM_qvwCdcSGTLohkNBtaigU5ms_h75W70");    
+   //this.verifyEmail("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkYWh3ZHd1YWRoYXd1aWRoYSIsInN1YiI6MTUsImV4cGlyYXRpb25fZGF0ZSI6IjIwMjAtMDctMDVUMTQ6NTE6MDkuNDY2WiIsImlhdCI6MTU5Mzg3NDI2OTQ2NiwiZXhwIjoxNTkzODc0MzU1ODY2fQ.u5iua2qcVcbM_qvwCdcSGTLohkNBtaigU5ms_h75W70");    
    // ESTE TIRA FALSE //this.verifyEmail("");    
  
   }

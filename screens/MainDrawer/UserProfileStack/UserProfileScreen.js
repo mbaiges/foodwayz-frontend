@@ -28,6 +28,7 @@ class UserProfileComponent extends Component {
       reviews: [],
       restaurants: [],
       restaurantsModalVisible: false,
+
     }
   }
 
@@ -175,15 +176,22 @@ class UserProfileComponent extends Component {
               <View style = {styles.centeredView}>
                 <View style = {styles.modalRestaurantsView}>
                   <View flexDirection='row'>
-                    <Icon
-                      name='add'
-                      onPress={() => {
-                        this.setState({restaurantsModalVisible: false});
-                        navigation.navigate("CreateRestaurant");
-                      }}/>
-                    <Icon
-                      name='close'
-                      onPress={() => this.setState({restaurantsModalVisible: false})} />
+                    <View style={styles.modalSubtitlesContainer}>
+                      <Text style={styles.modalSubtitles}>Add restaurant</Text>
+                      <Icon
+                        paddingRight= '30'
+                        name='add'
+                        onPress={() => {
+                          this.setState({restaurantsModalVisible: false});
+                          navigation.navigate("CreateRestaurant");
+                        }}/>
+                    </View>
+                    <View style={styles.modalSubtitlesContainer}>
+                      <Text style={styles.modalSubtitles}>Close</Text>
+                      <Icon
+                        name='close'
+                        onPress={() => this.setState({restaurantsModalVisible: false})} />
+                      </View>
                   </View>
                   <ScrollView>
                     {restaurantOptions}
@@ -417,5 +425,13 @@ const styles = StyleSheet.create({
     marginBottom: 5
 },
 
+
+  modalSubtitles:{
+    fontWeight: "bold",
+  },
+
+  modalSubtitlesContainer:{
+    padding: 13,
+  }
 
 });

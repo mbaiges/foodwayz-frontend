@@ -95,7 +95,7 @@ class CreateRestaurantComponent extends Component {
                 let ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);
                 let snapshot = await ref.put(blob)
 
-                downloadURL = await snapshot.ref.getDownloadURL();
+                let downloadURL = await snapshot.ref.getDownloadURL();
 
                 console.log("-------------------------url: ");
                 console.log(downloadURL);
@@ -171,7 +171,7 @@ class CreateRestaurantComponent extends Component {
                             modalInput = "";
                             }}
                         >
-                            <Text style={styles.buttonText}>{this.state.chains[i].a_name}</Text>
+                            <Text style={styles.blackButtonText}>{this.state.chains[i].a_name}</Text>
                         </TouchableOpacity>
 
                     </View>
@@ -200,7 +200,7 @@ class CreateRestaurantComponent extends Component {
                 <Text style={styles.title}> Register Restaurant</Text>
 
 
-                <ScrollView horizontal={true}>
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                     {this.state.imagesUrl.map(foodUrl => {
                         return(
                             <Card>
@@ -211,19 +211,22 @@ class CreateRestaurantComponent extends Component {
                             </Card>
                         )
                     })}
+
+                    <TouchableOpacity onPress={() => { 
+                        this.setState({modalImageVisible: true});
+                    }}>
+                        <View> 
+                        <Card>
+                            <Image
+                                style={styles.logoImage}
+                                source={require("../../../assets/images/dishPlaceholder.png")}
+                            />
+                            <Text style={styles.subsubtitleText}>Add Photo</Text>
+                        </Card>
+                        </View>
+                    </TouchableOpacity>
                 </ScrollView>
 
-
-
-                <TouchableOpacity onPress={() => { this.setState({modalImageVisible: true});  }}>
-                    <View style={styles.mainImage}>
-                        <Image
-                            style={styles.logoImage}
-                            source={ this.state.dishImage ? { uri: this.state.dishImage } : require("../../../assets/images/dishPlaceholder.png")}
-                        />
-                        <Text style={styles.titleText}>Add Image</Text>
-                    </View>
-                </TouchableOpacity>
 
                 <View style={styles.centeredView}>
                     <Modal
@@ -231,7 +234,7 @@ class CreateRestaurantComponent extends Component {
                         transparent={true}
                         visible={this.state.modalImageVisible}
                         onRequestClose={() => {
-                            this.setState({modalImageVisible: false});
+                            this.setState({modalImageVisible: false, isChain: false});
                           }}
 
                     >
@@ -247,7 +250,7 @@ class CreateRestaurantComponent extends Component {
                                         this.setState({modalImageVisible: false});
                                      }}
                                 >
-                                    <Text style={styles.buttonText}>Camera</Text>
+                                    <Text style={styles.blackButtonText}>Camera</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
 
@@ -274,7 +277,7 @@ class CreateRestaurantComponent extends Component {
                                         //Ir a la galería
                                     }}
                                 >
-                                    <Text style={styles.buttonText}>Gallery</Text>
+                                    <Text style={styles.blackButtonText}>Gallery</Text>
                                 </TouchableOpacity>
 
                             </View>
@@ -341,7 +344,9 @@ class CreateRestaurantComponent extends Component {
                     <CheckBox
                         title = "The restaurant is part of a chain"
                         checked = {this.state.isChain}
-                        onPress={() => {this.tickPressed()}}
+                        onPress={() => {
+                            this.tickPressed();    
+                        }}
                     />
                 </View>
                 {this.state.chainSelected && chainSelectedAndChange}
@@ -607,4 +612,18 @@ const styles = StyleSheet.create({
         color:"white",
         textAlign:"center"
       },
+
+    blackButtonText: {
+    color:"black",
+    textAlign:"center"
+    },  
+
+    subsubtitleText: {
+        textAlign: "center",
+        fontWeight: "bold",
+        fontSize: 18,
+        marginLeft: 15,
+        marginTop: 15,
+    },
+    
   });
