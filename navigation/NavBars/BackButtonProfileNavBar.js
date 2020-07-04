@@ -22,7 +22,7 @@ export default function BackButtonProfileNavBar({ title, navigation }) {
           name="md-person"
           size={38}
           style={styles.r_icon}
-          onPress={() => navigation.navigate("Profile")}
+          onPress={() => navigation.navigate("ProfileStack")}
         />
       </View>
     ),

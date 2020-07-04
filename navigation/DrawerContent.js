@@ -12,7 +12,9 @@ export default function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItem label="FoodWayz" />
-      <DrawerItemList {...props} />
+      <DrawerItem label="Home" onPress={() => props.navigation.navigate("HomeStack")} />
+      <DrawerItem label="Search" onPress={() => props.navigation.navigate("SearchStack")} />
+      {/* <DrawerItemList {...props} /> */}
     </DrawerContentScrollView>
   );
 }
