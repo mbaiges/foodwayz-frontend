@@ -33,18 +33,17 @@ class SearchScreenComponent extends React.Component {
   async querySearch(){
 
     let queryBody = {
-      raw_input: this.state.search,
+      raw_input: "asd",
       filters: {
         a_type_ids: [],
         a_ingr_ids: [],
         a_char_ids: []
-      },
-      sorted: {
-        reviews_amount: true
       }
     }
 
-    const resp = await searchApi.searchFood(queryBody);
+    console.log(queryBody);
+
+    const resp = await searchApi.searchFood({});
     console.log(resp);
 
     //searchApi.searchFood(queryBody).then( (resp) => console.log(resp) ).catch( (msg) => console.log(msg) )
