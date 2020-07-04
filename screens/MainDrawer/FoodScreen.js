@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Button,
-  Dimensions
+  Dimensions,
+  Alert 
 } from "react-native";
 
 import { Image, ListItem, Icon, Input, Rating } from 'react-native-elements';
