@@ -2,7 +2,7 @@
 
 import { Api } from './api';
 
-class searchApi{
+class SearchApi{
   constructor() {}
 
   static get url() {
@@ -191,7 +191,7 @@ class searchApi{
       }
   */
   static searchFood(body) {
-    return Api.put(`${searchApi.url}/food`, body);
+    return Api.post(`${SearchApi.url}/food`, body);
   }
 
   /*
@@ -242,8 +242,8 @@ class searchApi{
         }
   */
   static searchRestaurant(body) {
-    return Api.put(`${searchApi.url}/restaurant`, body);
+    return Api.post(`${SearchApi.url}/restaurant`, body);
   }
 }
 
-export { searchApi };
+export { SearchApi };
