@@ -11,6 +11,7 @@ import { Type, TypeApi } from './Type';
 import { User, UserApi } from './User';
 import { UserHasCharacteristic, UserHasCharacteristicApi } from './UserHasCharacteristic';
 import { AuthApi } from './Auth';
+import { searchApi } from './search';
 
 export {
     Characteristic,
@@ -39,5 +40,7 @@ export {
     IngredientApi,
     FoodHasIngredientApi, 
 
-    AuthApi
+    AuthApi,
+
+    searchApi,
 }

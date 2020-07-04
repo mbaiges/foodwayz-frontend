@@ -14,22 +14,45 @@ import {
 import Constants from 'expo-constants';
 import FoodCard from "../../components/FoodCard";
 
+import { searchApi } from '../../../api';
+
 const { width } = Dimensions.get("window");
 const statusBarHeight = Constants.statusBarHeight;
 
 class SearchScreenComponent extends React.Component {
   state = {
     search: '',
-    querryResult: []
+    queryResult: []
   };
 
   async updateSearch(text){
-    this.setState({ search: text });
+    await this.setState({ search: text });
     await this.querySearch();
   };
 
   async querySearch(){
-    const resp = await 
+
+    let queryBody = {
+      raw_input: this.state.search,
+      filters: {
+        a_type_ids: [
+            
+        ],
+        a_ingr_ids: [
+            
+        ],
+        a_char_ids: [
+            
+        ]
+      },
+      sorted: {
+        reviews_amount: true
+      }
+    }
+
+    const resp = await searchApi.searchFood(queryBody);
+    //console.log(resp);
+    this.setState({ queryResult: resp.response.result });
   }
 
   async componentDidMount() {
