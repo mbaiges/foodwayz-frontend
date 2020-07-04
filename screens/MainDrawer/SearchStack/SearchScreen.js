@@ -78,7 +78,7 @@ class SearchScreenComponent extends React.Component {
           />
         <ScrollView>
           {
-            this.state.querryResult.map(food => {
+            this.state.queryResult.map(food => {
               return (
                 <FoodCard
                   key={food.a_food_id}

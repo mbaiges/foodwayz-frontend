@@ -32,16 +32,8 @@ export default function MainDrawerNavigator({ navigation, route }) {
       }}
     >
       <Drawer.Screen name="HomeStack" component={HomeStack} />
-      <Drawer.Screen
-        label="Discover"
-        name="DiscoverStack"
-        component={DiscoverStack}
-      />
-      <Drawer.Screen
-        label="CategoriesStack"
-        name="CategoriesStack"
-        component={CategoriesStack}
-      />
+      <Drawer.Screen label="Discover" name="DiscoverStack" component={DiscoverStack} />
+      <Drawer.Screen label="CategoriesStack" name="CategoriesStack" component={CategoriesStack} />
       <Drawer.Screen name="SearchStack" component={SearchStack}/>
       <Drawer.Screen name="ProfileStack" component={UserProfileStack} />
       <Drawer.Screen name="ContactUsStack" component={ContactUsStack} />
