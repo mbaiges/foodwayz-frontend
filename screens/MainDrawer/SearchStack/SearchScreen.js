@@ -14,7 +14,7 @@ import {
 import Constants from 'expo-constants';
 import FoodCard from "../../components/FoodCard";
 
-import { searchApi } from '../../../api';
+import { SearchApi } from '../../../api';
 
 const { width } = Dimensions.get("window");
 const statusBarHeight = Constants.statusBarHeight;
@@ -22,36 +22,48 @@ const statusBarHeight = Constants.statusBarHeight;
 class SearchScreenComponent extends React.Component {
   state = {
     search: '',
+    timer: undefined,
     queryResult: []
   };
 
   async updateSearch(text){
-    await this.setState({ search: text });
-    await this.querySearch();
+
+    if (this.state.timer) {
+      clearTimeout(this.state.timer);
+    }
+
+    const timer = setTimeout(() => {
+      this.querySearch(text);
+    }, 500);
+
+    this.setState({
+      timer: timer,
+    });
+
+    this.querySearch(text);
+    this.setState({ search: text });
   };
 
-  async querySearch(){
+  async querySearch(text){
 
     let queryBody = {
-      raw_input: "asd",
+      raw_input: text ? text : "",
       filters: {
         a_type_ids: [],
         a_ingr_ids: [],
         a_char_ids: []
       }
     }
+    
+    const resp = await SearchApi.searchFood(queryBody);
 
-    console.log(queryBody);
-
-    const resp = await searchApi.searchFood({});
-    console.log(resp);
-
-    //searchApi.searchFood(queryBody).then( (resp) => console.log(resp) ).catch( (msg) => console.log(msg) )
-    //this.setState({ queryResult: resp.response.result });
+    this.setState({ queryResult: resp.response.result });
   }
 
+
+
   async componentDidMount() {
-    await this.querySearch();
+    this.querySearch();
   }
 
 
