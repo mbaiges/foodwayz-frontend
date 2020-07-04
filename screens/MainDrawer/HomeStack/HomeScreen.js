@@ -16,6 +16,7 @@ import FoodCard from "../../components/FoodCard";
 import { UserContext } from '../../../context/UserContext';
 
 import { FoodApi } from '../../../api';
+import { color } from "react-native-reanimated";
 
 class HomeScreenComponent extends Component {
   constructor() {
@@ -74,10 +75,11 @@ class HomeScreenComponent extends Component {
             onPress={async () => { navigation.navigate("Filter") }}
           >
             <View style={styles.buttonItemsContainer}>
-              <Text>FILTERS </Text>
+              <Text style={styles.filter}>FILTERS </Text>
               <Icon
                 name='filter'
                 type='material-community'
+                color="white"
               />
             </View>
           </TouchableOpacity>
@@ -154,5 +156,9 @@ const styles = StyleSheet.create({
   rating: {
     alignSelf: "flex-start",
   },
+
+  filter: {
+    color:"white",
+},
 
 });

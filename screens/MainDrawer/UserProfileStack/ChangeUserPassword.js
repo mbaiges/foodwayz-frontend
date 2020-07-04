@@ -94,7 +94,6 @@ class EditProfilePasswordComponent extends Component {
     const {navigation} = this.props;
     
     return (
-      <ScrollView>
         <View style={styles.backgroundContainer}>
             
             <Text style={styles.title}> Change Password</Text>
@@ -135,12 +134,11 @@ class EditProfilePasswordComponent extends Component {
 
             <View>
                 <TouchableOpacity style={styles.button} onPress={async() => { await this.changePass();}} >
-                    <Text>CHANGE PASSWORD</Text>
+                    <Text style={styles.buttonText}>CHANGE PASSWORD</Text>
                 </TouchableOpacity>
             </View>
-        </View>  
 
-        <Snackbar
+            <Snackbar
               duration={4000}
               style={styles.snackBar}
               visible={this.state.snackbarPassVisible}
@@ -166,8 +164,10 @@ class EditProfilePasswordComponent extends Component {
         >
               <Text style={styles.textSnack}>Wrong password.</Text>
         </Snackbar>
+        </View>  
 
-      </ScrollView>
+
+
     );
   }
   
@@ -274,7 +274,11 @@ const styles = StyleSheet.create({
     snackBar:{
       backgroundColor: "#787777",
       height:70,
-    }
+    },
+
+    buttonText: {
+      color:"white"
+    },
   
   });
 
