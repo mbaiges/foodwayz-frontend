@@ -283,6 +283,7 @@ class OwnerRestaurantProfileComponent extends Component {
             transparent={true}
             visible={this.state.verificationModal}
             onRequestClose={() => {
+              this.setState({verificationModal: false});
             }}
           >
 
@@ -324,6 +325,7 @@ class OwnerRestaurantProfileComponent extends Component {
             transparent={true}
             visible={this.state.verificationModalImage}
             onRequestClose={() => {
+              this.setState({verificationModalImage: false});
             }}
           >
 
@@ -365,7 +367,8 @@ class OwnerRestaurantProfileComponent extends Component {
                 transparent={true}
                 visible={this.state.modalImageVisible}
                 onRequestClose={() => {
-                }}
+                  this.setState({modalImageVisible: false});
+              }}
             >
                 <View style = {styles.centeredView}>
                     <View style = {styles.modalImageView}>
@@ -398,47 +401,50 @@ class OwnerRestaurantProfileComponent extends Component {
         </View>
   
         <View style={styles.centeredView}>
-                    <Modal
-                        animationType="slide"
-                        transparent={true}
-                        visible={this.state.modalInviteToBeOwner}
-                    >
-                        <View style={styles.centeredView}>
-                            <View style={styles.modalView}>
-                                <View flexDirection='row'>
-                                  <Text style={styles.modalTitle}>Add an Owner</Text>
-                                  <View style={styles.closeModalIconContainer}>
-                                    <Icon
-                                      name='close'
-                                      onPress={() => this.setState({modalInviteToBeOwner: false,})} />
-                                  </View> 
-                                </View>
-                                <Input
-                                    placeholder={"email"}
-                                    rightIcon={
-                                        <Icon
-                                          name='email'
-                                        />
-                                      }
-                                    onChangeText={(value) => (modalInput = value)}
-                                />
-                                   
-                                <TouchableOpacity
-                                  style={styles.button}
-                                  onPress={() => { 
-                                    this.setState({modalInviteToBeOwner: false});
-                                    this.insertNewOwner(modalInput);
-
-                                    modalInput = "";
-                                  }}
-                                >
-                                  {/* getState((state) => {//Code here}) */}
-                                  <Text style={styles.buttonText}>Done</Text>
-                                </TouchableOpacity>
-                            </View>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={this.state.modalInviteToBeOwner}
+                onRequestClose={() => {
+                  this.setState({modalInviteToBeOwner: false});
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <View flexDirection='row'>
+                          <Text style={styles.modalTitle}>Add an Owner</Text>
+                          <View style={styles.closeModalIconContainer}>
+                            <Icon
+                              name='close'
+                              onPress={() => this.setState({modalInviteToBeOwner: false,})} />
+                          </View> 
                         </View>
-                    </Modal>
+                        <Input
+                            placeholder={"email"}
+                            rightIcon={
+                                <Icon
+                                  name='email'
+                                />
+                              }
+                            onChangeText={(value) => (modalInput = value)}
+                        />
+                            
+                        <TouchableOpacity
+                          style={styles.button}
+                          onPress={() => { 
+                            this.setState({modalInviteToBeOwner: false});
+                            this.insertNewOwner(modalInput);
+
+                            modalInput = "";
+                          }}
+                        >
+                          {/* getState((state) => {//Code here}) */}
+                          <Text style={styles.buttonText}>Done</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
+            </Modal>
+        </View>
 
 
 {/* -------------------------------------------------------------------------------------------- */}

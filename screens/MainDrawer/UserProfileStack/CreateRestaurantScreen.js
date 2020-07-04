@@ -204,23 +204,20 @@ class CreateRestaurantComponent extends Component {
                     })}
                 </ScrollView>
 
-                
-                
                 <View>
                     <TouchableOpacity style={styles.button} onPress={() => { this.setState({modalImageVisible: true});  }}>
                         <Text>Add Photo</Text>
                     </TouchableOpacity>
                 </View>
                 
-
-
-
-
                 <View style={styles.centeredView}>
                     <Modal
                         animationType="slide"
                         transparent={true}
                         visible={this.state.modalImageVisible}
+                        onRequestClose={() => {
+                            this.setState({modalImageVisible: false});
+                          }}
                         
                     >
                         <View style = {styles.centeredView}>
@@ -319,6 +316,9 @@ class CreateRestaurantComponent extends Component {
                         animationType="slide"
                         transparent={true}
                         visible={this.state.modalVisible}
+                        onRequestClose={() => {
+                            this.setState({modalVisible: false});
+                          }}
                         
                     >
                         <View style={styles.centeredView}>

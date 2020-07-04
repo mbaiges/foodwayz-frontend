@@ -126,7 +126,7 @@ class LoginScreenComponent extends Component {
               <Text style={styles.logoText}>FoodWayz</Text>
 
 
-{/* ---------------------------------------MODAL-----------------------------------------------------------------------*/}
+{/* ---------------------------------------------------MODAL-----------------------------------------------------------------*/}
          
               <View style={styles.centeredView}>
                 <Modal
@@ -134,6 +134,7 @@ class LoginScreenComponent extends Component {
                   transparent={true}
                   visible={this.state.emailVerificationModal}
                   onRequestClose={() => {
+                    this.setState({emailVerificationModal: false});
                   }}
                 >
 
@@ -172,12 +173,6 @@ class LoginScreenComponent extends Component {
               </View>
 
 {/* --------------------------------------------------------------------------------------------------------------------*/} 
-
-
-
-
-
-
 
 
 

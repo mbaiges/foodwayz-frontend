@@ -97,6 +97,7 @@ class RegisterScreenComponent extends Component {
                   transparent={true}
                   visible={this.state.emailVerificationModal}
                   onRequestClose={() => {
+                    this.setState({emailVerificationModal: false});
                   }}
                 >
 

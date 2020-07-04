@@ -11,7 +11,7 @@ import {
 import MainDrawer from "./MainDrawerNavigator";
 
 const Stack = createStackNavigator();
-const INITIAL_ROUTE_NAME = "EmailVerified";
+const INITIAL_ROUTE_NAME = "Login";
 
 export default function AuthStackNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the

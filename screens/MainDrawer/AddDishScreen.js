@@ -451,7 +451,9 @@ class AddDishComponent extends Component {
                 animationType="slide"
                 transparent={true}
                 visible={this.state.typesVisible}
-                
+                onRequestClose={() => {
+                  this.setState({typesVisible: false});
+                }}
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -496,7 +498,9 @@ class AddDishComponent extends Component {
                 animationType="slide"
                 transparent={true}
                 visible={this.state.requestTypesVisible}
-                
+                onRequestClose={() => {
+                  this.setState({requestTypesVisible: false});
+                }}
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -526,7 +530,9 @@ class AddDishComponent extends Component {
                 animationType="slide"
                 transparent={true}
                 visible={this.state.ingredientsVisible}
-                
+                onRequestClose={() => {
+                  this.setState({ingredientsVisible: false});
+                }}
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -573,7 +579,9 @@ class AddDishComponent extends Component {
                 animationType="slide"
                 transparent={true}
                 visible={this.state.requestIngrVisible}
-                
+                onRequestClose={() => {
+                  this.setState({requestIngrVisible: false});
+                }}
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -602,7 +610,9 @@ class AddDishComponent extends Component {
                 animationType="slide"
                 transparent={true}
                 visible={this.state.characteristicsVisible}
-                
+                onRequestClose={() => {
+                  this.setState({characteristicsVisible: false});
+                }}
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -649,7 +659,10 @@ class AddDishComponent extends Component {
               animationType="slide"
               transparent={true}
               visible={this.state.requestVisible}
-              
+              onRequestClose={() => {
+                this.setState({requestVisible: false});
+              }}
+
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -679,6 +692,9 @@ class AddDishComponent extends Component {
                 animationType="slide"
                 transparent={true}
                 visible={this.state.modalImageVisible}
+                onRequestClose={() => {
+                  this.setState({modalImageVisible: false});
+                }}
                 
             >
                 <View style = {styles.centeredView}>

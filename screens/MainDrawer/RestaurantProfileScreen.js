@@ -10,7 +10,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
-  Modal
 } from "react-native";
 import { RestaurantApi, FoodApi } from "../../api";
 
