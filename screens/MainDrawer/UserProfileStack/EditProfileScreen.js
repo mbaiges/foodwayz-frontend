@@ -7,6 +7,9 @@ import { UserApi } from '../../../api';
 import * as ImagePicker from 'expo-image-picker';
 import * as firebase from 'firebase';
 
+import { Ionicons } from "@expo/vector-icons";
+import Colors from "../../../constants/Colors";
+
 class EditProfileComponent extends Component {
 
   constructor(){
@@ -144,6 +147,20 @@ class EditProfileComponent extends Component {
     const { navigation, context } = this.props;
     const date = this.state.date;
 
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={styles.navbar_r_icons}>
+          <Ionicons
+            name='check'
+            type='material-community'
+            size={38}
+            style={styles.navbar_r_icon}
+            onPress={async() => { await this.saveChanges()}} 
+          />
+        </View>
+      ),
+    });
+
     return (
       <ScrollView>
       <View style={styles.backgroundContainer}>
@@ -199,11 +216,6 @@ class EditProfileComponent extends Component {
               <Text>SET ALLERGIES</Text>
           </TouchableOpacity>
         </View>
-        <View>
-          <TouchableOpacity style={styles.button} onPress={async() => { await this.saveChanges()}} >
-              <Text>SAVE CHANGES</Text>
-          </TouchableOpacity>
-        </View>
       </View>
       </ScrollView>
     );
@@ -223,6 +235,16 @@ const styles = StyleSheet.create({
       width: null,
       height: null,
       backgroundColor: 'white',
+    },
+
+    navbar_r_icons: {
+      flexDirection: "row",
+      right: 16,
+    },
+  
+    navbar_r_icon: {
+      color: Colors.noticeText,
+      marginLeft: 16,
     },
 
     mainPage: {

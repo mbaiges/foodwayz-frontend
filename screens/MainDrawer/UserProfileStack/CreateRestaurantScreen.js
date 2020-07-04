@@ -18,6 +18,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as firebase from 'firebase';
 import { UserApi, RestaurantChainApi, RestaurantApi } from '../../../api';
 import { makeUrl } from "expo-linking";
+import { Snackbar } from 'react-native-paper';
 
 const { width } = Dimensions.get("window");
 
@@ -55,6 +56,11 @@ class CreateRestaurantComponent extends Component {
             }
         }
 
+        dismissFieldsSnackBar = () => {
+            this.setState({
+              snackbarFieldsVisible: false
+            });
+          }
 
         async onChooseImagePress(){
             let result = await ImagePicker.launchCameraAsync();
@@ -129,6 +135,9 @@ class CreateRestaurantComponent extends Component {
                 navigation.goBack();
 
             }else{
+                this.setState({
+                    snackbarFieldsVisible: true
+                  });
                 console.log("fill fields")
             }
         }
@@ -354,6 +363,16 @@ class CreateRestaurantComponent extends Component {
                     </TouchableOpacity>
                 </View>
             </View>  
+
+
+            <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarFieldsVisible}
+              onDismiss={this.dismissFieldsSnackBar}
+        >
+             <Text style={styles.textSnack}> Please fill all the fields.</Text>
+        </Snackbar>
           </ScrollView>
         );
       }
@@ -532,6 +551,17 @@ const styles = StyleSheet.create({
         margin: 15,
       },
     
+      textSnack:{
+        color: 'white',
+        fontSize: 20,
+        fontWeight: 'bold',
+        paddingBottom: 5,
+      },
+
+      snackBar:{
+        backgroundColor: "#787777",
+        height:70,
+      }  
   
   });
 

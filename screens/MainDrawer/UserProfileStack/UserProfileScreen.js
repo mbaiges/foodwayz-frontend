@@ -161,22 +161,7 @@ class UserProfileComponent extends Component {
               </ScrollView>
             </View>
           </View>
-          { 
-              (this.state.restaurants.length > 0) ? 
-              (<View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={async () => {
-                    this.openRestaurant();
-                    //navigation.navigate("RestaurantProfile");
-                  }}
-                >
-                  <Text style={styles.buttonText}>My Restaurants</Text>
-                </TouchableOpacity>
-              </View>) 
-              :
-              (<View/>)
-          }
+
           <View style={styles.centeredView}>
             <Modal
               animationType="slide"
@@ -210,16 +195,30 @@ class UserProfileComponent extends Component {
           </View>
           { 
               (this.state.restaurants.length == 0) ? 
-              (<View style={styles.buttonContainer}>
+              (
+              <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() => { navigation.navigate("CreateRestaurant") }}
                 >
                   <Text style={styles.buttonText}>Add Restaurant</Text>
                 </TouchableOpacity>
-              </View>) 
+              </View>
+              ) 
               :
-              (<View/>)
+              (
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={async () => {
+                    this.openRestaurant();
+                    //navigation.navigate("RestaurantProfile");
+                  }}
+                >
+                  <Text style={styles.buttonText}>My Restaurants</Text>
+                </TouchableOpacity>
+              </View>
+              )
           }
           <View style={styles.buttonContainer}>
             <TouchableOpacity
