@@ -1,4 +1,4 @@
-import React, { Component, useContext, u } from "react";
+import React, { Component, useContext } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../../../constants/Colors";
 import { Card, ListItem, Button, Icon, Rating } from "react-native-elements";

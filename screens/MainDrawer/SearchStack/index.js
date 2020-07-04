@@ -1,4 +1,4 @@
-import Search from './ScreenSearch';
+import Search from './SearchScreen';
 
 export {
     Search

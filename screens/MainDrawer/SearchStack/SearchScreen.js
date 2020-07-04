@@ -11,9 +11,13 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
+import Constants from 'expo-constants';
 import FoodCard from "../../components/FoodCard";
 
-class Search extends React.Component {
+const { width } = Dimensions.get("window");
+const statusBarHeight = Constants.statusBarHeight;
+
+class SearchScreenComponent extends React.Component {
   state = {
     search: '',
   };
@@ -23,17 +27,21 @@ class Search extends React.Component {
   };
 
   render() {
-    const { search } = this.state;
+    const { navigation } = this.props;
+
+    navigation.setOptions({
+      header: () => {<View />}
+    });
 
     return (
-      <View>
-        <SearchBar
-          platform = "android"
-          placeholder="Type Here..."
-          onChangeText={this.updateSearch}
-          value={search}
-        />
-
+      <View
+        style={styles.screenContainer}>
+          <SearchBar
+            platform="android"
+            placeholder="Type Here..."
+            onChangeText={this.updateSearch}
+            value={this.state.search}
+          />
         <ScrollView>
           <FoodCard
             image={{uri: 'https://www.knorr.com/content/dam/unilever/global/recipe_image/352/35279-default.jpg/_jcr_content/renditions/cq5dam.web.800.600.jpeg'}}
@@ -51,6 +59,16 @@ class Search extends React.Component {
 }
 
 export default SearchScreen = (props) => {
-  return <Search {...props} />;
+  return <SearchScreenComponent {...props} />;
 };
 
+const styles = StyleSheet.create({
+  screenContainer: {
+    paddingTop: statusBarHeight,
+  },
+
+  navbar: {
+    flexDirection: "row",
+    marginTop: 16,
+  },
+});
