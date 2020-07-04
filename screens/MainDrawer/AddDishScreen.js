@@ -11,8 +11,11 @@ import {
   Keyboard,
   Modal,
 } from "react-native";
+
+import { Snackbar } from 'react-native-paper';
+
 import { ScrollView } from "react-native-gesture-handler";
-import { CheckBox,Input, Icon} from "react-native-elements";
+import { CheckBox, Input, Icon} from "react-native-elements";
 import * as ImagePicker from 'expo-image-picker';
 import {IngredientApi, CharacteristicApi, FoodApi, FoodHasCharacteristicApi, FoodHasIngredientApi, TypeApi } from '../../api';
 import { makeUrl } from "expo-linking";
@@ -59,6 +62,12 @@ class AddDishComponent extends Component {
           rest: {},
         }
 
+  }
+
+  dismissSnackBar = () => {
+    this.setState({
+      snackbarVisible: false
+    });
   }
 
   //---------------------------OPEN ADD MODALS-----------------------------------
@@ -148,6 +157,13 @@ class AddDishComponent extends Component {
 
   //---------------------------DISH UPLOAD-----------------------------------
 
+  dismissFieldsSnackBar = () => {
+    this.setState({
+      snackbarFieldsVisible: false
+    });
+  }
+
+
   async uploadDish(){
       const {navigation} = this.props;
 
@@ -173,7 +189,10 @@ class AddDishComponent extends Component {
           navigation.goBack();
 
       }else{
-          console.log("fill fields")
+        this.setState({
+          snackbarFieldsVisible: true
+        });
+          console.log("Please fill title, description, image and type")
       }
   }
 
@@ -719,6 +738,18 @@ class AddDishComponent extends Component {
             </Modal>
             {/* -------------------------------------------------------------------------------------------------------------------------------------------------------- */}
 
+            {/* -------------------------------------------------------------- CHOOSE IMAGE MODAL----------------------------------------------------------------------- */}
+        
+            {/* -------------------------------------------------------------------------------------------------------------------------------------------------------- */}
+            <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarFieldsVisible}
+              onDismiss={this.dismissFieldsSnackBar}
+        >
+             <Text style={styles.textSnack}> Please fill all the fields.</Text>
+        </Snackbar>
+
         </SafeAreaView>
     );
   }
@@ -983,6 +1014,18 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 5
   },
+
+  textSnack:{
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingBottom: 5,
+  },
+
+  snackBar:{
+    backgroundColor: "#787777",
+    height:70,
+  }  
 
 });
 
