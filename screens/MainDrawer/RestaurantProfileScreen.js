@@ -141,26 +141,25 @@ class RestaurantProfileComponent extends Component {
   
         <View paddingTop={15}>
           <Text style={styles.subtitleText}>All of our dishes</Text>
-          {this.state.dishes.map(dish =>{
-            
-                return( 
-                  <ListItem
-                    onPress={async () => {navigation.navigate("Food");}}
-                    key={dish.a_food_id}
-                    leftAvatar={{ source: { uri: dish.a_image_url } }}
-                    title={dish.a_title}
-                    subtitle={
-                      <View style={styles.subtitleView}>
-                        <Text>{dish.a_description}</Text>
-                        <Rating imageSize={10} readonly startingValue={dish.a_score}  style={styles.rating}/> 
-                      </View>}
-                    bottomDivider
-                  />
-                )
-              })}
-  
+            {this.state.dishes.map(dish =>{
+              return( 
+                <ListItem
+                  onPress={async () => {navigation.navigate("Food");}}
+                  key={dish.a_food_id}
+                  leftAvatar={{ source: { uri: dish.a_image_url } }}
+                  title={dish.a_title}
+                  subtitle={
+                    <View style={styles.subtitleView}>
+                      <Text>{dish.a_description}</Text>
+                      <Rating imageSize={10} readonly startingValue={dish.a_score}  style={styles.rating}/> 
+                    </View>}
+                  bottomDivider={true}
+                  topDivider={true}
+                />
+              )
+            })}
         </View>
-    
+        
         </ScrollView>
       </SafeAreaView>
     );

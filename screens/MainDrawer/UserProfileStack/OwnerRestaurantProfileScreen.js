@@ -44,7 +44,6 @@ class OwnerRestaurantProfileComponent extends Component {
     }
   }
 
-
   async fetchRestaurant() {
     const { route } = this.props;
     console.log(route);
