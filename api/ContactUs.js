@@ -9,8 +9,8 @@ class ContactUsApi{
     return `${Api.baseUrl}/contact_us`;
   }
 
-  static customEmail(body) {
-    return Api.post(`${ContactUsApi.url}/contact_us`, body);
+  static customEmail({reason, body}) {
+    return Api.post(`${ContactUsApi.url}/contact_us`, {reason, body});
   }
 
   static typeRequest(a_type_name) {
