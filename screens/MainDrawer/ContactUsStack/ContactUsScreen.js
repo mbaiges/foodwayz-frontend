@@ -31,7 +31,7 @@ class ContactUs extends Component {
     
       }
 
-      sendMail(){
+      async sendMail(){
         let email = {
           reason: this.state.type,
           body: this.state.comment,
