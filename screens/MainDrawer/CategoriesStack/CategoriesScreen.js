@@ -64,7 +64,7 @@ class CategoriesScreenComponent extends Component {
       (<SafeAreaView style={styles.backgroundContainer}>
         <ScrollView>
           <View>
-            <Text style={styles.homeSubtitle}>Categpories</Text>
+            <Text style={styles.homeSubtitle}>Categories</Text>
             <ScrollView>
               {
                 this.state.types.map(type => {
@@ -74,7 +74,7 @@ class CategoriesScreenComponent extends Component {
                       image={{ uri: type.a_image_url }}
                       title={type.a_type_name}
                       onPress={async () => {
-                        //navigation.navigate("Food", { food: food });
+                        navigation.navigate("Categorie", { type: type });
                         //console.log("I want to navigate to Dish page");
                       }}
                     />

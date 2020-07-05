@@ -49,7 +49,6 @@ class HomeScreenComponent extends Component {
   }
 
   async fetchFoods() {
-
     let queryBody = {
       raw_input: "",
       filters: {

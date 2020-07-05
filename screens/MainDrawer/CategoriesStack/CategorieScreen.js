@@ -16,7 +16,7 @@ import FoodCard from "../../components/FoodCard";
 
 import { UserContext } from '../../../context/UserContext';
 
-import { FoodApi } from '../../../api';
+import { FoodApi, SearchApi } from '../../../api';
 import { color } from "react-native-reanimated";
 
 class CategorieScreenComponent extends Component {
@@ -24,23 +24,43 @@ class CategorieScreenComponent extends Component {
     super();
     this.state = {
       foods: [],
+      type: {},
     }
+  }
+
+  fetchType(){
+    const { route } = this.props;
+    const { type } = route.params;
+    this.setState({ type: type });
   }
 
   async fetchFoods() {
 
-    const resp = await FoodApi.getAll();
-    this.setState({
-      foods: resp.response.result
-    })
+    let aux = [];
+    aux.push(this.state.type.a_type_id);
+
+    let queryBody = {
+        raw_input: "",
+        filters: {
+            a_type_ids: aux,
+            a_ingr_ids: [],
+            a_char_ids: []
+    },
+        sort_by: "most_reviews"
+    };
+  
+    const resp = await SearchApi.searchFoods(queryBody);
+    this.setState({ foods: resp.response.result });
 
     console.log(resp);
+
   }
 
   async componentDidMount() {
     this.setState({
       activityIndicator: true
     })
+    await this.fetchType();
     await this.fetchFoods();
     this.setState({
       activityIndicator: false
@@ -62,7 +82,7 @@ class CategorieScreenComponent extends Component {
       (<SafeAreaView style={styles.backgroundContainer}>
         <ScrollView>
           <View>
-            <Text style={styles.homeSubtitle}>Categpories</Text>
+      <Text style={styles.homeSubtitle}>{this.state.type.a_type_name}s</Text>
             <ScrollView>
               {
                 this.state.foods.map(food => {

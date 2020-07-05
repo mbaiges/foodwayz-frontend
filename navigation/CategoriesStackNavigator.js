@@ -2,7 +2,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
+
 import Categories from "../screens/MainDrawer/CategoriesStack/CategoriesScreen";
+import Categorie from "../screens/MainDrawer/CategoriesStack/CategorieScreen";
+
 import DefaultNavBar from "./NavBars/DefaultNavBar";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -22,6 +25,7 @@ export default function StackNavigator({ navigation, route }) {
       }
     >
       <Stack.Screen name="Categories" component={Categories} />
+      <Stack.Screen name="Categorie" component={Categorie} />
     </Stack.Navigator>
   );
 }
@@ -32,6 +36,8 @@ function getHeaderTitle(route) {
 
   switch (routeName) {
     case "Categories":
+      return "Categories";
+    case "Categorie":
       return "Categories";
   }
 }
