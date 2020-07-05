@@ -94,10 +94,11 @@ class ReviewApi{
   /*
   BODY:
     {
-      "a_desc":"BuEnArDoOo bREOoO",
-      "a_food_id": 1
-      "a_score": 1
-      "a_user_id": 1
+      "a_food_id": 2,
+      "a_desc": "Buenaarrdooo", 
+      "a_food_quality_score": 4.5, 
+      "a_presentation_score": 3, 
+      "a_price_quality_score": 4.9
     }
   RESULTADOS:
     200 - Se agregó la review
@@ -106,12 +107,15 @@ class ReviewApi{
         "message": "Successfully added review",
         "result": [
           {
-            "a_review_id": 10,
+            "a_review_id": 9,
             "a_user_id": 1,
             "a_food_id": 2,
-            "a_desc": "BuEnArDoOo bREOoO",
-            "a_score": "1.00",
-            "a_created_at": "2020-07-01T03:28:47.349Z"
+            "a_desc": "Buenaarrdooo",
+            "a_food_quality_score": "4.50",
+            "a_presentation_score": "3.00",
+            "a_price_quality_score": "4.90",
+            "a_score": "4.13",
+            "a_created_at": "2020-07-05T18:40:55.845Z"
           }
         ]
       }
