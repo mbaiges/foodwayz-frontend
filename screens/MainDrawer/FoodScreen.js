@@ -15,6 +15,8 @@ import {
 
 import { Image, ListItem, Icon, Input, Rating } from 'react-native-elements';
 
+import { ViewsApi } from '../../api';
+
 const screenWidth = Dimensions.get('window').width
 
 import {
@@ -50,8 +52,10 @@ class FoodScreenComponent extends Component {
     console.log(this.state.food.a_reviews_info.quantified);
   }
 
-  componentDidMount() {
-    this.fetchFood();
+  async componentDidMount() {
+    await this.fetchFood();
+    const resp = await ViewsApi.registerFoodView(this.state.food.a_food_id);
+    console.log(resp);
   }
 
   render() {

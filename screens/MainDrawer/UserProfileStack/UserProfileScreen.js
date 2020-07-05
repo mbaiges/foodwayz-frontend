@@ -134,8 +134,8 @@ class UserProfileComponent extends Component {
             <Text style={styles.subtitleText}>My reviews</Text>
             <View style={styles.review}>
               <ScrollView 
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
               >
                 {
 
