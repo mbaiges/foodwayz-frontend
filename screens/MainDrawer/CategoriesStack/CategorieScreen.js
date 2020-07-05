@@ -16,23 +16,22 @@ import FoodCard from "../../components/FoodCard";
 
 import { UserContext } from '../../../context/UserContext';
 
-import { TypeApi } from '../../../api';
+import { FoodApi } from '../../../api';
 import { color } from "react-native-reanimated";
 
-class CategoriesScreenComponent extends Component {
+class CategorieScreenComponent extends Component {
   constructor() {
     super();
     this.state = {
-      types: [],
-
+      foods: [],
     }
   }
 
-  async fetchTypes() {
+  async fetchFoods() {
 
-    const resp = await TypeApi.getAll();
+    const resp = await FoodApi.getAll();
     this.setState({
-      types: resp.response.result
+      foods: resp.response.result
     })
 
     console.log(resp);
@@ -42,11 +41,10 @@ class CategoriesScreenComponent extends Component {
     this.setState({
       activityIndicator: true
     })
-    await this.fetchTypes();
+    await this.fetchFoods();
     this.setState({
       activityIndicator: false
     })
-
   }
 
   render() {
@@ -67,16 +65,18 @@ class CategoriesScreenComponent extends Component {
             <Text style={styles.homeSubtitle}>Categpories</Text>
             <ScrollView>
               {
-                this.state.types.map(type => {
+                this.state.foods.map(food => {
                   return (
                     <FoodCard
-                      key={type.a_type_id}
-                      image={{ uri: type.a_image_url }}
-                      title={type.a_type_name}
+                      key={food.a_food_id}
+                      image={{ uri: food.a_image_url }}
+                      title={food.a_title}
+                      brand={food.a_rest.a_name}
                       onPress={async () => {
-                        //navigation.navigate("Food", { food: food });
-                        //console.log("I want to navigate to Dish page");
+                        navigation.navigate("Food", { food: food });
+                        console.log("I want to navigate to Dish page");
                       }}
+                      rating={food.a_score}
                     />
                   )
                 })
@@ -91,9 +91,9 @@ class CategoriesScreenComponent extends Component {
   }
 }
 
-export default function CategoriesScreen(props) {
+export default function CategorieScreen(props) {
   const { authState, setAuthState } = useContext(UserContext);
-  return <CategoriesScreenComponent {...props} context={{ authState, setAuthState }} />;
+  return <CategorieScreenComponent {...props} context={{ authState, setAuthState }} />;
 }
 
 const styles = StyleSheet.create({
