@@ -10,9 +10,8 @@ import {
   ActivityIndicator
 } from "react-native";
 
-import { Image, ListItem, Button, Icon, Input, Rating } from 'react-native-elements';
+import { Card } from 'react-native-elements';
 
-import FoodCard from "../../components/FoodCard";
 
 import { UserContext } from '../../../context/UserContext';
 
@@ -69,15 +68,22 @@ class CategoriesScreenComponent extends Component {
               {
                 this.state.types.map(type => {
                   return (
-                    <FoodCard
-                      key={type.a_type_id}
-                      image={{ uri: type.a_image_url }}
-                      title={type.a_type_name}
-                      onPress={async () => {
-                        navigation.navigate("Categorie", { type: type });
-                        //console.log("I want to navigate to Dish page");
-                      }}
-                    />
+                    <TouchableOpacity
+                    onPress={async () => {
+                      navigation.navigate("Categorie", { type: type });
+                      //console.log("I want to navigate to Dish page");
+                    }}>
+                      <Card
+                        key={type.a_type_id}
+                        image={{ uri: type.a_image_url }}
+                        imageStyle={{
+                          height: 150,
+                        }}
+
+                      >
+                        <Text style={styles.foodName}>{type.a_type_name}</Text>
+                      </Card>
+                    </TouchableOpacity>
                   )
                 })
               }
@@ -122,7 +128,7 @@ const styles = StyleSheet.create({
   foodName: {
     textAlign: "left",
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 20,
     paddingLeft: 3,
   },
 
