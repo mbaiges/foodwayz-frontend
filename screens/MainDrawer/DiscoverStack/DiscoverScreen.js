@@ -16,58 +16,31 @@ import FoodCard from "../../components/FoodCard";
 
 import { UserContext } from '../../../context/UserContext';
 
-import { SearchApi, UserApi, UserHasCharacteristicApi } from '../../../api';
+import { FoodApi } from '../../../api';
 import { color } from "react-native-reanimated";
 
-class HomeScreenComponent extends Component {
+class DiscoverScreenComponent extends Component {
   constructor() {
     super();
     this.state = {
       foods: [],
-      user: {},
-      userChars: [],
     }
-  }
-
-
-  async fetchUser() {
-    const resp = await UserApi.getMe();
-    this.setState({ user: resp.response.result });
-    console.log(resp);
-
-    const resp2 = await UserHasCharacteristicApi.getCharactersticsByUser(this.state.user.a_user_id);
-    console.log(resp2);
-
-    let aux = []
-    resp2.response.result.forEach(char => {
-      aux.push(char.a_char_id);
-    });
-
-    this.setState({ userChars: aux })
-
-    console.log(this.state.userChars)
   }
 
   async fetchFoods() {
 
-    let queryBody = {
-      raw_input: "",
-      filters: {
-        a_type_ids: [],
-        a_ingr_ids: [],
-        a_char_ids: this.state.userChars
-      },
-      sort_by: "most_reviews"
-    };
-
-    const resp = await SearchApi.searchFoods(queryBody);
-    this.setState({ foods: resp.response.result });
+    const resp = await FoodApi.getAll();
+    this.setState({
+      foods: resp.response.result
+    })
 
     console.log(resp);
   }
 
   async componentDidMount() {
-    await this.fetchUser();
+    this.setState({
+      activityIndicator: true
+    })
     await this.fetchFoods();
     this.setState({
       activityIndicator: false
@@ -87,11 +60,10 @@ class HomeScreenComponent extends Component {
         </View>
       </SafeAreaView>)
       :
-      (
-      <SafeAreaView style={styles.backgroundContainer}>
+      (<SafeAreaView style={styles.backgroundContainer}>
         <ScrollView>
           <View>
-            <Text style={styles.homeSubtitle}>Recommended Dishes For You</Text>
+            <Text style={styles.homeSubtitle}>Discover New Food!</Text>
             <ScrollView>
               {
                 this.state.foods.map(food => {
@@ -113,14 +85,16 @@ class HomeScreenComponent extends Component {
             </ScrollView>
           </View>
         </ScrollView>
+
       </SafeAreaView>)
-      )
+
+    );
   }
 }
 
-export default function HomeScreen(props) {
+export default function DiscoverScreen(props) {
   const { authState, setAuthState } = useContext(UserContext);
-  return <HomeScreenComponent {...props} context={{ authState, setAuthState }} />;
+  return <DiscoverScreenComponent {...props} context={{ authState, setAuthState }} />;
 }
 
 const styles = StyleSheet.create({

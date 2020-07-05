@@ -89,7 +89,6 @@ class SearchScreenComponent extends React.Component {
 
   async querySearch(){
     const resp = await SearchApi.searchFoods(this.state.queryBody);
-
     this.setState({ queryResult: resp.response.result });
   }
 
