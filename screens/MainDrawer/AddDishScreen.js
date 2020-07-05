@@ -18,7 +18,7 @@ import { Snackbar } from 'react-native-paper';
 import { ScrollView } from "react-native-gesture-handler";
 import { CheckBox, Input, Icon} from "react-native-elements";
 import * as ImagePicker from 'expo-image-picker';
-import {IngredientApi, CharacteristicApi, FoodApi, FoodHasCharacteristicApi, FoodHasIngredientApi, TypeApi } from '../../api';
+import {IngredientApi, CharacteristicApi, FoodApi, FoodHasCharacteristicApi, FoodHasIngredientApi, TypeApi, SearchApi } from '../../api';
 import { makeUrl } from "expo-linking";
 import * as firebase from 'firebase';
 
@@ -61,6 +61,9 @@ class AddDishComponent extends Component {
 
           dish: {},
           rest: {},
+          
+          filterTimer: undefined,
+
         }
 
   }
@@ -115,6 +118,89 @@ class AddDishComponent extends Component {
     let aux = this.state.characteristicsChosen;
     aux.splice(idx,1);
     this.setState({characteristicsChosen: aux});
+  }
+
+  // ----------------------SEARCH IN MODALS -----------------------------------
+
+  async updateTypeSearch(){
+    if (this.state.filterTimer) {
+      console.log("clearing");
+      clearTimeout(this.state.filterTimer);
+    }
+    const timer = setTimeout(() => {
+      console.log("calling")
+      this.filterTypeQuery(this.state.typeModalInput);
+    }, 500);
+
+    this.setState({
+      filterTimer: timer,
+    });
+  }
+
+  async updateIngrSearch(){
+    if (this.state.filterTimer) {
+      console.log("clearing");
+      clearTimeout(this.state.filterTimer);
+    }
+    const timer = setTimeout(() => {
+      console.log("calling")
+      this.filterIngrQuery(this.state.ingrModalInput);
+    }, 500);
+
+    this.setState({
+      filterTimer: timer,
+    });
+  }
+
+  async updateCharSearch(){
+    if (this.state.filterTimer) {
+      console.log("clearing");
+      clearTimeout(this.state.filterTimer);
+    }
+    const timer = setTimeout(() => {
+      console.log("calling")
+      this.filterCharQuery(this.state.charModalInput);
+    }, 500);
+
+    this.setState({
+      filterTimer: timer,
+    });
+  }
+
+  async filterTypeQuery(input){
+    let auxFilterQueryBody = {
+      raw_input: input
+    }
+    const resp = await SearchApi.searchTypes(auxFilterQueryBody)
+    if(resp.status == 200){
+      this.setState({ allTypes: resp.response.result });
+    }else{
+      console.log("error");
+    }
+  }
+
+  async filterIngrQuery(input){
+    let auxFilterQueryBody = {
+      raw_input: input
+    }
+    const resp = await SearchApi.searchIngredients(auxFilterQueryBody)
+    if(resp.status == 200){
+      this.setState({ allIngredients: resp.response.result });
+    }else{
+      console.log("error");
+    }
+  }
+
+  async filterCharQuery(input){
+    let auxFilterQueryBody = {
+      raw_input: input
+    }
+    const resp = await SearchApi.searchCharacteristics(auxFilterQueryBody)
+    if(resp.status == 200){
+      this.setState({ allCharacteristics: resp.response.result });
+    }else{
+      console.log("error");
+    }
   }
 
   //-------------------------IMAGE MANAGEMENT----------------------------------
@@ -480,7 +566,10 @@ class AddDishComponent extends Component {
                         <Input
                             placeholder={"Search"}
                             rightIcon={ <Icon name='search' /> }
-                            onChangeText={ (value) => ( this.setState({typeModalInput:value}) )} 
+                            onChangeText={ async(value) => {
+                              this.setState({typeModalInput:value})
+                              await this.updateTypeSearch();
+                            }}  
                         />
                         <ScrollView>
                             {this.state.allTypes.map((type, idx) => {
@@ -559,7 +648,10 @@ class AddDishComponent extends Component {
                         <Input
                             placeholder={"Search"}
                             rightIcon={ <Icon name='search' /> }
-                            onChangeText={ (value) => ( this.setState({ingrModalInput:value}) )} 
+                            onChangeText={ async(value) => {
+                              this.setState({ingrModalInput:value})
+                              await this.updateIngrSearch();
+                            }} 
                         />
                         <ScrollView>
                             {this.state.allIngredients.map((ingr, idx) => {
@@ -639,7 +731,10 @@ class AddDishComponent extends Component {
                         <Input
                             placeholder={"Search"}
                             rightIcon={ <Icon name='search' /> }
-                            onChangeText={ (value) => ( this.setState({charModalInput:value}) )} 
+                            onChangeText={ async(value) => {
+                              this.setState({charModalInput:value})
+                              await this.updateCharSearch();
+                            }}
                         />
                         <ScrollView>
                             {this.state.allCharacteristics.map((char, idx) => {
