@@ -7,6 +7,7 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 
 import { Image, ListItem, Button, Icon, Input, Rating } from 'react-native-elements';
@@ -68,6 +69,10 @@ class HomeScreenComponent extends Component {
   async componentDidMount() {
     await this.fetchUser();
     await this.fetchFoods();
+    this.setState({
+      activityIndicator: false
+    })
+
   }
 
   render() {
@@ -75,6 +80,14 @@ class HomeScreenComponent extends Component {
     const { authState, setAuthState } = context;
 
     return (
+      (this.state.activityIndicator) ?
+      (<SafeAreaView>
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#000000" />
+        </View>
+      </SafeAreaView>)
+      :
+      (
       <SafeAreaView style={styles.backgroundContainer}>
         <ScrollView>
           <View>
@@ -100,9 +113,8 @@ class HomeScreenComponent extends Component {
             </ScrollView>
           </View>
         </ScrollView>
-
-      </SafeAreaView>
-    );
+      </SafeAreaView>)
+      )
   }
 }
 
@@ -177,4 +189,8 @@ const styles = StyleSheet.create({
     color:"white",
 },
 
+  loading:{
+    flex: 1,
+    marginTop:100,
+  }
 });

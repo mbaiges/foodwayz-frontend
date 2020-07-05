@@ -10,6 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  ActivityIndicator
 } from "react-native";
 import { RestaurantApi, FoodApi, ViewsApi } from "../../api";
 
@@ -72,6 +73,9 @@ class RestaurantProfileComponent extends Component {
   }
 
   async componentDidMount() {
+    this.setState({
+      activityIndicator: true
+    })
     console.log("Mounting");
     await this.fetchRestaurant();
     await this.fetchImages();
@@ -79,6 +83,9 @@ class RestaurantProfileComponent extends Component {
     this.chechPolularDishes();
     const resp = await ViewsApi.registerRestaurantView(this.state.restaurant.a_rest_id);
     console.log(resp);
+    this.setState({
+      activityIndicator: false
+    })
   }
 
 
@@ -86,7 +93,14 @@ class RestaurantProfileComponent extends Component {
     const {navigation} = this.props;
 
     return (
-      <SafeAreaView style={styles.backgroundContainer}>
+      (this.state.activityIndicator) ?
+            (<SafeAreaView>
+                <View style={styles.loading}>
+                <ActivityIndicator size="large" color="#000000" />
+                </View>
+            </SafeAreaView>)
+            :
+      (<SafeAreaView style={styles.backgroundContainer}>
 
         <ScrollView>
         <View style={styles.mainPage}>
@@ -176,7 +190,7 @@ class RestaurantProfileComponent extends Component {
         </View>
 
         </ScrollView>
-      </SafeAreaView>
+      </SafeAreaView>)
     );
   }
 
@@ -341,6 +355,10 @@ const styles = StyleSheet.create({
   },
 
 
+  loading:{
+    flex: 1,
+    marginTop:100,
+  }
 
 
 

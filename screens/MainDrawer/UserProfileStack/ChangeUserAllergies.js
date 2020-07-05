@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Keyboard,
+  ActivityIndicator
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { CheckBox } from "react-native-elements";
@@ -51,10 +52,12 @@ class EditProfileAllergiesComponent extends Component {
   }
 
   async fetchUserChars(){
+
     const resp = await UserHasCharacteristicApi.getCharactersticsByUser(this.state.user.a_user_id);
     for (let userChar of resp.response.result) {
       this.setValue(userChar.a_char_id);
     }
+
   }
 
   async fetchChars(){
@@ -66,6 +69,7 @@ class EditProfileAllergiesComponent extends Component {
   }
   
   async fetchUser() {
+
     const resp = await UserApi.getMe();
     this.setState({
       user: resp.response.result
@@ -78,10 +82,17 @@ class EditProfileAllergiesComponent extends Component {
     // this.setState({ user: user }); 
     // console.log(this.state.user);
 
+    this.setState({
+      activityIndicator: true
+    })
+
     console.log('mounting');
     await this.fetchUser();
     await this.fetchChars();
     await this.fetchUserChars();
+    this.setState({
+      activityIndicator: false
+    })
   }
 
   render() {
@@ -103,8 +114,15 @@ class EditProfileAllergiesComponent extends Component {
     }
 
     return (
+      (this.state.activityIndicator) ?
+      (<SafeAreaView>
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#000000" />
+        </View>
+      </SafeAreaView>)
+      :
         
-        <SafeAreaView style={styles.backgroundContainer}>
+       ( <SafeAreaView style={styles.backgroundContainer}>
             <ScrollView vertical = {true}>
                 <View style={styles.inner}>
                     <View style={styles.mainPage}>
@@ -122,7 +140,7 @@ class EditProfileAllergiesComponent extends Component {
                 </View>
 
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView>)
     );
   }
   
@@ -195,6 +213,11 @@ const styles = StyleSheet.create({
   buttonText: {
     color:"white"
   },
+
+  loading:{
+    flex: 1,
+    marginTop:100,
+  }
 
 });
 

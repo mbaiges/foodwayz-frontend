@@ -11,6 +11,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  ActivityIndicator
 } from "react-native";
 
 import { AuthApi } from '../../../api';
@@ -55,6 +56,9 @@ class EditProfilePasswordComponent extends Component {
     const {navigation} = this.props;
     
     if(this.state.newPass != "" && this.state.newPass2 != "" && this.state.oldPass != ""){
+      this.setState({
+        activityIndicator: true
+      })
       if(this.state.newPass == this.state.newPass2){
         const resp = await AuthApi.changePassword(this.state.oldPass, this.state.newPass);
         console.log(resp)
@@ -73,7 +77,11 @@ class EditProfilePasswordComponent extends Component {
           default : 
             console.log("an error ocurred");
           break;
+
         }
+        this.setState({
+          activityIndicator: true
+        })
 
       }else{  
         this.setState({
@@ -94,7 +102,14 @@ class EditProfilePasswordComponent extends Component {
     const {navigation} = this.props;
     
     return (
-        <View style={styles.backgroundContainer}>
+      (this.state.activityIndicator) ?
+      (<SafeAreaView>
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#000000" />
+        </View>
+      </SafeAreaView>)
+      :
+        (<View style={styles.backgroundContainer}>
             
             <Text style={styles.title}> Change Password</Text>
             <View style={styles.inputView}>
@@ -164,7 +179,7 @@ class EditProfilePasswordComponent extends Component {
         >
               <Text style={styles.textSnack}>Wrong password.</Text>
         </Snackbar>
-        </View>  
+        </View>  )
 
 
 
@@ -279,6 +294,11 @@ const styles = StyleSheet.create({
     buttonText: {
       color:"white"
     },
+
+    loading:{
+      flex: 1,
+      marginTop:100,
+    }
   
   });
 

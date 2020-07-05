@@ -255,7 +255,9 @@ class AddDishComponent extends Component {
       const {navigation} = this.props;
 
       if(this.state.dishTitle != "" && this.state.dishDesc != "" && this.state.dishImage != "" && this.state.typeChosen.a_type_id){
-      
+        this.setState({
+          activityIndicator: true
+        })
           let dish = {
             a_title: this.state.dishTitle,
             a_description: this.state.dishDesc,
@@ -272,6 +274,9 @@ class AddDishComponent extends Component {
             await this.uploadIngredients(resp.response.result);
             await this.uploadCharacteristics(resp.response.result); 
           }
+          this.setState({
+            activityIndicator: false
+          })
 
           navigation.goBack();
 
@@ -344,19 +349,31 @@ class AddDishComponent extends Component {
   //--------------------------------MOUNT---------------------------------------------
 
   async componentDidMount() {
+    this.setState({
+      activityIndicator: true
+    })
     console.log('mounting');
     await this.fetchRest();
     await this.fetchTypes();
     await this.fetchIngredients();
     await this.fetchCharacteristics();
+    this.setState({
+      activityIndicator: false
+    })
   }
 
   render() {
     const { navigation } = this.props;
 
     return (
-        
-        <SafeAreaView style={styles.backgroundContainer}>
+      (this.state.activityIndicator) ?
+      (<SafeAreaView>
+          <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#000000" />
+          </View>
+      </SafeAreaView>)
+      :
+        (<SafeAreaView style={styles.backgroundContainer}>
             <ScrollView vertical = {true}>
 
                 <Text style={styles.addDishTitle}> Add Dish </Text>
@@ -848,7 +865,7 @@ class AddDishComponent extends Component {
              <Text style={styles.textSnack}> Please fill all the fields.</Text>
         </Snackbar>
 
-        </SafeAreaView>
+        </SafeAreaView>)
     );
   }
 }
@@ -1123,7 +1140,13 @@ const styles = StyleSheet.create({
   snackBar:{
     backgroundColor: "#787777",
     height:70,
-  }  
+  }  ,
+
+  loading:{
+    flex: 1,
+    marginTop:100,
+  }
+
 
 });
 
