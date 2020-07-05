@@ -79,7 +79,7 @@ class AddDishComponent extends Component {
       const resp = await ContactUsApi.typeRequest(this.state.newTypeRequest);
       console.log(resp);
     }else{
-      console.log("fillFields");
+      console.log("fill Type");
     }
   }
 
@@ -88,7 +88,7 @@ class AddDishComponent extends Component {
       const resp = await ContactUsApi.ingredientRequest(this.state.newTypeRequest);
       console.log(resp);
     }else{
-      console.log("fillFields");
+      console.log("fill Ingredient");
     }
   }
 
@@ -97,7 +97,7 @@ class AddDishComponent extends Component {
       const resp = await ContactUsApi.characteristicRequest(this.state.newTypeRequest);
       console.log(resp);
     }else{
-      console.log("fillFields");
+      console.log("fill Characteristic");
     }
   }
   //---------------------------OPEN ADD MODALS-----------------------------------
