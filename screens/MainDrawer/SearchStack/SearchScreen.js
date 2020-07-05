@@ -15,6 +15,8 @@ import {
 import Constants from 'expo-constants';
 import FoodCard from "../../components/FoodCard";
 
+import { Picker } from 'react-native';
+
 import {IngredientApi, CharacteristicApi, TypeApi, FoodApi, FoodHasCharacteristicApi, FoodHasIngredientApi, SearchApi } from '../../../api';
 
 const { width } = Dimensions.get("window");
@@ -50,8 +52,13 @@ class SearchScreenComponent extends React.Component {
         a_type_ids: [],
         a_ingr_ids: [],
         a_char_ids: []
-      }
+      },
+      sort_by: "most_reviews"
     },
+
+    sortBy: "most_reviews",
+    sortType: "sort_asc",
+
   };
 
   async updateSearch(text){
@@ -223,6 +230,18 @@ class SearchScreenComponent extends React.Component {
     this.querySearch();
   }
   
+  async recalculateSortAndSearch(){
+    let queryBody = this.state.queryBody;
+    queryBody.sort_by = this.state.sortBy;
+    this.setState({ queryBody: queryBody });
+    this.querySearch();
+  }
+
+  recalculateSortType(){
+    let aux = this.state.queryResult.reverse()
+    this.setState({queryResult: aux});
+  }
+
   //----------------------------DELETE TAGS------------------------------------
 
   deleteType(idx){
@@ -612,6 +631,31 @@ class SearchScreenComponent extends React.Component {
                         <Text style={styles.buttonText}>Characteristics</Text>
                     </TouchableOpacity>
 
+                    <Text style={styles.modalTitle}>Sort By:</Text>
+
+                    <Picker
+                      selectedValue={this.state.sortBy}
+                      style={{height: 50, width: 200}}
+                      onValueChange={async(itemValue, itemIndex) =>{
+                        await this.setState({sortBy: itemValue});
+                        await this.recalculateSortAndSearch();
+                      }}>
+                      <Picker.Item label="Most Reviews" value="most_reviews" />
+                      <Picker.Item label="Best Rated" value="best_rated" />
+                      <Picker.Item label="Most Views" value="most_views" />
+                    </Picker>
+
+                    <Picker
+                      selectedValue={this.state.sortType}
+                      style={{height: 50, width: 200}}
+                      onValueChange={async(itemValue, itemIndex) =>{
+                        await this.setState({sortType: itemValue});
+                        await this.recalculateSortType();
+                      }}>
+                      <Picker.Item label="Acending" value="sort_asc" />
+                      <Picker.Item label="Decending" value="sort_dsc" />
+                    </Picker>
+
                 </View>         
             </View>
         </Modal>
@@ -815,6 +859,7 @@ const styles = StyleSheet.create({
     marginTop: 22,
     marginBottom:30,
   },
+
   modalView: {
     margin: 20,
     backgroundColor: "white",
@@ -884,7 +929,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    height: 230,
+    // height: 230,
   },
 
   chainButton: {

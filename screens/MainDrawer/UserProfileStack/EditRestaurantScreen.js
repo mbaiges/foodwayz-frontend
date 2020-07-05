@@ -11,7 +11,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
-  Modal
 } from "react-native";
 
 
@@ -149,7 +148,15 @@ class EditRestaurantComponent extends Component {
                         </View>
                     </View>
                     
-                    
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={async () => { this.setState({modalInviteToBeOwner: true }) }}
+                        >
+                        <Text style={styles.buttonText}>Add new owner</Text>
+                        </TouchableOpacity>
+                    </View>
+
                     <View>
                         <TouchableOpacity style={styles.button} onPress={() => { 
                             this.saveChanges();

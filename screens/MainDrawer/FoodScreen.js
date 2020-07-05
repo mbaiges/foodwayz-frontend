@@ -10,7 +10,7 @@ import {
   TouchableWithoutFeedback,
   Button,
   Dimensions,
-  Alert 
+  Alert
 } from "react-native";
 
 import { Image, ListItem, Icon, Input, Rating } from 'react-native-elements';
@@ -55,7 +55,7 @@ class FoodScreenComponent extends Component {
   }
 
   render() {
-    
+
     const { navigation } = this.props;
 
     return (
@@ -147,7 +147,7 @@ class FoodScreenComponent extends Component {
                 <Icon
                       name='arrow-right'
                       type='material-community'
-                      
+
                     />
               </TouchableOpacity>
             </View>
@@ -166,12 +166,12 @@ class FoodScreenComponent extends Component {
               style= {{
                 transform: [{ rotate: "90deg" }]
               }}
-              height={400}
+              height={380}
               width={screenWidth}
               marginBottom={100}
               marginTop={20}
             >
-            
+
             <BarChart
                 width={500}
                 withInnerLines={false}
@@ -179,7 +179,7 @@ class FoodScreenComponent extends Component {
                 verticalLabelRotation={270}
                 horizontalLabelRotation={270}
                 data={{
-                    labels: ["0 - 1", "1 - 2", "2 - 3", "3 - 4", "4 - 5"],
+                    labels: ["0-1", "1-2", "2-3", "3-4", "4-5"],
                     datasets: [
                         {
                         data: (this.state && this.state.food && this.state.food.a_reviews_info && this.state.food.a_reviews_info.quantified) ? (this.state.food.a_reviews_info.quantified) : ([])
@@ -191,14 +191,14 @@ class FoodScreenComponent extends Component {
                     backgroundGradientFrom: "white",
                     backgroundGradientTo: "#white",
                     color: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
-                    labelColor: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
+                    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                     decimalPlaces: 0, // optional, defaults to 2dp
                     color: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
                     style: {
                         borderRadius: 16
                     }
                 }}
-                verticalLabelRotation={0}
+                
             />
             </View>
           </View>
@@ -213,8 +213,6 @@ class FoodScreenComponent extends Component {
           </TouchableOpacity>
         </View>
 
-        
-        
         </ScrollView>
 
       </SafeAreaView>
@@ -246,7 +244,7 @@ const styles = StyleSheet.create({
   },
 
   secondaryText: {
-    
+
     fontSize: 14,
     paddingLeft: 15,
   },
