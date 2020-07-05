@@ -277,14 +277,6 @@ class OwnerRestaurantProfileComponent extends Component {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-                style={styles.button}
-                onPress={async () => { navigation.navigate("Premium", {restaurant: this.state.restaurant}) }}
-              >
-              <Text style={styles.buttonText}>Change Plan</Text>
-            </TouchableOpacity>
-          </View>
 
           <View style={styles.buttonContainer}>
             <TouchableOpacity
@@ -294,6 +286,35 @@ class OwnerRestaurantProfileComponent extends Component {
               <Text style={styles.buttonText}>Add new owner</Text>
             </TouchableOpacity>
           </View>
+
+          <View paddingTop={15}>
+          <Text style={styles.subtitleText}>Our dishes</Text>
+            {this.state.dishes.map(dish =>{
+              return( 
+                <ListItem
+                  onPress={async () => {navigation.navigate("Food");}}
+                  key={dish.a_food_id}
+                  leftAvatar={{ source: { uri: dish.a_image_url } }}
+                  title={dish.a_title}
+                  subtitle={
+                    <View flexDirection="row" justifyContent='space-between'>  
+                      <View>
+                      <Text>{dish.a_description}</Text>
+                      <Rating imageSize={10} readonly startingValue={dish.a_score}  style={styles.rating}/> 
+                      </View>
+                      <View style={styles.iconContainer} >
+                        <Icon
+                          name='close'
+                          onPress={() => this.setState({verificationModal: true, lastDishClicked: dish})} />
+                      </View>
+                    </View>
+}
+                  bottomDivider={true}
+                  topDivider={true}
+                />
+              )
+            })}
+        </View>
 
   {/* ------------------------------------MODALS-------------------------------------------- */}
 
@@ -472,37 +493,7 @@ class OwnerRestaurantProfileComponent extends Component {
 
 
 
-          <View style={styles.popularContainer} >
-            <Text style={styles.subtitleText}>Our Dishes</Text>
-            <View style={styles.popular}>
-              <ScrollView>
-                {this.state.dishes.map(dish =>{
-                  return(
-                    <TouchableOpacity onPress={async () => {navigation.navigate("Food", { food: dish }); 
-                    }}>
-                      <View style={styles.iconContainer}>
-                        <Icon
-                          name='close'
-                          onPress={() => this.setState({verificationModal: true, lastDishClicked: dish})} />
-                      </View>  
-                      <Card
-                        image={{ uri: dish.a_image_url }}
-                        imageStyle={{
-                          height: 300,
-                        }}
-                      >
-                        <View style={styles.cardFooter}>
-                          <Text style={styles.foodName}>{dish.a_title}</Text>
-                        </View>
-                      </Card>
-                    </TouchableOpacity>
-
-                  )
-                })}
-                
-              </ScrollView>
-            </View>
-          </View>    
+          
 
         </ScrollView>
       </SafeAreaView>

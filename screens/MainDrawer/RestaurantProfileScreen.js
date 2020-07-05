@@ -161,10 +161,11 @@ class RestaurantProfileComponent extends Component {
                   leftAvatar={{ source: { uri: dish.a_image_url } }}
                   title={dish.a_title}
                   subtitle={
-                    <View style={styles.subtitleView}>
+                    <View>  
                       <Text>{dish.a_description}</Text>
                       <Rating imageSize={10} readonly startingValue={dish.a_score}  style={styles.rating}/> 
-                    </View>}
+                    </View>
+                  }
                   bottomDivider={true}
                   topDivider={true}
                 />
