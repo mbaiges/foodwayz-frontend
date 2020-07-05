@@ -245,7 +245,6 @@ class OwnerRestaurantProfileComponent extends Component {
                       style={styles.logoImage}
                       source={require("../../../assets/images/dishPlaceholder.png")}
                       />
-                      <Text style={styles.subsubtitleText}>Add Photo</Text>
                   </Card>
                 </View>
               </TouchableOpacity>
@@ -292,7 +291,7 @@ class OwnerRestaurantProfileComponent extends Component {
             {this.state.dishes.map(dish =>{
               return( 
                 <ListItem
-                  onPress={async () => {navigation.navigate("Food");}}
+                  onPress={async () => {navigation.navigate("Food", { food: dish} );}}
                   key={dish.a_food_id}
                   leftAvatar={{ source: { uri: dish.a_image_url } }}
                   title={dish.a_title}
