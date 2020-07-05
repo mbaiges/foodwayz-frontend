@@ -286,12 +286,14 @@ class EditProfileComponent extends Component {
                 <Text style={styles.buttonText}>CHANGE PASSWORD</Text>
             </TouchableOpacity>
           </View>
-          <View>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("EditProfileAllergies", { user: this.state.user })} >
-                <Text style={styles.buttonText}>SET ALLERGIES / FOOD PREFERENCES</Text>
-            </TouchableOpacity>
-          </View>
+
         </View>
+        <View>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("EditProfileAllergies", { user: this.state.user })} >
+              <Text style={styles.buttonText}>SET FOOD PREFERENCES</Text>
+          </TouchableOpacity>
+        </View>
+
       </ScrollView>
     );
   }
