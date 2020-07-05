@@ -1,6 +1,6 @@
 import React, { Component, useContext} from 'react';
 import { Card, ListItem, Button, Icon, Input} from 'react-native-elements';
-import { SafeAreaView, StyleSheet, View, Text, Image, Picker, TextInput, ScrollView, TouchableOpacity, Dimensions, Alert} from 'react-native';
+import { SafeAreaView, StyleSheet, View, Text, Image, Picker, TextInput, ScrollView, TouchableOpacity, Dimensions, Alert, Modal} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { UserContext } from '../../../context/UserContext';
 import { UserApi } from '../../../api';
@@ -18,6 +18,7 @@ class EditProfileComponent extends Component {
       user: {},
       date: new Date(),
       showDatePicker: false,
+      modalImageVisible: false,
     }
     this.handleNameChange= this.handleNameChange.bind(this);
   }
@@ -49,7 +50,21 @@ class EditProfileComponent extends Component {
     if (!result.cancelled) {
         this.uploadImage(result.uri)
             .then(async () => {
-                Alert.alert("Success");
+                await this.getImage();
+            })
+            .catch((error) => {
+                Alert.alert(error.message);
+            });
+    }
+  }
+
+  onChooseGalleryImagePress = async () => {
+    //let result = await ImagePicker.launchCameraAsync();
+    let result = await ImagePicker.launchImageLibraryAsync();
+
+    if (!result.cancelled) {
+        this.uploadImage(result.uri)
+            .then(async () => {
                 await this.getImage();
             })
             .catch((error) => {
@@ -164,75 +179,121 @@ class EditProfileComponent extends Component {
 
     return (
       <ScrollView>
-      <View style={styles.backgroundContainer}>
-        <View style={styles.mainPage}>
-            <Image style={styles.logoImage} source={{ uri: this.state.user.a_image_url ? this.state.user.a_image_url : "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Funknown.png?alt=media&token=7bec299d-aefa-486e-8aa1-6f11c874ee2f" }}/>
-            <TouchableOpacity style={styles.imageButton} onPress={() => { this.onChooseImagePress() }} >
-            <Icon
-                name='pencil'
-                type='material-community'  
-                color="white" 
-            />
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.subtitle}> Personal Information</Text>
-        <View style={styles.inputView}>
-          <Text style={styles.inputTitle}>Name</Text>
-          <View style={styles.inputBox}>
-              <Input type="text" value={this.state.user.a_name} onChangeText={ text => this.handleNameChange(text) } placeholder='Name'></Input>
+        <View style={styles.backgroundContainer}>
+          <View style={styles.mainPage}>
+              <Image style={styles.logoImage} source={{ uri: this.state.user.a_image_url ? this.state.user.a_image_url : "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Funknown.png?alt=media&token=7bec299d-aefa-486e-8aa1-6f11c874ee2f" }}/>
+              <TouchableOpacity style={styles.imageButton} onPress={() => { this.setState({modalImageVisible: true}) }} >
+              <Icon
+                  name='pencil'
+                  type='material-community'  
+                  color="white" 
+              />
+            </TouchableOpacity>
           </View>
-        </View>
-        <Text style={styles.genderTitle}>Gender</Text>
-        <View style={styles.genderContainer}>
-          <Picker
-            selectedValue={this.state.user.a_gender}
-            style={{ height: 50, width: 150,  }}
-            onValueChange={(itemValue, itemIndex) => this.handleGenderChange(itemValue)}>
-            <Picker.Item label="Unknown" value="Undefined" />
-            <Picker.Item label="Female" value="Female" />
-            <Picker.Item label="Male" value="Male" />
-            <Picker.Item label="Other" value="Other" />
-          </Picker>
-        </View>
 
-        <View style={styles.showAll} flexDirection='row' justifyContent='space-between'  >
-        <View style={styles.inputView}>
-          <Text style={styles.inputTitle}>Birth Date</Text>
-          <View>
-              <Text style={styles.dateStyle}>{this.state.date.getDate()} / {this.state.date.getMonth() + 1} / {this.state.date.getFullYear()}</Text>
+{/* ---------------------------------MODAL------------------------------------------------- */}
+
+          <View style={styles.centeredView}>
+              <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={this.state.modalImageVisible}
+                  onRequestClose={() => {
+                    this.setState({modalImageVisible: false});
+                }}
+              >
+                  <View style = {styles.centeredView}>
+                      <View style = {styles.modalImageView}>
+                          <TouchableOpacity
+                              style={styles.modalItemButton}
+                              onPress={() => { 
+                                    //Ir a la camara y sacar la foto
+                                  this.onChooseImagePress();
+                                  this.setState({modalImageVisible: false});
+                                }}
+                          >
+                              <Text style={styles.blackButtonText}>Camera</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                              style={styles.modalItemButton}
+                              onPress={() => { 
+
+                                  this.onChooseGalleryImagePress();
+                                  this.setState({modalImageVisible: false});
+                                  //Ir a la galería
+                              }}
+                          >
+                              <Text style={styles.blackButtonText}>Gallery</Text>
+                          </TouchableOpacity>
+                      </View>             
+                  </View>
+              </Modal>
           </View>
-        </View>
+    
 
-        <View paddingTop={10}>
-              <TouchableOpacity onPress={() => this.setState({showDatePicker: true})}>
-                <Text style={styles.secondaryText}>CHANGE DATE</Text>
-                <Icon
-                      name='calendar-check-outline'
-                      type='material-community'
-                      
-                    />
-              </TouchableOpacity>
+
+
+{/* --------------------------------------------------------------------------------------- */}
+          <Text style={styles.subtitle}> Personal Information</Text>
+          <View style={styles.inputView}>
+            <Text style={styles.inputTitle}>Name</Text>
+            <View style={styles.inputBox}>
+                <Input type="text" value={this.state.user.a_name} onChangeText={ text => this.handleNameChange(text) } placeholder='Name'></Input>
             </View>
-        </View>
+          </View>
+          <Text style={styles.genderTitle}>Gender</Text>
+          <View style={styles.genderContainer}>
+            <Picker
+              selectedValue={this.state.user.a_gender}
+              style={{ height: 50, width: 150,  }}
+              onValueChange={(itemValue, itemIndex) => this.handleGenderChange(itemValue)}>
+              <Picker.Item label="Unknown" value="Undefined" />
+              <Picker.Item label="Female" value="Female" />
+              <Picker.Item label="Male" value="Male" />
+              <Picker.Item label="Other" value="Other" />
+            </Picker>
+          </View>
 
-          {this.state.showDatePicker && (
-            <DateTimePicker
-              value={ this.state.date }
-              mode='default'
-              display='default'
-              onChange={ date => { this.handleDateChanged(date.nativeEvent.timestamp)}}/>
-          )}
-        <View>
-          <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("EditProfilePassword") }} >
-              <Text style={styles.buttonText}>CHANGE PASSWORD</Text>
-          </TouchableOpacity>
+          <View style={styles.showAll} flexDirection='row' justifyContent='space-between'  >
+          <View style={styles.inputView}>
+            <Text style={styles.inputTitle}>Birth Date</Text>
+            <View>
+                <Text style={styles.dateStyle}>{this.state.date.getDate()} / {this.state.date.getMonth() + 1} / {this.state.date.getFullYear()}</Text>
+            </View>
+          </View>
+
+          <View paddingTop={10}>
+                <TouchableOpacity onPress={() => this.setState({showDatePicker: true})}>
+                  <Text style={styles.secondaryText}>CHANGE DATE</Text>
+                  <Icon
+                        name='calendar-check-outline'
+                        type='material-community'
+                        
+                      />
+                </TouchableOpacity>
+              </View>
+          </View>
+
+            {this.state.showDatePicker && (
+              <DateTimePicker
+                value={ this.state.date }
+                mode='default'
+                display='default'
+                onChange={ date => { this.handleDateChanged(date.nativeEvent.timestamp)}}/>
+            )}
+          <View>
+            <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("EditProfilePassword") }} >
+                <Text style={styles.buttonText}>CHANGE PASSWORD</Text>
+            </TouchableOpacity>
+          </View>
+
         </View>
         <View>
           <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("EditProfileAllergies", { user: this.state.user })} >
-              <Text style={styles.buttonText}>SET ALLERGIES / FOOD PREFERENCES</Text>
+              <Text style={styles.buttonText}>SET FOOD PREFERENCES</Text>
           </TouchableOpacity>
         </View>
-      </View>
+
       </ScrollView>
     );
   }
@@ -410,5 +471,50 @@ const styles = StyleSheet.create({
       backgroundColor: '#FC987E',                                                                             
       bottom: 25,                                                    
       left: 30, 
-    }
+    },
+
+      
+    modalImageView: {
+      margin: 20,
+      backgroundColor: "white",
+      borderRadius: 20,
+      padding: 10,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+      height: 120,
+    },
+
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      //alignItems: "center",
+      marginTop: 22
+    },
+  
+    modalItemButton: {
+      borderColor: 'black',
+      borderWidth:1,
+      elevation: 5,
+      borderRadius: 5,
+      backgroundColor: "white",
+      color: "black",
+      width: 217,
+      alignItems: "center",
+      padding: 13,
+      height: 48,
+      alignSelf: "center",
+      marginBottom: 5
+  },
+  
+  blackButtonText:{
+    color: "black",
+      
+  },
   });

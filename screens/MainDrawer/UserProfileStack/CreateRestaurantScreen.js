@@ -26,7 +26,7 @@ class CreateRestaurantComponent extends Component {
 
     constructor(){
         super();
-    
+
         this.state = {
             name: "",
             countryState: "",
@@ -41,13 +41,13 @@ class CreateRestaurantComponent extends Component {
             imagesUrl: [],
             chains: [],
         }
-    
-    } 
+
+    }
 
         setModalVisible = (visible) => {
             this.setState({ modalVisible: visible });
         }
-        
+
         tickPressed = () =>{
             this.setModalVisible(!this.state.isChain);
             this.setState({isChain: !this.state.isChain});
@@ -64,7 +64,7 @@ class CreateRestaurantComponent extends Component {
 
         async onChooseImagePress(){
             let result = await ImagePicker.launchCameraAsync();
-        
+
             if (!result.cancelled) {
                 let aux = this.state.imagesUrl;
                 aux.push(result.uri);
@@ -74,7 +74,7 @@ class CreateRestaurantComponent extends Component {
 
         async onChooseGalleryImagePress(){
             let result = await ImagePicker.launchImageLibraryAsync();
-        
+
             if (!result.cancelled) {
                 let aux = this.state.imagesUrl;
                 aux.push(result.uri);
@@ -92,15 +92,15 @@ class CreateRestaurantComponent extends Component {
                 let myStr = rest.a_rest_id + "_" + i;
                 console.log("imageName: " + myStr);
 
-                let ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);   
+                let ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);
                 let snapshot = await ref.put(blob)
 
-                downloadURL = await snapshot.ref.getDownloadURL();
+                let downloadURL = await snapshot.ref.getDownloadURL();
 
                 console.log("-------------------------url: ");
                 console.log(downloadURL);
                 a_images.push({ a_image_url: downloadURL, a_image_extra: i.toString() });
-                
+
             }
 
             console.log("URLS ");
@@ -113,7 +113,7 @@ class CreateRestaurantComponent extends Component {
             const {navigation} = this.props;
 
             if(this.state.name != "" && this.state.selectedChain != "" && this.state.city != "" && this.state.postalCode != "" && this.state.address != ""){
-            
+
                 let restaurant = {
                     a_name:this.state.name,
                     a_state:this.state.countryState,
@@ -121,11 +121,11 @@ class CreateRestaurantComponent extends Component {
                     a_postal_code:this.state.postalCode,
                     a_address:this.state.address
                 }
-    
+
                 if (this.state.isChain){
                     restaurant.a_rest_chain_id = this.state.selectedChain.a_rest_chain_id;
                 }
-                    
+
                 const resp = await RestaurantApi.add(restaurant);
                 console.log(resp);
                 if(resp.status == 200){
@@ -152,17 +152,17 @@ class CreateRestaurantComponent extends Component {
             console.log('mounting');
             await this.fetchChains();
         }
-   
+
         render() {
             const {navigation} = this.props;
             var modalInput = "";
             var chainOptionButtons = [];
             for(let i = 0; i < this.state.chains.length ; i++){
                 chainOptionButtons.push(
-                    <View key={i}>             
+                    <View key={i}>
                         <TouchableOpacity
                             style={styles.chainButton}
-                            onPress={() => { 
+                            onPress={() => {
                                 this.setModalVisible(false);
                                 this.setState({
                                     selectedChain: this.state.chains[i],
@@ -171,9 +171,9 @@ class CreateRestaurantComponent extends Component {
                             modalInput = "";
                             }}
                         >
-                            <Text style={styles.buttonText}>{this.state.chains[i].a_name}</Text>
+                            <Text style={styles.blackButtonText}>{this.state.chains[i].a_name}</Text>
                         </TouchableOpacity>
-                    
+
                     </View>
                 )
             }
@@ -183,7 +183,7 @@ class CreateRestaurantComponent extends Component {
             <View>
                 <Text style={styles.title}>Chain selected: { this.state.selectedChain.a_name ? this.state.selectedChain.a_name : "none"} </Text>
                 <View>
-                    <TouchableOpacity style={styles.button} onPress={() => { 
+                    <TouchableOpacity style={styles.button} onPress={() => {
                         this.setModalVisible(true);
                      }} >
                         <Text>Change Chain</Text>
@@ -191,16 +191,16 @@ class CreateRestaurantComponent extends Component {
                 </View>
             </View>
         )
-        
-        
+
+
         return (
           <ScrollView>
             <View style={styles.backgroundContainer}>
-                
+
                 <Text style={styles.title}> Register Restaurant</Text>
-                
-                
-                <ScrollView horizontal={true}>
+
+
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                     {this.state.imagesUrl.map(foodUrl => {
                         return(
                             <Card>
@@ -211,22 +211,21 @@ class CreateRestaurantComponent extends Component {
                             </Card>
                         )
                     })}
+
+                    <TouchableOpacity onPress={() => { 
+                        this.setState({modalImageVisible: true});
+                    }}>
+                        <View> 
+                        <Card>
+                            <Image
+                                style={styles.logoImage}
+                                source={require("../../../assets/images/dishPlaceholder.png")}
+                            />
+                            <Text style={styles.subsubtitleText}>Add Photo</Text>
+                        </Card>
+                        </View>
+                    </TouchableOpacity>
                 </ScrollView>
-
-                
-                
-                <TouchableOpacity onPress={() => { this.setState({modalImageVisible: true});  }}> 
-                    <View style={styles.mainImage}>
-                        <Image
-                            style={styles.logoImage}
-                            source={ this.state.dishImage ? { uri: this.state.dishImage } : require("../../../assets/images/dishPlaceholder.png")}
-                        />
-                        <Text style={styles.titleText}>Add Image</Text>
-                    </View>
-                </TouchableOpacity>
-                
-
-
 
 
                 <View style={styles.centeredView}>
@@ -235,68 +234,69 @@ class CreateRestaurantComponent extends Component {
                         transparent={true}
                         visible={this.state.modalImageVisible}
                         onRequestClose={() => {
-                        Alert.alert("Modal has been closed.");
-                        }}
+                            this.setState({modalImageVisible: false, isChain: false});
+                          }}
+
                     >
                         <View style = {styles.centeredView}>
                             <View style = {styles.modalImageView}>
                                 <View style={styles.close}>
-                                
+
                                 <TouchableOpacity
                                     style={styles.chainButton}
-                                    onPress={() => { 
+                                    onPress={() => {
                                          //Ir a la camara y sacar la foto
                                         this.onChooseImagePress();
                                         this.setState({modalImageVisible: false});
                                      }}
                                 >
-                                    <Text style={styles.buttonText}>Camera</Text>
+                                    <Text style={styles.blackButtonText}>Camera</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
 
                                     style={styles.closeButton}
-                                    onPress={() => { 
+                                    onPress={() => {
                                         this.setState({modalImageVisible: false});
                                         //cerrar
                                     }}
                                 >
                                     <Icon
                                         name='close'
-                                        type='material-community'  
-                                        
+                                        type='material-community'
+
                                     />
                                 </TouchableOpacity>
                                 </View>
                                 <TouchableOpacity
-                                   
+
                                     style={styles.chainButton}
-                                    onPress={() => { 
+                                    onPress={() => {
 
                                         this.onChooseGalleryImagePress();
                                         this.setState({modalImageVisible: false});
                                         //Ir a la galería
                                     }}
                                 >
-                                    <Text style={styles.buttonText}>Gallery</Text>
+                                    <Text style={styles.blackButtonText}>Gallery</Text>
                                 </TouchableOpacity>
 
-                            </View>             
-                            
+                            </View>
+
                         </View>
 
                     </Modal>
                 </View>
 
-                
+
                 <View style={styles.inputView}>
                     <Text style={styles.inputTitle}>Restaurant Name</Text>
                     <View style={styles.inputBox}>
                         <Input
                             style={styles.input}
-                            underLineColorAndroid="transparent"                      
+                            underLineColorAndroid="transparent"
                             onChangeText={(value) => { this.setState({name: value})}}
 
-                        />  
+                        />
                     </View>
                 </View>
                 <View style={styles.inputView}>
@@ -306,7 +306,7 @@ class CreateRestaurantComponent extends Component {
                             style={styles.input}
                             underLineColorAndroid="transparent"
                             onChangeText={(value) => { this.setState({countryState: value})}}
-                        />  
+                        />
                     </View>
                 </View>
                 <View style={styles.inputView}>
@@ -316,7 +316,7 @@ class CreateRestaurantComponent extends Component {
                             style={styles.input}
                             underLineColorAndroid="transparent"
                             onChangeText={(value) => { this.setState({city: value})}}
-                        />   
+                        />
                     </View>
                 </View>
                 <View style={styles.inputView}>
@@ -326,7 +326,7 @@ class CreateRestaurantComponent extends Component {
                             style={styles.input}
                             underLineColorAndroid="transparent"
                             onChangeText={(value) => { this.setState({postalCode: value})}}
-                        />   
+                        />
                     </View>
                 </View>
                 <View style={styles.inputView}>
@@ -336,15 +336,17 @@ class CreateRestaurantComponent extends Component {
                             style={styles.input}
                             underLineColorAndroid="transparent"
                             onChangeText={(value) => { this.setState({address: value})}}
-                        />   
+                        />
                     </View>
                 </View>
-                
+
                 <View>
                     <CheckBox
                         title = "The restaurant is part of a chain"
                         checked = {this.state.isChain}
-                        onPress={() => {this.tickPressed()}}
+                        onPress={() => {
+                            this.tickPressed();    
+                        }}
                     />
                 </View>
                 {this.state.chainSelected && chainSelectedAndChange}
@@ -354,8 +356,9 @@ class CreateRestaurantComponent extends Component {
                         transparent={true}
                         visible={this.state.modalVisible}
                         onRequestClose={() => {
-                        Alert.alert("Modal has been closed.");
-                        }}
+                            this.setState({modalVisible: false});
+                          }}
+
                     >
                         <View style={styles.centeredView}>
                             <View style={styles.modalView}>
@@ -371,13 +374,13 @@ class CreateRestaurantComponent extends Component {
                                 />
                                 <ScrollView>
                                     {chainOptionButtons}
-                                </ScrollView>    
+                                </ScrollView>
                             </View>
                         </View>
                     </Modal>
                 </View>
 
-                
+
 
 
                 <View>
@@ -385,7 +388,7 @@ class CreateRestaurantComponent extends Component {
                         <Text style={styles.buttonText}>REGISTER</Text>
                     </TouchableOpacity>
                 </View>
-            </View>  
+            </View>
 
 
             <Snackbar
@@ -397,7 +400,7 @@ class CreateRestaurantComponent extends Component {
              <Text style={styles.textSnack}> Please fill all the fields.</Text>
         </Snackbar>
 
-        
+
           </ScrollView>
         );
       }
@@ -418,7 +421,7 @@ const styles = StyleSheet.create({
       height: null,
       backgroundColor: 'white',
     },
-  
+
     mainPage: {
       //flex: 1,
       position: 'relative',
@@ -430,25 +433,25 @@ const styles = StyleSheet.create({
     titleText:{
         color: 'black',
         fontSize: 20,
-        fontFamily: 'Roboto', 
+        fontFamily: 'Roboto',
         fontWeight: 'bold',
         paddingLeft: 0,
         paddingBottom: 15,
       },
-    
+
     inputView: {
         position: 'relative',
         padding: 0,
-    
+
     },
 
-    
+
     title:{
         color: 'black',
         fontSize: 20,
         paddingLeft:15,
         paddingTop: 10,
-        fontFamily: 'Roboto', 
+        fontFamily: 'Roboto',
         fontWeight: 'bold',
         paddingBottom: 5,
     },
@@ -463,10 +466,10 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontWeight: '500',
         opacity: 1,
-    
+
     },
-  
-    
+
+
     input: {
         elevation: 15,
         position: "relative",
@@ -481,7 +484,7 @@ const styles = StyleSheet.create({
         color: "#000000",
         marginHorizontal: 25,
     },
-    
+
     inputBox:{
         paddingTop: 20,
         paddingLeft:10
@@ -514,7 +517,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginBottom: 5
     },
-   
+
 
     centeredView: {
         flex: 1,
@@ -575,7 +578,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         margin: 15,
       },
-    
+
       textSnack:{
         color: 'white',
         fontSize: 20,
@@ -594,8 +597,8 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         //paddingBottom: 40,
         alignItems: "center",
-      },  
-  
+      },
+
     close:{
         flexDirection:"row",
         marginLeft:74,
@@ -609,6 +612,18 @@ const styles = StyleSheet.create({
         color:"white",
         textAlign:"center"
       },
+
+    blackButtonText: {
+    color:"black",
+    textAlign:"center"
+    },  
+
+    subsubtitleText: {
+        textAlign: "center",
+        fontWeight: "bold",
+        fontSize: 18,
+        marginLeft: 15,
+        marginTop: 15,
+    },
+    
   });
-
-

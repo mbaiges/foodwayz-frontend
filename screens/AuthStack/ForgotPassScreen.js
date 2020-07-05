@@ -12,6 +12,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  Alert
 } from "react-native";
 
 class ForgotPassScreenComponent extends Component {

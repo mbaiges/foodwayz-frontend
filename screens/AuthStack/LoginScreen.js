@@ -12,6 +12,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  Modal
 } from "react-native";
 import { UserContext } from '../../context/UserContext';
 import { User, AuthApi } from '../../api';
@@ -24,6 +25,7 @@ class LoginScreenComponent extends Component {
     this.state = {
       email: "",
       password: "",
+      emailVerificationModal: false,
     };
 
     this.imageHeights = {
@@ -64,6 +66,12 @@ class LoginScreenComponent extends Component {
     }).start();
   };
 
+
+  
+  async resendEmail(email){
+    await AuthApi.resendEmail(email);
+  }
+
   signIn = async function ({ state, setAuthState, navigation }) {
     /*
     if (!validateSigninFields(state)) {
@@ -76,6 +84,7 @@ class LoginScreenComponent extends Component {
       a_password: state.password
     });
 
+
     try {
       const ans = await AuthApi.signIn(user);
       if (ans && ans.status === 200) {
@@ -86,6 +95,12 @@ class LoginScreenComponent extends Component {
           token: ans.response.accessToken
         };
         await setAuthState(auth);
+      }else if(ans && ans.status === 401 && ans.response.code === "not-verified"){
+        this.setState({emailVerificationModal: true});
+
+        
+      }else if(ans && ans.status === 401 && ans.response.code === "invalid-auth"){
+        //CONTRASEÑA INVALIDAAAAAAAA
       }
     } catch (err) {
       console.log(err);
@@ -109,6 +124,58 @@ class LoginScreenComponent extends Component {
                 source={require("../../assets/images/logo.png")}
               />
               <Text style={styles.logoText}>FoodWayz</Text>
+
+
+{/* ---------------------------------------------------MODAL-----------------------------------------------------------------*/}
+         
+              <View style={styles.centeredView}>
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={this.state.emailVerificationModal}
+                  onRequestClose={() => {
+                    this.setState({emailVerificationModal: false});
+                  }}
+                >
+
+                  <View style = {styles.centeredView}>
+                    <View style = {styles.modalView}>
+                      <Text>This mail is nos verified.</Text>
+                      <Text>A verification mail was sended to {this.state.email}. Please check your mailbox.</Text>
+                      <View flexDirection = 'row'>
+                        <View style={styles.buttonContainer}>
+                          <TouchableOpacity
+                              style={styles.cancelButton}
+                              onPress={async () => {
+                                this.setState({emailVerificationModal: false});
+                              }}
+                          >
+                              <Text style={styles.blackButtonText}>Close</Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View style={styles.buttonContainer}>
+                          <TouchableOpacity
+                              style={styles.deleteButton}
+                              onPress={async () => {
+                                this.resendEmail(this.state.email);
+                              }}
+                          >
+                              <Text style={styles.buttonText}>Resend email</Text>
+                          </TouchableOpacity>
+                        </View>
+
+                      </View>
+                      
+                    </View>
+                  </View>
+
+                </Modal>
+              </View>
+
+{/* --------------------------------------------------------------------------------------------------------------------*/} 
+
+
+
               <View style={styles.inputBoxes}>
                 <View style={styles.inputView}>
                   <TextInput
@@ -302,4 +369,72 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
     opacity: 1,
   },
+
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    //alignItems: "center",
+    marginTop: 22
+  },
+
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 10,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    height: 300,
+  },
+
+    
+  buttonContainer:{
+    alignItems:"center",
+    paddingTop: 20,
+    paddingBottom: 22,
+  },
+
+  cancelButton: {
+    elevation: 15,
+    borderRadius: 5,
+    backgroundColor: "white",
+    color: "black",
+    width: 100,
+    alignItems: "center",
+    padding: 13,
+    height: 48,
+  },
+
+
+  deleteButton: {
+    elevation: 15,
+    borderRadius: 5,
+    backgroundColor: "#FC987E",
+    color: "white",
+    width: 100,
+    alignItems: "center",
+    padding: 13,
+    height: 48,
+  },
+
+  buttonText:{
+    color: "white",
+      
+  },
+
+  blackButtonText:{
+    color: "black",
+      
+  },
+
+
+
 });

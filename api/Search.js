@@ -190,7 +190,7 @@ class SearchApi{
         ]
       }
   */
-  static searchFood(body) {
+  static searchFoods(body) {
     return Api.post(`${SearchApi.url}/food`, body);
   }
 
@@ -241,8 +241,20 @@ class SearchApi{
           ]
         }
   */
-  static searchRestaurant(body) {
+  static searchRestaurants(body) {
     return Api.post(`${SearchApi.url}/restaurant`, body);
+  }
+
+  static searchTypes(body) {
+    return Api.post(`${SearchApi.url}/type`, body);
+  }
+
+  static searchIngredients(body) {
+    return Api.post(`${SearchApi.url}/ingredient`, body);
+  }
+
+  static searchCharacteristics(body) {
+    return Api.post(`${SearchApi.url}/characteristic`, body);
   }
 }
 

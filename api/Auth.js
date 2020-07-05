@@ -53,8 +53,8 @@ class AuthApi{
     404 - No existe el usuario
     400 - token expirado
   */
-  static verifyEmail(token) {
-    return Api.get(`${AuthApi.url}/verify_email/${token}`);
+  static verifyEmail(a_email, a_code) {
+    return Api.post(`${AuthApi.url}/verify_email`, {a_email, a_code});
   }
 
   /*
@@ -64,8 +64,16 @@ class AuthApi{
     200 - se reenvió el mail
     404 - No existe el usuario
   */
-  static resendEmail(email) {
-    return Api.post(`${AuthApi.url}/resend_email`, {a_email: email});
+  static resendEmail(a_email) {
+    return Api.post(`${AuthApi.url}/resend_email`, {a_email});
+  }
+
+  static resetPassword(a_email) {
+    return Api.post(`${AuthApi.url}/reset_password`, {a_email});
+  }
+
+  static resetPasswordConfirmation(a_email, {a_code, a_password_new}) {
+    return Api.post(`${AuthApi.url}/reset_password/confirm`, {a_code, a_password_new});
   }
 }
 

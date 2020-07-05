@@ -16,7 +16,7 @@ import {
   Dimensions,
   Modal
 } from "react-native";
-import { RestaurantApi, FoodApi, UserApi } from "../../../api";
+import { RestaurantApi, FoodApi, UserApi, OwnsApi } from "../../../api";
 
 
 import * as ImagePicker from 'expo-image-picker';
@@ -146,24 +146,45 @@ class OwnerRestaurantProfileComponent extends Component {
     let biggestNumber = this.state.theBiggestExtra;
     biggestNumber = +biggestNumber + +1;
     
-    const response = await fetch(uri);
-    const blob = await response.blob();
-    //SETEAR EL NAME DE ALGUNA FORMA
-    this.setState({theBiggestExtra: biggestNumber});
-    var myStr = this.state.restaurant.a_rest_id + "_" + biggestNumber;
-    console.log("imageName: " + myStr);
+    try {
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      //SETEAR EL NAME DE ALGUNA FORMA
+      this.setState({theBiggestExtra: biggestNumber});
+      var myStr = this.state.restaurant.a_rest_id + "_" + biggestNumber;
+      console.log("imageName: " + myStr);
 
-    var ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);
-    let snapshot = await ref.put(blob)          
+      var ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);
+      
+      console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+      console.log(ref);
+      
+      let snapshot = await ref.put(blob)          
 
-    downloadURL = await snapshot.ref.getDownloadURL();
-    console.log("-------------------------url: ");
-    console.log(downloadURL);
-    a_image.push({ a_image_url: downloadURL, a_image_extra: this.state.theBiggestExtra.toString()});
 
-    console.log(a_image)
-    await RestaurantApi.addImages(this.state.restaurant.a_rest_id,a_image);
-    await this.fetchImages();
+      console.log("6666666666666666666666666666666666666666666666666666");
+
+      let downloadURL = await snapshot.ref.getDownloadURL();
+      
+      console.log("-------------------------url: ");
+      console.log(downloadURL);
+      a_image.push({ a_image_url: downloadURL, a_image_extra: this.state.theBiggestExtra.toString()});
+
+      console.log(a_image)
+      await RestaurantApi.addImages(this.state.restaurant.a_rest_id,a_image);
+      await this.fetchImages();
+    } catch (error) {
+      console.log(error);
+    }
+    
+  }
+
+
+  async insertNewOwner(modalInput){
+    let body = {a_email: modalInput};
+    let resp = await UserApi.findUsers(body);
+    let userId = resp.response.result[0].a_user_id;
+    await OwnsApi.addOtherOwner(userId,this.state.restaurant.a_rest_id)
   }
 
 
@@ -192,285 +213,287 @@ class OwnerRestaurantProfileComponent extends Component {
           
 
         <ScrollView>
-        <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={() => { 
-                this.setState({modalImageVisible: true});
-            }}>
-              <View flexDirection='row'>
-                {/* <Icon name='add_a_photo'/> */}
-                <Text style={styles.buttonText} >Add Photo</Text>
-              </View>  
-            </TouchableOpacity>
-        </View>
-        <View style={styles.mainPage}>
-          <ScrollView horizontal={true}>
-            {this.state.images.map(image =>{
-              return(
-                <View>
-                  <View style={styles.iconContainer}>
-                    <Icon
-                      name='close'
-                      onPress={() => this.setState({verificationModalImage: true, lastImageClicked: image})} />
-                  </View> 
-                  <Card>
-                    <Image
-                      style={styles.logoImage}
-                      source={{uri: image.a_image_url}}
-                    />
-                  </Card>
-                </View>
-              )
-            })}
-          </ScrollView>
-          <Text style={styles.logoText}>{this.state.restaurant.a_name}</Text>
-            
-          <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => { navigation.navigate("RestaurantStatisticsProfile") }}
-              >
-                <Text style={styles.buttonText}>Statistics</Text>
-              </TouchableOpacity>
-          </View>
           
-          {/* <Text style={styles.primaryText}>About us</Text>
-          <Text style={styles.secondaryText}>Somos un restaurante asiático basado en la película Kung Fu Panda.
-          Nuestros cocineros panda trabajan las 24h sin descansar para que tú puedas comer
-          una sopa a las 2 de la madrugada si así lo deseas!</Text> */}
-        </View>
-  
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-              style={styles.button}
-              onPress={async () => {navigation.navigate("AddDish", {restaurant: this.state.restaurant})}}
-          >
-              <Text style={styles.buttonText}>Add New Dish!</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-              style={styles.button}
-              onPress={async () => { navigation.navigate("Premium", {restaurant: this.state.restaurant}) }}
+          <View style={styles.mainPage}>
+            <ScrollView 
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
             >
-            <Text style={styles.buttonText}>Change Plan</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-              style={styles.button}
-              onPress={async () => { this.setState({modalInviteToBeOwner: true }) }}
-            >
-            <Text style={styles.buttonText}>Add new owner</Text>
-          </TouchableOpacity>
-        </View>
-
-{/* ------------------------------------MODALS-------------------------------------------- */}
-
-        <View style={styles.centeredView}>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={this.state.verificationModal}
-            onRequestClose={() => {
-            }}
-          >
-
-            <View style = {styles.centeredView}>
-              <View style = {styles.modalView}>
-                <Text>Are you sure that you want to delete this dish. This action is irreversible</Text>
-                <View flexDirection = 'row'>
-                  <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                        style={styles.cancelButton}
-                        onPress={async () => {this.setState({verificationModal: false})}}
-                    >
-                        <Text style={styles.blackButtonText}>Cancel</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                        style={styles.deleteButton}
-                        onPress={async () => {
-                          this.setState({verificationModal: false})
-                          await this.deleteDish();
-                        }}
-                    >
-                        <Text style={styles.buttonText}>Delete</Text>
-                    </TouchableOpacity>
-                  </View>
-
-                </View>
-                
-              </View>
-            </View>
-
-          </Modal>
-        </View>
-
-        <View style={styles.centeredView}>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={this.state.verificationModalImage}
-            onRequestClose={() => {
-            }}
-          >
-
-            <View style = {styles.centeredView}>
-              <View style = {styles.modalView}>
-                <Text>Are you sure that you want to delete this image. This action is irreversible</Text>
-                <View flexDirection = 'row'>
-                  <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                        style={styles.cancelButton}
-                        onPress={async () => {this.setState({verificationModalImage: false})}}
-                    >
-                        <Text style={styles.blackButtonText}>Cancel</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                        style={styles.deleteButton}
-                        onPress={async () => {
-                          this.setState({verificationModalImage: false})
-                          await this.deleteImage();
-                        }}
-                    >
-                        <Text style={styles.buttonText}>Delete</Text>
-                    </TouchableOpacity>
-                  </View>
-
-                </View>
-                
-              </View>
-            </View>
-
-          </Modal>
-        </View>
-
-        <View style={styles.centeredView}>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={this.state.modalImageVisible}
-                onRequestClose={() => {
-                }}
-            >
-                <View style = {styles.centeredView}>
-                    <View style = {styles.modalImageView}>
-                        <TouchableOpacity
-                            style={styles.modalItemButton}
-                            onPress={() => { 
-                                  //Ir a la camara y sacar la foto
-                                this.onChooseImagePress();
-                                this.setState({modalImageVisible: false});
-                              }}
-                        >
-                            <Text style={styles.blackButtonText}>Camera</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.modalItemButton}
-                            onPress={() => { 
-
-                                this.onChooseGalleryImagePress();
-                                this.setState({modalImageVisible: false});
-                                //Ir a la galería
-                            }}
-                        >
-                            <Text style={styles.blackButtonText}>Gallery</Text>
-                        </TouchableOpacity>
-                    </View>             
-                    
-                </View>
-
-            </Modal>
-        </View>
-  
-        <View style={styles.centeredView}>
-                    <Modal
-                        animationType="slide"
-                        transparent={true}
-                        visible={this.state.modalInviteToBeOwner}
-                    >
-                        <View style={styles.centeredView}>
-                            <View style={styles.modalView}>
-                                <View flexDirection='row'>
-                                  <Text style={styles.modalTitle}>Add an Owner</Text>
-                                  <View style={styles.closeModalIconContainer}>
-                                    <Icon
-                                      name='close'
-                                      onPress={() => this.setState({modalInviteToBeOwner: false,})} />
-                                  </View> 
-                                </View>
-                                <Input
-                                    placeholder={"email"}
-                                    rightIcon={
-                                        <Icon
-                                          name='email'
-                                        />
-                                      }
-                                    onChangeText={(value) => (modalInput = value)}
-                                />
-                                   
-                                <TouchableOpacity
-                                  style={styles.button}
-                                  onPress={() => { 
-                                    this.setState({modalInviteToBeOwner: false});
-                                    var body = {a_email: modalInput};
-                                    var resp = UserApi.findUsers(body);
-                                    console.log("????????????????????????????????????????????????????????");
-                                    console.log(resp);
-                                    console.log("????????????????????????????????????????????????????????");
-                                    modalInput = "";
-                                  }}
-                                >
-                                  {/* getState((state) => {//Code here}) */}
-                                  <Text style={styles.buttonText}>Done</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </Modal>
-                </View>
-
-
-{/* -------------------------------------------------------------------------------------------- */}
-
-
-
-
-        <View style={styles.popularContainer} >
-          <Text style={styles.subtitleText}>Our Dishes</Text>
-          <View style={styles.popular}>
-            <ScrollView>
-              {this.state.dishes.map(dish =>{
+              {this.state.images.map(image =>{
                 return(
-                  <TouchableOpacity onPress={async () => {navigation.navigate("Food", { food: dish }); 
-                  }}>
+                  <View>
                     <View style={styles.iconContainer}>
                       <Icon
                         name='close'
-                        onPress={() => this.setState({verificationModal: true, lastDishClicked: dish})} />
-                    </View>  
-                    <Card
-                      image={{ uri: dish.a_image_url }}
-                      imageStyle={{
-                        height: 300,
-                      }}
-                    >
-                      <View style={styles.cardFooter}>
-                        <Text style={styles.foodName}>{dish.a_title}</Text>
-                      </View>
+                        onPress={() => this.setState({verificationModalImage: true, lastImageClicked: image})} />
+                    </View> 
+                    <Card>
+                      <Image
+                        style={styles.logoImage}
+                        source={{uri: image.a_image_url}}
+                      />
                     </Card>
-                  </TouchableOpacity>
-
+                  </View>
                 )
               })}
-              
+              <TouchableOpacity onPress={() => { 
+                  this.setState({modalImageVisible: true});
+              }}>
+                <View> 
+                  <Card>
+                      <Image
+                      style={styles.logoImage}
+                      source={require("../../../assets/images/dishPlaceholder.png")}
+                      />
+                      <Text style={styles.subsubtitleText}>Add Photo</Text>
+                  </Card>
+                </View>
+              </TouchableOpacity>
+
             </ScrollView>
+            <Text style={styles.logoText}>{this.state.restaurant.a_name}</Text>
+              
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => { navigation.navigate("RestaurantStatisticsProfile") }}
+                >
+                  <Text style={styles.buttonText}>Statistics</Text>
+                </TouchableOpacity>
+            </View>
+            
+            {/* <Text style={styles.primaryText}>About us</Text>
+            <Text style={styles.secondaryText}>Somos un restaurante asiático basado en la película Kung Fu Panda.
+            Nuestros cocineros panda trabajan las 24h sin descansar para que tú puedas comer
+            una sopa a las 2 de la madrugada si así lo deseas!</Text> */}
           </View>
-        </View>    
+    
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={async () => {navigation.navigate("AddDish", {restaurant: this.state.restaurant})}}
+            >
+                <Text style={styles.buttonText}>Add New Dish!</Text>
+            </TouchableOpacity>
+          </View>
+
+
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={async () => { this.setState({modalInviteToBeOwner: true }) }}
+              >
+              <Text style={styles.buttonText}>Add new owner</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View paddingTop={15}>
+          <Text style={styles.subtitleText}>Our dishes</Text>
+            {this.state.dishes.map(dish =>{
+              return( 
+                <ListItem
+                  onPress={async () => {navigation.navigate("Food");}}
+                  key={dish.a_food_id}
+                  leftAvatar={{ source: { uri: dish.a_image_url } }}
+                  title={dish.a_title}
+                  subtitle={
+                    <View flexDirection="row" justifyContent='space-between'>  
+                      <View>
+                      <Text>{dish.a_description}</Text>
+                      <Rating imageSize={10} readonly startingValue={dish.a_score}  style={styles.rating}/> 
+                      </View>
+                      <View style={styles.iconContainer} >
+                        <Icon
+                          name='close'
+                          onPress={() => this.setState({verificationModal: true, lastDishClicked: dish})} />
+                      </View>
+                    </View>
+}
+                  bottomDivider={true}
+                  topDivider={true}
+                />
+              )
+            })}
+        </View>
+
+  {/* ------------------------------------MODALS-------------------------------------------- */}
+
+          <View style={styles.centeredView}>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={this.state.verificationModal}
+              onRequestClose={() => {
+                this.setState({verificationModal: false});
+              }}
+            >
+
+              <View style = {styles.centeredView}>
+                <View style = {styles.modalView}>
+                  <Text>Are you sure that you want to delete this dish. This action is irreversible</Text>
+                  <View flexDirection = 'row'>
+                    <View style={styles.buttonContainer}>
+                      <TouchableOpacity
+                          style={styles.cancelButton}
+                          onPress={async () => {this.setState({verificationModal: false})}}
+                      >
+                          <Text style={styles.blackButtonText}>Cancel</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.buttonContainer}>
+                      <TouchableOpacity
+                          style={styles.deleteButton}
+                          onPress={async () => {
+                            this.setState({verificationModal: false})
+                            await this.deleteDish();
+                          }}
+                      >
+                          <Text style={styles.buttonText}>Delete</Text>
+                      </TouchableOpacity>
+                    </View>
+
+                  </View>
+                  
+                </View>
+              </View>
+
+            </Modal>
+          </View>
+
+          <View style={styles.centeredView}>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={this.state.verificationModalImage}
+              onRequestClose={() => {
+                this.setState({verificationModalImage: false});
+              }}
+            >
+
+              <View style = {styles.centeredView}>
+                <View style = {styles.modalView}>
+                  <Text>Are you sure that you want to delete this image. This action is irreversible</Text>
+                  <View flexDirection = 'row'>
+                    <View style={styles.buttonContainer}>
+                      <TouchableOpacity
+                          style={styles.cancelButton}
+                          onPress={async () => {this.setState({verificationModalImage: false})}}
+                      >
+                          <Text style={styles.blackButtonText}>Cancel</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.buttonContainer}>
+                      <TouchableOpacity
+                          style={styles.deleteButton}
+                          onPress={async () => {
+                            this.setState({verificationModalImage: false})
+                            await this.deleteImage();
+                          }}
+                      >
+                          <Text style={styles.buttonText}>Delete</Text>
+                      </TouchableOpacity>
+                    </View>
+
+                  </View>
+                  
+                </View>
+              </View>
+
+            </Modal>
+          </View>
+
+          <View style={styles.centeredView}>
+              <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={this.state.modalImageVisible}
+                  onRequestClose={() => {
+                    this.setState({modalImageVisible: false});
+                }}
+              >
+                  <View style = {styles.centeredView}>
+                      <View style = {styles.modalImageView}>
+                          <TouchableOpacity
+                              style={styles.modalItemButton}
+                              onPress={() => { 
+                                    //Ir a la camara y sacar la foto
+                                  this.onChooseImagePress();
+                                  this.setState({modalImageVisible: false});
+                                }}
+                          >
+                              <Text style={styles.blackButtonText}>Camera</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                              style={styles.modalItemButton}
+                              onPress={() => { 
+
+                                  this.onChooseGalleryImagePress();
+                                  this.setState({modalImageVisible: false});
+                                  //Ir a la galería
+                              }}
+                          >
+                              <Text style={styles.blackButtonText}>Gallery</Text>
+                          </TouchableOpacity>
+                      </View>             
+                      
+                  </View>
+
+              </Modal>
+          </View>
+    
+          <View style={styles.centeredView}>
+              <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={this.state.modalInviteToBeOwner}
+                  onRequestClose={() => {
+                    this.setState({modalInviteToBeOwner: false});
+                  }}
+              >
+                  <View style={styles.centeredView}>
+                      <View style={styles.modalView}>
+                          <View flexDirection='row'>
+                            <Text style={styles.modalTitle}>Add an Owner</Text>
+                            <View style={styles.closeModalIconContainer}>
+                              <Icon
+                                name='close'
+                                onPress={() => this.setState({modalInviteToBeOwner: false,})} />
+                            </View> 
+                          </View>
+                          <Input
+                              placeholder={"email"}
+                              rightIcon={
+                                  <Icon
+                                    name='email'
+                                  />
+                                }
+                              onChangeText={(value) => (modalInput = value)}
+                          />
+                              
+                          <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => { 
+                              this.setState({modalInviteToBeOwner: false});
+                              this.insertNewOwner(modalInput);
+
+                              modalInput = "";
+                            }}
+                          >
+                            {/* getState((state) => {//Code here}) */}
+                            <Text style={styles.buttonText}>Done</Text>
+                          </TouchableOpacity>
+                      </View>
+                  </View>
+              </Modal>
+          </View>
+
+
+  {/* -------------------------------------------------------------------------------------------- */}
+
+
+
+
+          
 
         </ScrollView>
       </SafeAreaView>
