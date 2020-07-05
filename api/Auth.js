@@ -54,7 +54,7 @@ class AuthApi{
     400 - token expirado
   */
   static verifyEmail(a_email, a_code) {
-    return Api.post(`${AuthApi.url}/verify_email`, {a_email, a_code});
+    return Api.post(`${AuthApi.url}/verify_email`, {a_email: a_email, a_code: a_code});
   }
 
   /*
@@ -65,11 +65,11 @@ class AuthApi{
     404 - No existe el usuario
   */
   static resendEmail(a_email) {
-    return Api.post(`${AuthApi.url}/resend_email`, {a_email});
+    return Api.post(`${AuthApi.url}/resend_email`, {a_email: a_email});
   }
 
   static resetPassword(a_email) {
-    return Api.post(`${AuthApi.url}/reset_password`, {a_email});
+    return Api.post(`${AuthApi.url}/reset_password`, {a_email: a_email});
   }
 
   static resetPasswordConfirmation(a_email, {a_code, a_password_new}) {
