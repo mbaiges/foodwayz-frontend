@@ -48,8 +48,6 @@ class FoodScreenComponent extends Component {
       chars: food.a_characteristics ? food.a_characteristics : [],
       rest: food.a_rest
     })
-    console.log("INFO REVIEWS --> QUANTIFIED")
-    console.log(this.state.food.a_reviews_info.quantified);
   }
 
   async componentDidMount() {
