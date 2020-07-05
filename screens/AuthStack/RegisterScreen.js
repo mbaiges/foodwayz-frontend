@@ -11,6 +11,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  Modal
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
 import { User, AuthApi } from '../../api'; 
@@ -26,6 +27,7 @@ class RegisterScreenComponent extends Component {
       password1: "",
       password2: "",
       checked: false,
+      emailVerificationModal:false,
     };
   }
 
@@ -47,17 +49,23 @@ class RegisterScreenComponent extends Component {
       const ans = await AuthApi.signUp(user);
       if(ans){
         console.log(ans);
-        console.log("User successfully registered"); 
+        console.log("User successfully registered");
+        this.setState({emailVerificationModal: true}); 
         const auth = {
           state: 'SIGNED_UP',
           token: ''
         };
         await setAuthState(auth);
-        navigation.navigate("Login")
+        //navigation.navigate("Login")
       }
     } catch (err) {
       console.log(err);
     }
+  }
+
+  async resendEmail(email){
+
+    await AuthApi.resendEmail(email);
   }
 
   render() {
@@ -66,17 +74,71 @@ class RegisterScreenComponent extends Component {
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
+        
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
           style={styles.container}
         >
+          
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.inner}>
               <Image
                 style={styles.logoImage}
                 source={require("../../assets/images/logo.png")}
               />
+              
               <Text style={styles.logoText}>FoodWayz</Text>
+
+{/* ---------------------------------------MODAL-----------------------------------------------------------------------*/}
+         
+              <View style={styles.centeredView}>
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={this.state.emailVerificationModal}
+                  onRequestClose={() => {
+                    this.setState({emailVerificationModal: false});
+                  }}
+                >
+
+                  <View style = {styles.centeredView}>
+                    <View style = {styles.modalView}>
+                      <Text>A verification mail was sended to {this.state.email}. Please check your mailbox.</Text>
+                      <View flexDirection = 'row'>
+                        <View style={styles.buttonContainer}>
+                          <TouchableOpacity
+                              style={styles.cancelButton}
+                              onPress={async () => {
+                                this.setState({emailVerificationModal: false});
+                                navigation.navigate("Login");}}
+                          >
+                              <Text style={styles.blackButtonText}>Return to LogIn</Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View style={styles.buttonContainer}>
+                          <TouchableOpacity
+                              style={styles.deleteButton}
+                              onPress={() => {
+                                
+                                this.resendEmail(this.state.email);
+
+                              }}
+                          >
+                              <Text style={styles.buttonText}>Resend email</Text>
+                          </TouchableOpacity>
+                        </View>
+
+                      </View>
+                      
+                    </View>
+                  </View>
+
+                </Modal>
+              </View>
+
+{/* --------------------------------------------------------------------------------------------------------------------*/} 
+
+
               <View style={styles.inputBoxes}>
                 <View style={styles.inputView}>
                   <TextInput
@@ -156,6 +218,7 @@ class RegisterScreenComponent extends Component {
             </TouchableOpacity>
           </View>
         </View>
+     
       </SafeAreaView>
     );
   }
@@ -270,5 +333,70 @@ const styles = StyleSheet.create({
 
   termAndConds: {
     textDecorationLine: "underline",
+  },
+
+    
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    //alignItems: "center",
+    marginTop: 22
+  },
+
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 10,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    height: 300,
+  },
+
+    
+  buttonContainer:{
+    alignItems:"center",
+    paddingTop: 20,
+    paddingBottom: 22,
+  },
+
+  cancelButton: {
+    elevation: 15,
+    borderRadius: 5,
+    backgroundColor: "white",
+    color: "black",
+    width: 100,
+    alignItems: "center",
+    padding: 13,
+    height: 48,
+  },
+
+
+  deleteButton: {
+    elevation: 15,
+    borderRadius: 5,
+    backgroundColor: "#FC987E",
+    color: "white",
+    width: 100,
+    alignItems: "center",
+    padding: 13,
+    height: 48,
+  },
+
+  buttonText:{
+    color: "white",
+      
+  },
+
+  blackButtonText:{
+    color: "black",
+      
   },
 });

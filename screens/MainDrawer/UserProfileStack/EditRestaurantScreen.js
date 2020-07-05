@@ -11,7 +11,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
-  Modal
 } from "react-native";
 
 

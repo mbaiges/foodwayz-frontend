@@ -10,7 +10,7 @@ import {
   TouchableWithoutFeedback,
   Button,
   Dimensions,
-  Alert 
+  Alert
 } from "react-native";
 
 import { Image, ListItem, Icon, Input, Rating } from 'react-native-elements';
@@ -55,7 +55,7 @@ class FoodScreenComponent extends Component {
   }
 
   render() {
-    
+
     const { navigation } = this.props;
 
     return (
@@ -147,7 +147,7 @@ class FoodScreenComponent extends Component {
                 <Icon
                       name='arrow-right'
                       type='material-community'
-                      
+
                     />
               </TouchableOpacity>
             </View>
@@ -171,7 +171,7 @@ class FoodScreenComponent extends Component {
               marginBottom={100}
               marginTop={20}
             >
-            
+
             <BarChart
                 width={500}
                 withInnerLines={false}
@@ -213,8 +213,6 @@ class FoodScreenComponent extends Component {
           </TouchableOpacity>
         </View>
 
-        
-        
         </ScrollView>
 
       </SafeAreaView>
@@ -246,7 +244,7 @@ const styles = StyleSheet.create({
   },
 
   secondaryText: {
-    
+
     fontSize: 14,
     paddingLeft: 15,
   },

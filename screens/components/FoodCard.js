@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { StyleSheet, View, ScrollView, Text, TouchableOpacity} from "react-native";
+import { StyleSheet, View, ScrollView, Text, TouchableOpacity,Alert} from "react-native";
 import {Rating, Card} from 'react-native-elements';
 import { SafeAreaView } from "react-native-safe-area-context";
 

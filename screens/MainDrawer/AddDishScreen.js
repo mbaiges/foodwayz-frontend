@@ -10,6 +10,7 @@ import {
   Dimensions,
   Keyboard,
   Modal,
+  Alert
 } from "react-native";
 
 import { Snackbar } from 'react-native-paper';
@@ -470,7 +471,7 @@ class AddDishComponent extends Component {
                 transparent={true}
                 visible={this.state.typesVisible}
                 onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
+                  this.setState({typesVisible: false});
                 }}
             >
                 <View style={styles.centeredView}>
@@ -517,7 +518,7 @@ class AddDishComponent extends Component {
                 transparent={true}
                 visible={this.state.requestTypesVisible}
                 onRequestClose={() => {
-                  Alert.alert("Modal has been closed.");
+                  this.setState({requestTypesVisible: false});
                 }}
             >
                 <View style={styles.centeredView}>
@@ -549,7 +550,7 @@ class AddDishComponent extends Component {
                 transparent={true}
                 visible={this.state.ingredientsVisible}
                 onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
+                  this.setState({ingredientsVisible: false});
                 }}
             >
                 <View style={styles.centeredView}>
@@ -598,7 +599,7 @@ class AddDishComponent extends Component {
                 transparent={true}
                 visible={this.state.requestIngrVisible}
                 onRequestClose={() => {
-                  Alert.alert("Modal has been closed.");
+                  this.setState({requestIngrVisible: false});
                 }}
             >
                 <View style={styles.centeredView}>
@@ -629,7 +630,7 @@ class AddDishComponent extends Component {
                 transparent={true}
                 visible={this.state.characteristicsVisible}
                 onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
+                  this.setState({characteristicsVisible: false});
                 }}
             >
                 <View style={styles.centeredView}>
@@ -678,8 +679,9 @@ class AddDishComponent extends Component {
               transparent={true}
               visible={this.state.requestVisible}
               onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
+                this.setState({requestVisible: false});
               }}
+
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -710,8 +712,9 @@ class AddDishComponent extends Component {
                 transparent={true}
                 visible={this.state.modalImageVisible}
                 onRequestClose={() => {
-                  Alert.alert("Modal has been closed.");
+                  this.setState({modalImageVisible: false});
                 }}
+                
             >
                 <View style = {styles.centeredView}>
                     <View style = {styles.modalImageView}>

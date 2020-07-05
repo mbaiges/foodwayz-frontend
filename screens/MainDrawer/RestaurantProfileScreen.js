@@ -10,7 +10,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
-  Modal
 } from "react-native";
 import { RestaurantApi, FoodApi } from "../../api";
 
@@ -93,12 +92,12 @@ class RestaurantProfileComponent extends Component {
                 {this.state.images.map(image =>{
                 return(
                     <View> 
-                    <Card>
-                        <Image
-                        style={styles.logoImage}
-                        source={{uri: image.a_image_url}}
-                        />
-                    </Card>
+                      <Card>
+                          <Image
+                          style={styles.logoImage}
+                          source={{uri: image.a_image_url}}
+                          />
+                      </Card>
                     </View>
                 )
                 })}

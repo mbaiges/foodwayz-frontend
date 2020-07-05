@@ -4,7 +4,7 @@ import {
   View,
   SafeAreaView,
   Text,
-  Animated,
+  Image,
   TextInput,
   TouchableOpacity,
   Dimensions,
@@ -17,52 +17,72 @@ import {
 import { Icon, } from 'react-native-elements';
 
 import { User, AuthApi } from '../../api'; 
+import { Api } from "../../api/api";
 
 class EmailVerifiedComponent extends Component {
   constructor() {
     super();
+
+    this.state = {
+      isVerified: false,
+    };
   }
 
+  componentDidMount() {
+    const {route} = this.props;
+    const {params} = route;
+    // ESTE DEBERíA IR CUANDO FUNCIONE //this.verifyEmail(params.token);
+   //this.verifyEmail("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkYWh3ZHd1YWRoYXd1aWRoYSIsInN1YiI6MTUsImV4cGlyYXRpb25fZGF0ZSI6IjIwMjAtMDctMDVUMTQ6NTE6MDkuNDY2WiIsImlhdCI6MTU5Mzg3NDI2OTQ2NiwiZXhwIjoxNTkzODc0MzU1ODY2fQ.u5iua2qcVcbM_qvwCdcSGTLohkNBtaigU5ms_h75W70");    
+   // ESTE TIRA FALSE //this.verifyEmail("");    
+ 
+  }
 
+  async verifyEmail(token){
+    const resp = await AuthApi.verifyEmail(token);
+    if(resp.status === 200 && resp.response.result === true){
+      this.setState({isVerified: true});
+    }
+  }
+  
   render() {
 
+    const {navigation} = this.props;
+    
     return (
-        <SafeAreaView style={styles.backgroundContainer}>
-          {/* IF EMAIL VERIFIED
-            <View style={styles.inner}>
-                    <Text style={styles.logoText}>Verified email!</Text>
-                    <Icon
-                        color="white"
-                        name='emoticon-happy-outline'
-                        type='material-community'
-                        size={100}
-                    />
-                                <TouchableOpacity
-              style={styles.button}
-              onPress={() => {}}
-            >
-              <Text>GO TO HOME SCREEN</Text>
-            </TouchableOpacity>
-            </View>
-          */}
+      <SafeAreaView style={styles.backgroundContainer}>
+        <View style={styles.inner}>
+      {
+        (this.state.isVerified) ? (
+        <View alignItems= 'center'>
+          <Text style={styles.logoText}>Email Verified!</Text>
+          <Image
+            style={{ height: 200, width: 200 }}
+            source={require("../../assets/images/HamburguesitaFeliz.png")}
+          />
+        </View>  
+        ) : (
+        <View alignItems= 'center'>
+          <Text style={styles.logoText}>Sorry, your email could not be verified</Text>
+          <Image
+            style={{ height: 200, width: 200 }}
+            source={require("../../assets/images/HamburguesitaTriste.png")}
+          />
+        </View>  
+        ) 
+      }
 
-        {/* IF EMAIL NOT VERIFIED */}
-            <View style={styles.inner}>
-                    <Text style={styles.logoText}>Sorry, your email could not be verified</Text>
-                    <Icon
-                        color="white"
-                        name='emoticon-sad-outline'
-                        type='material-community'
-                        size={100}
-                    />
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => {}}
-                        >
-                        <Text>TRY AGAIN</Text>
-                    </TouchableOpacity>
-            </View>
-          
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => { 
+            navigation.navigate("Login");
+          }}
+        >
+          <Text>GO TO LOGIN SCREEN</Text>
+        </TouchableOpacity>
+              
+      </View>     
+   
+        
 
           
       </SafeAreaView>
@@ -70,8 +90,8 @@ class EmailVerifiedComponent extends Component {
   }
 }
 
-export default EmailVerifiedScreen = (navigation) => {
-    return <EmailVerifiedComponent navigation={navigation}/>;
+export default EmailVerifiedScreen = (props) => {
+    return <EmailVerifiedComponent {...props}/>;
 };
 
 const { width: WIDTH } = Dimensions.get("window");
