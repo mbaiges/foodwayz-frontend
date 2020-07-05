@@ -31,6 +31,10 @@ class ContactUs extends Component {
     
       }
 
+      sendMail(){
+        
+      }
+
       dismissFieldsSnackBar = () => {
         this.setState({
           snackbarFieldsVisible: false
@@ -101,7 +105,10 @@ class ContactUs extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.cancelButton}
-                    onPress={() => {navigation.navigate("Home");}}
+                    onPress={async() => {
+                      await this.sendMail();
+                      navigation.navigate("Home");
+                    }}
                 >
                     <Text style={styles.cancel}>Cancel</Text>
                  
