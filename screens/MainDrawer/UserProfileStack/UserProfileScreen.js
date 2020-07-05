@@ -13,7 +13,8 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
-  Modal
+  Modal,
+  ActivityIndicator
 } from "react-native";
 
 import { UserApi, ReviewApi, RestaurantApi, Owns, OwnsApi } from '../../../api';
@@ -64,10 +65,18 @@ class UserProfileComponent extends Component {
   }
 
   async componentDidMount() {
+    this.setState({
+      activityIndicator: true
+    })
+
     console.log('mounting');
     await this.fetchUser();
     await this.fetchReviews();
     await this.fetchRestaurants();
+    this.setState({
+      activityIndicator: false
+    })
+
   }
 
   async componentDidUpdate(){
@@ -120,7 +129,14 @@ class UserProfileComponent extends Component {
     }
 
     return (
-      <SafeAreaView style={styles.backgroundContainer}>
+      (this.state.activityIndicator) ?
+      (<SafeAreaView>
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#000000" />
+        </View>
+      </SafeAreaView>)
+      :
+      (<SafeAreaView style={styles.backgroundContainer}>
         <ScrollView>
           <View style={styles.mainPage}>
             <Image
@@ -245,7 +261,7 @@ class UserProfileComponent extends Component {
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </SafeAreaView>)
     );
   }
 }
@@ -435,6 +451,11 @@ const styles = StyleSheet.create({
 
   modalSubtitlesContainer:{
     padding: 13,
+  },
+
+  loading:{
+    flex: 1,
+    marginTop:100,
   }
 
 });
