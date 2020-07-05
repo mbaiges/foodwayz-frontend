@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Card, ListItem, Button, Icon, Rating, AirbnbRating} from "react-native-elements";
-import { StyleSheet, View, SafeAreaView, Text, Image, TextInput, ScrollView, TouchableOpacity, Dimensions} from "react-native";
+import { StyleSheet, View, SafeAreaView, Text, Image, TextInput, ActivityIndicator, ScrollView, TouchableOpacity, Dimensions} from "react-native";
 import CheckBox from "@react-native-community/checkbox";
 import { ReviewApi, UserApi } from '../../api';
 
@@ -19,6 +19,9 @@ class RateFoodComponent extends Component {
     }
 
     async uploadReview(){
+        this.setState({
+            activityIndicator: true
+          })
         const { navigation } = this.props;
         console.log("comment: " + this.state.comment)
         console.log("score: " + this.state.raiting)
@@ -32,6 +35,10 @@ class RateFoodComponent extends Component {
 
         const resp = await ReviewApi.add(review);
         console.log(resp);
+
+        this.setState({
+            activityIndicator: false
+          })
         
         navigation.goBack();
     }
@@ -56,16 +63,29 @@ class RateFoodComponent extends Component {
     }
 
     async componentDidMount() {
+        this.setState({
+            activityIndicator: true
+          })
         console.log('mounting');
         await this.fetchUser();
         await this.fetchFood();
+        this.setState({
+            activityIndicator: false
+          })
     }
 
     render() {
         const { navigation } = this.props;
 
         return (
-            <SafeAreaView style={styles.backgroundContainer}>
+            (this.state.activityIndicator) ?
+            (<SafeAreaView>
+                <View style={styles.loading}>
+                <ActivityIndicator size="large" color="#000000" />
+                </View>
+            </SafeAreaView>)
+            :
+            (<SafeAreaView style={styles.backgroundContainer}>
                 <ScrollView>
                 <View>
                 <Text style={styles.logoText}>Rate Dish: {this.state.food.a_title}</Text>
@@ -104,7 +124,7 @@ class RateFoodComponent extends Component {
                     </TouchableOpacity>
                 </View>
                 </ScrollView>
-            </SafeAreaView>
+            </SafeAreaView>)
         );
     };
 }
@@ -185,5 +205,10 @@ const styles = StyleSheet.create({
         borderColor: "#FC987E",
         borderWidth: 1,
       },
+
+      loading:{
+        flex: 1,
+        marginTop:100,
+      }
 });
 

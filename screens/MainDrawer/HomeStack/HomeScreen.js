@@ -7,6 +7,7 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 
 import { Image, ListItem, Button, Icon, Input, Rating } from 'react-native-elements';
@@ -23,19 +24,29 @@ class HomeScreenComponent extends Component {
     super();
     this.state = {
       foods: [],
+ 
     }
   }
 
   async fetchFoods() {
+
     const resp = await FoodApi.getAll();
     this.setState({
       foods: resp.response.result
     })
+
     console.log(resp);
   }
 
   async componentDidMount() {
+    this.setState({
+      activityIndicator: true
+    })
     await this.fetchFoods();
+    this.setState({
+      activityIndicator: false
+    })
+
   }
 
   render() {
@@ -43,7 +54,14 @@ class HomeScreenComponent extends Component {
     const { authState, setAuthState } = context;
 
     return (
-      <SafeAreaView style={styles.backgroundContainer}>
+      (this.state.activityIndicator) ?
+      (<SafeAreaView>
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#000000" />
+        </View>
+      </SafeAreaView>)
+      :
+      (<SafeAreaView style={styles.backgroundContainer}>
         <ScrollView>
           <View>
             <Text style={styles.homeSubtitle}>Recommended Dishes Near You</Text>
@@ -84,7 +102,9 @@ class HomeScreenComponent extends Component {
             </View>
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+
+      </SafeAreaView>)
+
     );
   }
 }
@@ -160,4 +180,8 @@ const styles = StyleSheet.create({
     color:"white",
 },
 
+  loading:{
+    flex: 1,
+    marginTop:100,
+  }
 });
