@@ -18,14 +18,13 @@ import { Snackbar } from 'react-native-paper';
 import { ScrollView } from "react-native-gesture-handler";
 import { CheckBox, Input, Icon} from "react-native-elements";
 import * as ImagePicker from 'expo-image-picker';
-import {IngredientApi, CharacteristicApi, FoodApi, FoodHasCharacteristicApi, FoodHasIngredientApi, TypeApi, SearchApi } from '../../api';
+import {IngredientApi, CharacteristicApi, FoodApi, FoodHasCharacteristicApi, FoodHasIngredientApi, TypeApi, SearchApi, ContactUsApi } from '../../api';
 import { makeUrl } from "expo-linking";
 import * as firebase from 'firebase';
 
 class AddDishComponent extends Component {
     constructor() {
         super();
-
 
         this.state = {
           dishImage: undefined,
@@ -74,6 +73,20 @@ class AddDishComponent extends Component {
     });
   }
 
+  sendNewTypeMail(){
+    const resp = await ContactUsApi.typeRequest(this.state.newTypeRequest)
+    console.log(resp);
+  }
+
+  sendNewIngrMail(){
+    const resp = await ContactUsApi.ingredientRequest(this.state.newTypeRequest)
+    console.log(resp);
+  }
+
+  sendNewCharMail(){
+    const resp = await ContactUsApi.characteristicRequest(this.state.newTypeRequest)
+    console.log(resp);
+  }
   //---------------------------OPEN ADD MODALS-----------------------------------
 
   setTypesVisible = (visible) => {
@@ -638,6 +651,7 @@ class AddDishComponent extends Component {
                             <TouchableOpacity
                                 style={styles.button}
                                 onPress={() => { 
+                                  this.sendNewTypeMail();
                                   this.setRequestTypesVisible(false)
                                 }}
                             >
@@ -722,6 +736,7 @@ class AddDishComponent extends Component {
                             <TouchableOpacity
                                 style={styles.button}
                                 onPress={() => { 
+                                  this.sendNewIngrMail();
                                   this.setRequestIngrVisible(false)
                                 }}
                             >
@@ -806,6 +821,7 @@ class AddDishComponent extends Component {
                             <TouchableOpacity
                                 style={styles.button}
                                 onPress={() => { 
+                                    this.sendNewCharMail();
                                     this.setRequestVisible(false)
                                 }}
                             >
