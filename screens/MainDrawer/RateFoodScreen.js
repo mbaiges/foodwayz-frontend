@@ -13,7 +13,9 @@ class RateFoodComponent extends Component {
 
         this.state = {
             comment: "",
-            raiting: 2.5,
+            rating_quality: 2.5,
+            rating_precentation: 2.5,
+            rating_price: 2.5,
             food: {}
         };
     }
@@ -26,7 +28,9 @@ class RateFoodComponent extends Component {
         let review = {
             a_desc: this.state.comment,
             a_food_id: this.state.food.a_food_id,
-            a_score: this.state.raiting,
+            a_food_quality_score: this.state.rating_quality,
+            a_presentation_score: this.state.rating_precentation,
+            a_price_quality_score: this.state.rating_price,
             a_user_id: this.state.user.a_user_id
         }
 
@@ -69,13 +73,37 @@ class RateFoodComponent extends Component {
                 <ScrollView>
                 <View>
                 <Text style={styles.logoText}>Rate Dish: {this.state.food.a_title}</Text>
+
+
+                <Text style={styles.logoText}>Quality</Text>
                 <Rating
                     ratingCount={5}
                     imageSize={60}
                     fractions={1}
                     showRating
-                    onFinishRating={(value) => (this.setState({raiting: value}))}
+                    onFinishRating={(value) => (this.setState({rating_quality: value}))}
                 />
+                
+
+                <Text style={styles.logoText}>Presentation</Text>
+                <Rating
+                    ratingCount={5}
+                    imageSize={60}
+                    fractions={1}
+                    showRating
+                    onFinishRating={(value) => (this.setState({rating_precentation: value}))}
+                />
+
+                <Text style={styles.logoText}>Price</Text>
+                <Rating
+                    ratingCount={5}
+                    imageSize={60}
+                    fractions={1}
+                    showRating
+                    onFinishRating={(value) => (this.setState({rating_price: value}))}
+                />
+
+
                 </View>
                 <View style={styles.inputView}>
                 <Text style={styles.text}>Leave a comment</Text>
