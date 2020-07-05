@@ -12,7 +12,7 @@ import {
   Dimensions,
   ActivityIndicator
 } from "react-native";
-import { RestaurantApi, FoodApi } from "../../api";
+import { RestaurantApi, FoodApi, ViewsApi } from "../../api";
 
 
 //import { Constants } from 'expo';
@@ -81,6 +81,8 @@ class RestaurantProfileComponent extends Component {
     await this.fetchImages();
     await this.fetchDishes();
     this.chechPolularDishes();
+    const resp = await ViewsApi.registerRestaurantView(this.state.restaurant.a_rest_id);
+    console.log(resp);
     this.setState({
       activityIndicator: false
     })

@@ -277,22 +277,12 @@ class OwnerRestaurantProfileComponent extends Component {
             </TouchableOpacity>
           </View>
 
-
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-                style={styles.button}
-                onPress={async () => { this.setState({modalInviteToBeOwner: true }) }}
-              >
-              <Text style={styles.buttonText}>Add new owner</Text>
-            </TouchableOpacity>
-          </View>
-
           <View paddingTop={15}>
           <Text style={styles.subtitleText}>Our dishes</Text>
             {this.state.dishes.map(dish =>{
               return( 
                 <ListItem
-                  onPress={async () => {navigation.navigate("Food");}}
+                  onPress={async () => {navigation.navigate("Food", { food: dish} );}}
                   key={dish.a_food_id}
                   leftAvatar={{ source: { uri: dish.a_image_url } }}
                   title={dish.a_title}
