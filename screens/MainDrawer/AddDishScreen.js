@@ -10,7 +10,8 @@ import {
   Dimensions,
   Keyboard,
   Modal,
-  Alert
+  Alert,
+  ActivityIndicator
 } from "react-native";
 
 import { Snackbar } from 'react-native-paper';
@@ -73,19 +74,31 @@ class AddDishComponent extends Component {
     });
   }
 
-  sendNewTypeMail(){
-    const resp = await ContactUsApi.typeRequest(this.state.newTypeRequest)
-    console.log(resp);
+  async sendNewTypeMail(){
+    if(this.state.newTypeRequest != ""){
+      const resp = await ContactUsApi.typeRequest(this.state.newTypeRequest);
+      console.log(resp);
+    }else{
+      console.log("fillFields");
+    }
   }
 
-  sendNewIngrMail(){
-    const resp = await ContactUsApi.ingredientRequest(this.state.newTypeRequest)
-    console.log(resp);
+  async sendNewIngrMail(){
+    if(this.state.newTypeRequest != ""){
+      const resp = await ContactUsApi.ingredientRequest(this.state.newTypeRequest);
+      console.log(resp);
+    }else{
+      console.log("fillFields");
+    }
   }
 
-  sendNewCharMail(){
-    const resp = await ContactUsApi.characteristicRequest(this.state.newTypeRequest)
-    console.log(resp);
+  async sendNewCharMail(){
+    if(this.state.newTypeRequest != ""){
+      const resp = await ContactUsApi.characteristicRequest(this.state.newTypeRequest);
+      console.log(resp);
+    }else{
+      console.log("fillFields");
+    }
   }
   //---------------------------OPEN ADD MODALS-----------------------------------
 
@@ -650,8 +663,8 @@ class AddDishComponent extends Component {
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity
                                 style={styles.button}
-                                onPress={() => { 
-                                  this.sendNewTypeMail();
+                                onPress={async () => { 
+                                  await this.sendNewTypeMail();
                                   this.setRequestTypesVisible(false)
                                 }}
                             >
@@ -735,8 +748,8 @@ class AddDishComponent extends Component {
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity
                                 style={styles.button}
-                                onPress={() => { 
-                                  this.sendNewIngrMail();
+                                onPress={async() => { 
+                                  await this.sendNewIngrMail();
                                   this.setRequestIngrVisible(false)
                                 }}
                             >
@@ -820,8 +833,8 @@ class AddDishComponent extends Component {
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity
                                 style={styles.button}
-                                onPress={() => { 
-                                    this.sendNewCharMail();
+                                onPress={async() => { 
+                                    await this.sendNewCharMail();
                                     this.setRequestVisible(false)
                                 }}
                             >
