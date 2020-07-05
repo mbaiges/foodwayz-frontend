@@ -11,7 +11,8 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
-  Modal
+  Modal,
+  ActivityIndicator
 } from "react-native";
 
 import * as ImagePicker from 'expo-image-picker';
@@ -85,6 +86,7 @@ class CreateRestaurantComponent extends Component {
         async uploadImages(rest){
             let a_images = [];
 
+
             for(let i = 0 ; i < this.state.imagesUrl.length ; i++){
                 const response = await fetch(this.state.imagesUrl[i]);
                 const blob = await response.blob();
@@ -107,12 +109,18 @@ class CreateRestaurantComponent extends Component {
             console.log(a_images);
             await RestaurantApi.addImages(rest.a_rest_id, a_images);
 
+
+
         }
 
         async uploadRestaurant(){
             const {navigation} = this.props;
 
             if(this.state.name != "" && this.state.selectedChain != "" && this.state.city != "" && this.state.postalCode != "" && this.state.address != ""){
+                
+                this.setState({
+                    activityIndicator: true
+                  })
 
                 let restaurant = {
                     a_name:this.state.name,
@@ -132,6 +140,10 @@ class CreateRestaurantComponent extends Component {
                     await this.uploadImages(resp.response.result);
                 }
 
+                this.setState({
+                    activityIndicator: false
+                  })
+
                 navigation.goBack();
 
             }else{
@@ -149,11 +161,18 @@ class CreateRestaurantComponent extends Component {
         }
 
         async componentDidMount() {
+            this.setState({
+                activityIndicator: true
+              })
             console.log('mounting');
             await this.fetchChains();
+            this.setState({
+                activityIndicator: false
+              })
         }
 
         render() {
+
             const {navigation} = this.props;
             var modalInput = "";
             var chainOptionButtons = [];
@@ -194,7 +213,14 @@ class CreateRestaurantComponent extends Component {
 
 
         return (
-          <ScrollView>
+        (this.state.activityIndicator) ?
+            (<SafeAreaView>
+                <View style={styles.loading}>
+                <ActivityIndicator size="large" color="#000000" />
+                </View>
+            </SafeAreaView>)
+            :
+          (<ScrollView>
             <View style={styles.backgroundContainer}>
 
                 <Text style={styles.title}> Register Restaurant</Text>
@@ -401,7 +427,7 @@ class CreateRestaurantComponent extends Component {
         </Snackbar>
 
 
-          </ScrollView>
+          </ScrollView>)
         );
       }
 }
@@ -625,5 +651,10 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         marginTop: 15,
     },
+
+    loading:{
+        flex: 1,
+        marginTop:100,
+      }
     
   });

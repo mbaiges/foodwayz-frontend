@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet,  View,  SafeAreaView,  Text,  Image,  TextInput,  ScrollView,  TouchableOpacity,  Dimensions} from "react-native";
+import { StyleSheet,  View,  SafeAreaView,  Text,  Image,  TextInput, ActivityIndicator,  ScrollView,  TouchableOpacity,  Dimensions} from "react-native";
 import { ReviewApi } from '../../api';
 import ReviewCard from "../components/ReviewCard";
 
@@ -35,9 +35,15 @@ class ReviewsComponent extends Component {
     }
 
     async componentDidMount() {
+        this.setState({
+            activityIndicator: true
+          })
         console.log('mounting');
         await this.fetchFood();
         await this.fetchReviews();
+        this.setState({
+            activityIndicator: false
+          })
     }
 
     render() {
@@ -65,14 +71,21 @@ class ReviewsComponent extends Component {
         }
 
         return (
-            <SafeAreaView style={styles.backgroundContainer}>
+            (this.state.activityIndicator) ?
+            (<SafeAreaView>
+                <View style={styles.loading}>
+                <ActivityIndicator size="large" color="#000000" />
+                </View>
+            </SafeAreaView>)
+            :
+            (<SafeAreaView style={styles.backgroundContainer}>
                 <ScrollView>
                 <View>
                 <Text style={styles.logoText}>All reviews</Text>
                 { reviewCards }
             </View>
             </ScrollView>
-            </SafeAreaView>
+            </SafeAreaView>)
         );
     };
 }
@@ -99,4 +112,9 @@ const styles = StyleSheet.create({
         opacity: 1,
         textAlign: "left",
     },
+
+    loading:{
+        flex: 1,
+        marginTop:100,
+      }
 });

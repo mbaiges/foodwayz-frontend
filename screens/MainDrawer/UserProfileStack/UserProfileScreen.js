@@ -133,7 +133,10 @@ class UserProfileComponent extends Component {
           <View style={styles.reviewContainer} >
             <Text style={styles.subtitleText}>My reviews</Text>
             <View style={styles.review}>
-              <ScrollView horizontal={true}>
+              <ScrollView 
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+              >
                 {
 
                   this.state.reviews.map((review, idx) => {

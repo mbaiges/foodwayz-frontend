@@ -18,7 +18,7 @@ import { Snackbar } from 'react-native-paper';
 import { ScrollView } from "react-native-gesture-handler";
 import { CheckBox, Input, Icon} from "react-native-elements";
 import * as ImagePicker from 'expo-image-picker';
-import {IngredientApi, CharacteristicApi, FoodApi, FoodHasCharacteristicApi, FoodHasIngredientApi, TypeApi } from '../../api';
+import {IngredientApi, CharacteristicApi, FoodApi, FoodHasCharacteristicApi, FoodHasIngredientApi, TypeApi, SearchApi } from '../../api';
 import { makeUrl } from "expo-linking";
 import * as firebase from 'firebase';
 
@@ -61,6 +61,9 @@ class AddDishComponent extends Component {
 
           dish: {},
           rest: {},
+          
+          filterTimer: undefined,
+
         }
 
   }
@@ -117,6 +120,89 @@ class AddDishComponent extends Component {
     this.setState({characteristicsChosen: aux});
   }
 
+  // ----------------------SEARCH IN MODALS -----------------------------------
+
+  async updateTypeSearch(){
+    if (this.state.filterTimer) {
+      console.log("clearing");
+      clearTimeout(this.state.filterTimer);
+    }
+    const timer = setTimeout(() => {
+      console.log("calling")
+      this.filterTypeQuery(this.state.typeModalInput);
+    }, 500);
+
+    this.setState({
+      filterTimer: timer,
+    });
+  }
+
+  async updateIngrSearch(){
+    if (this.state.filterTimer) {
+      console.log("clearing");
+      clearTimeout(this.state.filterTimer);
+    }
+    const timer = setTimeout(() => {
+      console.log("calling")
+      this.filterIngrQuery(this.state.ingrModalInput);
+    }, 500);
+
+    this.setState({
+      filterTimer: timer,
+    });
+  }
+
+  async updateCharSearch(){
+    if (this.state.filterTimer) {
+      console.log("clearing");
+      clearTimeout(this.state.filterTimer);
+    }
+    const timer = setTimeout(() => {
+      console.log("calling")
+      this.filterCharQuery(this.state.charModalInput);
+    }, 500);
+
+    this.setState({
+      filterTimer: timer,
+    });
+  }
+
+  async filterTypeQuery(input){
+    let auxFilterQueryBody = {
+      raw_input: input
+    }
+    const resp = await SearchApi.searchTypes(auxFilterQueryBody)
+    if(resp.status == 200){
+      this.setState({ allTypes: resp.response.result });
+    }else{
+      console.log("error");
+    }
+  }
+
+  async filterIngrQuery(input){
+    let auxFilterQueryBody = {
+      raw_input: input
+    }
+    const resp = await SearchApi.searchIngredients(auxFilterQueryBody)
+    if(resp.status == 200){
+      this.setState({ allIngredients: resp.response.result });
+    }else{
+      console.log("error");
+    }
+  }
+
+  async filterCharQuery(input){
+    let auxFilterQueryBody = {
+      raw_input: input
+    }
+    const resp = await SearchApi.searchCharacteristics(auxFilterQueryBody)
+    if(resp.status == 200){
+      this.setState({ allCharacteristics: resp.response.result });
+    }else{
+      console.log("error");
+    }
+  }
+
   //-------------------------IMAGE MANAGEMENT----------------------------------
 
   async onChooseImagePress(){
@@ -169,7 +255,9 @@ class AddDishComponent extends Component {
       const {navigation} = this.props;
 
       if(this.state.dishTitle != "" && this.state.dishDesc != "" && this.state.dishImage != "" && this.state.typeChosen.a_type_id){
-      
+        this.setState({
+          activityIndicator: true
+        })
           let dish = {
             a_title: this.state.dishTitle,
             a_description: this.state.dishDesc,
@@ -186,6 +274,9 @@ class AddDishComponent extends Component {
             await this.uploadIngredients(resp.response.result);
             await this.uploadCharacteristics(resp.response.result); 
           }
+          this.setState({
+            activityIndicator: false
+          })
 
           navigation.goBack();
 
@@ -258,19 +349,31 @@ class AddDishComponent extends Component {
   //--------------------------------MOUNT---------------------------------------------
 
   async componentDidMount() {
+    this.setState({
+      activityIndicator: true
+    })
     console.log('mounting');
     await this.fetchRest();
     await this.fetchTypes();
     await this.fetchIngredients();
     await this.fetchCharacteristics();
+    this.setState({
+      activityIndicator: false
+    })
   }
 
   render() {
     const { navigation } = this.props;
 
     return (
-        
-        <SafeAreaView style={styles.backgroundContainer}>
+      (this.state.activityIndicator) ?
+      (<SafeAreaView>
+          <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#000000" />
+          </View>
+      </SafeAreaView>)
+      :
+        (<SafeAreaView style={styles.backgroundContainer}>
             <ScrollView vertical = {true}>
 
                 <Text style={styles.addDishTitle}> Add Dish </Text>
@@ -480,7 +583,10 @@ class AddDishComponent extends Component {
                         <Input
                             placeholder={"Search"}
                             rightIcon={ <Icon name='search' /> }
-                            onChangeText={ (value) => ( this.setState({typeModalInput:value}) )} 
+                            onChangeText={ async(value) => {
+                              this.setState({typeModalInput:value})
+                              await this.updateTypeSearch();
+                            }}  
                         />
                         <ScrollView>
                             {this.state.allTypes.map((type, idx) => {
@@ -559,7 +665,10 @@ class AddDishComponent extends Component {
                         <Input
                             placeholder={"Search"}
                             rightIcon={ <Icon name='search' /> }
-                            onChangeText={ (value) => ( this.setState({ingrModalInput:value}) )} 
+                            onChangeText={ async(value) => {
+                              this.setState({ingrModalInput:value})
+                              await this.updateIngrSearch();
+                            }} 
                         />
                         <ScrollView>
                             {this.state.allIngredients.map((ingr, idx) => {
@@ -639,7 +748,10 @@ class AddDishComponent extends Component {
                         <Input
                             placeholder={"Search"}
                             rightIcon={ <Icon name='search' /> }
-                            onChangeText={ (value) => ( this.setState({charModalInput:value}) )} 
+                            onChangeText={ async(value) => {
+                              this.setState({charModalInput:value})
+                              await this.updateCharSearch();
+                            }}
                         />
                         <ScrollView>
                             {this.state.allCharacteristics.map((char, idx) => {
@@ -753,7 +865,7 @@ class AddDishComponent extends Component {
              <Text style={styles.textSnack}> Please fill all the fields.</Text>
         </Snackbar>
 
-        </SafeAreaView>
+        </SafeAreaView>)
     );
   }
 }
@@ -1028,7 +1140,13 @@ const styles = StyleSheet.create({
   snackBar:{
     backgroundColor: "#787777",
     height:70,
-  }  
+  }  ,
+
+  loading:{
+    flex: 1,
+    marginTop:100,
+  }
+
 
 });
 

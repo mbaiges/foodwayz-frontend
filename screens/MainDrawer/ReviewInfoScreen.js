@@ -10,6 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  ActivityIndicator
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
 import { FoodApi } from '../../api';
@@ -51,14 +52,27 @@ class ReviewInfoComponent extends Component {
   }
 
   async componentDidMount() {
+    this.setState({
+      activityIndicator: true
+    })
     await this.fetchInfo();
+    this.setState({
+      activityIndicator: false
+    })
   }
   
   render() {
   
     const { navigation } = this.props;
     return (
-        <SafeAreaView style={styles.backgroundContainer}>
+      (this.state.activityIndicator) ?
+      (<SafeAreaView>
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#000000" />
+        </View>
+      </SafeAreaView>)
+      :
+       ( <SafeAreaView style={styles.backgroundContainer}>
           <ScrollView>
             <Text style={styles.logoText}>Review</Text>
 
@@ -94,7 +108,7 @@ class ReviewInfoComponent extends Component {
           </TouchableOpacity>
     
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView>)
     );
   };
 }
@@ -243,7 +257,10 @@ const styles = StyleSheet.create({
         paddingTop: 5,
       },
     
-
+      loading:{
+        flex: 1,
+        marginTop:100,
+      }
     
 });
 

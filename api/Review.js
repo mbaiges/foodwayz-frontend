@@ -32,7 +32,10 @@ class ReviewApi{
         "result": {
           "a_review_id": 1,
           "a_desc": "moito ustoso",
-          "a_score": "4.50",
+          "a_food_quality_score": 4.2,
+          "a_presentation_score": 3.2,
+          "a_price_quality_score": 2.2,
+          "a_score": 3.2,
           "a_created_at": "2020-06-30T18:30:32.338Z",
           "a_user": {
             "a_user_id": 1,
