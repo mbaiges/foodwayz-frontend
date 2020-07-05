@@ -245,6 +245,7 @@ class OwnerRestaurantProfileComponent extends Component {
                       style={styles.logoImage}
                       source={require("../../../assets/images/dishPlaceholder.png")}
                       />
+                      <Text style={styles.subsubtitleText}>Add Photo</Text>
                   </Card>
                 </View>
               </TouchableOpacity>
@@ -273,16 +274,6 @@ class OwnerRestaurantProfileComponent extends Component {
                 onPress={async () => {navigation.navigate("AddDish", {restaurant: this.state.restaurant})}}
             >
                 <Text style={styles.buttonText}>Add New Dish!</Text>
-            </TouchableOpacity>
-          </View>
-
-
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-                style={styles.button}
-                onPress={async () => { this.setState({modalInviteToBeOwner: true }) }}
-              >
-              <Text style={styles.buttonText}>Add new owner</Text>
             </TouchableOpacity>
           </View>
 
