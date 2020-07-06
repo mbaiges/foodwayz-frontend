@@ -60,13 +60,22 @@ class RestaurantStatisticsProfileComponent extends Component {
                     label: 'Five',
                 },
             ],
+
             weekDayValueData:[50,10,40,95,85, 5, 30],
-            
             weekDayLabels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            chosenInterval: "week",
+
+            monthDayValueData:[50, 10, 40, 95, 85, 5, 30, 50, 10, 40, 95, 85, 5, 30 ,50 , 10, 40, 95, 85, 5, 30, 50, 10, 40, 95, 85, 5, 30, 50, 10, 40, 95, 85, 5],
             
+            yearMonthValueData:[50, 10, 40, 95, 85, 5, 30, 50, 10, 40, 95, 85],
+            yearMonthLabels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+
+            chosenInterval: "week",
+
             allHoursInDayData: [],
             chosenDate: "",
+
+            firstChartData: [],
+            firstChartLables: [],
 
             contentInset: { top: 20, bottom: 20 },
         
@@ -89,7 +98,28 @@ class RestaurantStatisticsProfileComponent extends Component {
         // this.badReviews = 25;
     }
 
-    async recalculateIntercalChartInfo(){
+    async recalculateIntervalChartInfo(){
+
+        switch( this.state.chosenInterval ){
+            case "week":
+                this.setState({
+                    firstChartData: this.state.weekDayValueData,
+                    firstChartLables: this.state.weekDayLabels
+                });
+            break;
+            case "month":
+                this.setState({
+                    firstChartData: this.state.monthDayValueData,
+                    firstChartLables: undefined
+                });
+            break;
+            case "year":
+                this.setState({
+                    firstChartData: this.state.yearMonthValueData,
+                    firstChartLables: this.state.yearMonthLabels
+                });
+            break;
+        }
 
     }
 
@@ -100,13 +130,11 @@ class RestaurantStatisticsProfileComponent extends Component {
         var favoriteCards = [];
         var lessFavouriteCards = [];
 
-
-
-        const data = [ 50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80 ]
-
         const axesSvg = { fontSize: 10, fill: 'grey' };
         const verticalContentInset = { top: 10, bottom: 10 }
         const xAxisHeight = 30
+
+        let chart1Dat = this.state.weekDayValueData;
 
 
         
@@ -161,81 +189,11 @@ class RestaurantStatisticsProfileComponent extends Component {
                 <ScrollView>
 
                     {/* --------------------------- LAST INTERVAL DATA CHART --------------------------- */}
-                    {/* <Card 
-                        alignItems='center'
-                        title={"Views last " + this.state.chosenInterval}
-                    >
-                        <View style={{ height: 200, flexDirection: 'row' }}>
-                            <BarChart 
-                                style={{ 
-                                    height: 200, 
-                                    width: width - 100,
-                                    flex: 1
-                                }} 
-                                data={this.state.lastIntervalChartData} 
-                                svg={ { fill: this.state.lastIntervalChartColor }} 
-                                contentInset={{ top: 30, bottom: 30 }}
-                            >
-                                <Grid />
-                            </BarChart>
-
-                            <YAxis
-                                data={ this.state.lastIntervalChartData }
-                                contentInset={{ top: 30, bottom: 30 }}
-                                svg={{ fontSize: 10, fill: 'black' }}
-                                numberOfTicks={10}
-                            />
-
-                            <XAxis
-                                style={{ marginHorizontal: -10 }}
-                                data={ this.state.lastIntervalChartXAxisData }
-                                formatLabel={(value, index) => value}
-                                contentInset={{ left: 30, right: 30 }}
-                                svg={{ fontSize: 10, fill: 'black' }}
-                            />
-
-                            <View alignItems='center'>
-                                <Picker
-                                    selectedValue={this.state.chosenInterval}
-                                    style={{height: 50, width: 200}}
-                                    onValueChange={async(itemValue, itemIndex) =>{
-                                        await this.setState({chosenInterval: itemValue});
-                                        await this.recalculateIntercalChartInfo();
-                                }}>
-                                    <Picker.Item label="Last Week" value="week" />
-                                    <Picker.Item label="Last Month" value="month" />
-                                    <Picker.Item label="Last Year" value="year" />
-                                </Picker>
-                            </View>
-                        </View>
-                    </Card> */}
-                    {/* -------------------------------------------------------------------------------- */}
-
-
-                    {/* --------------------------- LAST INTERVAL DATA CHART --------------------------- */}
                     <Card title={"Views last " + this.state.chosenInterval}>
                         <View style={{ flexDirection: 'row', height: 200, paddingVertical: 16 }}>
-                            {/* <YAxis
-                                data={this.state.data}
-                                
-                                contentInset={{ top: 10, bottom: 10 }}
-                                spacing={0.2}
-                                formatLabel={(_, index) => this.state.labels[index]}
-                            />
-                            <BarChart
-                                style={{ flex: 1, marginLeft: 8 }}
-                                data={this.state.data}
-                                xAccessor={({ item }) => item.value}
-                                svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
-                                contentInset={{ top: 10, bottom: 10 }}
-                                spacing={0.2}
-                                gridMin={0}
-                            >
-                                <Grid/>
-                            </BarChart> */}
 
                            <YAxis
-                                data={this.state.weekDayValueData}
+                                data={this.state.firstChartData}
                                 style={{ marginBottom: xAxisHeight }}
                                 contentInset={verticalContentInset}
                                 svg={axesSvg}
@@ -243,7 +201,7 @@ class RestaurantStatisticsProfileComponent extends Component {
                             <View style={{ flex: 1, marginLeft: 8 }}>
                                 <BarChart
                                     style={{ flex: 1, marginLeft: 8 }}
-                                    data={this.state.weekDayValueData}
+                                    data={this.state.firstChartData}
                                     xAccessor={({ item }) => item.value}
                                     svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
                                     contentInset={{ top: 10, bottom: 10 }}
@@ -254,28 +212,29 @@ class RestaurantStatisticsProfileComponent extends Component {
                                 </BarChart>    
                                 <XAxis
                                     style={{ marginLeft: 20, height: xAxisHeight, width: 280}}
-                                    data={this.state.weekDayLabels}
-                                    formatLabel={(value, index) => this.state.weekDayLabels[index]}
+                                    data={this.state.firstChartData}
+                                    formatLabel={(value, index) => { this.state.firstChartLables? this.state.firstChartLables[index] : index+1 }}
                                     contentInset={{ left: 10, right: 10 }}
                                     svg={axesSvg}
                                 />
                             </View>
                         </View>
-
-                        <Picker
-                            selectedValue={this.state.chosenInterval}
-                            style={{height: 50, width: 200}}
-                            onValueChange={async(itemValue, itemIndex) =>{
-                                await this.setState({chosenInterval: itemValue});
-                                await this.recalculateIntercalChartInfo();
-                        }}>
-                            <Picker.Item label="Last Week" value="week" />
-                            <Picker.Item label="Last Month" value="month" />
-                            <Picker.Item label="Last Year" value="year" />
-                        </Picker>
+                        <View alignItems = 'center'>
+                            <Picker
+                                selectedValue={this.state.chosenInterval}
+                                style={{height: 50, width: 200}}
+                                onValueChange={async(itemValue, itemIndex) =>{
+                                    await this.setState({chosenInterval: itemValue});
+                                    await this.recalculateIntervalChartInfo();
+                            }}>
+                                <Picker.Item label="Last Week" value="week" />
+                                <Picker.Item label="Last Month" value="month" />
+                                <Picker.Item label="Last Year" value="year" />
+                            </Picker>
+                        </View>
                     </Card>
                     {/* -------------------------------------------------------------------------------- */}
-
+                    
 
                     {/* <View style={styles.mainPage}>
                     <Text style={styles.logoText}>Statistics</Text>
