@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import {ListItem, Rating} from "react-native-elements";
 import {
   StyleSheet,
   View,
@@ -25,7 +24,7 @@ import {Text} from 'react-native-svg'
 //   } from 'react-native-chart-kit'
 
 import { ScrollView } from "react-native-gesture-handler";
-import { Card,Rating, Icon } from "react-native-elements";
+import { ListItem, Card,Rating, Icon } from "react-native-elements";
 
 import { BarChart, LineChart, YAxis, XAxis, Grid, PieChart } from 'react-native-svg-charts'
 import { FoodApi, StatisticsApi, RestaurantApi } from '../../../api';
