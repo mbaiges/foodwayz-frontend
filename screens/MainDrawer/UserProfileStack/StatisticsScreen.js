@@ -15,13 +15,7 @@ import {
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {Text} from 'react-native-svg'
-// import {
-//     LineChart,
-//     BarChart,
-//     PieChart,
-//     ProgressChart,
-//     ContributionGraph
-//   } from 'react-native-chart-kit'
+
 
 import { ScrollView } from "react-native-gesture-handler";
 import { ListItem, Card,Rating, Icon } from "react-native-elements";
