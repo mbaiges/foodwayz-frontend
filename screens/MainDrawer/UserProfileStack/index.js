@@ -7,6 +7,7 @@ import EditProfilePassword from './ChangeUserPassword';
 import EditProfileAllergies from './ChangeUserAllergies';
 import EditRestaurant from './EditRestaurantScreen';
 import OwnerRestaurantProfile from './OwnerRestaurantProfileScreen';
+import FoodSpecificStatistics from './FoodSpecificStatisticsScreen';
 export {
     CreateRestaurant,
     EditProfile,
@@ -17,4 +18,5 @@ export {
     Premium,
     EditRestaurant,
     OwnerRestaurantProfile,
+    FoodSpecificStatistics
 }

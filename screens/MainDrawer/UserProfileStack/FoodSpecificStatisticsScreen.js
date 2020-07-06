@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {ListItem, Rating} from "react-native-elements";
+
 import {
   StyleSheet,
   View,
@@ -28,17 +28,21 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Card,Rating, Icon } from "react-native-elements";
 
 import { BarChart, LineChart, YAxis, XAxis, Grid, PieChart } from 'react-native-svg-charts'
-import { FoodApi, StatisticsApi, RestaurantApi } from '../../../api';
+import { FoodApi, StatisticsApi } from '../../../api';
 
 const screenWidth = Dimensions.get('window').width
 
 const { width } = Dimensions.get("window");
 
-class RestaurantStatisticsProfileComponent extends Component {
+class FoodSpecificStatisticsComponent extends Component {
     constructor() {
         super();
 
         this.state = {
+
+            food: {},
+
+
             //First Graph
             weekDayValueData:[],
             weekDayLabels: [],
@@ -95,9 +99,6 @@ class RestaurantStatisticsProfileComponent extends Component {
             scoreChosenLabels: [],
 
             chosenDataType: "gender",
-            
-            //rest foods
-            allResturantFoods: []
             
         }
       
@@ -192,33 +193,6 @@ class RestaurantStatisticsProfileComponent extends Component {
 
     }
 
-    async recalculateFoodDisplay(){
-
-        let bestSelected = this.state.bestFoodSet;
-        let worstSelected = this.state.worstFoodSet;
-
-        switch( this.state.chosenFoodDisplay ){
-            case "quality":
-                this.setState({
-                    bestFoods: bestSelected.a_food_quality_score,
-                    worstFoods: worstSelected.a_food_quality_score
-                });
-            break;
-            case "precentation":
-                this.setState({
-                    bestFoods: bestSelected.a_presentation_score,
-                    worstFoods: worstSelected.a_presentation_score
-                });
-            break;
-            case "price":
-                this.setState({
-                    bestFoods: bestSelected.a_food_price_Score,
-                    worstFoods: worstSelected.a_food_price_Score
-                });
-            break;
-        }
-
-    }
 
     // --------------------------------- DATE CHANGED -----------------------------------------------
 
@@ -234,32 +208,7 @@ class RestaurantStatisticsProfileComponent extends Component {
 
     // --------------------------------- FETCH DATA -----------------------------------------------
 
-    async fetchfoodData(){
-
-        const resp = await FoodApi.getAll();
-
-        let foodInfo = {
-            a_best: {
-                a_presentation_score: [resp.response.result[0]],
-                a_food_price_Score: [resp.response.result[1]],
-                a_food_quality_score: [resp.response.result[2]]
-            },
-            a_worst: {
-                a_presentation_score: [resp.response.result[3]],
-                a_food_price_Score: [resp.response.result[4]],
-                a_food_quality_score: [resp.response.result[5]]
-            }
-        }
-
-        this.setState({
-            bestFoodSet: foodInfo.a_best,
-            worstFoodSet: foodInfo.a_worst
-        });
-
-        this.recalculateFoodDisplay();
-   
-    }
-
+    
     async fetchFirstGraphData(){
 
         await this.setState({
@@ -422,7 +371,7 @@ class RestaurantStatisticsProfileComponent extends Component {
         let auxReviewsPerCharPieData = [];
         let auxCharScoreData = [];
         let auxCharScoreLabels = [];
-        Object.entries(userData.a_reviews_info.a_characteristic).forEach( (element,idx) => {
+        Object.entries(userData.a_reviews_info.a_characteristic).forEach((element,idx) => {
             auxReviewsPerCharPieData.push({
                 key: idx,
                 amount: element[1].a_amount,
@@ -452,36 +401,29 @@ class RestaurantStatisticsProfileComponent extends Component {
         this.recalculateScoreData();
     }
 
-    async fetchRestaurantFoods(){
-
-        const { route } = this.props;
-        const { rest } = route.params;
-
-        this.setState({ rest: rest });
-    
-        const resp = await RestaurantApi.getFoods(rest.a_rest_id);
-
-        if( resp.status == 200 ){
-            this.setState({ allResturantFoods: resp.response.result });
-        }else{
-            console.log("error");
-        }
-
-    }
-
     // --------------------------------- MOUNT ----------------------------------------------------
+    async fetchFood() {
+        const { route } = this.props;
+        const { food } = route.params;
+        console.log(food);
+        this.setState({
+          food: food,
+        })
+      }
+    
+    
     async componentDidMount() {
+        
         this.setState({
           activityIndicator: true
         })
     
         console.log('mounting');
     
-        await this.fetchfoodData();
+        await this.fetchFood();
         await this.fetchFirstGraphData();
         await this.fetchSecondGraphData(this.state.date);
         await this.fetchUserChartData();
-        await this.fetchRestaurantFoods();
     
         this.setState({
           activityIndicator: false
@@ -534,85 +476,12 @@ class RestaurantStatisticsProfileComponent extends Component {
 
                 <ScrollView>
 
-                    <Card title='Best and Worst Dishes'>
-                        <View>
-                            <Text2 style={styles.subtitleText}>Best</Text2>
-                        </View>
-                        <View>   
-                            <ScrollView horizontal= {true}
-                            showsHorizontalScrollIndicator={false}>        
-                                {this.state.bestFoods.map((food, idx) =>{
-                                    return(
-                                        <View key={idx}>
-                                            <TouchableOpacity onPress={async () => {navigation.navigate("Food", { food: food});
-                                                console.log("I want to navigate to Dish page");
-                                                }}>
-                                                <Card
-                                                    image={{uri: food.a_image_url}}
-                                                    //image={this.favourites[i].img}
-                                                    imageStyle={{
-                                                        height: 100,
-                                                    }}
-                                                >
-                                                    <View style={styles.cardFooter}>
-                                                        <Text2 style={styles.foodName}>{food.a_title}</Text2>
-                                                    </View>
-                                                    <Rating imageSize={20} readonly startingValue={food.a_score} style={styles.rating} /> 
-                                                </Card>
-                                            </TouchableOpacity>
-                                        </View>    
-                                    );   
-                                })}
-                            </ScrollView> 
-                        </View>
-                        <View>
-                            <Text2 style={styles.subtitleText}>Worst</Text2>
-                        </View>
-                        <View>
-                        
-                            <ScrollView horizontal={true}
-                            showsHorizontalScrollIndicator={false}>
-                                {this.state.worstFoods.map((food, idx) =>{
-                                    return(
-                                        <View key={idx}>
-                                            <TouchableOpacity onPress={async () => {navigation.navigate("Food", { food: food});
-                                                console.log("I want to navigate to Dish page");
-                                                }}>
-                                                <Card
-                                                    image={{uri: food.a_image_url}}
-                                                    //image={this.favourites[i].img}
-                                                    imageStyle={{
-                                                        height: 100,
-                                                        }}
-                                                >
-                                                    <View style={styles.cardFooter}>
-                                                        <Text2 style={styles.foodName}>{food.a_title}</Text2>
-                                                    </View>
-                                                    <Rating imageSize={20} readonly startingValue={food.a_score} style={styles.rating} /> 
-                                                </Card>
-                                            </TouchableOpacity>
-                                        </View>    
-                                    );   
-                                })}
-                            </ScrollView>
-                        </View>    
-                        <View alignItems = 'center'>
-                            <Picker
-                                selectedValue={this.state.chosenFoodDisplay}
-                                style={{height: 50, width: 200}}
-                                onValueChange={async(itemValue, itemIndex) =>{
-                                    await this.setState({chosenFoodDisplay: itemValue});
-                                    await this.recalculateFoodDisplay();
-                            }}>
-                                <Picker.Item label="Quality" value="quality" />
-                                <Picker.Item label="Precentation" value="precentation" />
-                                <Picker.Item label="Price" value="price" />
-                            </Picker>
-                        </View>          
+                    <View style={{ alignItems: 'center' }}>
+                        <Image source={{ uri: this.state.food.a_image_url }}
+                        style={styles.imageStyle} />
+                    </View>
 
-                    </Card>
-
-
+                    <Text style={styles.primaryText}>{this.state.food.a_title}</Text>
 
                     {/* --------------------------- LAST INTERVAL DATA CHART --------------------------- */}
                     <Card title={"Views last " + this.state.chosenInterval}>
@@ -791,56 +660,6 @@ class RestaurantStatisticsProfileComponent extends Component {
                     </Card>
                     {/* -------------------------------------------------------------------------------- */}
                          
-
-                    {/* --------------------------------ALL FOODS -------------------------------------- */}
-                    <View>
-                        <Text2 style={styles.subtitleText}>Food Specific Statistics</Text2>
-                    </View>
-                    <View>   
-                        <ScrollView
-                        showsHorizontalScrollIndicator={false}>        
-                            {this.state.allResturantFoods.map((food, idx) =>{
-                                return(
-                                    // <View key={idx}>
-                                    //     <TouchableOpacity onPress={async () => {navigation.navigate("FoodSpecificStatistics", { food: food});
-                                    //         console.log("I want to navigate to Dish page");
-                                    //         }}>
-                                    //         <Card
-                                    //             image={{uri: food.a_image_url}}
-                                    //             //image={this.favourites[i].img}
-                                    //             imageStyle={{
-                                    //                 height: 100,
-                                    //             }}
-                                    //         >
-                                    //             <View style={styles.cardFooter}>
-                                    //                 <Text2 style={styles.foodName}>{food.a_title}</Text2>
-                                    //             </View>
-                                    //             <Rating imageSize={20} readonly startingValue={food.a_score} style={styles.rating} /> 
-                                    //         </Card>
-                                    //     </TouchableOpacity>
-                                    // </View>    
-
-                                    <ListItem
-                                        onPress={async () => {navigation.navigate("FoodSpecificStatistics", { food: food});}}
-                                        key={food.a_food_id}
-                                        leftAvatar={{ source: { uri: food.a_image_url } }}
-                                        title={food.a_title}
-                                        subtitle={
-                                            <View>  
-                                                <Text2>{food.a_description}</Text2>
-                                                <Rating imageSize={10} readonly startingValue={food.a_score}  style={styles.rating}/> 
-                                            </View>
-                                        }
-                                        bottomDivider={true}
-                                        topDivider={true}
-                                    />
-
-                                );   
-                            })}
-                        </ScrollView> 
-                    </View>
-
-                    {/* -------------------------------------------------------------------------------- */}
                 </ScrollView>
             </SafeAreaView>
             )
@@ -848,10 +667,9 @@ class RestaurantStatisticsProfileComponent extends Component {
     }
 }
 
-export default RestaurantStatisticsProfile = (props) => {
-  return <RestaurantStatisticsProfileComponent {...props} />;
+export default FoodSpecificStatistics = (props) => {
+  return <FoodSpecificStatisticsComponent {...props} />;
 };
-
 
 
 const styles = StyleSheet.create({
@@ -861,9 +679,7 @@ const styles = StyleSheet.create({
         height: null,
         backgroundColor: "white",
     },
-    rating: {
-        alignSelf: "flex-start",
-      },
+    
     mainPage: {
         //flex: 1,
         position: "relative",
@@ -1012,5 +828,20 @@ const styles = StyleSheet.create({
     loading:{
         flex: 1,
         marginTop:100,
-    }
+    },
+
+    imageStyle: {
+        width: Dimensions.get('window').width,
+        height: 200,
+        alignSelf: 'center',
+    
+    },
+
+    primaryText: {
+        textAlign: "left",
+        fontWeight: "bold",
+        fontSize: 18,
+        paddingLeft: 15,
+        paddingTop: 15,
+    },
 });

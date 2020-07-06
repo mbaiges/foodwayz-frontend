@@ -13,6 +13,7 @@ import {
     Premium,
     RestaurantStatisticsProfile,
     OwnerRestaurantProfile,
+    FoodSpecificStatistics
 } from './UserProfileStack';
 
 import Filter from './FilterScreen';
@@ -47,6 +48,7 @@ export {
     Premium,
     RestaurantStatisticsProfile,
     OwnerRestaurantProfile,
+    FoodSpecificStatistics,
 
     // Shared
     Filter,

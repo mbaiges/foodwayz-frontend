@@ -178,6 +178,7 @@ class EditProfileComponent extends Component {
     });
 
     return (
+      
       <ScrollView>
         <View style={styles.backgroundContainer}>
           <View style={styles.mainPage}>
@@ -267,8 +268,7 @@ class EditProfileComponent extends Component {
                   <Text style={styles.secondaryText}>CHANGE DATE</Text>
                   <Icon
                         name='calendar-check-outline'
-                        type='material-community'
-                        
+                        type='material-community'  
                       />
                 </TouchableOpacity>
               </View>
@@ -295,6 +295,7 @@ class EditProfileComponent extends Component {
         </View>
 
       </ScrollView>
+      
     );
   }
 }
