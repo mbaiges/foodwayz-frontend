@@ -205,8 +205,8 @@ class RestaurantStatisticsProfileComponent extends Component {
             break;
             case "price":
                 this.setState({
-                    bestFoods: bestSelected.a_food_price_Score,
-                    worstFoods: worstSelected.a_food_price_Score
+                    bestFoods: bestSelected.a_price_quality_score,
+                    worstFoods: worstSelected.a_price_quality_score
                 });
             break;
         }
@@ -229,27 +229,39 @@ class RestaurantStatisticsProfileComponent extends Component {
 
     async fetchfoodData(){
 
-        const resp = await FoodApi.getAll();
+        const resp = await StatisticsApi.getBestWorstFoods(this.state.rest.a_rest_id, 5);
+        
+        // const resp = await FoodApi.getAll();
+        // let foodInfo = {
+        //     a_best: {
+        //         a_presentation_score: [resp.response.result[0]],
+        //         a_food_price_Score: [resp.response.result[1]],
+        //         a_food_quality_score: [resp.response.result[2]]
+        //     },
+        //     a_worst: {
+        //         a_presentation_score: [resp.response.result[3]],
+        //         a_food_price_Score: [resp.response.result[4]],
+        //         a_food_quality_score: [resp.response.result[5]]
+        //     }
+        // }
 
-        let foodInfo = {
-            a_best: {
-                a_presentation_score: [resp.response.result[0]],
-                a_food_price_Score: [resp.response.result[1]],
-                a_food_quality_score: [resp.response.result[2]]
-            },
-            a_worst: {
-                a_presentation_score: [resp.response.result[3]],
-                a_food_price_Score: [resp.response.result[4]],
-                a_food_quality_score: [resp.response.result[5]]
-            }
+        if(resp.status == 200){
+            
+            let foodInfo = resp.response.result;
+            this.setState({
+                bestFoodSet: foodInfo.a_best,
+                worstFoodSet: foodInfo.a_worst
+            });
+
+            console.log("-------------------------------");
+            console.log(this.state.bestFoodSet);
+            //console.log(this.state.worstFoodSet);
+            console.log("-------------------------------");
+    
+            this.recalculateFoodDisplay();
+        }else{
+            console.log("error");
         }
-
-        this.setState({
-            bestFoodSet: foodInfo.a_best,
-            worstFoodSet: foodInfo.a_worst
-        });
-
-        this.recalculateFoodDisplay();
    
     }
 
@@ -447,12 +459,7 @@ class RestaurantStatisticsProfileComponent extends Component {
 
     async fetchRestaurantFoods(){
 
-        const { route } = this.props;
-        const { rest } = route.params;
-
-        this.setState({ rest: rest });
-    
-        const resp = await RestaurantApi.getFoods(rest.a_rest_id);
+        const resp = await RestaurantApi.getFoods(this.state.rest.a_rest_id);
 
         if( resp.status == 200 ){
             this.setState({ allResturantFoods: resp.response.result });
@@ -462,6 +469,13 @@ class RestaurantStatisticsProfileComponent extends Component {
 
     }
 
+    async fetchRestaurant(){
+        const { route } = this.props;
+        const { rest } = route.params;
+
+        this.setState({ rest: rest });
+    }
+
     // --------------------------------- MOUNT ----------------------------------------------------
     async componentDidMount() {
         this.setState({
@@ -469,7 +483,8 @@ class RestaurantStatisticsProfileComponent extends Component {
         })
     
         console.log('mounting');
-    
+        
+        await this.fetchRestaurant();
         await this.fetchfoodData();
         await this.fetchFirstGraphData();
         await this.fetchSecondGraphData(this.state.date);
