@@ -33,6 +33,10 @@ class UserProfileComponent extends Component {
     }
   }
 
+  updateUser(user) {
+    this.setState({ user });
+  }
+
   async fetchUser() {
     console.log('fetching user');
     const resp = await UserApi.getMe();
@@ -119,7 +123,7 @@ class UserProfileComponent extends Component {
                 style={styles.restaurantButton}
                 onPress={() => {
                   this.setState({restaurantsModalVisible: false});
-                  navigation.navigate("OwnerRestaurantProfile", {restaurant: rest});
+                  navigation.navigate("OwnerRestaurantProfile", {restaurant: rest, userUpdater: this.updateUser.bind(this)});
                 }}
             >
                 <Text style={styles.buttonRestaurantsText}>{this.state.restaurants[i].a_name}</Text>
