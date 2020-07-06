@@ -60,7 +60,9 @@ class RestaurantStatisticsProfileComponent extends Component {
                     label: 'Five',
                 },
             ],
-            labels: ["One", "Two", "Three", "Four", "Five"],
+            weekDayValueData:[50,10,40,95,85, 5, 30],
+            
+            weekDayLabels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
             chosenInterval: "week",
             
             allHoursInDayData: [],
@@ -97,6 +99,16 @@ class RestaurantStatisticsProfileComponent extends Component {
 
         var favoriteCards = [];
         var lessFavouriteCards = [];
+
+
+
+        const data = [ 50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80 ]
+
+        const axesSvg = { fontSize: 10, fill: 'grey' };
+        const verticalContentInset = { top: 10, bottom: 10 }
+        const xAxisHeight = 30
+
+
         
         // for(let i = 0; i < this.favourites.length ; i++){
         //     favoriteCards.push(
@@ -203,9 +215,9 @@ class RestaurantStatisticsProfileComponent extends Component {
                     {/* --------------------------- LAST INTERVAL DATA CHART --------------------------- */}
                     <Card title={"Views last " + this.state.chosenInterval}>
                         <View style={{ flexDirection: 'row', height: 200, paddingVertical: 16 }}>
-                            <YAxis
+                            {/* <YAxis
                                 data={this.state.data}
-                                yAccessor={({ index }) => index}
+                                
                                 contentInset={{ top: 10, bottom: 10 }}
                                 spacing={0.2}
                                 formatLabel={(_, index) => this.state.labels[index]}
@@ -220,7 +232,34 @@ class RestaurantStatisticsProfileComponent extends Component {
                                 gridMin={0}
                             >
                                 <Grid/>
-                            </BarChart>
+                            </BarChart> */}
+
+                           <YAxis
+                                data={this.state.weekDayValueData}
+                                style={{ marginBottom: xAxisHeight }}
+                                contentInset={verticalContentInset}
+                                svg={axesSvg}
+                            />
+                            <View style={{ flex: 1, marginLeft: 8 }}>
+                                <BarChart
+                                    style={{ flex: 1, marginLeft: 8 }}
+                                    data={this.state.weekDayValueData}
+                                    xAccessor={({ item }) => item.value}
+                                    svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
+                                    contentInset={{ top: 10, bottom: 10 }}
+                                    spacing={0.2}
+                                    gridMin={0}
+                                >
+                                    <Grid/>
+                                </BarChart>    
+                                <XAxis
+                                    style={{ marginLeft: 20, height: xAxisHeight, width: 280}}
+                                    data={this.state.weekDayLabels}
+                                    formatLabel={(value, index) => this.state.weekDayLabels[index]}
+                                    contentInset={{ left: 10, right: 10 }}
+                                    svg={axesSvg}
+                                />
+                            </View>
                         </View>
 
                         <Picker
