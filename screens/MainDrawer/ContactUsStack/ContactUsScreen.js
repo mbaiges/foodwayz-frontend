@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
 import { Snackbar } from 'react-native-paper';
+import { ContactUsApi } from '../../../api';
 
 //import { Constants } from 'expo';
 
@@ -24,15 +25,19 @@ class ContactUs extends Component {
         super();
     
         this.state = {
-          name: "",
           type: "",
           comment: "",
         };
     
       }
 
-      sendMail(){
-        
+      async sendMail(){
+        let email = {
+          reason: this.state.type,
+          body: this.state.comment,
+        }
+        const resp = await ContactUsApi.customEmail(email)
+        console.log(resp);
       }
 
       dismissFieldsSnackBar = () => {
@@ -49,16 +54,6 @@ class ContactUs extends Component {
           <ScrollView>
             <Text style={styles.logoText}>Contact us</Text>
             <View style={styles.inputBoxes}></View>
-            <View style={styles.inputView}>
-              <Text style={styles.subtitle}>Name</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder={"Name"}
-                    placeholderTextColor={"rgba(0,0,0,0.4)"}
-                    underLineColorAndroid="transparent"
-                    onChangeText={(value) => (this.state.name = value)}
-                />
-            </View>
 
             <Text style={styles.subtitle}>Why you want to contact us?</Text>
             <View style={styles.opacities}>
