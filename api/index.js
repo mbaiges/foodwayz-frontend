@@ -45,6 +45,7 @@ export {
     SearchApi,
     ViewsApi,
     ContactUsApi,
+    Statistics,
 
     AuthApi,
 }
