@@ -447,8 +447,17 @@ class AddDishComponent extends Component {
 
 
                 <View>
+                    <View flexDirection="row" justifyContent="space-between">
+                      <Text style={styles.text}>Type</Text>
+                      <TouchableOpacity onPress={() => { this.setTypesVisible(true);}} style={styles.select}>
+                        <Text style={styles.secondaryText}>SELECT</Text>
+                        <Icon
+                              name='arrow-right'
+                              type='material-community'
 
-                    <Text style={styles.text}>Type</Text>
+                            />
+                      </TouchableOpacity>
+                    </View>
                     <View style={styles.tagsList}>
                           { this.state.typeChosen.a_type_id ? 
                           (
@@ -470,36 +479,34 @@ class AddDishComponent extends Component {
                           }
                     </View>
 
-                    <View style={styles.centeredView}>
-                        <View style={styles.buttonContainer}>
-                            <TouchableOpacity
-                                style={styles.button}
-                                onPress={() => { 
-                                  this.setTypesVisible(true);
-                                }}
-                            >
-                                <Text style={styles.buttonText}>ADD TYPE</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+
 
                 </View>
 
-                <View style={styles.buttonContainer}>
+                <View >
                     <TouchableOpacity
-                        style={styles.buttonChar}
+                        
                         onPress={() => { 
                           this.setRequestTypesVisible(true);
                         }}
                     >
-                        <Text style={styles.buttonText}>This dish has other type</Text>
+                        <Text style={styles.requestText}>I can't find my type</Text>
                     </TouchableOpacity>
                 </View>
 
 
                 <View>
-
+                  <View flexDirection="row" justifyContent="space-between">
                     <Text style={styles.text}>Ingredients</Text>
+                    <TouchableOpacity onPress={() => { this.setIngredientsVisible(true);}} style={styles.select}>
+                        <Text style={styles.secondaryText}>SELECT</Text>
+                        <Icon
+                              name='arrow-right'
+                              type='material-community'
+
+                            />
+                      </TouchableOpacity>
+                  </View>
                     <View style={styles.tagsList}>
                         {this.state.ingredientsChosen.map((ingredient, idx) => {
                             return(
@@ -519,36 +526,33 @@ class AddDishComponent extends Component {
                         })}
                     </View>
 
-                    <View style={styles.centeredView}>
-                        <View style={styles.buttonContainer}>
-                            <TouchableOpacity
-                                style={styles.button}
-                                onPress={() => { 
-                                  this.setIngredientsVisible(true);
-                                }}
-                            >
-                                <Text style={styles.buttonText}>ADD INGREDIENT</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
                 </View>
 
-                <View style={styles.buttonContainer}>
+                <View>
                     <TouchableOpacity
-                        style={styles.buttonChar}
+                        
                         onPress={() => { 
                           this.setRequestIngrVisible(true);
                         }}
                     >
-                        <Text style={styles.buttonText}>This dish has other ingredients</Text>
+                        <Text style={styles.requestText}>I can't find my ingredients</Text>
                     </TouchableOpacity>
                 </View>
           
-                <View style={styles.centeredView}></View>
+
                         
-                <View style={styles.allergiesContainer}>
+                <View>
+                  <View flexDirection="row" justifyContent="space-between">
                     <Text style={styles.text}>Select allergies / characteristics</Text>
+                    <TouchableOpacity onPress={() => { this.setCharacteristicsVisible(true);}} style={styles.select}>
+                        <Text style={styles.secondaryText}>SELECT</Text>
+                        <Icon
+                              name='arrow-right'
+                              type='material-community'
+
+                            />
+                      </TouchableOpacity>
+                    </View>
                 
                     <View style={styles.tagsList}>
                           {this.state.characteristicsChosen.map((char, idx) => {
@@ -569,38 +573,25 @@ class AddDishComponent extends Component {
                           })}
                     </View>
                 
-                    <View style={styles.centeredView}>
-                      <View style={styles.buttonContainer}>
-                          <TouchableOpacity
-                              style={styles.button}
-                              onPress={() => { 
-                                this.setCharacteristicsVisible(true);
-                              }}
-                          >
-                              <Text style={styles.buttonText}>ADD CHARACTERISTIC</Text>
-                          </TouchableOpacity>
-                      </View>
-                    </View>
 
                 </View>
                 
-                <View style={styles.buttonContainer}>
+                <View>
                     <TouchableOpacity
-                        style={styles.buttonChar}
+                        
                         onPress={() => { 
                           this.setRequestVisible(true);
                         }}
                     >
-                        <Text style={styles.buttonText}>This dish has other characteristics</Text>
+                        <Text style={styles.requestText}>I can't find my characteristics</Text>
                     </TouchableOpacity>
                 </View>
-                  
-                <View style={styles.centeredView}></View>
+
 
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => { this.uploadDish(); }}
+                        onPress={() => { this.Dish(); }}
                     >
                         <Text style={styles.buttonText}>Add Dish</Text>
                     </TouchableOpacity>
@@ -1038,7 +1029,8 @@ const styles = StyleSheet.create({
 
   desc:{
     paddingTop: 0,
-    paddingBottom: 0
+    paddingBottom: 0,
+    textAlignVertical:"top",
   },
 
   buttonContainer:{
@@ -1207,8 +1199,27 @@ const styles = StyleSheet.create({
   loading:{
     flex: 1,
     marginTop:100,
-  }
+  },
 
+  select:{
+    marginRight:20,
+  },
+
+
+  buttonText:{
+    color: "white",   
+  },
+
+  requestText: {
+    position: "relative",
+    color: "black",
+    fontSize: 16,
+    paddingTop: 10,
+    paddingBottom: 60,
+    textDecorationLine: "underline",
+    opacity: 1,
+    paddingLeft: 15,
+  },
 
 });
 
