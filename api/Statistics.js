@@ -8,32 +8,8 @@ class StatisticsApi{
   static get url() {
     return `${Api.baseUrl}/statistics`;
   }
-  
-  static getFoodViewsByDay(foodId) {
-    return Api.post(`${StatisticsApi.url}/food/${foodId}/views_by_day`);
-  }
 
-  static getFoodViewsByHour(foodId) {
-    return Api.post(`${StatisticsApi.url}/food/${foodId}/views_by_hour`);
-  }
-
-  static getFoodUserStatistics(foodId) {
-    return Api.post(`${StatisticsApi.url}/food/${foodId}/user`);
-  }
-
-  static getRestaurantViewsByDay(restId) {
-    return Api.post(`${StatisticsApi.url}/restaurant/${restId}/views_by_day`);
-  }
-
-  static getRestaurantViewsByHour(restId) {
-    return Api.post(`${StatisticsApi.url}/restaurant/${restId}/views_by_hour`);
-  }
-
-  static getRestaurantUserStatistics(restId) {
-    return Api.post(`${StatisticsApi.url}/restaurant/${restId}/user`);
-  }
-
-  /*
+    /*
   USA EL ID DEL MIDDLEWARE
   BODY:
     --
@@ -59,8 +35,32 @@ class StatisticsApi{
     400 - la cantidad pasada no es un Integer 
     401 - El user no es owner del restaurant / no tienen el premium level suficiente
   */
-  static getBestWorstFoods(restId, cantFoodPerCategory) {
-    return Api.post(`${StatisticsApi.url}/restaurant/${restId}/best_worst_food`, {"limit": cantFoodPerCategory});
+ static getBestWorstFoods(restId, cantFoodPerCategory) {
+  return Api.post(`${StatisticsApi.url}/restaurant/${restId}/best_worst_food`, {"limit": cantFoodPerCategory});
+}
+  
+  static getFoodViewsByDay(foodId) {
+    return Api.post(`${StatisticsApi.url}/food/${foodId}/views_by_day`);
+  }
+
+  static getFoodViewsByHour(foodId) {
+    return Api.post(`${StatisticsApi.url}/food/${foodId}/views_by_hour`);
+  }
+
+  static getFoodUserStatistics(foodId) {
+    return Api.post(`${StatisticsApi.url}/food/${foodId}/user`);
+  }
+
+  static getRestaurantViewsByDay(restId) {
+    return Api.post(`${StatisticsApi.url}/restaurant/${restId}/views_by_day`);
+  }
+
+  static getRestaurantViewsByHour(restId) {
+    return Api.post(`${StatisticsApi.url}/restaurant/${restId}/views_by_hour`);
+  }
+
+  static getRestaurantUserStatistics(restId) {
+    return Api.post(`${StatisticsApi.url}/restaurant/${restId}/user`);
   }
   
 }
