@@ -94,7 +94,7 @@ export default EmailVerifiedScreen = (props) => {
     return <EmailVerifiedComponent {...props}/>;
 };
 
-const { width: WIDTH } = Dimensions.get("window");
+const { WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
