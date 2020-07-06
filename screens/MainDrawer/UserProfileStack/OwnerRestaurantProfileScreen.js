@@ -222,16 +222,16 @@ class OwnerRestaurantProfileComponent extends Component {
               {this.state.images.map(image =>{
                 return(
                   <View>
-                    <View style={styles.iconContainer}>
-                      <Icon
-                        name='close'
-                        onPress={() => this.setState({verificationModalImage: true, lastImageClicked: image})} />
-                    </View> 
                     <Card>
                       <Image
                         style={styles.logoImage}
                         source={{uri: image.a_image_url}}
                       />
+                      <View style={styles.iconContainer}>
+                      <Icon
+                        name='close'
+                        onPress={() => this.setState({verificationModalImage: true, lastImageClicked: image})} />
+                    </View> 
                     </Card>
                   </View>
                 )
@@ -240,9 +240,8 @@ class OwnerRestaurantProfileComponent extends Component {
                   this.setState({modalImageVisible: true});
               }}>
                 <View> 
-                  <Card>
+                  <Card> style={styles.logoImage}
                       <Image
-                      style={styles.logoImage}
                       source={require("../../../assets/images/dishPlaceholder.png")}
                       />
                       <Text style={styles.subsubtitleText}>Add Photo</Text>
@@ -287,7 +286,7 @@ class OwnerRestaurantProfileComponent extends Component {
                   leftAvatar={{ source: { uri: dish.a_image_url } }}
                   title={dish.a_title}
                   subtitle={
-                    <View flexDirection="row" justifyContent='space-between'>  
+                    <View flexDirection="row" justifyContent="space-between">  
                       <View>
                       <Text>{dish.a_description}</Text>
                       <Rating imageSize={10} readonly startingValue={dish.a_score}  style={styles.rating}/> 
@@ -531,6 +530,14 @@ const styles = StyleSheet.create({
     height: 240,
     justifyContent: "center",
     margin: 15,
+  },
+
+  addImage: {
+    position: "relative",
+    width: 200,
+    height: 200,
+    justifyContent: "center",
+    marginBottom:15
   },
 
   primaryText: {
