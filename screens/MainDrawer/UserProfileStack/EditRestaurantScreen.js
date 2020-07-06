@@ -66,6 +66,9 @@ class EditRestaurantComponent extends Component {
         }
     
         async saveChanges(){
+            const { route } = this.props;
+            const { restaurantUpdater } = route.params;
+
             let aux = this.state.restaurant;
             aux.a_name = this.state.name;
             aux.a_state = this.state.countryState;
@@ -76,6 +79,7 @@ class EditRestaurantComponent extends Component {
             this.setState({restaurant: aux });
 
             await RestaurantApi.modify(this.state.restaurant);
+            restaurantUpdater(aux);
         }
 
         render() {

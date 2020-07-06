@@ -24,13 +24,14 @@ class EditProfileComponent extends Component {
   }
 
   async fetchUser() {
+    const { route } = this.props;
+    const { user } = route.params;
+
     console.log('fetching user');
-    const resp = await UserApi.getMe();
+    //const resp = await UserApi.getMe();
     this.setState({
-      user: resp.response.result
-    })
-    this.setState({
-      date: this.state.user.a_birthdate ? new Date(this.state.user.a_birthdate) : new Date()
+      user: user,
+      date: user.a_birthdate ? new Date(user.a_birthdate) : new Date()
     })
     console.log('done fetching user');
     console.log(this.state.user);
@@ -42,18 +43,15 @@ class EditProfileComponent extends Component {
 
     try {
       const resp = await UserApi.modifyMe(this.state.user);
-      userUpdater(resp.response);
+      userUpdater(this.state.user);
     } catch (error) {
       console.log(error);
     }
     
-    console.log("api updated" +  this.state.user);
-    ///route.params.setState({user: this.state.user});
   }
 
   onChooseImagePress = async () => {
     let result = await ImagePicker.launchCameraAsync();
-    //let result = await ImagePicker.launchImageLibraryAsync();
 
     if (!result.cancelled) {
         this.uploadImage(result.uri)

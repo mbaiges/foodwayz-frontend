@@ -36,31 +36,31 @@ class StatisticsApi{
     401 - El user no es owner del restaurant / no tienen el premium level suficiente
   */
  static getBestWorstFoods(restId, cantFoodPerCategory) {
-  return Api.post(`${StatisticsApi.url}/restaurant/${restId}/best_worst_food`, {"limit": cantFoodPerCategory});
+  return Api.post(`${StatisticsApi.url}/restaurant/${restId}/best_worst_food`, {limit: cantFoodPerCategory});
 }
   
-  static getFoodViewsByDay(foodId) {
-    return Api.post(`${StatisticsApi.url}/food/${foodId}/views_by_day`);
+  static getFoodViewsByDay(foodId, a_first_date, a_last_date) {
+    return Api.post(`${StatisticsApi.url}/food/${foodId}/views_by_day`, {a_first_date, a_last_date});
   }
 
-  static getFoodViewsByHour(foodId) {
-    return Api.post(`${StatisticsApi.url}/food/${foodId}/views_by_hour`);
+  static getFoodViewsByHour(foodId, a_date) {
+    return Api.post(`${StatisticsApi.url}/food/${foodId}/views_by_hour`, {a_date});
   }
 
-  static getFoodUserStatistics(foodId) {
-    return Api.post(`${StatisticsApi.url}/food/${foodId}/user`);
+  static getFoodUserStatistics(foodId, a_first_date, a_last_date) {
+    return Api.post(`${StatisticsApi.url}/food/${foodId}/user`, {a_first_date, a_last_date});
   }
 
-  static getRestaurantViewsByDay(restId) {
-    return Api.post(`${StatisticsApi.url}/restaurant/${restId}/views_by_day`);
+  static getRestaurantViewsByDay(restId, a_first_date, a_last_date) {
+    return Api.post(`${StatisticsApi.url}/restaurant/${restId}/views_by_day`, {a_first_date, a_last_date});
   }
 
-  static getRestaurantViewsByHour(restId) {
-    return Api.post(`${StatisticsApi.url}/restaurant/${restId}/views_by_hour`);
+  static getRestaurantViewsByHour(restId, a_date) {
+    return Api.post(`${StatisticsApi.url}/restaurant/${restId}/views_by_hour`, {a_date});
   }
 
-  static getRestaurantUserStatistics(restId) {
-    return Api.post(`${StatisticsApi.url}/restaurant/${restId}/user`);
+  static getRestaurantUserStatistics(restId, a_date) {
+    return Api.post(`${StatisticsApi.url}/restaurant/${restId}/user`, {a_first_date, a_last_date});
   }
   
 }

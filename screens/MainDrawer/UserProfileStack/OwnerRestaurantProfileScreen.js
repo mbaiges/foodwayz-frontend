@@ -44,6 +44,10 @@ class OwnerRestaurantProfileComponent extends Component {
     }
   }
 
+  updateRestaurant(restaurant) {
+    this.setState({ restaurant: restaurant });
+  }
+
   async fetchRestaurant() {
     const { route } = this.props;
     console.log(route);
@@ -200,7 +204,7 @@ class OwnerRestaurantProfileComponent extends Component {
             name="md-create"
             size={38}
             style={styles.navbar_r_icon}
-            onPress={() => navigation.navigate("EditRestaurant", {restaurant: this.state.restaurant})}
+            onPress={() => navigation.navigate("EditRestaurant", {restaurant: this.state.restaurant, restaurantUpdater: this.updateRestaurant.bind(this)})}
           />
         </View>
       ),

@@ -108,7 +108,7 @@ class UserProfileComponent extends Component {
             name="md-create"
             size={38}
             style={styles.navbar_r_icon}
-            onPress={() => navigation.navigate("EditProfile", {setState: this.setState})}
+            onPress={() => navigation.navigate("EditProfile", {user: this.state.user, userUpdater: this.updateUser.bind(this)})}
           />
         </View>
       ),
@@ -123,7 +123,7 @@ class UserProfileComponent extends Component {
                 style={styles.restaurantButton}
                 onPress={() => {
                   this.setState({restaurantsModalVisible: false});
-                  navigation.navigate("OwnerRestaurantProfile", {restaurant: rest, userUpdater: this.updateUser.bind(this)});
+                  navigation.navigate("OwnerRestaurantProfile", {restaurant: rest});
                 }}
             >
                 <Text style={styles.buttonRestaurantsText}>{this.state.restaurants[i].a_name}</Text>
