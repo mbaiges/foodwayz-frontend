@@ -3,6 +3,8 @@ import {Icon} from "react-native-elements";
 
 import { Ionicons } from "@expo/vector-icons";
 
+import {Text} from "react-native"
+
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -11,14 +13,12 @@ import {
 
 export default function CustomDrawerContent(props) {
   return (
-    <DrawerContentScrollView {...props}>
-      <DrawerItem 
-        label="FoodWayz"
-        labelStyle={{color:"white"}} />
+    <DrawerContentScrollView {...props} >
+      <Text style={{margin:20, color:"white", fontSize:20, fontWeight: "bold"}}>FoodWayz</Text>
       <DrawerItem 
         label="Home" 
         labelStyle={{color:"white"}}
-        onPress={() => props.navigation.navigate("HomeStack")} 
+        onPress={() => {props.navigation.navigate("HomeStack")} }
         icon= {({  }) => <Ionicons
                             name="md-home"
                             size={20}
@@ -46,7 +46,7 @@ export default function CustomDrawerContent(props) {
                           />}
       />
 
-      <DrawerItem 
+      <DrawerItem
         label="Contact Us" 
         labelStyle={{color:"white"}}
         onPress={() => props.navigation.navigate("ContactUsStack")} 
