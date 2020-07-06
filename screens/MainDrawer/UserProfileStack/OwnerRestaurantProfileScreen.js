@@ -260,7 +260,7 @@ class OwnerRestaurantProfileComponent extends Component {
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={styles.button}
-                  onPress={() => { navigation.navigate("RestaurantStatisticsProfile") }}
+                  onPress={() => { navigation.navigate("RestaurantStatisticsProfile", {rest: this.state.restaurant }) }}
                 >
                   <Text style={styles.buttonText}>Statistics</Text>
                 </TouchableOpacity>

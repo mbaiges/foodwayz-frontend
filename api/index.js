@@ -14,7 +14,7 @@ import { AuthApi } from './Auth';
 import { SearchApi } from './Search';
 import { ViewsApi } from './Views';
 import { ContactUsApi } from './ContactUs';
-import { Statistics } from './Statistics';
+import { StatisticsApi } from './Statistics';
 
 export {
     Characteristic,
@@ -45,7 +45,7 @@ export {
     SearchApi,
     ViewsApi,
     ContactUsApi,
-    Statistics,
+    StatisticsApi,
 
     AuthApi,
 }

@@ -21,6 +21,8 @@ import {
   Reviews,
   RateFood,
 
+  FoodSpecificStatistics
+
 } from "../screens/MainDrawer";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -55,12 +57,14 @@ export default function StackNavigator({ navigation, route }) {
       <Stack.Screen name="AddDish" component={AddDish} />
       <Stack.Screen name="EditRestaurant" component={EditRestaurant} />
       <Stack.Screen name="Premium" component={Premium} />
-      
+      <Stack.Screen name="FoodSpecificStatistics" component={FoodSpecificStatistics}/>
+
       <Stack.Screen name="ReviewInfo" component={ReviewInfo}/>
       <Stack.Screen name="Food" component={Food}/>
       <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} />
       <Stack.Screen name="Reviews" component={Reviews}/>
       <Stack.Screen name="RateFood" component={RateFood}/>
+
 
     </Stack.Navigator>
   );
@@ -86,7 +90,9 @@ function getHeaderTitle(route) {
     case "OwnerRestaurantProfile":
       return "Restaurant";
     case "RestaurantStatisticsProfile":
-      return "Statistics";
+      return "Restaurant Statistics";
+    case "FoodSpecificStatistics":
+      return "Food Statistics";
     case "AddDish":
       return "Add Dish";
     case "EditRestaurant":
