@@ -221,10 +221,10 @@ class OwnerRestaurantProfileComponent extends Component {
             >
               {this.state.images.map(image =>{
                 return(
-                  <View>
-                    <Card>
+                  <View >
+                    <Card >
                       <Image
-                        style={styles.logoImage}
+                        style={styles.cardImage}
                         source={{uri: image.a_image_url}}
                       />
                       <View style={styles.iconContainer}>
@@ -288,17 +288,18 @@ class OwnerRestaurantProfileComponent extends Component {
                   title={dish.a_title}
                   subtitle={
                     <View flexDirection="row" justifyContent="space-between">  
-                      <View>
+                    <View width={320}>  
                       <Text>{dish.a_description}</Text>
                       <Rating imageSize={10} readonly startingValue={dish.a_score}  style={styles.rating}/> 
-                      </View>
-                      <View style={styles.iconContainer} >
+                    </View>
+                      <View >
                         <Icon
+                          style={styles.icon}
                           name='close'
                           onPress={() => this.setState({verificationModal: true, lastDishClicked: dish})} />
                       </View>
                     </View>
-}
+                  }
                   bottomDivider={true}
                   topDivider={true}
                 />
@@ -533,6 +534,15 @@ const styles = StyleSheet.create({
     margin: 15,
   },
 
+  cardImage: {
+    position: "relative",
+    width: 240,
+    height: 240,
+    justifyContent: "center",
+    margin: 25,
+    marginBottom: 45,
+  },
+
   addImage: {
     position: "relative",
     width: 200,
@@ -627,6 +637,13 @@ const styles = StyleSheet.create({
 
 
 
+  rating: {
+    alignSelf: "flex-start",
+  },
+
+  icon: {
+    alignSelf: "flex-end",
+  },
   
   buttonContainer:{
     alignItems:"center",
@@ -669,8 +686,7 @@ const styles = StyleSheet.create({
   },
 
   buttonText:{
-    color: "white",
-      
+    color: "white",   
   },
 
   blackButtonText:{

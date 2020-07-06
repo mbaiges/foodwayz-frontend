@@ -37,8 +37,16 @@ class EditProfileComponent extends Component {
   }
 
   async updateUser(){
-    //const { route } = this.props;
-    let result = await UserApi.modifyMe(this.state.user);
+    const { route } = this.props;
+    const { userUpdater } = route.params;
+
+    try {
+      const resp = await UserApi.modifyMe(this.state.user);
+      userUpdater(resp.response);
+    } catch (error) {
+      console.log(error);
+    }
+    
     console.log("api updated" +  this.state.user);
     ///route.params.setState({user: this.state.user});
   }
