@@ -66,6 +66,9 @@ class HomeScreenComponent extends Component {
   }
 
   async componentDidMount() {
+    this.setState({
+      activityIndicator: true
+    })
     await this.fetchUser();
     await this.fetchFoods();
     this.setState({

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, ListItem, Button, Icon, Picker } from "react-native-elements";
+import { Card, ListItem, Button, Icon, Picker, ButtonGroup } from "react-native-elements";
 import {
   StyleSheet,
   View,
@@ -27,8 +27,9 @@ class ContactUs extends Component {
         this.state = {
           type: "",
           comment: "",
+          selectedIndex: 1
         };
-    
+        this.updateIndex = this.updateIndex.bind(this)
       }
 
       async sendMail(){
@@ -45,9 +46,22 @@ class ContactUs extends Component {
           snackbarFieldsVisible: false
         });
       }
+
+      updateIndex (selected) {
+        this.setState({selectedIndex: selected})
+        if(selected == 0)
+          this.setState({type: "comment"})
+        else if(selected == 1)
+          this.setState({type: "suggestion"})
+        else if(selected == 2)
+          this.setState({type: "complaint"})
+      }
+      
     
       render() {
         const { navigation, signIn } = this.props;
+        const buttons = ['Comment', 'Suggestion', 'Complaint']
+        const { selectedIndex } = this.state.selectedIndex
 
     return (
         <SafeAreaView style={styles.backgroundContainer}>
@@ -56,30 +70,15 @@ class ContactUs extends Component {
             <View style={styles.inputBoxes}></View>
 
             <Text style={styles.subtitle}>Why you want to contact us?</Text>
-            <View style={styles.opacities}>
-                
-                <TouchableOpacity
-                    style={styles.opacity}
-                    onPress={() => this.state.type = "suggestion"}
-                >
-                  <Text style={styles.subtitle}>Comment</Text>
-                  
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.opacity}
-                    onPress={() => this.state.type = "suggestion"}
-                >
-                  <Text style={styles.subtitle}>Suggestion</Text>
-                  
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.opacity}
-                    onPress={() => (this.state.type = "complain")}
-                >
-                  <Text style={styles.subtitle}>Complain</Text>
-                 
-                </TouchableOpacity>
-            </View>
+
+            <ButtonGroup
+                onPress={this.updateIndex}
+                selectedIndex={this.state.selectedIndex}
+                buttons={buttons}
+                containerStyle={styles.opacities}
+                selectedButtonStyle={{backgroundColor: "#FC987E"}}
+              />
+           
             <View style={styles.inputView}>
               <Text style={styles.subtitle}>Message</Text>
                 <TextInput
@@ -198,28 +197,13 @@ const styles = StyleSheet.create({
         borderWidth: 1,
       },
     opacities:{
-        flexDirection:"row"
+      height: 50, 
+      borderRadius:20, 
+      marginTop:15, 
+      marginBottom:15
     },
-    opacity: {
-      backgroundColor: "#FC987E",
-      color: "white",
-      alignItems: "center",
-      borderRadius: 20,
-      margin:10,
-      height: 40,
-      paddingTop:8,
-      paddingEnd:10
-    } ,
+    
 
-    pickers:{
-      flexDirection:"row"
-  },
-  picker: {
-    margin:10,
-    height: 40,
-    paddingTop:8,
-    paddingEnd:10
-  } 
     
 });
 
