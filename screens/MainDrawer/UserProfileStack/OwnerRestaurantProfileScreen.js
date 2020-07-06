@@ -240,8 +240,9 @@ class OwnerRestaurantProfileComponent extends Component {
                   this.setState({modalImageVisible: true});
               }}>
                 <View> 
-                  <Card> style={styles.logoImage}
+                  <Card> 
                       <Image
+                      style={styles.logoImage}
                       source={require("../../../assets/images/dishPlaceholder.png")}
                       />
                       <Text style={styles.subsubtitleText}>Add Photo</Text>

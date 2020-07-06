@@ -74,6 +74,19 @@ class AddDishComponent extends Component {
     });
   }
 
+  dismissIngrSnackBar = () => {
+    this.setState({
+      snackbarIngrVisible: false
+    });
+  }
+
+  dismissCharSnackBar = () => {
+    this.setState({
+      snackbarCharVisible: false
+    });
+  }
+
+
   async sendNewTypeMail(){
     if(this.state.newTypeRequest != ""){
       const resp = await ContactUsApi.typeRequest(this.state.newTypeRequest);
@@ -88,6 +101,9 @@ class AddDishComponent extends Component {
       const resp = await ContactUsApi.ingredientRequest(this.state.newTypeRequest);
       console.log(resp);
     }else{
+      this.setState({
+        snackbarIngrVisible: false
+      });
       console.log("fill Ingredient");
     }
   }
@@ -97,6 +113,9 @@ class AddDishComponent extends Component {
       const resp = await ContactUsApi.characteristicRequest(this.state.newTypeRequest);
       console.log(resp);
     }else{
+      this.setState({
+        snackbarCharVisible: true
+      });
       console.log("fill Characteristic");
     }
   }
@@ -886,6 +905,24 @@ class AddDishComponent extends Component {
         
             {/* -------------------------------------------------------------------------------------------------------------------------------------------------------- */}
             <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarFieldsVisible}
+              onDismiss={this.dismissFieldsSnackBar}
+        >
+             <Text style={styles.textSnack}> Please fill all the fields.</Text>
+        </Snackbar>
+
+        <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarIngrVisible}
+              onDismiss={this.dismissFieldsSnackBar}
+        >
+             <Text style={styles.textSnack}> Please fill ingredient name.</Text>
+        </Snackbar>
+
+        <Snackbar
               style={styles.snackBar}
               duration={4000}
               visible={this.state.snackbarFieldsVisible}
