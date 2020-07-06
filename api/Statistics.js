@@ -13,8 +13,24 @@ class StatisticsApi{
     return Api.post(`${StatisticsApi.url}/food/${foodId}/views_by_day`);
   }
 
-  static registerRestaurantViewsByDay(restId) {
+  static getFoodViewsByHour(foodId) {
+    return Api.post(`${StatisticsApi.url}/food/${foodId}/views_by_hour`);
+  }
+
+  static getFoodUserStatistics(foodId) {
+    return Api.post(`${StatisticsApi.url}/food/${foodId}/user`);
+  }
+
+  static getRestaurantViewsByDay(restId) {
     return Api.post(`${StatisticsApi.url}/restaurant/${restId}/views_by_day`);
+  }
+
+  static getRestaurantViewsByHour(restId) {
+    return Api.post(`${StatisticsApi.url}/restaurant/${restId}/views_by_hour`);
+  }
+
+  static getRestaurantUserStatistics(restId) {
+    return Api.post(`${StatisticsApi.url}/restaurant/${restId}/user`);
   }
 
   /*
