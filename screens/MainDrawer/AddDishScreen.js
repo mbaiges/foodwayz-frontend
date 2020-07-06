@@ -68,11 +68,7 @@ class AddDishComponent extends Component {
 
   }
 
-  dismissSnackBar = () => {
-    this.setState({
-      snackbarVisible: false
-    });
-  }
+
 
   dismissIngrSnackBar = () => {
     this.setState({
@@ -917,7 +913,7 @@ class AddDishComponent extends Component {
               style={styles.snackBar}
               duration={4000}
               visible={this.state.snackbarIngrVisible}
-              onDismiss={this.dismissFieldsSnackBar}
+              onDismiss={this.dismissIngrSnackBar}
         >
              <Text style={styles.textSnack}> Please fill ingredient name.</Text>
         </Snackbar>
@@ -925,10 +921,10 @@ class AddDishComponent extends Component {
         <Snackbar
               style={styles.snackBar}
               duration={4000}
-              visible={this.state.snackbarFieldsVisible}
-              onDismiss={this.dismissFieldsSnackBar}
+              visible={this.state.snackbarCharVisible}
+              onDismiss={this.dismissCharSnackBar}
         >
-             <Text style={styles.textSnack}> Please fill all the fields.</Text>
+             <Text style={styles.textSnack}> Please fill characteristic name.</Text>
         </Snackbar>
 
         </SafeAreaView>)
