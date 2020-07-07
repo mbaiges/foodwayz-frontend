@@ -33,6 +33,10 @@ class UserProfileComponent extends Component {
     }
   }
 
+  updateUser(user) {
+    this.setState({user});
+  }
+
   async fetchUser() {
     console.log('fetching user');
     const resp = await UserApi.getMe();
@@ -104,7 +108,7 @@ class UserProfileComponent extends Component {
             name="md-create"
             size={38}
             style={styles.navbar_r_icon}
-            onPress={() => navigation.navigate("EditProfile", {setState: this.setState})}
+            onPress={() => navigation.navigate("EditProfile", {user: this.state.user, userUpdated: this.updateUser.bind(this)})}
           />
         </View>
       ),

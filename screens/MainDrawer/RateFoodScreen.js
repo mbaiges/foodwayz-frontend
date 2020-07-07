@@ -137,7 +137,7 @@ class RateFoodComponent extends Component {
             (<SafeAreaView style={styles.backgroundContainer}>
                 <ScrollView>
                 <View>
-                <Text style={styles.logoText}>Rate Dish: {this.state.food.a_title}</Text>
+                <Text style={styles.logoText}>Rate Food: {this.state.food.a_title}</Text>
 
 
                 <Text style={styles.logoText}>Quality</Text>
@@ -176,7 +176,7 @@ class RateFoodComponent extends Component {
                         style={styles.input}
                         multiline
                         numberOfLines={10}
-                        placeholder={"This dish was awesome!"}
+                        placeholder={"This food was awesome!"}
                         placeholderTextColor={"rgba(0,0,0,0.4)"}
                         underLineColorAndroid="transparent"
                         onChangeText={(value) => (this.setState({comment: value}))}

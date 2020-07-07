@@ -151,7 +151,7 @@ class HomeScreenComponent extends Component {
       <SafeAreaView style={styles.backgroundContainer}>
         <ScrollView>
           <View>
-            <Text style={styles.homeSubtitle}>Recommended Dishes For You</Text>
+            <Text style={styles.homeSubtitle}>Recommended Foods For You</Text>
             <ScrollView>
               {
                 this.state.foods.map(food => {

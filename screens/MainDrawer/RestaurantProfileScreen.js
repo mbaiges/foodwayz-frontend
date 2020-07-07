@@ -192,7 +192,7 @@ class RestaurantProfileComponent extends Component {
           (this.state.hasPopularDishes) ? 
           (
           <View style={styles.popularContainer} >
-            <Text style={styles.subtitleText}>Our most popular dishes</Text>
+            <Text style={styles.subtitleText}>Our most popular foods</Text>
             <View style={styles.popular}>
               <ScrollView horizontal={true}>
                 {this.state.dishes.map(dish =>{
@@ -230,7 +230,7 @@ class RestaurantProfileComponent extends Component {
         }
         
         <View paddingTop={15}>
-          <Text style={styles.subtitleText}>All of our dishes</Text>
+          <Text style={styles.subtitleText}>All of our foods</Text>
             {this.state.dishes.map(dish =>{
               return( 
                 <ListItem

@@ -324,12 +324,12 @@ class OwnerRestaurantProfileComponent extends Component {
                 style={styles.button}
                 onPress={async () => {navigation.navigate("AddDish", {restaurant: this.state.restaurant})}}
             >
-                <Text style={styles.buttonText}>Add New Dish!</Text>
+                <Text style={styles.buttonText}>Add New Food!</Text>
             </TouchableOpacity>
           </View>
 
           <View paddingTop={15}>
-          <Text style={styles.subtitleText}>Our dishes</Text>
+          <Text style={styles.subtitleText}>Our foods</Text>
             {this.state.dishes.map(dish =>{
               return( 
                 <ListItem
@@ -372,7 +372,7 @@ class OwnerRestaurantProfileComponent extends Component {
 
               <View style = {styles.centeredView}>
                 <View style = {styles.modalView}>
-                  <Text>Are you sure that you want to delete this dish. This action is irreversible</Text>
+                  <Text>Are you sure that you want to delete this food. This action is irreversible</Text>
                   <View flexDirection = 'row'>
                     <View style={styles.buttonContainer}>
                       <TouchableOpacity
