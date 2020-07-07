@@ -820,18 +820,24 @@ class RestaurantStatisticsProfileComponent extends Component {
                     }
                     {/* -------------------------------------------------------------------------------- */}
 
-                    <View style={ styles.center } >
-                        <Text2 style={styles.subtitleText}>Want more stats?</Text2>
-                        <View style={styles.buttonContainer}>
-                            <TouchableOpacity
-                                style={styles.button}
-                                onPress={() => { navigation.navigate("Premium", {restaurant: this.state.restaurant}) }}
-                            >
-                                <Text2 style={styles.buttonText}>Premium</Text2>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
+                    {
+                        (this.state.rest.a_premium_level < 3) ? 
+                        (
+                            <View style={ styles.center } >
+                                <Text2 style={styles.subtitleText}>Want more stats?</Text2>
+                                <View style={styles.buttonContainer}>
+                                    <TouchableOpacity
+                                        style={styles.button}
+                                        onPress={() => { navigation.navigate("Premium", {restaurant: this.state.restaurant}) }}
+                                    >
+                                        <Text2 style={styles.buttonText}>Premium</Text2>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        )
+                        : (<View></View>)
+                    }
+                
                     {/* --------------------------- USER PIE CHARTS --------------------------- */}
                     {
                         (this.state.rest.a_premium_level >= 2) ? 
