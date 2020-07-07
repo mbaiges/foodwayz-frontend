@@ -20,6 +20,8 @@ import { color } from "react-native-reanimated";
 
 const { width } = Dimensions.get("window");
 
+const levels = [ "None", "Copper", "silver", "Gold"]
+
 class PremiumComponent extends Component {
 
     constructor() {
@@ -102,8 +104,8 @@ class PremiumComponent extends Component {
                 onPress={() => { this.changePlan(0) }}
             >
 
-              <Text style={styles.subtitle}>Current Plan: {this.state.rest.a_premium_level }</Text>
-              <Text style={styles.subtitle}>Selected Plan: {this.state.chosenPlanIndex}</Text>
+              <Text style={styles.subtitle}>Current Plan: {levels[this.state.rest.a_premium_level]}</Text>
+              <Text style={styles.subtitle}>Selected Plan: {levels[this.state.chosenPlanIndex]}</Text>
 
               <Card style={ this.state.selectedCard == 0 ? styles.selectedCard : styles.card }>
                 <Text style={styles.subtitle}>No Premium</Text>

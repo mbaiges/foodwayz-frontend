@@ -46,7 +46,7 @@ class FoodSpecificStatisticsComponent extends Component {
         this.state = {
 
             food: {},
-
+            rest: {},
 
             //First Graph
             weekDayValueData:[],
@@ -216,6 +216,11 @@ class FoodSpecificStatisticsComponent extends Component {
     
     async fetchFirstGraphData(){
 
+        if(this.state.rest.a_premium_level < 1){
+            console.log("asd");
+            return;
+        }
+
         const today = new Date();
         const lastWeek = new Date();
         const lastMonth = new Date();
@@ -318,6 +323,12 @@ class FoodSpecificStatisticsComponent extends Component {
     }
 
     async fetchSecondGraphData(date){
+
+        if(this.state.rest.a_premium_level < 1){
+            console.log("asd");
+            return;
+        }
+
         const isoDate = date.toISOString();
 
         // llanada a la api
@@ -333,6 +344,11 @@ class FoodSpecificStatisticsComponent extends Component {
 
     async fetchUserChartData(){
         //llamada a la api
+
+        if(this.state.rest.a_premium_level < 3){
+            console.log("asd");
+            return;
+        }
 
         const resp = await StatisticsApi.getFoodUserStatistics(this.state.food.a_food_id)
 
@@ -501,10 +517,11 @@ class FoodSpecificStatisticsComponent extends Component {
     // --------------------------------- MOUNT ----------------------------------------------------
     async fetchFood() {
         const { route } = this.props;
-        const { food } = route.params;
+        const { food, rest } = route.params;
         console.log(food);
         this.setState({
           food: food,
+          rest: rest
         })
       }
     
@@ -581,180 +598,213 @@ class FoodSpecificStatisticsComponent extends Component {
                     <Text style={styles.primaryText}>{this.state.food.a_title}</Text>
 
                     {/* --------------------------- LAST INTERVAL DATA CHART --------------------------- */}
-                    <Card title={"Views last " + this.state.chosenInterval}>
-                        <View style={{ flexDirection: 'row', height: 200, paddingVertical: 16 }}>
+                    
+                    {
+                        (this.state.rest.a_premium_level >= 1) ? 
+                        (
+                            <Card title={"Views last " + this.state.chosenInterval}>
+                                <View style={{ flexDirection: 'row', height: 200, paddingVertical: 16 }}>
+        
+                                <YAxis
+                                        data={this.state.firstChartData}
+                                        style={{ marginBottom: xAxisHeight }}
+                                        contentInset={verticalContentInset}
+                                        svg={axesSvg}
+                                    />
+                                    <View style={{ flex: 1, marginLeft: 8 }}>
+                                        <BarChart
+                                            style={{ flex: 1, marginLeft: 8 }}
+                                            data={this.state.firstChartData}
+                                            xAccessor={({ item }) => item.value}
+                                            svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
+                                            contentInset={{ top: 10, bottom: 10 }}
+                                            spacing={0.2}
+                                            gridMin={0}
+                                        >
+                                            <Grid/>
+                                        </BarChart>    
+                                        <XAxis
+                                            style={{ marginLeft: 10, height: xAxisHeight, width: 300}}
+                                            data={this.state.firstChartData}
+                                            formatLabel={(value, index) => this.state.firstChartLabels[index] }
+                                            contentInset={{ left: 10, right: 10 }}
+                                            svg={axesSvg}
+                                        />
+                                    </View>
+                                </View>
+                                <View alignItems = 'center'>
+                                    <Picker
+                                        selectedValue={this.state.chosenInterval}
+                                        style={{height: 50, width: 200}}
+                                        onValueChange={async(itemValue, itemIndex) =>{
+                                            await this.setState({chosenInterval: itemValue});
+                                            await this.recalculateIntervalChartInfo();
+                                    }}>
+                                        <Picker.Item label="Last Week" value="week" />
+                                        <Picker.Item label="Last Month" value="month" />
+                                        <Picker.Item label="Last Year" value="year" />
+                                    </Picker>
+                                </View>
+                            </Card>
+                        )
+                        : (<View></View>)
+                    }
+                    
 
-                           <YAxis
-                                data={this.state.firstChartData}
-                                style={{ marginBottom: xAxisHeight }}
-                                contentInset={verticalContentInset}
-                                svg={axesSvg}
-                            />
-                            <View style={{ flex: 1, marginLeft: 8 }}>
-                                <BarChart
-                                    style={{ flex: 1, marginLeft: 8 }}
-                                    data={this.state.firstChartData}
-                                    xAccessor={({ item }) => item.value}
-                                    svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
-                                    contentInset={{ top: 10, bottom: 10 }}
-                                    spacing={0.2}
-                                    gridMin={0}
-                                >
-                                    <Grid/>
-                                </BarChart>    
-                                <XAxis
-                                    style={{ marginLeft: 10, height: xAxisHeight, width: 300}}
-                                    data={this.state.firstChartData}
-                                    formatLabel={(value, index) => this.state.firstChartLabels[index] }
-                                    contentInset={{ left: 10, right: 10 }}
-                                    svg={axesSvg}
-                                />
-                            </View>
-                        </View>
-                        <View alignItems = 'center'>
-                            <Picker
-                                selectedValue={this.state.chosenInterval}
-                                style={{height: 50, width: 200}}
-                                onValueChange={async(itemValue, itemIndex) =>{
-                                    await this.setState({chosenInterval: itemValue});
-                                    await this.recalculateIntervalChartInfo();
-                            }}>
-                                <Picker.Item label="Last Week" value="week" />
-                                <Picker.Item label="Last Month" value="month" />
-                                <Picker.Item label="Last Year" value="year" />
-                            </Picker>
-                        </View>
-                    </Card>
                     {/* -------------------------------------------------------------------------------- */}
                     
                     {/* --------------------------- CHOSEN DATE DATA CHART --------------------------- */}
-                    <Card title={"Views on " + this.state.date.getDate() +"/"+ (this.state.date.getMonth() + 1) +"/"+ this.state.date.getFullYear() }>
-                        <View style={{ flexDirection: 'row', height: 200, paddingVertical: 16 }}>
+                    
+                    {
+                        (this.state.rest.a_premium_level >= 1) ? 
+                        (
+                            <Card title={"Views on " + this.state.date.getDate() +"/"+ (this.state.date.getMonth() + 1) +"/"+ this.state.date.getFullYear() }>
+                                <View style={{ flexDirection: 'row', height: 200, paddingVertical: 16 }}>
+        
+                                <YAxis
+                                        data={this.state.secondChartData}
+                                        style={{ marginBottom: xAxisHeight }}
+                                        contentInset={verticalContentInset}
+                                        //formatLabel={(value, index) => index%2 == 0 ? index : "" }
+                                        svg={axesSvg}
+                                        numberOfTicks={10}
+                                    />
+                                    <View style={{ flex: 1, marginLeft: 8 }}>
+                                        <BarChart
+                                            style={{ flex: 1, marginLeft: 8 }}
+                                            data={this.state.secondChartData}
+                                            xAccessor={({ item }) => item.value}
+                                            svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
+                                            contentInset={{ top: 10, bottom: 10 }}
+                                            spacing={0.2}
+                                            gridMin={0}
+                                        >
+                                            <Grid/>
+                                        </BarChart>    
+                                        <XAxis
+                                            style={{ marginLeft: 10, height: xAxisHeight, width: 300}}
+                                            data={this.state.secondChartData}
+                                            formatLabel={(value, index) => index%6 == 0 ? this.state.secondChartLabels[index/6] : "" }
+                                            contentInset={{ left: 10, right: 10 }}
+                                            svg={axesSvg}
+                                        />
+                                    </View>
+                                </View>
+                                <View alignItems = 'center'>
+                                    <TouchableOpacity onPress={() => this.setState({showDatePicker: true})}>
+                                        <Text style={styles.secondaryText}>CHANGE DATE</Text>
+                                        <Icon name='calendar-check-outline' type='material-community'/>
+                                    </TouchableOpacity>
+                                    {this.state.showDatePicker && (
+                                        <DateTimePicker
+                                            value={ this.state.date }
+                                            mode='default'
+                                            display='default'
+                                            onChange={ date => { this.handleDateChanged(date.nativeEvent.timestamp)}}
+                                        />
+                                    )}
+                                </View>
+                            </Card>
+                        )
+                        : (<View></View>)
+                    }
 
-                           <YAxis
-                                data={this.state.secondChartData}
-                                style={{ marginBottom: xAxisHeight }}
-                                contentInset={verticalContentInset}
-                                //formatLabel={(value, index) => index%2 == 0 ? index : "" }
-                                svg={axesSvg}
-                                numberOfTicks={10}
-                            />
-                            <View style={{ flex: 1, marginLeft: 8 }}>
-                                <BarChart
-                                    style={{ flex: 1, marginLeft: 8 }}
-                                    data={this.state.secondChartData}
-                                    xAccessor={({ item }) => item.value}
-                                    svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
-                                    contentInset={{ top: 10, bottom: 10 }}
-                                    spacing={0.2}
-                                    gridMin={0}
-                                >
-                                    <Grid/>
-                                </BarChart>    
-                                <XAxis
-                                    style={{ marginLeft: 10, height: xAxisHeight, width: 300}}
-                                    data={this.state.secondChartData}
-                                    formatLabel={(value, index) => index%6 == 0 ? this.state.secondChartLabels[index/6] : "" }
-                                    contentInset={{ left: 10, right: 10 }}
-                                    svg={axesSvg}
-                                />
-                            </View>
-                        </View>
-                        <View alignItems = 'center'>
-                            <TouchableOpacity onPress={() => this.setState({showDatePicker: true})}>
-                                <Text style={styles.secondaryText}>CHANGE DATE</Text>
-                                <Icon name='calendar-check-outline' type='material-community'/>
-                            </TouchableOpacity>
-                            {this.state.showDatePicker && (
-                                <DateTimePicker
-                                    value={ this.state.date }
-                                    mode='default'
-                                    display='default'
-                                    onChange={ date => { this.handleDateChanged(date.nativeEvent.timestamp)}}
-                                />
-                            )}
-                        </View>
-                    </Card>
                     {/* -------------------------------------------------------------------------------- */}
 
                     {/* --------------------------- USER PIE CHARTS --------------------------- */}
-                    <Card title={this.state.chosenPieChart}>
-                        <PieChart
-                            style={{ height: 200 }}
-                            valueAccessor={({ item }) => item.amount}
-                            data={this.state.pieChartData}
-                            spacing={0}
-                            outerRadius={'95%'}
-                        >
-                            <Labels/>
-                        </PieChart>
+                    
+                    {
+                        (this.state.rest.a_premium_level >= 3) ? 
+                        (
+                            <Card title={this.state.chosenPieChart}>
+                                <PieChart
+                                    style={{ height: 200 }}
+                                    valueAccessor={({ item }) => item.amount}
+                                    data={this.state.pieChartData}
+                                    spacing={0}
+                                    outerRadius={'95%'}
+                                >
+                                    <Labels/>
+                                </PieChart>
+        
+                                <View alignItems = 'center'>
+                                    <Picker
+                                        selectedValue={this.state.chosenPieChart}
+                                        style={{height: 50, width: 200}}
+                                        onValueChange={async(itemValue, itemIndex) =>{
+                                            await this.setState({chosenPieChart: itemValue});
+                                            await this.recalculatePieChartData();
+                                    }}>
+                                        <Picker.Item label="Views per gender" value="Views per gender" />
+                                        <Picker.Item label="Views per age group" value="Views per age group" />
+                                        <Picker.Item label="Views per characteristic" value="Views per characteristic" />
+                                        <Picker.Item label="Reviews per gender" value="Reviews per gender" />
+                                        <Picker.Item label="Reviews per age group" value="Reviews per age group" />
+                                        <Picker.Item label="Reviews per characteristic" value="Reviews per characteristic" />
+                                    </Picker>
+                                </View>
+                            </Card>
+                        )
+                        : (<View></View>)
+                    }
 
-                        <View alignItems = 'center'>
-                            <Picker
-                                selectedValue={this.state.chosenPieChart}
-                                style={{height: 50, width: 200}}
-                                onValueChange={async(itemValue, itemIndex) =>{
-                                    await this.setState({chosenPieChart: itemValue});
-                                    await this.recalculatePieChartData();
-                            }}>
-                                <Picker.Item label="Views per gender" value="Views per gender" />
-                                <Picker.Item label="Views per age group" value="Views per age group" />
-                                <Picker.Item label="Views per characteristic" value="Views per characteristic" />
-                                <Picker.Item label="Reviews per gender" value="Reviews per gender" />
-                                <Picker.Item label="Reviews per age group" value="Reviews per age group" />
-                                <Picker.Item label="Reviews per characteristic" value="Reviews per characteristic" />
-                            </Picker>
-                        </View>
-                    </Card>
                     
                     {/* -------------------------------------------------------------------------------- */}
 
 
                     {/* --------------------------- SCORES --------------------------- */}
-                    <Card title={"Average score by " + this.state.chosenDataType}>
-                        <View style={{ flexDirection: 'row', height: 200, paddingVertical: 16 }}>
-
-                           <YAxis
-                                data={this.state.scoreChosenData}
-                                style={{ marginBottom: xAxisHeight }}
-                                contentInset={verticalContentInset}
-                                svg={axesSvg}
-                            />
-                            <View style={{ flex: 1, marginLeft: 8 }}>
-                                <BarChart
-                                    style={{ flex: 1, marginLeft: 8 }}
-                                    data={this.state.scoreChosenData}
-                                    xAccessor={({ item }) => item.value}
-                                    svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
-                                    contentInset={{ top: 10, bottom: 10 }}
-                                    spacing={0.2}
-                                    gridMin={0}
-                                >
-                                    <Grid/>
-                                </BarChart>    
-                                <XAxis
-                                    style={{ marginLeft: 10, height: xAxisHeight, width: 300}}
-                                    data={this.state.scoreChosenData}
-                                    formatLabel={(value, index) => this.state.scoreChosenLabels[index] }
-                                    contentInset={{ left: 10, right: 10 }}
-                                    svg={axesSvg}
-                                />
-                            </View>
-                        </View>
-                        <View alignItems = 'center'>
-                            <Picker
-                                selectedValue={this.state.chosenDataType}
-                                style={{height: 50, width: 200}}
-                                onValueChange={async(itemValue, itemIndex) =>{
-                                    await this.setState({chosenDataType: itemValue});
-                                    await this.recalculateScoreData();
-                            }}>
-                                <Picker.Item label="Gender" value="gender"/>
-                                <Picker.Item label="Age" value="age"/>
-                                <Picker.Item label="Characteristic" value="characteristics"/>
-                            </Picker>
-                        </View>
-                    </Card>
+                    
+                    {
+                        (this.state.rest.a_premium_level >= 3) ? 
+                        (
+                            <Card title={"Average score by " + this.state.chosenDataType}>
+                                <View style={{ flexDirection: 'row', height: 200, paddingVertical: 16 }}>
+        
+                                <YAxis
+                                        data={this.state.scoreChosenData}
+                                        style={{ marginBottom: xAxisHeight }}
+                                        contentInset={verticalContentInset}
+                                        svg={axesSvg}
+                                    />
+                                    <View style={{ flex: 1, marginLeft: 8 }}>
+                                        <BarChart
+                                            style={{ flex: 1, marginLeft: 8 }}
+                                            data={this.state.scoreChosenData}
+                                            xAccessor={({ item }) => item.value}
+                                            svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
+                                            contentInset={{ top: 10, bottom: 10 }}
+                                            spacing={0.2}
+                                            gridMin={0}
+                                        >
+                                            <Grid/>
+                                        </BarChart>    
+                                        <XAxis
+                                            style={{ marginLeft: 10, height: xAxisHeight, width: 300}}
+                                            data={this.state.scoreChosenData}
+                                            formatLabel={(value, index) => this.state.scoreChosenLabels[index] }
+                                            contentInset={{ left: 10, right: 10 }}
+                                            svg={axesSvg}
+                                        />
+                                    </View>
+                                </View>
+                                <View alignItems = 'center'>
+                                    <Picker
+                                        selectedValue={this.state.chosenDataType}
+                                        style={{height: 50, width: 200}}
+                                        onValueChange={async(itemValue, itemIndex) =>{
+                                            await this.setState({chosenDataType: itemValue});
+                                            await this.recalculateScoreData();
+                                    }}>
+                                        <Picker.Item label="Gender" value="gender"/>
+                                        <Picker.Item label="Age" value="age"/>
+                                        <Picker.Item label="Characteristic" value="characteristics"/>
+                                    </Picker>
+                                </View>
+                            </Card>
+                        )
+                        : (<View></View>)
+                    }
+                    
                     {/* -------------------------------------------------------------------------------- */}
                          
                 </ScrollView>
