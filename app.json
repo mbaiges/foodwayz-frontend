@@ -23,6 +23,8 @@
       "**/*"
     ],
     "android": {
+      "package": "ar.edu.itba.dychromatic.foodwayz",
+      "versionCode": 1,
       "intentFilters": [
         {
           "action": "VIEW",
