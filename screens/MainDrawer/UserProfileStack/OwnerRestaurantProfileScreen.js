@@ -382,6 +382,15 @@ class OwnerRestaurantProfileComponent extends Component {
                 <Text style={styles.buttonText}>Premium</Text>
               </TouchableOpacity>
             </View>
+
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={async () => { this.setState({modalInviteToBeOwner: true }) }}
+                >
+                <Text style={styles.buttonText}>Add new owner</Text>
+                </TouchableOpacity>
+            </View>
             
             
             {/* <Text style={styles.primaryText}>About us</Text>
