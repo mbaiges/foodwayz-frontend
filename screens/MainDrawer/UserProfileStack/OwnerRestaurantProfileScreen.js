@@ -45,7 +45,7 @@ class OwnerRestaurantProfileComponent extends Component {
       theBiggestExtra: 0,
     }
   }
-  
+
   dismissConnectionSnackBar = () => {
     this.setState({
       snackbarConnectionVisible: false
@@ -70,7 +70,7 @@ class OwnerRestaurantProfileComponent extends Component {
   async fetchRestaurant() {
     const { route } = this.props;
     console.log(route);
-    
+
     const { restaurant } = route.params;
     console.log(restaurant);
     this.setState({ restaurant: restaurant});
@@ -86,7 +86,7 @@ class OwnerRestaurantProfileComponent extends Component {
           console.log("-----------------------------------------------------------------------------------------");
           console.log(resp);
           // if(resp.response.result.length != 0){
-          //   theBiggestExtra = resp.response.result.reduce((a,b) => (a<b) ? b : a);  
+          //   theBiggestExtra = resp.response.result.reduce((a,b) => (a<b) ? b : a);
           // }
           for(var i = 0 ; i < resp.response.result.length ; i++){
             if(resp.response.result[i].a_image_extra > theBiggestExtra){
@@ -159,7 +159,7 @@ class OwnerRestaurantProfileComponent extends Component {
     var myStr = foodToDelete.a_food_id;
     var ref = firebase.storage().ref().child(`images/foods/${myStr}.jpg`);
     //var ref = firebase.storage().ref().child(`images/foods/18.jpg`);
-    
+
     await ref.delete();
     await FoodApi.delete(foodToDelete.a_food_id);
     await this.fetchDishes();
@@ -167,16 +167,16 @@ class OwnerRestaurantProfileComponent extends Component {
 
 
   async deleteImage(){
-    
+
     let imageToDelete = this.state.lastImageClicked;
     var myStr = "" + imageToDelete.a_rest_id + "_" + imageToDelete.a_image_extra;
     console.log(myStr);
-    
+
     var ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);
     await ref.delete();
 
     await RestaurantApi.removeImage(this.state.restaurant.a_rest_id, imageToDelete.a_image_id);
-    
+
     await this.fetchImages();
   }
 
@@ -193,7 +193,7 @@ class OwnerRestaurantProfileComponent extends Component {
 
       if (!result.cancelled) {
         await this.uploadImage(result.uri);
-        
+
       }
   }
 
@@ -201,7 +201,7 @@ class OwnerRestaurantProfileComponent extends Component {
     let a_image = [];
     let biggestNumber = this.state.theBiggestExtra;
     biggestNumber = +biggestNumber + +1;
-    
+
     try {
       const response = await fetch(uri);
       const blob = await response.blob();
@@ -211,17 +211,17 @@ class OwnerRestaurantProfileComponent extends Component {
       console.log("imageName: " + myStr);
 
       var ref = firebase.storage().ref().child(`images/restaurants/${myStr}.jpg`);
-      
+
       console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
       console.log(ref);
-      
-      let snapshot = await ref.put(blob)          
+
+      let snapshot = await ref.put(blob)
 
 
       console.log("6666666666666666666666666666666666666666666666666666");
 
       let downloadURL = await snapshot.ref.getDownloadURL();
-      
+
       console.log("-------------------------url: ");
       console.log(downloadURL);
       a_image.push({ a_image_url: downloadURL, a_image_extra: this.state.theBiggestExtra.toString()});
@@ -232,7 +232,7 @@ class OwnerRestaurantProfileComponent extends Component {
     } catch (error) {
       console.log(error);
     }
-    
+
   }
 
 
@@ -271,14 +271,14 @@ class OwnerRestaurantProfileComponent extends Component {
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
-        
-        
-          
+
+
+
 
         <ScrollView>
-          
+
           <View style={styles.mainPage}>
-            <ScrollView 
+            <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}
             >
@@ -291,19 +291,20 @@ class OwnerRestaurantProfileComponent extends Component {
                         source={{uri: image.a_image_url}}
                       />
                       <View style={styles.iconContainer}>
-                      <Icon
-                        name='close'
-                        onPress={() => this.setState({verificationModalImage: true, lastImageClicked: image})} />
-                    </View> 
+                        <Icon
+                          name='close'
+                          onPress={() => this.setState({verificationModalImage: true, lastImageClicked: image})} />
+                      </View>
+
                     </Card>
                   </View>
                 )
               })}
-              <TouchableOpacity onPress={() => { 
+              <TouchableOpacity onPress={() => {
                   this.setState({modalImageVisible: true});
               }}>
-                <View> 
-                  <Card> 
+                <View>
+                  <Card>
                       <Image
                       style={styles.logoImage}
                       source={require("../../../assets/images/dishPlaceholder.png")}
@@ -315,10 +316,10 @@ class OwnerRestaurantProfileComponent extends Component {
 
             </ScrollView>
             <Text style={styles.logoText}>{this.state.restaurant.a_name}</Text>
-                
-            <View alignItems='flex-start'>    
+
+            <View alignItems='flex-start'>
                         {/* //-----------------------------NUEVO----------------------------      */}
-            <Text style={styles.subtitleText}>Address</Text>  
+            <Text style={styles.subtitleText}>Address</Text>
             <Text style = {styles.addressText}>{this.state.restaurant.a_state +", " + this.state.restaurant.a_city}</Text>
             <Text style = {styles.addressText}>{this.state.restaurant.a_address +", " + this.state.restaurant.a_postal_code}</Text>
 
@@ -341,7 +342,7 @@ class OwnerRestaurantProfileComponent extends Component {
 
             { this.state.restaurant.a_rest_chain &&
               <View>
-                <Text style={styles.subtitleText}>Chain Info</Text> 
+                <Text style={styles.subtitleText}>Chain Info</Text>
                 <Card title={this.state.restaurant.a_rest_chain.a_name}>
                   <Image source={{ uri: this.state.restaurant.a_rest_chain.a_image_url}}
                   style={styles.imageStyle} />
@@ -352,19 +353,19 @@ class OwnerRestaurantProfileComponent extends Component {
                   </View>
                 </Card>
               </View>
-            
+
             }
 
             {/* //---------------------------------------------------------      */}
-            </View> 
+            </View>
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={styles.button}
-                  onPress={() => { 
+                  onPress={() => {
                     const pushAction = StackActions.push("RestaurantStatisticsProfile", {rest: this.state.restaurant });
                     navigation.dispatch(pushAction);
-                    //navigation.navigate("RestaurantStatisticsProfile", {rest: this.state.restaurant }) 
+                    //navigation.navigate("RestaurantStatisticsProfile", {rest: this.state.restaurant })
                   }}
                 >
                   <Text style={styles.buttonText}>Statistics</Text>
@@ -373,23 +374,32 @@ class OwnerRestaurantProfileComponent extends Component {
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => { 
+                onPress={() => {
                   const pushAction = StackActions.push("Premium", {restaurant: this.state.restaurant, updateRestaurantPremium: this.updateRestaurantPremium.bind(this)});
                   navigation.dispatch(pushAction);
-                  //navigation.navigate("Premium", {restaurant: this.state.restaurant, updateRestaurantPremium: this.updateRestaurantPremium.bind(this)}) 
+                  //navigation.navigate("Premium", {restaurant: this.state.restaurant, updateRestaurantPremium: this.updateRestaurantPremium.bind(this)})
                 }}
               >
                 <Text style={styles.buttonText}>Premium</Text>
               </TouchableOpacity>
             </View>
-            
-            
+
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={async () => { this.setState({modalInviteToBeOwner: true }) }}
+                >
+                <Text style={styles.buttonText}>Add new owner</Text>
+                </TouchableOpacity>
+            </View>
+
+
             {/* <Text style={styles.primaryText}>About us</Text>
             <Text style={styles.secondaryText}>Somos un restaurante asiático basado en la película Kung Fu Panda.
             Nuestros cocineros panda trabajan las 24h sin descansar para que tú puedas comer
             una sopa a las 2 de la madrugada si así lo deseas!</Text> */}
           </View>
-    
+
           <View style={styles.buttonContainer}>
             <TouchableOpacity
                 style={styles.button}
@@ -406,7 +416,7 @@ class OwnerRestaurantProfileComponent extends Component {
           <View paddingTop={15}>
           <Text style={styles.subtitleText}>Our foods</Text>
             {this.state.dishes.map(dish =>{
-              return( 
+              return(
                 <ListItem
                   onPress={async () => {
                     const pushAction = StackActions.push("Food", { food: dish} );
@@ -417,18 +427,22 @@ class OwnerRestaurantProfileComponent extends Component {
                   leftAvatar={{ source: { uri: dish.a_image_url } }}
                   title={dish.a_title}
                   subtitle={
-                    <View flexDirection="row" justifyContent="space-between">  
-                    <View width={320}>  
-                      <Text>{dish.a_description}</Text>
-                      <Rating imageSize={10} readonly startingValue={dish.a_score}  style={styles.rating}/> 
-                    </View>
-                      <View >
-                        <Icon
-                          style={styles.icon}
-                          name='close'
-                          onPress={() => this.setState({verificationModal: true, lastDishClicked: dish})} />
+                    <View flexDirection="row" justifyContent="space-between">
+                      <View>
+                        <Text>{dish.a_description}</Text>
+                        <Rating imageSize={15} readonly startingValue={dish.a_score}  style={styles.rating}/>
+
                       </View>
+                      <View style={styles.foodDeleteIconContainer}>
+                          <Icon
+                            style={styles.icon}
+                            name='close'
+                            onPress={() => this.setState({verificationModal: true, lastDishClicked: dish})} />
+
+                        </View>
+
                     </View>
+
                   }
                   bottomDivider={true}
                   topDivider={true}
@@ -451,7 +465,7 @@ class OwnerRestaurantProfileComponent extends Component {
 
               <View style = {styles.centeredView}>
                 <View style = {styles.modalView}>
-                  <Text>Are you sure that you want to delete this food. This action is irreversible</Text>
+                  <Text style = {styles.subtitleText}>Are you sure that you want to delete this food. This action is irreversible</Text>
                   <View flexDirection = 'row'>
                     <View style={styles.buttonContainer}>
                       <TouchableOpacity
@@ -474,7 +488,7 @@ class OwnerRestaurantProfileComponent extends Component {
                     </View>
 
                   </View>
-                  
+
                 </View>
               </View>
 
@@ -493,7 +507,8 @@ class OwnerRestaurantProfileComponent extends Component {
 
               <View style = {styles.centeredView}>
                 <View style = {styles.modalView}>
-                  <Text>Are you sure that you want to delete this image. This action is irreversible</Text>
+
+                  <Text style={styles.subtitleText}>Are you sure that you want to delete this image. This action is irreversible</Text>
                   <View flexDirection = 'row'>
                     <View style={styles.buttonContainer}>
                       <TouchableOpacity
@@ -516,7 +531,7 @@ class OwnerRestaurantProfileComponent extends Component {
                     </View>
 
                   </View>
-                  
+
                 </View>
               </View>
 
@@ -536,7 +551,7 @@ class OwnerRestaurantProfileComponent extends Component {
                       <View style = {styles.modalImageView}>
                           <TouchableOpacity
                               style={styles.modalItemButton}
-                              onPress={() => { 
+                              onPress={() => {
                                     //Ir a la camara y sacar la foto
                                   this.onChooseImagePress();
                                   this.setState({modalImageVisible: false});
@@ -546,7 +561,7 @@ class OwnerRestaurantProfileComponent extends Component {
                           </TouchableOpacity>
                           <TouchableOpacity
                               style={styles.modalItemButton}
-                              onPress={() => { 
+                              onPress={() => {
 
                                   this.onChooseGalleryImagePress();
                                   this.setState({modalImageVisible: false});
@@ -555,13 +570,13 @@ class OwnerRestaurantProfileComponent extends Component {
                           >
                               <Text style={styles.blackButtonText}>Gallery</Text>
                           </TouchableOpacity>
-                      </View>             
-                      
+                      </View>
+
                   </View>
 
               </Modal>
           </View>
-    
+
           <View style={styles.centeredView}>
               <Modal
                   animationType="slide"
@@ -579,7 +594,7 @@ class OwnerRestaurantProfileComponent extends Component {
                               <Icon
                                 name='close'
                                 onPress={() => this.setState({modalInviteToBeOwner: false,})} />
-                            </View> 
+                            </View>
                           </View>
                           <Input
                               placeholder={"email"}
@@ -590,10 +605,10 @@ class OwnerRestaurantProfileComponent extends Component {
                                 }
                               onChangeText={(value) => (modalInput = value)}
                           />
-                              
+
                           <TouchableOpacity
                             style={styles.button}
-                            onPress={() => { 
+                            onPress={() => {
                               this.setState({modalInviteToBeOwner: false});
                               this.insertNewOwner(modalInput);
 
@@ -780,9 +795,9 @@ const styles = StyleSheet.create({
 
   icon: {
     alignSelf: "flex-end",
-    
+
   },
-  
+
   buttonContainer:{
     alignItems:"center",
     paddingTop: 20,
@@ -824,19 +839,19 @@ const styles = StyleSheet.create({
   },
 
   buttonText:{
-    color: "white",   
+    color: "white",
   },
 
   blackButtonText:{
     color: "black",
-      
+
   },
 
   popularContainer: {
     flex: 2,
   },
 
-  
+
   centeredView: {
     flex: 1,
     justifyContent: "center",
@@ -844,7 +859,7 @@ const styles = StyleSheet.create({
     marginTop: 22
   },
 
-  
+
   modalView: {
     margin: 20,
     backgroundColor: "white",
@@ -859,7 +874,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    height: 300,
+    height: 200,
   },
 
   iconContainer:{
@@ -876,7 +891,7 @@ const styles = StyleSheet.create({
     elevation:20,
   },
 
-  
+
   modalImageView: {
     margin: 20,
     backgroundColor: "white",
@@ -894,7 +909,7 @@ const styles = StyleSheet.create({
     height: 120,
   },
 
-  
+
   modalItemButton: {
     borderColor: 'black',
     borderWidth:1,
@@ -969,6 +984,11 @@ imageStyle: {
   height: 250,
   alignSelf: 'center',
 
+},
+
+foodDeleteIconContainer:{
+  position:'absolute',
+  marginLeft: Dimensions.get('window').width -120,
 },
 headerText: {
     fontWeight: "bold",

@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Modal,
+  ActivityIndicator
 } from "react-native";
 import Constants from 'expo-constants';
 import FoodCard from "../../components/FoodCard";
@@ -409,10 +410,16 @@ class SearchScreenComponent extends React.Component {
   //--------------------------------MOUNT---------------------------------------------
 
   async componentDidMount() {
+    this.setState({
+      activityIndicator: true
+    });
     this.querySearch();
     await this.fetchTypes();
     await this.fetchIngredients();
     await this.fetchCharacteristics();
+    this.setState({
+      activityIndicator: false
+    });
   }
 
   render() {
@@ -423,7 +430,14 @@ class SearchScreenComponent extends React.Component {
     });
 
     return (
-      <View
+      (this.state.activityIndicator) ?
+      (<SafeAreaView>
+          <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#000000" />
+          </View>
+      </SafeAreaView>)
+      :
+      (<View
         style={styles.screenContainer}>
           <SearchBar
             platform="android"
@@ -461,12 +475,12 @@ class SearchScreenComponent extends React.Component {
             }}
           >
             <View style={styles.buttonItemsContainer}>
-              <Text style={styles.filter}>FILTERS </Text>
-              <Icon
+              <Text style={styles.filter}>CUSTOMIZE</Text>
+              {/* <Icon
                 name='filter'
                 type='material-community'
                 color="white"
-              />
+              /> */}
             </View>
           </TouchableOpacity>
         </View>
@@ -794,7 +808,7 @@ class SearchScreenComponent extends React.Component {
         >
              <Text style={styles.textSnack}>No internet connection.</Text>
         </Snackbar>
-      </View>
+      </View>)
     );
   }
 }
