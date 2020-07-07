@@ -49,6 +49,7 @@ class RegisterScreenComponent extends Component {
       email: this.state.email,
       password1: this.state.password1,
       password2: this.state.password2,
+      checked: this.state.checked
     };
 
     if (!validateSignupFields(inputs)) {
