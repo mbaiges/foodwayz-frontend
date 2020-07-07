@@ -56,6 +56,7 @@ class OwnerRestaurantProfileComponent extends Component {
   }
 
   updateDishes() {
+    console.log("Updating dishes");
     this.fetchDishes();
   }
 

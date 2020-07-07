@@ -410,6 +410,7 @@ class AddDishComponent extends Component {
             const resp = await FoodApi.add(dish);
             switch(resp.status) {
               case 200:
+                console.log(resp.response.result);
                 await this.uploadImage(resp.response.result);  
                 await this.uploadIngredients(resp.response.result);
                 await this.uploadCharacteristics(resp.response.result); 
