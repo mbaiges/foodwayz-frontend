@@ -40,6 +40,7 @@ class UserProfileComponent extends Component {
   }
 
   updateRestaurants() {
+    console.log("FETCHING");
     this.fetchRestaurants();
   }
 

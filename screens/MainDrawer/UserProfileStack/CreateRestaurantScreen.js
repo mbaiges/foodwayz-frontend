@@ -121,7 +121,7 @@ class CreateRestaurantComponent extends Component {
 
         async uploadRestaurant(){
             const { route, navigation } = this.props;
-            const { updateRestaurants } = route.params;
+            const { restaurantsUpdater } = route.params;
 
             if(this.state.name != "" && this.state.selectedChain != "" && this.state.city != "" && this.state.postalCode != "" && this.state.address != ""){
                 
@@ -146,7 +146,7 @@ class CreateRestaurantComponent extends Component {
                     switch(resp.status) {
                         case 200:
                             await this.uploadImages(resp.response.result);
-                            updateRestaurants();
+                            restaurantsUpdater();
                             break;
                         default:
                             console.log(`Status Received: ${resp.status} --->`);
