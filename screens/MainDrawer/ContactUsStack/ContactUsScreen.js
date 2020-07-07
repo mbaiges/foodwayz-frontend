@@ -10,6 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  ActivityIndicator
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
 import { Snackbar } from 'react-native-paper';
@@ -41,13 +42,23 @@ class ContactUs extends Component {
 
         if( this.state.comment != "" ){
           try {
+            this.setState({
+              activityIndicator: true
+            })
             const resp = await ContactUsApi.customEmail(email)
             switch(resp.status) {
               case 200:
                 console.log("Email Sent")
+                this.setState({
+                  activityIndicator: false
+                })
+                this.setState({
+                  snackbarSentVisible: true
+                });
                 break;
             default:
-              console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+              console.log(`Status Received: ${resp.status} --->`);
+              console.log(`${resp.response}`);
               // Show snackbar ?
               break;
             }
@@ -60,6 +71,9 @@ class ContactUs extends Component {
             // Show snackbar (Internet connecion, maybe?)
           }
         }else{
+          this.setState({
+            snackbarFieldsVisible: true
+          });
           console.log("Write something!")
         }
       
@@ -74,6 +88,12 @@ class ContactUs extends Component {
       dismissFieldsSnackBar = () => {
         this.setState({
           snackbarFieldsVisible: false
+        });
+      }
+
+      dismissSentSnackBar = () => {
+        this.setState({
+          snackbarSentVisible: false
         });
       }
 
@@ -96,7 +116,14 @@ class ContactUs extends Component {
         const { selectedIndex } = this.state.selectedIndex
 
     return (
-        <SafeAreaView style={styles.backgroundContainer}>
+      (this.state.activityIndicator) ?
+      (<SafeAreaView>
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#000000" />
+        </View>
+      </SafeAreaView>)
+      :
+        (<SafeAreaView style={styles.backgroundContainer}>
           <ScrollView>
             <Text style={styles.logoText}>Contact us</Text>
             
@@ -136,7 +163,7 @@ class ContactUs extends Component {
                     style={styles.saveButton}
                     onPress={async() => {
                       await this.sendMail();
-                      navigation.navigate("Home");
+                    
                     }}
                 >
                     <Text style={styles.save}>Send</Text>
@@ -149,7 +176,7 @@ class ContactUs extends Component {
                 </TouchableOpacity>
             </View>
                
-      <Snackbar
+        <Snackbar
               style={styles.snackBar}
               duration={4000}
               visible={this.state.snackbarConnectionVisible}
@@ -157,8 +184,26 @@ class ContactUs extends Component {
         >
              <Text style={styles.textSnack}>No internet connection.</Text>
         </Snackbar>
+
+        <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarFieldsVisible}
+              onDismiss={this.dismissFieldsSnackBar}
+        >
+             <Text style={styles.textSnack}>Please write a message.</Text>
+        </Snackbar>
+
+        <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarSentVisible}
+              onDismiss={this.dismissSentSnackBar}
+        >
+             <Text style={styles.textSnack}>Email sent!</Text>
+        </Snackbar>
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView>)
     );
     };
 }
@@ -244,6 +289,7 @@ const styles = StyleSheet.create({
         height: 40,
         borderColor: "#FC987E",
         borderWidth: 1,
+        marginBottom:70
       },
     opacities:{
       height: 50, 
@@ -269,6 +315,11 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
   },
+
+  loading:{
+    flex: 1,
+    marginTop:100,
+  }
     
 });
 

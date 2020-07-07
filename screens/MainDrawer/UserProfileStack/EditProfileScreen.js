@@ -1,4 +1,5 @@
 import React, { Component, useContext} from 'react';
+import{ActivityIndicator} from 'react-native'
 import { Card, ListItem, Button, Icon, Input} from 'react-native-elements';
 import { SafeAreaView, StyleSheet, View, Text, Image, Picker, TextInput, ScrollView, TouchableOpacity, Dimensions, Alert, Modal} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -11,6 +12,8 @@ import { Ionicons } from "@expo/vector-icons";
 import Colors from "../../../constants/Colors";
 
 import { Snackbar } from 'react-native-paper';
+
+import { StackActions } from '@react-navigation/native';
 
 class EditProfileComponent extends Component {
 
@@ -31,41 +34,19 @@ class EditProfileComponent extends Component {
 
     console.log('fetching user');
 
-    try {
-      const resp = await UserApi.getMe();
-      switch(resp.status) {
-        case 200:
-          this.setState({
-            user: resp.response.result
-          })
-          this.setState({
-            date: this.state.user.a_birthdate ? new Date(this.state.user.a_birthdate) : new Date()
-          })
-          console.log('done fetching user');
-          console.log(this.state.user);
-          break;
-      default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
-        // Show snackbar ?
-        break;
-      }
-    }
-    catch (error) {
-      console.log(error);
-      this.setState({
-        snackbarConnectionVisible: true
-      });
-      // Show snackbar (Internet connecion, maybe?)
-    }
+    this.setState({
+      user: user,
+      date: user.a_birthdate ? new Date(user.a_birthdate) : new Date()
+    })
 
-
-
-    
+    console.log(this.state.user);
   }
 
   async updateUser(){
     const { route } = this.props;
     const { userUpdater } = route.params;
+
+    console.log(userUpdater);
 
     try {
       const resp = await UserApi.modifyMe(this.state.user);
@@ -185,7 +166,9 @@ class EditProfileComponent extends Component {
   }
 
   async componentDidMount() {
-
+    this.setState({
+      activityIndicator: true
+    })
     const { route } = this.props;
     const { food } = route.params;
     console.log(food);
@@ -193,6 +176,9 @@ class EditProfileComponent extends Component {
     console.log(JSON.stringify(this.updateProfile));
     console.log('mounting');
     await this.fetchUser();
+    this.setState({
+      activityIndicator: false
+    })
   }
 
   render() {
@@ -216,8 +202,14 @@ class EditProfileComponent extends Component {
     });
 
     return (
-      
-      <ScrollView>
+      (this.state.activityIndicator) ?
+      (<SafeAreaView>
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#000000" />
+        </View>
+      </SafeAreaView>)
+      :
+      (<ScrollView>
         <View style={styles.backgroundContainer}>
           <View style={styles.mainPage}>
               <Image style={styles.logoImage} source={{ uri: this.state.user.a_image_url ? this.state.user.a_image_url : "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Funknown.png?alt=media&token=7bec299d-aefa-486e-8aa1-6f11c874ee2f" }}/>
@@ -320,14 +312,22 @@ class EditProfileComponent extends Component {
                 onChange={ date => { this.handleDateChanged(date.nativeEvent.timestamp)}}/>
             )}
           <View>
-            <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("EditProfilePassword") }} >
+            <TouchableOpacity style={styles.button} onPress={() => { 
+                const pushAction = StackActions.push("EditProfilePassword");
+                navigation.dispatch(pushAction);
+                //navigation.navigate("EditProfilePassword") 
+              }} >
                 <Text style={styles.buttonText}>CHANGE PASSWORD</Text>
             </TouchableOpacity>
           </View>
 
         </View>
         <View>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("EditProfileAllergies", { user: this.state.user })} >
+          <TouchableOpacity style={styles.button} onPress={() => {
+              const pushAction = StackActions.push("EditProfileAllergies", { user: this.state.user });
+              navigation.dispatch(pushAction);
+              //navigation.navigate("EditProfileAllergies", { user: this.state.user })
+            }} >
               <Text style={styles.buttonText}>SET FOOD PREFERENCES</Text>
           </TouchableOpacity>
         </View>
@@ -342,7 +342,7 @@ class EditProfileComponent extends Component {
              <Text style={styles.textSnack}>No internet connection.</Text>
         </Snackbar>
 
-      </ScrollView>
+      </ScrollView>)
       
     );
   }
@@ -579,4 +579,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#787777",
     height:70,
   },
+
+  loading:{
+    flex: 1,
+    marginTop:100,
+  }
   });

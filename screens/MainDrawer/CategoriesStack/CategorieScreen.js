@@ -18,6 +18,8 @@ import FoodCard from "../../components/FoodCard";
 
 import { UserContext } from '../../../context/UserContext';
 
+import { StackActions } from '@react-navigation/native';
+
 import { FoodApi, SearchApi } from '../../../api';
 import { color } from "react-native-reanimated";
 
@@ -57,7 +59,8 @@ class CategorieScreenComponent extends Component {
           this.setState({ foods: resp.response.result });
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -105,7 +108,7 @@ class CategorieScreenComponent extends Component {
       (<SafeAreaView style={styles.backgroundContainer}>
         <ScrollView>
           <View>
-      <Text style={styles.homeSubtitle}>{this.state.type.a_type_name}s</Text>
+      <Text style={styles.homeSubtitle}>{this.state.type.a_type_name.charAt(0).toUpperCase() + this.state.type.a_type_name.slice(1)}s</Text>
             <ScrollView>
               {
                 this.state.foods.map(food => {
@@ -116,7 +119,9 @@ class CategorieScreenComponent extends Component {
                       title={food.a_title}
                       brand={food.a_rest.a_name}
                       onPress={async () => {
-                        navigation.navigate("Food", { food: food });
+                        const pushAction = StackActions.push("Food", { food: food });
+                        navigation.dispatch(pushAction);
+                        //navigation.navigate("Food", { food: food });
                         console.log("I want to navigate to Dish page");
                       }}
                       rating={food.a_score}

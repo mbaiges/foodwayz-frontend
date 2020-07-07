@@ -20,6 +20,8 @@ import { UserContext } from '../../../context/UserContext';
 import { TypeApi } from '../../../api';
 import { color } from "react-native-reanimated";
 
+import { StackActions } from '@react-navigation/native';
+
 class CategoriesScreenComponent extends Component {
   constructor() {
     super();
@@ -40,7 +42,8 @@ class CategoriesScreenComponent extends Component {
           })
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -94,7 +97,9 @@ class CategoriesScreenComponent extends Component {
                   return (
                     <TouchableOpacity
                     onPress={async () => {
-                      navigation.navigate("Categorie", { type: type });
+                      const pushAction = StackActions.push("Categorie", { type: type });
+                      navigation.dispatch(pushAction);
+                      //navigation.navigate("Categorie", { type: type });
                       //console.log("I want to navigate to Dish page");
                     }}>
                       <Card
@@ -105,7 +110,7 @@ class CategoriesScreenComponent extends Component {
                         }}
 
                       >
-                        <Text style={styles.foodName}>{type.a_type_name}</Text>
+                        <Text style={styles.foodName}>{type.a_type_name.charAt(0).toUpperCase() + type.a_type_name.slice(1)}</Text>
                       </Card>
                     </TouchableOpacity>
                   )

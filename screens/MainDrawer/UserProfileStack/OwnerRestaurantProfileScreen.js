@@ -18,6 +18,7 @@ import {
 } from "react-native";
 import { RestaurantApi, FoodApi, UserApi, OwnsApi } from "../../../api";
 
+import { StackActions } from '@react-navigation/native';
 
 import * as ImagePicker from 'expo-image-picker';
 import * as firebase from 'firebase';
@@ -55,6 +56,17 @@ class OwnerRestaurantProfileComponent extends Component {
     this.setState({ restaurant: restaurant });
   }
 
+  updateRestaurantPremium(premiumLevel) {
+    let rest = this.state.restaurant;
+    rest.a_premium_level = premiumLevel;
+    this.setState({restaurant: rest});
+  }
+
+  updateDishes() {
+    console.log("Updating dishes");
+    this.fetchDishes();
+  }
+
   async fetchRestaurant() {
     const { route } = this.props;
     console.log(route);
@@ -87,7 +99,8 @@ class OwnerRestaurantProfileComponent extends Component {
           })
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -114,7 +127,8 @@ class OwnerRestaurantProfileComponent extends Component {
           })
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -242,7 +256,11 @@ class OwnerRestaurantProfileComponent extends Component {
             name="md-create"
             size={38}
             style={styles.navbar_r_icon}
-            onPress={() => navigation.navigate("EditRestaurant", {restaurant: this.state.restaurant, restaurantUpdater: this.updateRestaurant.bind(this)})}
+            onPress={() => {
+              const pushAction = StackActions.push("EditRestaurant", {restaurant: this.state.restaurant, restaurantUpdater: this.updateRestaurant.bind(this)});
+              navigation.dispatch(pushAction);
+              //navigation.navigate("EditRestaurant", {restaurant: this.state.restaurant, restaurantUpdater: this.updateRestaurant.bind(this)})
+            }}
           />
         </View>
       ),
@@ -340,7 +358,11 @@ class OwnerRestaurantProfileComponent extends Component {
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={styles.button}
-                  onPress={() => { navigation.navigate("RestaurantStatisticsProfile", {rest: this.state.restaurant }) }}
+                  onPress={() => { 
+                    const pushAction = StackActions.push("RestaurantStatisticsProfile", {rest: this.state.restaurant });
+                    navigation.dispatch(pushAction);
+                    //navigation.navigate("RestaurantStatisticsProfile", {rest: this.state.restaurant }) 
+                  }}
                 >
                   <Text style={styles.buttonText}>Statistics</Text>
                 </TouchableOpacity>
@@ -348,7 +370,11 @@ class OwnerRestaurantProfileComponent extends Component {
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => { navigation.navigate("Premium", {restaurant: this.state.restaurant}) }}
+                onPress={() => { 
+                  const pushAction = StackActions.push("Premium", {restaurant: this.state.restaurant, updateRestaurantPremium: this.updateRestaurantPremium.bind(this)});
+                  navigation.dispatch(pushAction);
+                  //navigation.navigate("Premium", {restaurant: this.state.restaurant, updateRestaurantPremium: this.updateRestaurantPremium.bind(this)}) 
+                }}
               >
                 <Text style={styles.buttonText}>Premium</Text>
               </TouchableOpacity>
@@ -364,7 +390,11 @@ class OwnerRestaurantProfileComponent extends Component {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
                 style={styles.button}
-                onPress={async () => {navigation.navigate("AddDish", {restaurant: this.state.restaurant})}}
+                onPress={async () => {
+                  const pushAction = StackActions.push("AddDish", {restaurant: this.state.restaurant, dishesUpdater: this.updateDishes.bind(this)});
+                  navigation.dispatch(pushAction);
+                  //navigation.navigate("AddDish", {restaurant: this.state.restaurant, dishesUpdater: this.updateDishes.bind(this)})
+                }}
             >
                 <Text style={styles.buttonText}>Add New Food!</Text>
             </TouchableOpacity>
@@ -375,7 +405,11 @@ class OwnerRestaurantProfileComponent extends Component {
             {this.state.dishes.map(dish =>{
               return( 
                 <ListItem
-                  onPress={async () => {navigation.navigate("Food", { food: dish} );}}
+                  onPress={async () => {
+                    const pushAction = StackActions.push("Food", { food: dish} );
+                    navigation.dispatch(pushAction);
+                    //navigation.navigate("Food", { food: dish} );
+                  }}
                   key={dish.a_food_id}
                   leftAvatar={{ source: { uri: dish.a_image_url } }}
                   title={dish.a_title}

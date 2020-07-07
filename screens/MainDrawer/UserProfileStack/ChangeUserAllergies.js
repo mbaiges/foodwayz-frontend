@@ -49,7 +49,8 @@ class EditProfileAllergiesComponent extends Component {
    
             break;
         default:
-          console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+          console.log(`Status Received: ${resp.status} --->`);
+          console.log(`${resp.response}`);
           // Show snackbar ?
           break;
         }
@@ -71,7 +72,8 @@ class EditProfileAllergiesComponent extends Component {
    
             break;
         default:
-          console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+          console.log(`Status Received: ${resp.status} --->`);
+          console.log(`${resp.response}`);
           // Show snackbar ?
           break;
         }
@@ -107,7 +109,8 @@ class EditProfileAllergiesComponent extends Component {
           }
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -133,7 +136,8 @@ class EditProfileAllergiesComponent extends Component {
           } 
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -159,7 +163,8 @@ class EditProfileAllergiesComponent extends Component {
           })
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -202,7 +207,7 @@ class EditProfileAllergiesComponent extends Component {
         optionButtons.push(
             <View key={i}>
                 <CheckBox
-                    title = {this.state.chars[i].a_char_name}
+                    title = {this.state.chars[i].a_char_name.charAt(0).toUpperCase() + this.state.chars[i].a_char_name.slice(1)}
                     checked = {this.state.values[i]}
                     onPress={async () => await this.changeValue(i)}
                 />

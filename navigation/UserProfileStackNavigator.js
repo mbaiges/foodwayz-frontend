@@ -30,6 +30,7 @@ import { Ionicons } from "@expo/vector-icons";
 import DefaultNavBar from "./NavBars/DefaultNavBar";
 import BackButtonSearchProfileNavBar from "./NavBars/BackButtonSearchProfileNavBar";
 import BackButtonNavBar from "./NavBars/BackButtonNavBar";
+import FirstBackButtonNavBar from "./NavBars/FirstBackButtonNavBar";
 
 const Stack = createStackNavigator();
 const INITIAL_ROUTE_NAME = "UserProfile";
@@ -46,7 +47,7 @@ export default function StackNavigator({ navigation, route }) {
         BackButtonNavBar({ title: getHeaderTitle(route), navigation })
       }
     >
-      <Stack.Screen name="UserProfile" component={UserProfile} />
+      <Stack.Screen name="UserProfile" component={UserProfile} options={FirstBackButtonNavBar}/>
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="EditProfilePassword" component={EditProfilePassword} />
       <Stack.Screen name="EditProfileAllergies" component={EditProfileAllergies} />

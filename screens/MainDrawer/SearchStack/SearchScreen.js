@@ -19,6 +19,8 @@ import { Picker } from 'react-native';
 
 import { Snackbar } from 'react-native-paper';
 
+import { StackActions } from '@react-navigation/native';
+
 import {IngredientApi, CharacteristicApi, TypeApi, FoodApi, FoodHasCharacteristicApi, FoodHasIngredientApi, SearchApi } from '../../../api';
 
 const { width } = Dimensions.get("window");
@@ -97,7 +99,8 @@ class SearchScreenComponent extends React.Component {
           this.setState({ queryResult: resp.response.result });
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -175,7 +178,8 @@ class SearchScreenComponent extends React.Component {
           this.setState({ allTypes: resp.response.result });
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -201,7 +205,8 @@ class SearchScreenComponent extends React.Component {
           this.setState({ allIngredients: resp.response.result });
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -226,7 +231,8 @@ class SearchScreenComponent extends React.Component {
           this.setState({ allCharacteristics: resp.response.result });
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -337,7 +343,8 @@ class SearchScreenComponent extends React.Component {
           this.setState({ allTypes: resp.response.result });
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -360,7 +367,8 @@ class SearchScreenComponent extends React.Component {
           this.setState({ allIngredients: resp.response.result });
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -383,7 +391,8 @@ class SearchScreenComponent extends React.Component {
           console.log(resp);
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -432,7 +441,9 @@ class SearchScreenComponent extends React.Component {
                   title={food.a_title}
                   brand={food.a_rest.a_name}
                   onPress={async () => {
-                    navigation.navigate("Food", { food: food });
+                    const pushAction = StackActions.push("Food", { food: food });
+                    navigation.dispatch(pushAction);
+                    //navigation.navigate("Food", { food: food });
                     console.log("I want to navigate to Dish page");
                   }}
                   rating={food.a_score}
@@ -489,7 +500,7 @@ class SearchScreenComponent extends React.Component {
                                         <View key={idx}>
                                             <TouchableOpacity style={styles.buttonTag}>
                                                 <View style={styles.rowItemsContainer}>
-                                                    <Text style={styles.tagText}>{type.a_type_name}</Text>
+                                                    <Text style={styles.tagText}>{type.a_type_name.charAt(0).toUpperCase() + type.a_type_name.slice(1)}</Text>
                                                     <TouchableOpacity
                                                         onPress={() => this.deleteType(idx)}
                                                     >
@@ -517,7 +528,7 @@ class SearchScreenComponent extends React.Component {
                                               this.setState({chosenTypes: aux});
                                             }}
                                         >
-                                            <Text style={styles.ingredient}>{type.a_type_name}</Text>
+                                            <Text style={styles.ingredient}>{type.a_type_name.charAt(0).toUpperCase() + type.a_type_name.slice(1)}</Text>
                                         </TouchableOpacity>
                                   </View>
                                 );
@@ -568,7 +579,7 @@ class SearchScreenComponent extends React.Component {
                                         <View key={idx}>
                                             <TouchableOpacity style={styles.buttonTag}>
                                                 <View style={styles.rowItemsContainer}>
-                                                    <Text style={styles.tagText}>{ingredient.a_ingr_name}</Text>
+                                                    <Text style={styles.tagText}>{ingredient.a_ingr_name.charAt(0).toUpperCase() + ingredient.a_ingr_name.slice(1)}</Text>
                                                     <TouchableOpacity
                                                         onPress={() => this.deleteInredient(idx)}
                                                     >
@@ -596,7 +607,7 @@ class SearchScreenComponent extends React.Component {
                                               this.setState({chosenIngredients: aux});
                                             }}
                                         >
-                                            <Text style={styles.ingredient}>{ingr.a_ingr_name}</Text>
+                                            <Text style={styles.ingredient}>{ingr.a_ingr_name.charAt(0).toUpperCase() + ingr.a_ingr_name.slice(1)}</Text>
                                         </TouchableOpacity>
                                   </View>
                                 );
@@ -648,7 +659,7 @@ class SearchScreenComponent extends React.Component {
                                         <View key={idx}>
                                             <TouchableOpacity style={styles.buttonTag}>
                                                 <View style={styles.rowItemsContainer}>
-                                                    <Text style={styles.tagText}>{characteristic.a_char_name}</Text>
+                                                    <Text style={styles.tagText}>{characteristic.a_char_name.charAt(0).toUpperCase() + characteristic.a_char_name.slice(1)}</Text>
                                                     <TouchableOpacity
                                                         onPress={() => this.deleteCharacteristic(idx)}
                                                     >
@@ -676,7 +687,7 @@ class SearchScreenComponent extends React.Component {
                                               this.setState({chosenCharacteristics: aux});
                                           }}
                                       >
-                                          <Text style={styles.ingredient}>{char.a_char_name}</Text>
+                                          <Text style={styles.ingredient}>{char.a_char_name.charAt(0).toUpperCase() + char.a_char_name.slice(1)}</Text>
                                       </TouchableOpacity>
                                   </View>
                                 );

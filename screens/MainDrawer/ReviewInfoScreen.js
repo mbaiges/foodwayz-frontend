@@ -18,6 +18,8 @@ import { FoodApi } from '../../api';
 
 import { Snackbar } from 'react-native-paper';
 
+import { StackActions } from '@react-navigation/native';
+
 import FoodCard from "../components/FoodCard.js";
 
 const { width } = Dimensions.get("window");
@@ -63,7 +65,8 @@ class ReviewInfoComponent extends Component {
  
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -122,16 +125,16 @@ class ReviewInfoComponent extends Component {
             <Text style={styles.subtitle}>Comments</Text>    
             <Text style={styles.text}>{this.state.review.a_desc}</Text>   
             <Text style={styles.subtitle}>Food reviewed</Text>
-            <TouchableOpacity       
-              onPress={async () => {
-                navigation.navigate("Food");
-                console.log("I want to navigate to Dish page");
-              }}>
+            <TouchableOpacity>
               <FoodCard
                   image={{ uri: this.state.food.a_image_url }}
                   title={this.state.food.a_title}
                   brand={this.state.rest.a_name}
-                  onPress={async () => { navigation.navigate("Food", { food: this.state.food }) }}
+                  onPress={async () => {
+                    const pushAction = StackActions.push("Food", { food: this.state.food });
+                    navigation.dispatch(pushAction);
+                    //navigation.navigate("Food", { food: this.state.food }) 
+                  }}
                   rating={this.state.food.a_score}
               />
           </TouchableOpacity>

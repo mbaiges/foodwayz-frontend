@@ -18,6 +18,9 @@ import {
 import { Input } from "react-native-elements";
 import { UserContext } from '../../context/UserContext';
 import { User, AuthApi } from '../../api';
+
+import { StackActions } from '@react-navigation/native';
+
 import { validateSigninFields } from '../../utils';
 
 
@@ -285,7 +288,9 @@ class LoginScreenComponent extends Component {
           <Text
             style={styles.forgotpassword}
             onPress={() => {
-              navigation.navigate("ForgotPass");
+              const pushAction = StackActions.push("ForgotPass");
+              navigation.dispatch(pushAction);
+              //navigation.navigate("ForgotPass");
             }}
           >
             {" "}
@@ -294,20 +299,13 @@ class LoginScreenComponent extends Component {
           <Text
             style={styles.signUp}
             onPress={() => {
-              navigation.navigate("Register");
+              const pushAction = StackActions.push("Register");
+              navigation.dispatch(pushAction);
+              //navigation.navigate("Register");
             }}
           >
             {" "}
             Don't have an account yet? Sign up!{" "}
-          </Text>
-          <Text
-            style={styles.signUp}
-            onPress={() => {
-              navigation.navigate("Main");
-            }}
-          >
-            {" "}
-            Don't have a working log-in system yet? Bypass security right now!{" "}
           </Text>
         </View>
       </SafeAreaView>

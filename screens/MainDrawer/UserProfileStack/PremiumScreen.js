@@ -14,10 +14,15 @@ import {
 import CheckBox from "@react-native-community/checkbox";
 import { RestaurantApi } from "../../../api";
 import { Snackbar } from 'react-native-paper';
+import { color } from "react-native-reanimated";
+
+import { StackActions } from '@react-navigation/native';
 
 //import { Constants } from 'expo';
 
 const { width } = Dimensions.get("window");
+
+const levels = [ "None", "Copper", "silver", "Gold"]
 
 class PremiumComponent extends Component {
 
@@ -30,17 +35,21 @@ class PremiumComponent extends Component {
      }
     
     async uploadPrimium(){
-      const { navigation } = this.props;
+      const { route, navigation } = this.props;
+      const { updateRestaurantPremium } = route.params;
 
       if(this.state.chosenPlanIndex){
         try {
           const resp = await RestaurantApi.updatePremiumStatus(this.state.rest.a_rest_id, this.state.chosenPlanIndex)
+          console.log(resp);
           switch(resp.status) {
             case 200:
+              updateRestaurantPremium(this.state.chosenPlanIndex);
               navigation.goBack();
               break;
           default:
-            console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+            console.log(`Status Received: ${resp.status} --->`);
+            console.log(`${resp.response}`);
             // Show snackbar ?
             break;
           }
@@ -60,6 +69,10 @@ class PremiumComponent extends Component {
       const { restaurant } = route.params;
       this.setState({rest: restaurant});
       console.log(restaurant);
+      this.setState({ 
+        chosenPlanIndex: restaurant.a_premium_level, 
+        selectedCard: restaurant.a_premium_level
+      })
     }
 
     dismissConnectionSnackBar = () => {
@@ -69,7 +82,10 @@ class PremiumComponent extends Component {
     }
 
     changePlan(plan){
-      this.setState({ chosenPlanIndex: plan })
+      this.setState({ 
+        chosenPlanIndex: plan, 
+        selectedCard: plan
+      })
       console.log("selecting plan: " + plan)
     }
 
@@ -85,34 +101,54 @@ class PremiumComponent extends Component {
         <SafeAreaView style={styles.backgroundContainer}>
           <ScrollView>
             <Text style={styles.logoText}>Sign up for premium</Text>
+
+            <TouchableOpacity
+                onPress={() => { this.changePlan(0) }}
+            >
+
+              <Text style={styles.subtitle}>Current Plan: {levels[this.state.rest.a_premium_level]}</Text>
+              <Text style={styles.subtitle}>Selected Plan: {levels[this.state.chosenPlanIndex]}</Text>
+
+              <Card style={ this.state.selectedCard == 0 ? styles.selectedCard : styles.card }>
+                <Text style={styles.subtitle}>No Premium</Text>
+                <Text style={styles.text}>You will be able to see:</Text>
+                <Text style={styles.text}>- The top 5 best and worst rated foods in your restaurant according to price, quality or presentation</Text>
+              </Card>
+            </TouchableOpacity>
             
             <TouchableOpacity
                 onPress={() => { this.changePlan(1) }}
             >
-              <Card style={styles.card}>
-                <Text style={styles.subtitle}>Basic - $100 a month!</Text>
-                <Text style={styles.text}>- Feature 1</Text>
+              <Card style={ this.state.selectedCard == 1 ? styles.selectedCard : styles.card }>
+                <Text style={styles.subtitle}>Copper - $100 a month!</Text>
+                <Text style={styles.text}>You will be able to see:</Text>
+                <Text style={styles.text}>- All non premium Perks</Text>
+                <Text style={styles.text}>- The restaurants views on the last week, month, or year</Text>
+                <Text style={styles.text}>- Detailed hour by hour info on your restaurants views on a specific day</Text>
+                <Text style={styles.text}>- Each Foods views on the last week, month, or year</Text>
+                <Text style={styles.text}>- Detailed hour by hour info on each food views on a specific day</Text>
               </Card>
             </TouchableOpacity>
 
             <TouchableOpacity
                 onPress={() => { this.changePlan(2) }}
             >
-            <Card style={styles.card}>
-                <Text style={styles.subtitle}>Standard - $300 a month!</Text>
-                <Text style={styles.text}>- Feature 1</Text>
-                <Text style={styles.text}>- Feature 2</Text>
+            <Card style={ this.state.selectedCard == 2 ? styles.selectedCard : styles.card }>
+                <Text style={styles.subtitle}>Silver - $300 a month!</Text>
+                <Text style={styles.text}>You will be able to see:</Text>
+                <Text style={styles.text}>- All Copper level Perks</Text>
+                <Text style={styles.text}>- All the user statistics for your restaurant including: Views per gender, Views per age, Views per characteristic (Vegan, Celiac, etc) and the same information for the reviews</Text>
               </Card>
             </TouchableOpacity>
 
             <TouchableOpacity
                 onPress={() => { this.changePlan(3) }}
             >
-            <Card style={styles.card}>
-                <Text style={styles.subtitle}>Premium - $500 a month!</Text>
-                <Text style={styles.text}>- Feature 1</Text>
-                <Text style={styles.text}>- Feature 2</Text>
-                <Text style={styles.text}>- Feature 3</Text>
+            <Card style={ this.state.selectedCard == 3 ? styles.selectedCard : styles.card }>
+                <Text style={styles.subtitle}>Gold - $500 a month!</Text>
+                <Text style={styles.text}>You will be able to see:</Text>
+                <Text style={styles.text}>- All Silver level Perks</Text>
+                <Text style={styles.text}>- Same user statistics as on silver but not only for your restaurant but for all of the foods!</Text>
               </Card>
             </TouchableOpacity>
 
@@ -121,11 +157,15 @@ class PremiumComponent extends Component {
                     style={styles.saveButton}
                     onPress={() => { this.uploadPrimium() }}
                 >
-                    <Text style={styles.save}>Send</Text>
+                    <Text style={styles.save}>Save</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.cancelButton}
-                    onPress={() => {navigation.navigate("UserProfile");}}
+                    onPress={() => {
+                      const pushAction = StackActions.push("UserProfile");
+                      navigation.dispatch(pushAction);
+                      //navigation.navigate("UserProfile");
+                    }}
                 >
                     <Text style={styles.cancel}>Cancel</Text>
                  
@@ -208,7 +248,9 @@ const styles = StyleSheet.create({
     buttons: {
         flexDirection:"row",
         paddingTop:10,
-        marginTop:230
+        marginTop:50,
+        marginBottom: 20,
+        marginLeft: 20
     },
     saveButton: {
         marginLeft:180,
@@ -235,16 +277,27 @@ const styles = StyleSheet.create({
         height: 40,
         borderColor: "#FC987E",
         borderWidth: 1,
+        
       },
+
       card: {
         marginTop:20,
-
         alignSelf:"center",
         marginBottom:50,
         alignItems: "center",
         paddingTop:8,
-
       },
+
+      selectedCard: {
+        marginTop:20,
+        alignSelf:"center",
+        marginBottom:50,
+        alignItems: "center",
+        paddingTop:8,
+        backgroundColor: "#FC987E",
+        color: "white",
+      },
+
       textSnack:{
         color: 'white',
         fontSize: 20,

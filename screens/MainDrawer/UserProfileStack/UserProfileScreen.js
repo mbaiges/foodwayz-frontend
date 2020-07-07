@@ -17,6 +17,8 @@ import {
   ActivityIndicator
 } from "react-native";
 
+import { StackActions } from '@react-navigation/native';
+
 import { UserApi, ReviewApi, RestaurantApi, Owns, OwnsApi } from '../../../api';
 
 const { width } = Dimensions.get("window");
@@ -108,7 +110,12 @@ class UserProfileComponent extends Component {
             name="md-create"
             size={38}
             style={styles.navbar_r_icon}
-            onPress={() => navigation.navigate("EditProfile", {user: this.state.user, userUpdated: this.updateUser.bind(this)})}
+            onPress={() => {
+              const pushAction = StackActions.push("EditProfile", {user: this.state.user, userUpdater: this.updateUser.bind(this)});
+              navigation.dispatch(pushAction);
+              //navigation.navigate("EditProfile", {user: this.state.user, userUpdater: this.updateUser.bind(this)})
+              }
+            }
           />
         </View>
       ),
@@ -123,7 +130,9 @@ class UserProfileComponent extends Component {
                 style={styles.restaurantButton}
                 onPress={() => {
                   this.setState({restaurantsModalVisible: false});
-                  navigation.navigate("OwnerRestaurantProfile", {restaurant: rest});
+                  const pushAction = StackActions.push("OwnerRestaurantProfile", {restaurant: rest});
+                  navigation.dispatch(pushAction);
+                  //navigation.navigate("OwnerRestaurantProfile", {restaurant: rest});
                 }}
             >
                 <Text style={styles.buttonRestaurantsText}>{this.state.restaurants[i].a_name}</Text>
@@ -164,7 +173,9 @@ class UserProfileComponent extends Component {
                       <TouchableOpacity
                         key={idx}
                         onPress={async () => {
-                          navigation.navigate("ReviewInfo", { review: review });
+                          const pushAction = StackActions.push("ReviewInfo", { review: review });
+                          navigation.dispatch(pushAction);
+                          //navigation.navigate("ReviewInfo", { review: review });
                           console.log("I want to navigate to Dish page");
                         }}>
                         <Card
@@ -206,7 +217,9 @@ class UserProfileComponent extends Component {
                         name='add'
                         onPress={() => {
                           this.setState({restaurantsModalVisible: false});
-                          navigation.navigate("CreateRestaurant");
+                          const pushAction = StackActions.push("CreateRestaurant");
+                          navigation.dispatch(pushAction);
+                          //navigation.navigate("CreateRestaurant");
                         }}/>
                     </View>
                     <View style={styles.modalSubtitlesContainer}>
@@ -230,7 +243,11 @@ class UserProfileComponent extends Component {
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={styles.button}
-                  onPress={() => { navigation.navigate("CreateRestaurant") }}
+                  onPress={() => { 
+                    const pushAction = StackActions.push("CreateRestaurant");
+                    navigation.dispatch(pushAction);
+                    //navigation.navigate("CreateRestaurant") 
+                  }}
                 >
                   <Text style={styles.buttonText}>Add Restaurant</Text>
                 </TouchableOpacity>

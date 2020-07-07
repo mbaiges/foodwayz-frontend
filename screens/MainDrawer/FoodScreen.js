@@ -19,6 +19,8 @@ import { Image, ListItem, Icon, Input, Rating } from 'react-native-elements';
 
 import { ViewsApi } from '../../api';
 
+import { StackActions } from '@react-navigation/native';
+
 const screenWidth = Dimensions.get('window').width
 
 import {
@@ -75,7 +77,8 @@ class FoodScreenComponent extends Component {
  
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -93,7 +96,6 @@ class FoodScreenComponent extends Component {
   render() {
 
     const { navigation } = this.props;
-
     return (
       <SafeAreaView style={styles.backgroundContainer}>
         <ScrollView justifyContent='flex-start'>
@@ -107,7 +109,11 @@ class FoodScreenComponent extends Component {
           <View style={styles.showAll} flexDirection='row' justifyContent='space-between' >
             <Text style={styles.secondaryText}>from: {this.state.rest.a_name}</Text>
             <View >
-              <TouchableOpacity onPress={() => {navigation.navigate("RestaurantProfile", {restaurant: this.state.rest});}}>
+              <TouchableOpacity onPress={() => {
+                  const pushAction = StackActions.push("RestaurantProfile", {restaurant: this.state.rest});
+                  navigation.dispatch(pushAction);
+                  //navigation.navigate("RestaurantProfile", {restaurant: this.state.rest});
+                }}>
                 <Text style={styles.secondaryText}>VISIT</Text>
                 <Icon name='arrow-right' type='material-community' />
               </TouchableOpacity>
@@ -143,7 +149,7 @@ class FoodScreenComponent extends Component {
                       style={styles.buttonTag}
                       onPress={() => {}}
                     >
-                      <Text>{tag.a_ingr_name}</Text>
+                      <Text>{tag.a_ingr_name.charAt(0).toUpperCase() + tag.a_ingr_name.slice(1)}</Text>
                     </TouchableOpacity>
                   )
                 }))
@@ -165,7 +171,7 @@ class FoodScreenComponent extends Component {
                       style={styles.buttonTag}
                       onPress={() => {}}
                     >
-                      <Text>{tag.a_char_name}</Text>
+                      <Text>{tag.a_char_name.charAt(0).toUpperCase() + tag.a_char_name.slice(1)}</Text>
                     </TouchableOpacity>
                   )
                 }))
@@ -178,7 +184,11 @@ class FoodScreenComponent extends Component {
           <View style={styles.showAll} flexDirection='row' justifyContent='space-between'  >
             <Text style={styles.primaryText}>Rating:</Text>
             <View>
-              <TouchableOpacity onPress={() => {navigation.navigate("Reviews", {food: this.state.food});}}>
+              <TouchableOpacity onPress={() => {
+                  const pushAction = StackActions.push("Reviews", {food: this.state.food});
+                  navigation.dispatch(pushAction);
+                  //navigation.navigate("Reviews", {food: this.state.food});
+                }}>
                 <Text style={styles.secondaryText}>SHOW ALL</Text>
                 <Icon
                       name='arrow-right'
@@ -208,9 +218,13 @@ class FoodScreenComponent extends Component {
         <View alignItems="center">
           <TouchableOpacity
             style={styles.button}
-            onPress={() => {navigation.navigate("RateFood", {food: this.state.food});}}
+            onPress={() => {
+              const pushAction = StackActions.push("RateFood", {food: this.state.food});
+              navigation.dispatch(pushAction);
+              //navigation.navigate("RateFood", {food: this.state.food});
+            }}
           >
-            <Text style={styles.buttonItemsContainer}>RATE DISH</Text>
+            <Text style={styles.buttonItemsContainer}>RATE FOOD</Text>
           </TouchableOpacity>
         </View>
 

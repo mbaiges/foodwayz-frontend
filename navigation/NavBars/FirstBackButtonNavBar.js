@@ -3,8 +3,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, View, Button } from "react-native";
 import Colors from "../../constants/Colors";
 
-import { StackActions } from '@react-navigation/native';
-
 export default function BackButtonNavBar({ title, navigation }) {
   return {
     headerLeft: () => (
@@ -14,8 +12,7 @@ export default function BackButtonNavBar({ title, navigation }) {
           size={38}
           style={styles.l_icon}
           onPress={() => {
-            const popAction = StackActions.pop(1);
-            navigation.dispatch(popAction);
+            navigation.goBack();
           }}
         />
       </View>

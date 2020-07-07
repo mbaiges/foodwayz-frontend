@@ -18,6 +18,8 @@ import { Snackbar } from 'react-native-paper';
 
 import { UserContext } from '../../../context/UserContext';
 
+import { StackActions } from '@react-navigation/native';
+
 import { SearchApi, UserApi, UserHasCharacteristicApi } from '../../../api';
 import { color } from "react-native-reanimated";
 
@@ -46,7 +48,8 @@ class HomeScreenComponent extends Component {
           console.log(resp);
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -74,7 +77,8 @@ class HomeScreenComponent extends Component {
           console.log(this.state.userChars)
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -108,7 +112,8 @@ class HomeScreenComponent extends Component {
           console.log(resp);
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -162,7 +167,9 @@ class HomeScreenComponent extends Component {
                       title={food.a_title}
                       brand={food.a_rest.a_name}
                       onPress={async () => {
-                        navigation.navigate("Food", { food: food });
+                        const pushAction = StackActions.push("Food", { food: food });
+                        navigation.dispatch(pushAction);
+                        //navigation.navigate("Food", { food: food });
                         console.log("I want to navigate to Dish page");
                       }}
                       rating={food.a_score}

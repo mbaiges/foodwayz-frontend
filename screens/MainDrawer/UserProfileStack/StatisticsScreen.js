@@ -16,6 +16,7 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {Text} from 'react-native-svg'
 
+import { StackActions } from '@react-navigation/native';
 
 import { ScrollView } from "react-native-gesture-handler";
 import { ListItem, Card,Rating, Icon } from "react-native-elements";
@@ -35,6 +36,7 @@ class RestaurantStatisticsProfileComponent extends Component {
         super();
 
         this.state = {
+            rest: {},
             //First Graph
             weekDayValueData:[],
             weekDayLabels: [],
@@ -234,20 +236,6 @@ class RestaurantStatisticsProfileComponent extends Component {
 
         const resp = await StatisticsApi.getBestWorstFoods(this.state.rest.a_rest_id, 5);
 
-        // const resp = await FoodApi.getAll();
-        // let foodInfo = {
-        //     a_best: {
-        //         a_presentation_score: [resp.response.result[0]],
-        //         a_food_price_Score: [resp.response.result[1]],
-        //         a_food_quality_score: [resp.response.result[2]]
-        //     },
-        //     a_worst: {
-        //         a_presentation_score: [resp.response.result[3]],
-        //         a_food_price_Score: [resp.response.result[4]],
-        //         a_food_quality_score: [resp.response.result[5]]
-        //     }
-        // }
-
         if(resp.status == 200){
             
             let foodInfo = resp.response.result;
@@ -264,6 +252,10 @@ class RestaurantStatisticsProfileComponent extends Component {
     }
 
     async fetchFirstGraphData(){
+
+        if(this.state.rest.a_premium_level < 1){
+            return;
+        }
 
         const today = new Date();
         const lastWeek = new Date();
@@ -368,12 +360,12 @@ class RestaurantStatisticsProfileComponent extends Component {
 
     async fetchSecondGraphData(date){
 
-        const isoDate = date.toISOString();
-        
-        const resp = await StatisticsApi.getRestaurantViewsByHour(this.state.rest.a_rest_id, isoDate)
+        if(this.state.rest.a_premium_level < 1){
+            return;
+        }
 
-        console.log(resp);
-        // llanada a la api
+        const isoDate = date.toISOString();
+        const resp = await StatisticsApi.getRestaurantViewsByHour(this.state.rest.a_rest_id, isoDate)
         
         await this.setState({
             //secondChartData:[2,0,10,0,0,4,25,3,0,0,0,0,3,2,6,2,5,7,4,2,10,25,30,7],
@@ -384,6 +376,11 @@ class RestaurantStatisticsProfileComponent extends Component {
     }
 
     async fetchUserChartData(){
+
+        if(this.state.rest.a_premium_level < 2){
+            console.log("asd");
+            return;
+        }
         
         const resp = await StatisticsApi.getRestaurantUserStatistics(this.state.rest.a_rest_id)
 
@@ -455,7 +452,7 @@ class RestaurantStatisticsProfileComponent extends Component {
             auxViewsPerGenderPieData.push({
                 key: idx,
                 amount: element[1],
-                svg: { fill: '#600080' },
+                svg: { fill: "#FC987E" },
                 tag: element[0]
             })
         })
@@ -465,7 +462,7 @@ class RestaurantStatisticsProfileComponent extends Component {
             auxViewsPerAgeGroupPieData.push({
                 key: idx,
                 amount: element[1],
-                svg: { fill: '#600080' },
+                svg: { fill: "#FC987E" },
                 tag: element[0]
             })
         })
@@ -475,7 +472,7 @@ class RestaurantStatisticsProfileComponent extends Component {
             auxViewsPerCharPieData.push({
                 key: idx,
                 amount: element[1],
-                svg: { fill: '#600080' },
+                svg: { fill: "#FC987E" },
                 tag: element[0]
             })
         })
@@ -495,7 +492,7 @@ class RestaurantStatisticsProfileComponent extends Component {
             auxReviewsPerGenderPieData.push({
                 key: idx,
                 amount: element[1].a_amount,
-                svg: { fill: '#600080' },
+                svg: { fill: "#FC987E" },
                 tag: element[0]
             });
             auxGenderScoreData.push( element[1].a_score );
@@ -509,7 +506,7 @@ class RestaurantStatisticsProfileComponent extends Component {
             auxReviewsPerAgeGroupPieData.push({
                 key: idx,
                 amount: element[1].a_amount,
-                svg: { fill: '#600080' },
+                svg: { fill: "#FC987E" },
                 tag: element[0]
             })
             auxAgeScoreDate.push( element[1].a_score );
@@ -523,7 +520,7 @@ class RestaurantStatisticsProfileComponent extends Component {
             auxReviewsPerCharPieData.push({
                 key: idx,
                 amount: element[1].a_amount,
-                svg: { fill: '#600080' },
+                svg: { fill: "#FC987E" },
                 tag: element[0]
             })
             auxCharScoreData.push( element[1].a_score );
@@ -644,7 +641,10 @@ class RestaurantStatisticsProfileComponent extends Component {
                                 {this.state.bestFoods.map((food, idx) =>{
                                     return(
                                         <View key={idx}>
-                                            <TouchableOpacity onPress={async () => {navigation.navigate("Food", { food: food});
+                                            <TouchableOpacity onPress={async () => {
+                                                const pushAction = StackActions.push("Food", { food: food});
+                                                navigation.dispatch(pushAction);
+                                                //navigation.navigate("Food", { food: food});
                                                 console.log("I want to navigate to Dish page");
                                                 }}>
                                                 <Card
@@ -675,7 +675,10 @@ class RestaurantStatisticsProfileComponent extends Component {
                                 {this.state.worstFoods.map((food, idx) =>{
                                     return(
                                         <View key={idx}>
-                                            <TouchableOpacity onPress={async () => {navigation.navigate("Food", { food: food});
+                                            <TouchableOpacity onPress={async () => {
+                                                const pushAction = StackActions.push("Food", { food: food});
+                                                navigation.dispatch(pushAction);
+                                                //navigation.navigate("Food", { food: food});
                                                 console.log("I want to navigate to Dish page");
                                                 }}>
                                                 <Card
@@ -715,230 +718,291 @@ class RestaurantStatisticsProfileComponent extends Component {
 
 
                     {/* --------------------------- LAST INTERVAL DATA CHART --------------------------- */}
-                    <Card title={"Views last " + this.state.chosenInterval}>
-                        <View style={{ flexDirection: 'row', height: 200, paddingVertical: 16 }}>
+                    {
+                        (this.state.rest.a_premium_level >= 1) ? 
+                        (
+                            <Card title={"Views last " + this.state.chosenInterval}>
+                                <View style={{ flexDirection: 'row', height: 200, paddingVertical: 16 }}>
+        
+                                <YAxis
+                                        data={this.state.firstChartData}
+                                        style={{ marginBottom: xAxisHeight }}
+                                        contentInset={verticalContentInset}
+                                        svg={axesSvg}
+                                    />
+                                    <View style={{ flex: 1, marginLeft: 8 }}>
+                                        <BarChart
+                                            style={{ flex: 1, marginLeft: 8 }}
+                                            data={this.state.firstChartData}
+                                            xAccessor={({ item }) => item.value}
+                                            svg={{ fill: "#FC987E" }}
+                                            contentInset={{ top: 10, bottom: 10 }}
+                                            spacing={0.2}
+                                            gridMin={0}
+                                        >
+                                            <Grid/>
+                                        </BarChart>    
+                                        <XAxis
+                                            style={{ marginLeft: 10, height: xAxisHeight, width: 300}}
+                                            data={this.state.firstChartData}
+                                            formatLabel={(value, index) => this.state.firstChartLabels[index] }
+                                            contentInset={{ left: 10, right: 10 }}
+                                            svg={axesSvg}
+                                        />
+                                    </View>
+                                </View>
+                                <View alignItems = 'center'>
+                                    <Picker
+                                        selectedValue={this.state.chosenInterval}
+                                        style={{height: 50, width: 200}}
+                                        onValueChange={async(itemValue, itemIndex) =>{
+                                            await this.setState({chosenInterval: itemValue});
+                                            await this.recalculateIntervalChartInfo();
+                                    }}>
+                                        <Picker.Item label="Last Week" value="week" />
+                                        <Picker.Item label="Last Month" value="month" />
+                                        <Picker.Item label="Last Year" value="year" />
+                                    </Picker>
+                                </View>
+                            </Card>
+                        )
+                        : (<View></View>)
+                    }
 
-                           <YAxis
-                                data={this.state.firstChartData}
-                                style={{ marginBottom: xAxisHeight }}
-                                contentInset={verticalContentInset}
-                                svg={axesSvg}
-                            />
-                            <View style={{ flex: 1, marginLeft: 8 }}>
-                                <BarChart
-                                    style={{ flex: 1, marginLeft: 8 }}
-                                    data={this.state.firstChartData}
-                                    xAccessor={({ item }) => item.value}
-                                    svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
-                                    contentInset={{ top: 10, bottom: 10 }}
-                                    spacing={0.2}
-                                    gridMin={0}
-                                >
-                                    <Grid/>
-                                </BarChart>    
-                                <XAxis
-                                    style={{ marginLeft: 10, height: xAxisHeight, width: 300}}
-                                    data={this.state.firstChartData}
-                                    formatLabel={(value, index) => this.state.firstChartLabels[index] }
-                                    contentInset={{ left: 10, right: 10 }}
-                                    svg={axesSvg}
-                                />
-                            </View>
-                        </View>
-                        <View alignItems = 'center'>
-                            <Picker
-                                selectedValue={this.state.chosenInterval}
-                                style={{height: 50, width: 200}}
-                                onValueChange={async(itemValue, itemIndex) =>{
-                                    await this.setState({chosenInterval: itemValue});
-                                    await this.recalculateIntervalChartInfo();
-                            }}>
-                                <Picker.Item label="Last Week" value="week" />
-                                <Picker.Item label="Last Month" value="month" />
-                                <Picker.Item label="Last Year" value="year" />
-                            </Picker>
-                        </View>
-                    </Card>
                     {/* -------------------------------------------------------------------------------- */}
                     
                     {/* --------------------------- CHOSEN DATE DATA CHART --------------------------- */}
-                    <Card title={"Views on " + this.state.date.getDate() +"/"+ (this.state.date.getMonth() + 1) +"/"+ this.state.date.getFullYear() }>
-                        <View style={{ flexDirection: 'row', height: 200, paddingVertical: 16 }}>
-
-                           <YAxis
-                                data={this.state.secondChartData}
-                                style={{ marginBottom: xAxisHeight }}
-                                contentInset={verticalContentInset}
-                                //formatLabel={(value, index) => index%2 == 0 ? index : "" }
-                                svg={axesSvg}
-                                numberOfTicks={10}
-                            />
-                            <View style={{ flex: 1, marginLeft: 8 }}>
-                                <BarChart
-                                    style={{ flex: 1, marginLeft: 8 }}
-                                    data={this.state.secondChartData}
-                                    xAccessor={({ item }) => item.value}
-                                    svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
-                                    contentInset={{ top: 10, bottom: 10 }}
-                                    spacing={0.2}
-                                    gridMin={0}
-                                >
-                                    <Grid/>
-                                </BarChart>    
-                                <XAxis
-                                    style={{ marginLeft: 10, height: xAxisHeight, width: 300}}
-                                    data={this.state.secondChartData}
-                                    formatLabel={(value, index) => index%6 == 0 ? this.state.secondChartLabels[index/6] : "" }
-                                    contentInset={{ left: 10, right: 10 }}
-                                    svg={axesSvg}
-                                />
-                            </View>
-                        </View>
-                        <View alignItems = 'center'>
-                            <TouchableOpacity onPress={() => this.setState({showDatePicker: true})}>
-                                <Text style={styles.secondaryText}>CHANGE DATE</Text>
-                                <Icon name='calendar-check-outline' type='material-community'/>
-                            </TouchableOpacity>
-                            {this.state.showDatePicker && (
-                                <DateTimePicker
-                                    value={ this.state.date }
-                                    mode='default'
-                                    display='default'
-                                    onChange={ date => { this.handleDateChanged(date.nativeEvent.timestamp)}}
-                                />
-                            )}
-                        </View>
-                    </Card>
+                    {
+                        (this.state.rest.a_premium_level >= 1) ? 
+                        (
+                            <Card title={"Views on " + this.state.date.getDate() +"/"+ (this.state.date.getMonth() + 1) +"/"+ this.state.date.getFullYear() }>
+                                <View style={{ flexDirection: 'row', height: 200, paddingVertical: 16 }}>
+        
+                                <YAxis
+                                        data={this.state.secondChartData}
+                                        style={{ marginBottom: xAxisHeight }}
+                                        contentInset={verticalContentInset}
+                                        //formatLabel={(value, index) => index%2 == 0 ? index : "" }
+                                        svg={axesSvg}
+                                        numberOfTicks={10}
+                                    />
+                                    <View style={{ flex: 1, marginLeft: 8 }}>
+                                        <BarChart
+                                            style={{ flex: 1, marginLeft: 8 }}
+                                            data={this.state.secondChartData}
+                                            xAccessor={({ item }) => item.value}
+                                            svg={{ fill: "#FC987E" }}
+                                            contentInset={{ top: 10, bottom: 10 }}
+                                            spacing={0.2}
+                                            gridMin={0}
+                                        >
+                                            <Grid/>
+                                        </BarChart>    
+                                        <XAxis
+                                            style={{ marginLeft: 10, height: xAxisHeight, width: 300}}
+                                            data={this.state.secondChartData}
+                                            formatLabel={(value, index) => index%6 == 0 ? this.state.secondChartLabels[index/6] : "" }
+                                            contentInset={{ left: 10, right: 10 }}
+                                            svg={axesSvg}
+                                        />
+                                    </View>
+                                </View>
+                                <View alignItems = 'center'>
+                                    <TouchableOpacity onPress={() => this.setState({showDatePicker: true})}>
+                                        <Text style={styles.secondaryText}>CHANGE DATE</Text>
+                                        <Icon name='calendar-check-outline' type='material-community'/>
+                                    </TouchableOpacity>
+                                    {this.state.showDatePicker && (
+                                        <DateTimePicker
+                                            value={ this.state.date }
+                                            mode='default'
+                                            display='default'
+                                            onChange={ date => { this.handleDateChanged(date.nativeEvent.timestamp)}}
+                                        />
+                                    )}
+                                </View>
+                            </Card>
+                        )
+                        : (<View></View>)
+                    }
                     {/* -------------------------------------------------------------------------------- */}
 
+                    {
+                        (this.state.rest.a_premium_level < 3) ? 
+                        (
+                            <View style={ styles.center } >
+                                <Text2 style={styles.subtitleText}>Want more stats?</Text2>
+                                <View style={styles.buttonContainer}>
+                                    <TouchableOpacity
+                                        style={styles.button}
+                                        onPress={() => { 
+                                            const pushAction = StackActions.push("Premium", {restaurant: this.state.restaurant});
+                                            navigation.dispatch(pushAction);
+                                            //navigation.navigate("Premium", {restaurant: this.state.restaurant}) 
+                                        }}
+                                    >
+                                        <Text2 style={styles.buttonText}>Premium</Text2>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        )
+                        : (<View></View>)
+                    }
+                
                     {/* --------------------------- USER PIE CHARTS --------------------------- */}
-                    <Card title={this.state.chosenPieChart}>
-                        <PieChart
-                            style={{ height: 200 }}
-                            valueAccessor={({ item }) => item.amount}
-                            data={this.state.pieChartData}
-                            spacing={0}
-                            outerRadius={'95%'}
-                        >
-                            <Labels/>
-                        </PieChart>
+                    {
+                        (this.state.rest.a_premium_level >= 2) ? 
+                        (
+                            <Card title={this.state.chosenPieChart}>
+                                <PieChart
+                                    style={{ height: 200 }}
+                                    valueAccessor={({ item }) => item.amount}
+                                    data={this.state.pieChartData}
+                                    spacing={0}
+                                    outerRadius={'95%'}
+                                >
+                                    <Labels/>
+                                </PieChart>
 
-                        <View alignItems = 'center'>
-                            <Picker
-                                selectedValue={this.state.chosenPieChart}
-                                style={{height: 50, width: 200}}
-                                onValueChange={async(itemValue, itemIndex) =>{
-                                    await this.setState({chosenPieChart: itemValue});
-                                    await this.recalculatePieChartData();
-                            }}>
-                                <Picker.Item label="Views per gender" value="Views per gender" />
-                                <Picker.Item label="Views per age group" value="Views per age group" />
-                                <Picker.Item label="Views per characteristic" value="Views per characteristic" />
-                                <Picker.Item label="Reviews per gender" value="Reviews per gender" />
-                                <Picker.Item label="Reviews per age group" value="Reviews per age group" />
-                                <Picker.Item label="Reviews per characteristic" value="Reviews per characteristic" />
-                            </Picker>
-                        </View>
-                    </Card>
+                                <View alignItems = 'center'>
+                                    <Picker
+                                        selectedValue={this.state.chosenPieChart}
+                                        style={{height: 50, width: 200}}
+                                        onValueChange={async(itemValue, itemIndex) =>{
+                                            await this.setState({chosenPieChart: itemValue});
+                                            await this.recalculatePieChartData();
+                                    }}>
+                                        <Picker.Item label="Views per gender" value="Views per gender" />
+                                        <Picker.Item label="Views per age group" value="Views per age group" />
+                                        <Picker.Item label="Views per characteristic" value="Views per characteristic" />
+                                        <Picker.Item label="Reviews per gender" value="Reviews per gender" />
+                                        <Picker.Item label="Reviews per age group" value="Reviews per age group" />
+                                        <Picker.Item label="Reviews per characteristic" value="Reviews per characteristic" />
+                                    </Picker>
+                                </View>
+                            </Card>
+                        )
+                        : (<View></View>)
+                    }
+                    
                     
                     {/* -------------------------------------------------------------------------------- */}
 
 
                     {/* --------------------------- SCORES --------------------------- */}
-                    <Card title={"Average score by " + this.state.chosenDataType}>
-                        <View style={{ flexDirection: 'row', height: 200, paddingVertical: 16 }}>
+                    {
+                        (this.state.rest.a_premium_level >= 2) ? 
+                        (
+                            <Card title={"Average score by " + this.state.chosenDataType}>
+                                <View style={{ flexDirection: 'row', height: 200, paddingVertical: 16 }}>
+        
+                                <YAxis
+                                        data={this.state.scoreChosenData}
+                                        style={{ marginBottom: xAxisHeight }}
+                                        contentInset={verticalContentInset}
+                                        svg={axesSvg}
+                                    />
+                                    <View style={{ flex: 1, marginLeft: 8 }}>
+                                        <BarChart
+                                            style={{ flex: 1, marginLeft: 8 }}
+                                            data={this.state.scoreChosenData}
+                                            xAccessor={({ item }) => item.value}
+                                            svg={{ fill: "#FC987E" }}
+                                            contentInset={{ top: 10, bottom: 10 }}
+                                            spacing={0.2}
+                                            gridMin={0}
+                                        >
+                                            <Grid/>
+                                        </BarChart>    
+                                        <XAxis
+                                            style={{ marginLeft: 10, height: xAxisHeight, width: 300}}
+                                            data={this.state.scoreChosenData}
+                                            formatLabel={(value, index) => this.state.scoreChosenLabels[index] }
+                                            contentInset={{ left: 10, right: 10 }}
+                                            svg={axesSvg}
+                                        />
+                                    </View>
+                                </View>
+                                <View alignItems = 'center'>
+                                    <Picker
+                                        selectedValue={this.state.chosenDataType}
+                                        style={{height: 50, width: 200}}
+                                        onValueChange={async(itemValue, itemIndex) =>{
+                                            await this.setState({chosenDataType: itemValue});
+                                            await this.recalculateScoreData();
+                                    }}>
+                                        <Picker.Item label="Gender" value="gender"/>
+                                        <Picker.Item label="Age" value="age"/>
+                                        <Picker.Item label="Characteristic" value="characteristics"/>
+                                    </Picker>
+                                </View>
+                            </Card>
+                        )
+                        : (<View></View>)
+                    }
 
-                           <YAxis
-                                data={this.state.scoreChosenData}
-                                style={{ marginBottom: xAxisHeight }}
-                                contentInset={verticalContentInset}
-                                svg={axesSvg}
-                            />
-                            <View style={{ flex: 1, marginLeft: 8 }}>
-                                <BarChart
-                                    style={{ flex: 1, marginLeft: 8 }}
-                                    data={this.state.scoreChosenData}
-                                    xAccessor={({ item }) => item.value}
-                                    svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
-                                    contentInset={{ top: 10, bottom: 10 }}
-                                    spacing={0.2}
-                                    gridMin={0}
-                                >
-                                    <Grid/>
-                                </BarChart>    
-                                <XAxis
-                                    style={{ marginLeft: 10, height: xAxisHeight, width: 300}}
-                                    data={this.state.scoreChosenData}
-                                    formatLabel={(value, index) => this.state.scoreChosenLabels[index] }
-                                    contentInset={{ left: 10, right: 10 }}
-                                    svg={axesSvg}
-                                />
-                            </View>
-                        </View>
-                        <View alignItems = 'center'>
-                            <Picker
-                                selectedValue={this.state.chosenDataType}
-                                style={{height: 50, width: 200}}
-                                onValueChange={async(itemValue, itemIndex) =>{
-                                    await this.setState({chosenDataType: itemValue});
-                                    await this.recalculateScoreData();
-                            }}>
-                                <Picker.Item label="Gender" value="gender"/>
-                                <Picker.Item label="Age" value="age"/>
-                                <Picker.Item label="Characteristic" value="characteristics"/>
-                            </Picker>
-                        </View>
-                    </Card>
                     {/* -------------------------------------------------------------------------------- */}
                          
 
                     {/* --------------------------------ALL FOODS -------------------------------------- */}
-                    <View>
-                        <Text2 style={styles.subtitleText}>Food Specific Statistics</Text2>
-                    </View>
-                    <View>   
-                        <ScrollView
-                        showsHorizontalScrollIndicator={false}>        
-                            {this.state.allResturantFoods.map((food, idx) =>{
-                                return(
-                                    // <View key={idx}>
-                                    //     <TouchableOpacity onPress={async () => {navigation.navigate("FoodSpecificStatistics", { food: food});
-                                    //         console.log("I want to navigate to Dish page");
-                                    //         }}>
-                                    //         <Card
-                                    //             image={{uri: food.a_image_url}}
-                                    //             //image={this.favourites[i].img}
-                                    //             imageStyle={{
-                                    //                 height: 100,
-                                    //             }}
-                                    //         >
-                                    //             <View style={styles.cardFooter}>
-                                    //                 <Text2 style={styles.foodName}>{food.a_title}</Text2>
-                                    //             </View>
-                                    //             <Rating imageSize={20} readonly startingValue={food.a_score} style={styles.rating} /> 
-                                    //         </Card>
-                                    //     </TouchableOpacity>
-                                    // </View>    
+                    {
+                        (this.state.rest.a_premium_level >= 1) ? 
+                        (
+                            <View>
+                                <View>
+                                    <Text2 style={styles.subtitleText}>Food Specific Statistics</Text2>
+                                </View>
+                                <View>   
+                                    <ScrollView
+                                    showsHorizontalScrollIndicator={false}>        
+                                        {this.state.allResturantFoods.map((food, idx) =>{
+                                            return(
+                                                // <View key={idx}>
+                                                //     <TouchableOpacity onPress={async () => {navigation.navigate("FoodSpecificStatistics", { food: food});
+                                                //         console.log("I want to navigate to Dish page");
+                                                //         }}>
+                                                //         <Card
+                                                //             image={{uri: food.a_image_url}}
+                                                //             //image={this.favourites[i].img}
+                                                //             imageStyle={{
+                                                //                 height: 100,
+                                                //             }}
+                                                //         >
+                                                //             <View style={styles.cardFooter}>
+                                                //                 <Text2 style={styles.foodName}>{food.a_title}</Text2>
+                                                //             </View>
+                                                //             <Rating imageSize={20} readonly startingValue={food.a_score} style={styles.rating} /> 
+                                                //         </Card>
+                                                //     </TouchableOpacity>
+                                                // </View>    
 
-                                    <ListItem
-                                        onPress={async () => {navigation.navigate("FoodSpecificStatistics", { food: food});}}
-                                        key={food.a_food_id}
-                                        leftAvatar={{ source: { uri: food.a_image_url } }}
-                                        title={food.a_title}
-                                        subtitle={
-                                            <View>  
-                                                <Text2>{food.a_description}</Text2>
-                                                <Rating imageSize={10} readonly startingValue={food.a_score}  style={styles.rating}/> 
-                                            </View>
-                                        }
-                                        bottomDivider={true}
-                                        topDivider={true}
-                                    />
+                                                <ListItem
+                                                    onPress={async () => {
+                                                        const pushAction = StackActions.push("FoodSpecificStatistics", { food: food, rest: this.state.rest});
+                                                        navigation.dispatch(pushAction);
+                                                        //navigation.navigate("FoodSpecificStatistics", { food: food, rest: this.state.rest});
+                                                    }}
+                                                    key={food.a_food_id}
+                                                    leftAvatar={{ source: { uri: food.a_image_url } }}
+                                                    title={food.a_title}
+                                                    subtitle={
+                                                        <View>  
+                                                            <Text2>{food.a_description}</Text2>
+                                                            <Rating imageSize={10} readonly startingValue={food.a_score}  style={styles.rating}/> 
+                                                        </View>
+                                                    }
+                                                    bottomDivider={true}
+                                                    topDivider={true}
+                                                />
 
-                                );   
-                            })}
-                        </ScrollView> 
-                    </View>
+                                            );   
+                                        })}
+                                    </ScrollView> 
+                                </View>
+                            </View>
+                        )
+                        : (<View></View>)
+                    }
 
                     {/* -------------------------------------------------------------------------------- */}
                 </ScrollView>
@@ -984,6 +1048,10 @@ const styles = StyleSheet.create({
         position: "relative",
         width: width,
         flexDirection: "row",
+    },
+
+    center: {
+        alignItems: "center",
     },
     
     reviewImage: {
@@ -1081,10 +1149,10 @@ const styles = StyleSheet.create({
         alignItems:"center",
         paddingTop: 20,
         paddingBottom: 22,
-    },
-
-  
-    button: {
+      },
+    
+    
+      button: {
         elevation: 15,
         borderRadius: 25,
         backgroundColor: "#FC987E",
@@ -1093,12 +1161,42 @@ const styles = StyleSheet.create({
         alignItems: "center",
         padding: 13,
         height: 48,
-    },
+      },
+    
+      cancelButton: {
+        elevation: 15,
+        borderRadius: 5,
+        backgroundColor: "white",
+        color: "black",
+        width: 100,
+        alignItems: "center",
+        padding: 13,
+        height: 48,
+      },
+    
+      deleteButton: {
+        elevation: 15,
+        borderRadius: 5,
+        backgroundColor: "red",
+        color: "white",
+        width: 100,
+        alignItems: "center",
+        padding: 13,
+        height: 48,
+      },
+    
+      buttonText:{
+        color: "white",   
+      },
+    
+      blackButtonText:{
+        color: "black",
+          
+      },
 
     
     buttonText:{
-        color: "white",
-        
+        color: "#FFFFFF",
     },
 
     reviewContainer: {
