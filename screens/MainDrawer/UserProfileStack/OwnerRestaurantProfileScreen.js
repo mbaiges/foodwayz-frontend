@@ -264,7 +264,10 @@ class OwnerRestaurantProfileComponent extends Component {
           />
         </View>
       ),
+      headerTitle: () => <Text style={styles.headerText}>{this.state.restaurant.a_name}</Text>
     });
+
+
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
@@ -967,6 +970,11 @@ imageStyle: {
   alignSelf: 'center',
 
 },
-
+headerText: {
+    fontWeight: "bold",
+    fontSize: 20,
+    color: "white",
+    letterSpacing: 1,
+  },
 
 });

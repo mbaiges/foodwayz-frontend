@@ -25,7 +25,7 @@ import {Text} from 'react-native-svg'
 //   } from 'react-native-chart-kit'
 
 import { ScrollView } from "react-native-gesture-handler";
-import { Card,Rating, Icon } from "react-native-elements";
+import { Card,Rating, Icon, ThemeConsumer } from "react-native-elements";
 
 import { BarChart, LineChart, YAxis, XAxis, Grid, PieChart } from 'react-native-svg-charts'
 import { FoodApi, StatisticsApi } from '../../../api';
@@ -555,6 +555,10 @@ class FoodSpecificStatisticsComponent extends Component {
         const axesSvg = { fontSize: 10, fill: 'grey' };
         const verticalContentInset = { top: 10, bottom: 10 }
         const xAxisHeight = 30;
+
+        navigation.setOptions({
+            headerTitle: () => <Text2 style={styles.headerText}>{this.state.food.a_title}'s Statistics</Text2>
+        });
        
         const Labels = ({ slices, height, width }) => {
             return slices.map((slice, index) => {
@@ -991,4 +995,11 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         paddingTop: 15,
     },
+
+    headerText: {
+        fontWeight: "bold",
+        fontSize: 20,
+        color: "white",
+        letterSpacing: 1,
+      },
 });
