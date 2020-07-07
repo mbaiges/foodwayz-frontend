@@ -97,7 +97,8 @@ class SearchScreenComponent extends React.Component {
           this.setState({ queryResult: resp.response.result });
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -175,7 +176,8 @@ class SearchScreenComponent extends React.Component {
           this.setState({ allTypes: resp.response.result });
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -201,7 +203,8 @@ class SearchScreenComponent extends React.Component {
           this.setState({ allIngredients: resp.response.result });
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -226,7 +229,8 @@ class SearchScreenComponent extends React.Component {
           this.setState({ allCharacteristics: resp.response.result });
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -337,7 +341,8 @@ class SearchScreenComponent extends React.Component {
           this.setState({ allTypes: resp.response.result });
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -360,7 +365,8 @@ class SearchScreenComponent extends React.Component {
           this.setState({ allIngredients: resp.response.result });
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -383,7 +389,8 @@ class SearchScreenComponent extends React.Component {
           console.log(resp);
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }

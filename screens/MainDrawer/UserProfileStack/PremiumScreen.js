@@ -20,6 +20,8 @@ import { color } from "react-native-reanimated";
 
 const { width } = Dimensions.get("window");
 
+const levels = [ "None", "Copper", "silver", "Gold"]
+
 class PremiumComponent extends Component {
 
     constructor() {
@@ -31,17 +33,21 @@ class PremiumComponent extends Component {
      }
     
     async uploadPrimium(){
-      const { navigation } = this.props;
+      const { route, navigation } = this.props;
+      const { updateRestaurantPremium } = route.params;
 
       if(this.state.chosenPlanIndex){
         try {
           const resp = await RestaurantApi.updatePremiumStatus(this.state.rest.a_rest_id, this.state.chosenPlanIndex)
+          console.log(resp);
           switch(resp.status) {
             case 200:
+              updateRestaurantPremium(this.state.chosenPlanIndex);
               navigation.goBack();
               break;
           default:
-            console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+            console.log(`Status Received: ${resp.status} --->`);
+            console.log(`${resp.response}`);
             // Show snackbar ?
             break;
           }
@@ -98,8 +104,8 @@ class PremiumComponent extends Component {
                 onPress={() => { this.changePlan(0) }}
             >
 
-              <Text style={styles.subtitle}>Current Plan: {this.state.rest.a_premium_level }</Text>
-              <Text style={styles.subtitle}>Selected Plan: {this.state.chosenPlanIndex}</Text>
+              <Text style={styles.subtitle}>Current Plan: {levels[this.state.rest.a_premium_level]}</Text>
+              <Text style={styles.subtitle}>Selected Plan: {levels[this.state.chosenPlanIndex]}</Text>
 
               <Card style={ this.state.selectedCard == 0 ? styles.selectedCard : styles.card }>
                 <Text style={styles.subtitle}>No Premium</Text>

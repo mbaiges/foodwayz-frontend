@@ -56,7 +56,8 @@ class RateFoodComponent extends Component {
                 navigation.goBack();
                 break;
             default:
-              console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+              console.log(`Status Received: ${resp.status} --->`);
+              console.log(`${resp.response}`);
               // Show snackbar ?
               break;
             }
@@ -86,7 +87,8 @@ class RateFoodComponent extends Component {
                   console.log("User is: " + resp.response.result);
                 break;
             default:
-              console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+              console.log(`Status Received: ${resp.status} --->`);
+              console.log(`${resp.response}`);
               // Show snackbar ?
               break;
             }
