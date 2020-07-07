@@ -414,21 +414,26 @@ class AddDishComponent extends Component {
 
           try {
             const resp = await FoodApi.add(dish);
+            console.log('caca1');
             switch(resp.status) {
               case 200:
                 console.log(resp.response.result);
-                await this.uploadImage(resp.response.result);  
+                console.log('caca2');
+                await this.uploadImage(resp.response.result); 
+                console.log('caca3');
                 await this.uploadIngredients(resp.response.result);
+                console.log('caca4');
                 await this.uploadCharacteristics(resp.response.result); 
+                console.log('caca5');
                 this.setState({
                   activityIndicator: false
                 })
-                dishesUpdater();
+                //dishesUpdater();
                 navigation.goBack();
                 break;
             default:
               console.log(`Status Received: ${resp.status} --->`);
-              console.log(`${resp.response}`);
+              console.log(resp);
               // Show snackbar ?
               break;
             }
@@ -1116,7 +1121,7 @@ class AddDishComponent extends Component {
                                 this.setState({modalImageVisible: false});
                               }}
                         >
-                            <Text style={styles.buttonText}>Camera</Text>
+                            <Text style={styles.blackButtonText}>Camera</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.chainButton}
@@ -1125,7 +1130,7 @@ class AddDishComponent extends Component {
                                 this.setState({modalImageVisible: false});
                             }}
                         >
-                            <Text style={styles.buttonText}>Gallery</Text>
+                            <Text style={styles.blackButtonText}>Gallery</Text>
                         </TouchableOpacity>
                     </View>         
                 </View>
@@ -1321,7 +1326,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",    
   },
 
-  buttonText:{
+  blackButtonText:{
     color: "black",
     fontWeight: "bold",    
     fontSize: 15,      
