@@ -150,7 +150,7 @@ class AddDishComponent extends Component {
         this.setState({
           activityIndicator: true
         });
-        const resp = await ContactUsApi.ingredientRequest(this.state.newTypeRequest);
+        const resp = await ContactUsApi.ingredientRequest(this.state.newIngrRequest);
         switch(resp.status) {
           case 200:
             this.setState({
@@ -187,7 +187,7 @@ class AddDishComponent extends Component {
   }
 
   async sendNewCharMail(){
-    if(this.state.newRequest != ""){
+    if(this.state.newCharRequest != ""){
       try {      
         this.setState({
           activityIndicator: true
