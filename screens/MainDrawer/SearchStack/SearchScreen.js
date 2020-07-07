@@ -17,6 +17,8 @@ import FoodCard from "../../components/FoodCard";
 
 import { Picker } from 'react-native';
 
+import { Snackbar } from 'react-native-paper';
+
 import {IngredientApi, CharacteristicApi, TypeApi, FoodApi, FoodHasCharacteristicApi, FoodHasIngredientApi, SearchApi } from '../../../api';
 
 const { width } = Dimensions.get("window");
@@ -88,8 +90,25 @@ class SearchScreenComponent extends React.Component {
   };
 
   async querySearch(){
-    const resp = await SearchApi.searchFoods(this.state.queryBody);
-    this.setState({ queryResult: resp.response.result });
+    try {
+      const resp = await SearchApi.searchFoods(this.state.queryBody);
+      switch(resp.status) {
+        case 200:
+          this.setState({ queryResult: resp.response.result });
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
   }
 
   // ------------------------------- SEARCH IN FILTERS ------------------------------
@@ -124,6 +143,12 @@ class SearchScreenComponent extends React.Component {
     });
   }
 
+  dismissConnectionSnackBar = () => {
+    this.setState({
+      snackbarConnectionVisible: false
+    });
+  }
+
   async updateCharSearch(){
     if (this.state.filterTimer) {
       console.log("clearing");
@@ -143,23 +168,50 @@ class SearchScreenComponent extends React.Component {
     let auxFilterQueryBody = {
       raw_input: input
     }
-    const resp = await SearchApi.searchTypes(auxFilterQueryBody)
-    if(resp.status == 200){
-      this.setState({ allTypes: resp.response.result });
-    }else{
-      console.log("error");
+    try {
+      const resp = await SearchApi.searchTypes(auxFilterQueryBody)
+      switch(resp.status) {
+        case 200:
+          this.setState({ allTypes: resp.response.result });
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
     }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
+
   }
 
   async filterIngrQuery(input){
     let auxFilterQueryBody = {
       raw_input: input
     }
-    const resp = await SearchApi.searchIngredients(auxFilterQueryBody)
-    if(resp.status == 200){
-      this.setState({ allIngredients: resp.response.result });
-    }else{
-      console.log("error");
+    try {
+      const resp = await SearchApi.searchIngredients(auxFilterQueryBody)
+      switch(resp.status) {
+        case 200:
+          this.setState({ allIngredients: resp.response.result });
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
     }
   }
 
@@ -167,12 +219,26 @@ class SearchScreenComponent extends React.Component {
     let auxFilterQueryBody = {
       raw_input: input
     }
-    const resp = await SearchApi.searchCharacteristics(auxFilterQueryBody)
-    if(resp.status == 200){
-      this.setState({ allCharacteristics: resp.response.result });
-    }else{
-      console.log("error");
+    try {
+      const resp = await SearchApi.searchCharacteristics(auxFilterQueryBody)
+      switch(resp.status) {
+        case 200:
+          this.setState({ allCharacteristics: resp.response.result });
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
     }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
+
   }
 
 
@@ -264,21 +330,71 @@ class SearchScreenComponent extends React.Component {
   //------------------------------FETCHS------------------------------------------------
 
   async fetchTypes(){
-    const resp = await TypeApi.getAll();
-    this.setState({ allTypes: resp.response.result });
-    console.log(resp);
+    try {
+      const resp = await TypeApi.getAll();
+      switch(resp.status) {
+        case 200:
+          this.setState({ allTypes: resp.response.result });
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
+
   }
 
   async fetchIngredients(){
-    const resp = await IngredientApi.getAll();
-    this.setState({ allIngredients: resp.response.result });
-    console.log(resp);
+    try {
+      const resp = await IngredientApi.getAll();
+      switch(resp.status) {
+        case 200:
+          this.setState({ allIngredients: resp.response.result });
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
   }
 
   async fetchCharacteristics(){
-    const resp = await CharacteristicApi.getAll();
-    this.setState({ allCharacteristics: resp.response.result });
-    console.log(resp);
+    try {
+      const resp = await CharacteristicApi.getAll();
+      switch(resp.status) {
+        case 200:
+          this.setState({ allCharacteristics: resp.response.result });
+          console.log(resp);
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
   }
 
   //--------------------------------MOUNT---------------------------------------------
@@ -659,7 +775,14 @@ class SearchScreenComponent extends React.Component {
             </View>
         </Modal>
         {/* -------------------------------------------------------------------------------------------------------------------------------------------------------- */}
-
+        <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+        >
+             <Text style={styles.textSnack}>No internet connection.</Text>
+        </Snackbar>
       </View>
     );
   }

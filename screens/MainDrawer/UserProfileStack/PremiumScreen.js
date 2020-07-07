@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
 import { RestaurantApi } from "../../../api";
+import { Snackbar } from 'react-native-paper';
 
 //import { Constants } from 'expo';
 
@@ -32,21 +33,39 @@ class PremiumComponent extends Component {
       const { navigation } = this.props;
 
       if(this.state.chosenPlanIndex){
-        const resp = await RestaurantApi.updatePremiumStatus(this.state.rest.a_rest_id, this.state.chosenPlanIndex)
-        console.log(resp)
-        if(resp.status == 200){
-          navigation.goBack();
+        try {
+          const resp = await RestaurantApi.updatePremiumStatus(this.state.rest.a_rest_id, this.state.chosenPlanIndex)
+          switch(resp.status) {
+            case 200:
+              navigation.goBack();
+              break;
+          default:
+            console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+            // Show snackbar ?
+            break;
+          }
         }
-      }else{
-        console.log("you need to choose a plan")
-      }
+        catch (error) {
+          console.log(error);
+          this.setState({
+            snackbarConnectionVisible: true
+          });
+          // Show snackbar (Internet connecion, maybe?)
+        }
     }
+  }
 
     async fetchRestaurant(){
       const { route } = this.props;
       const { restaurant } = route.params;
       this.setState({rest: restaurant});
       console.log(restaurant);
+    }
+
+    dismissConnectionSnackBar = () => {
+      this.setState({
+        snackbarConnectionVisible: false
+      });
     }
 
     changePlan(plan){
@@ -112,6 +131,14 @@ class PremiumComponent extends Component {
                  
                 </TouchableOpacity>
             </View>
+            <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+            >
+                <Text style={styles.textSnack}>No internet connection.</Text>
+            </Snackbar>
             </ScrollView>
         </SafeAreaView>
       );
@@ -217,6 +244,17 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingTop:8,
 
+      },
+      textSnack:{
+        color: 'white',
+        fontSize: 20,
+        fontWeight: 'bold',
+        paddingBottom: 5,
+      },
+    
+      snackBar:{
+        backgroundColor: "#787777",
+        height:70,
       },
     
 });

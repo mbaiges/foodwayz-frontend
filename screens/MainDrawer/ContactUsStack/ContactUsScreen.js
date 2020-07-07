@@ -33,18 +33,42 @@ class ContactUs extends Component {
       }
 
       async sendMail(){
-        if()
+
         let email = {
           reason: this.state.type,
           body: this.state.comment,
         }
-        //console.log('asd')
-        //console.log(email);
-        const resp = await ContactUsApi.customEmail(email)
-        console.log(resp);
-        if(resp.status == 200){
-          console.log("Email Sent")
+
+        if( this.state.comment != "" ){
+          try {
+            const resp = await ContactUsApi.customEmail(email)
+            switch(resp.status) {
+              case 200:
+                console.log("Email Sent")
+                break;
+            default:
+              console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+              // Show snackbar ?
+              break;
+            }
+          }
+          catch (error) {
+            console.log(error);
+            this.setState({
+              snackbarConnectionVisible: true
+            });
+            // Show snackbar (Internet connecion, maybe?)
+          }
+        }else{
+          console.log("Write something!")
         }
+      
+      }
+
+      dismissConnectionSnackBar = () => {
+        this.setState({
+          snackbarConnectionVisible: false
+        });
       }
 
       dismissFieldsSnackBar = () => {
@@ -75,11 +99,13 @@ class ContactUs extends Component {
         <SafeAreaView style={styles.backgroundContainer}>
           <ScrollView>
             <Text style={styles.logoText}>Contact us</Text>
-
-            {/* <Image
-              style={styles.logoImage}
-              source={require("../../assets/images/logo.png")}
-            /> */}
+            
+            <View alignItems='center'>
+              <Image
+                style={styles.logoImage}
+                source={require("../../../assets/images/PugEmail.png")}
+              />
+            </View> 
 
             <View style={styles.inputBoxes}></View>
 
@@ -122,6 +148,15 @@ class ContactUs extends Component {
                  
                 </TouchableOpacity>
             </View>
+               
+      <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+        >
+             <Text style={styles.textSnack}>No internet connection.</Text>
+        </Snackbar>
             </ScrollView>
         </SafeAreaView>
     );
@@ -217,7 +252,23 @@ const styles = StyleSheet.create({
       marginBottom:15
     },
     
+  textSnack:{
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingBottom: 5,
+  },
 
+  snackBar:{
+    backgroundColor: "#787777",
+    height:70,
+  },
+
+  logoImage: {
+    position: "relative",
+    width: 200,
+    height: 200,
+  },
     
 });
 

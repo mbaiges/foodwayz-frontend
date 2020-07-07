@@ -21,6 +21,7 @@ import { RestaurantApi, FoodApi, UserApi, OwnsApi } from "../../../api";
 
 import * as ImagePicker from 'expo-image-picker';
 import * as firebase from 'firebase';
+import { Snackbar } from 'react-native-paper';
 
 //import { Constants } from 'expo';
 
@@ -43,6 +44,12 @@ class OwnerRestaurantProfileComponent extends Component {
       theBiggestExtra: 0,
     }
   }
+  
+  dismissConnectionSnackBar = () => {
+    this.setState({
+      snackbarConnectionVisible: false
+    });
+  }
 
   updateRestaurant(restaurant) {
     this.setState({ restaurant: restaurant });
@@ -60,34 +67,65 @@ class OwnerRestaurantProfileComponent extends Component {
   async fetchImages() {
     const aux = this.state.restaurant;
     var theBiggestExtra = 0;
-    const resp = await RestaurantApi.getImages(aux.a_rest_id);
-    
-    console.log("-----------------------------------------------------------------------------------------");
-    console.log(resp);
-    // if(resp.response.result.length != 0){
-    //   theBiggestExtra = resp.response.result.reduce((a,b) => (a<b) ? b : a);  
-    // }
-    for(var i = 0 ; i < resp.response.result.length ; i++){
-      if(resp.response.result[i].a_image_extra > theBiggestExtra){
-        theBiggestExtra = resp.response.result[i].a_image_extra;
+    try {
+      const resp = await RestaurantApi.getImages(aux.a_rest_id);
+      switch(resp.status) {
+        case 200:
+          console.log("-----------------------------------------------------------------------------------------");
+          console.log(resp);
+          // if(resp.response.result.length != 0){
+          //   theBiggestExtra = resp.response.result.reduce((a,b) => (a<b) ? b : a);  
+          // }
+          for(var i = 0 ; i < resp.response.result.length ; i++){
+            if(resp.response.result[i].a_image_extra > theBiggestExtra){
+              theBiggestExtra = resp.response.result[i].a_image_extra;
+            }
+          }
+          this.setState({
+            images: resp.response.result,
+            theBiggestExtra: theBiggestExtra,
+          })
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
       }
     }
-    
-
-    this.setState({
-      images: resp.response.result,
-      theBiggestExtra: theBiggestExtra,
-    })
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
   }
 
   async fetchDishes() {
     const aux = this.state.restaurant;
-    const resp = await RestaurantApi.getFoods(aux.a_rest_id);
-    console.log("-----------------------------------------------------------------------------------------");
-    console.log(resp);
-    this.setState({
-      dishes: resp.response.result,
-    })
+    try {
+      const resp = await RestaurantApi.getFoods(aux.a_rest_id);
+      switch(resp.status) {
+        case 200:
+          console.log("-----------------------------------------------------------------------------------------");
+          console.log(resp);
+          this.setState({
+            dishes: resp.response.result,
+          })
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
   }
 
   async componentDidMount() {
@@ -497,7 +535,14 @@ class OwnerRestaurantProfileComponent extends Component {
 
 
 
-          
+        <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+        >
+             <Text style={styles.textSnack}>No internet connection.</Text>
+        </Snackbar>
 
         </ScrollView>
       </SafeAreaView>
@@ -797,6 +842,17 @@ modalTitle: {
 
 
 
+textSnack:{
+  color: 'white',
+  fontSize: 20,
+  fontWeight: 'bold',
+  paddingBottom: 5,
+},
+
+snackBar:{
+  backgroundColor: "#787777",
+  height:70,
+},
 
 
 });

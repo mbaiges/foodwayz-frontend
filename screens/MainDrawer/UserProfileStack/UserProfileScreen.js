@@ -33,10 +33,6 @@ class UserProfileComponent extends Component {
     }
   }
 
-  updateUser(user) {
-    this.setState({ user });
-  }
-
   async fetchUser() {
     console.log('fetching user');
     const resp = await UserApi.getMe();
@@ -108,7 +104,7 @@ class UserProfileComponent extends Component {
             name="md-create"
             size={38}
             style={styles.navbar_r_icon}
-            onPress={() => navigation.navigate("EditProfile", {user: this.state.user, userUpdater: this.updateUser.bind(this)})}
+            onPress={() => navigation.navigate("EditProfile", {setState: this.setState})}
           />
         </View>
       ),
@@ -251,13 +247,13 @@ class UserProfileComponent extends Component {
               </View>
               )
           }
-
-          
-
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               onPress={() => {
-                setAuthState({
+           
+
+          
+     setAuthState({
                   state: 'SIGNED_OUT',
                   token: ''
                 })
@@ -266,11 +262,11 @@ class UserProfileComponent extends Component {
             >
               <Text style={styles.buttonText}>Sign Out</Text>
             </TouchableOpacity>
-
           </View>
         </ScrollView>
       </SafeAreaView>)
     );
+
   }
 }
 
@@ -467,3 +463,4 @@ const styles = StyleSheet.create({
   }
 
 });
+

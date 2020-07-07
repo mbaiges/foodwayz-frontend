@@ -13,6 +13,8 @@ import {
   Alert
 } from "react-native";
 
+import { Snackbar } from 'react-native-paper';
+
 import { Image, ListItem, Icon, Input, Rating } from 'react-native-elements';
 
 import { ViewsApi } from '../../api';
@@ -31,7 +33,8 @@ class FoodScreenComponent extends Component {
       ingrs: [],
       chars: [],
       rest: {},
-      type: {}
+      type: {},
+      reviews: {}
     }
   }
 
@@ -39,21 +42,52 @@ class FoodScreenComponent extends Component {
     const { route } = this.props;
     const { food } = route.params;
     console.log(food);
+    let aux = {
+      quality: food.a_food_quality_score,
+      precentation: food.a_presentation_score,
+      price: food.a_price_quality_score
+    }
     this.setState({
       food: food,
-      type: food.a_type
+      type: food.a_type,
+      reviews: aux
     })
     this.setState({
-      ingrs: food.a_ingredients ? food.a_ingredients : [] ,
-      chars: food.a_characteristics ? food.a_characteristics : [],
+      ingrs: food.a_ingredients,
+      chars: food.a_characteristics,
       rest: food.a_rest
     })
+
+  }
+
+  dismissConnectionSnackBar = () => {
+    this.setState({
+      snackbarConnectionVisible: false
+    });
   }
 
   async componentDidMount() {
     await this.fetchFood();
-    const resp = await ViewsApi.registerFoodView(this.state.food.a_food_id);
-    console.log(resp);
+    try {
+      const resp = await ViewsApi.registerFoodView(this.state.food.a_food_id);
+      switch(resp.status) {
+        case 200:
+ 
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
+
   }
 
   render() {
@@ -142,7 +176,7 @@ class FoodScreenComponent extends Component {
           </View>
 
           <View style={styles.showAll} flexDirection='row' justifyContent='space-between'  >
-            <Text style={styles.primaryText}>Rate:</Text>
+            <Text style={styles.primaryText}>Rating:</Text>
             <View>
               <TouchableOpacity onPress={() => {navigation.navigate("Reviews", {food: this.state.food});}}>
                 <Text style={styles.secondaryText}>SHOW ALL</Text>
@@ -154,55 +188,20 @@ class FoodScreenComponent extends Component {
               </TouchableOpacity>
             </View>
           </View>
-
+          <Text style={styles.secondaryText}>Quality Score</Text>
           <View style={styles.ratingContainer}>
-            <Text style={styles.ratingText}>{this.state.food.a_score}</Text>
-            <Rating imageSize={30} readonly startingValue={this.state.food.a_score} style={styles.rating} />
+            <Text style={styles.ratingText}>{this.state.reviews.quality}</Text>
+            <Rating imageSize={30} readonly startingValue={this.state.reviews.quality} style={styles.rating} />
           </View>
-
-          <View>
-            <View >
-                <Text style={styles.primaryText}>Reviews by score:</Text>
-            </View>
-            <View
-              style= {{
-                transform: [{ rotate: "90deg" }]
-              }}
-              height={380}
-              width={screenWidth}
-              marginBottom={100}
-              marginTop={20}
-            >
-
-            <BarChart
-                width={500}
-                withInnerLines={false}
-                height={screenWidth}
-                verticalLabelRotation={270}
-                horizontalLabelRotation={270}
-                data={{
-                    labels: ["0-1", "1-2", "2-3", "3-4", "4-5"],
-                    datasets: [
-                        {
-                        data: (this.state && this.state.food && this.state.food.a_reviews_info && this.state.food.a_reviews_info.quantified) ? (this.state.food.a_reviews_info.quantified) : ([])
-                        }
-                    ]
-                  }}
-                chartConfig={{
-                    backgroundColor: "#FC987E",
-                    backgroundGradientFrom: "white",
-                    backgroundGradientTo: "#white",
-                    color: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
-                    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                    decimalPlaces: 0, // optional, defaults to 2dp
-                    color: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
-                    style: {
-                        borderRadius: 16
-                    }
-                }}
-                
-            />
-            </View>
+          <Text style={styles.secondaryText}>Presentation Score</Text>
+          <View style={styles.ratingContainer}>
+            <Text style={styles.ratingText}>{this.state.reviews.precentation}</Text>
+            <Rating imageSize={30} readonly startingValue={this.state.reviews.precentation} style={styles.rating} />
+          </View>
+          <Text style={styles.secondaryText}>Price-quality Score</Text>
+          <View style={styles.ratingContainer}>
+            <Text style={styles.ratingText}>{this.state.reviews.price}</Text>
+            <Rating imageSize={30} readonly startingValue={this.state.reviews.price} style={styles.rating} />
           </View>
 
 
@@ -216,6 +215,15 @@ class FoodScreenComponent extends Component {
         </View>
 
         </ScrollView>
+
+        <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+        >
+             <Text style={styles.textSnack}>No internet connection.</Text>
+        </Snackbar>
 
       </SafeAreaView>
     );
@@ -320,6 +328,18 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
     paddingRight: 20,
 
+  },
+
+  textSnack:{
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingBottom: 5,
+  },
+
+  snackBar:{
+    backgroundColor: "#787777",
+    height:70,
   },
 
 

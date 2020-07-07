@@ -14,6 +14,7 @@ import {
   ActivityIndicator
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { Snackbar } from 'react-native-paper';
 import { CheckBox } from "react-native-elements";
 
 import { UserApi } from '../../../api';
@@ -30,14 +31,59 @@ class EditProfileAllergiesComponent extends Component {
       }
   }
 
+  dismissConnectionSnackBar = () => {
+    this.setState({
+      snackbarConnectionVisible: false
+    });
+  }
+
   async changeValue(i){
     let newValues = this.state.values;
     newValues[i] = !newValues[i];
     this.setState({values: newValues})
     if(this.state.values[i]){
-      const resp = await UserHasCharacteristicApi.addCharacteristicToUser(this.state.user.a_user_id, this.state.chars[i].a_char_id);
+      try {
+        const resp = await UserHasCharacteristicApi.addCharacteristicToUser(this.state.user.a_user_id, this.state.chars[i].a_char_id);
+        switch(resp.status) {
+          case 200:
+   
+            break;
+        default:
+          console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+          // Show snackbar ?
+          break;
+        }
+      }
+      catch (error) {
+        console.log(error);
+        this.setState({
+          snackbarConnectionVisible: true
+        });
+        // Show snackbar (Internet connecion, maybe?)
+      }
+
+      
     }else{
-      const resp = await UserHasCharacteristicApi.removeCharacteristicFromUser(this.state.user.a_user_id, this.state.chars[i].a_char_id);
+      try {
+        const resp = await UserHasCharacteristicApi.removeCharacteristicFromUser(this.state.user.a_user_id, this.state.chars[i].a_char_id);
+        switch(resp.status) {
+          case 200:
+   
+            break;
+        default:
+          console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+          // Show snackbar ?
+          break;
+        }
+      }
+      catch (error) {
+        console.log(error);
+        this.setState({
+          snackbarConnectionVisible: true
+        });
+        // Show snackbar (Internet connecion, maybe?)
+      }
+      
     }
   }
 
@@ -52,28 +98,79 @@ class EditProfileAllergiesComponent extends Component {
   }
 
   async fetchUserChars(){
-
-    const resp = await UserHasCharacteristicApi.getCharactersticsByUser(this.state.user.a_user_id);
-    for (let userChar of resp.response.result) {
-      this.setValue(userChar.a_char_id);
+    try {
+      const resp = await UserHasCharacteristicApi.getCharactersticsByUser(this.state.user.a_user_id);
+      switch(resp.status) {
+        case 200:
+          for (let userChar of resp.response.result) {
+            this.setValue(userChar.a_char_id);
+          }
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
     }
 
   }
 
   async fetchChars(){
-    const resp = await CharacteristicApi.getAll();
-    this.setState({ chars: resp.response.result });
-    for(let i = 0; i < this.state.chars.length ; i++){
-      this.state.values.push(false);                        
-    } 
+    try {
+      const resp = await CharacteristicApi.getAll();
+      switch(resp.status) {
+        case 200:
+          this.setState({ chars: resp.response.result });
+          for(let i = 0; i < this.state.chars.length ; i++){
+            this.state.values.push(false);                        
+          } 
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
+    
   }
   
   async fetchUser() {
 
-    const resp = await UserApi.getMe();
-    this.setState({
-      user: resp.response.result
-    })
+    try {
+      const resp = await UserApi.getMe();
+      switch(resp.status) {
+        case 200:
+          this.setState({
+            user: resp.response.result
+          })
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
   }
 
   async componentDidMount() {
@@ -138,7 +235,14 @@ class EditProfileAllergiesComponent extends Component {
                       <Text style={styles.buttonText}>BACK</Text>
                   </TouchableOpacity>
                 </View>
-
+                <Snackbar
+                  style={styles.snackBar}
+                  duration={4000}
+                  visible={this.state.snackbarConnectionVisible}
+                  onDismiss={this.dismissConnectionSnackBar}
+                >
+                    <Text style={styles.textSnack}>No internet connection.</Text>
+                </Snackbar>
             </ScrollView>
         </SafeAreaView>)
     );
@@ -217,7 +321,19 @@ const styles = StyleSheet.create({
   loading:{
     flex: 1,
     marginTop:100,
-  }
+  },
+
+  textSnack:{
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingBottom: 5,
+  },
+
+  snackBar:{
+    backgroundColor: "#787777",
+    height:70,
+  },
 
 });
 

@@ -16,6 +16,8 @@ import FoodCard from "../../components/FoodCard";
 
 import { UserContext } from '../../../context/UserContext';
 
+import { Snackbar } from 'react-native-paper';
+
 import { FoodApi } from '../../../api';
 import { color } from "react-native-reanimated";
 
@@ -28,13 +30,34 @@ class DiscoverScreenComponent extends Component {
   }
 
   async fetchFoods() {
+    try {
+      const resp = await FoodApi.getAll();
+      switch(resp.status) {
+        case 200:
+          this.setState({
+            foods: resp.response.result
+          })
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
 
-    const resp = await FoodApi.getAll();
+  }
+
+  dismissConnectionSnackBar = () => {
     this.setState({
-      foods: resp.response.result
-    })
-
-    console.log(resp);
+      snackbarConnectionVisible: false
+    });
   }
 
   async componentDidMount() {
@@ -84,6 +107,14 @@ class DiscoverScreenComponent extends Component {
               }
             </ScrollView>
           </View>
+          <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+        >
+             <Text style={styles.textSnack}>No internet connection.</Text>
+        </Snackbar>
         </ScrollView>
 
       </SafeAreaView>)
@@ -166,5 +197,16 @@ const styles = StyleSheet.create({
   loading:{
     flex: 1,
     marginTop:100,
-  }
+  },
+  textSnack:{
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingBottom: 5,
+  },
+
+  snackBar:{
+    backgroundColor: "#787777",
+    height:70,
+  },
 });

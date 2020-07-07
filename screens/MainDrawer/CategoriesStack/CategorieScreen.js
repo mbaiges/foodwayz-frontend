@@ -10,6 +10,8 @@ import {
   ActivityIndicator
 } from "react-native";
 
+import { Snackbar } from 'react-native-paper';
+
 import { Image, ListItem, Button, Icon, Input, Rating } from 'react-native-elements';
 
 import FoodCard from "../../components/FoodCard";
@@ -48,11 +50,26 @@ class CategorieScreenComponent extends Component {
     },
         sort_by: "most_reviews"
     };
-  
-    const resp = await SearchApi.searchFoods(queryBody);
-    this.setState({ foods: resp.response.result });
+    try {
+      const resp = await SearchApi.searchFoods(queryBody);
+      switch(resp.status) {
+        case 200:
+          this.setState({ foods: resp.response.result });
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
 
-    console.log(resp);
 
   }
 
@@ -65,6 +82,12 @@ class CategorieScreenComponent extends Component {
     this.setState({
       activityIndicator: false
     })
+  }
+
+  dismissConnectionSnackBar = () => {
+    this.setState({
+      snackbarConnectionVisible: false
+    });
   }
 
   render() {
@@ -103,6 +126,14 @@ class CategorieScreenComponent extends Component {
               }
             </ScrollView>
           </View>
+          <Snackbar
+            style={styles.snackBar}
+            duration={4000}
+            visible={this.state.snackbarConnectionVisible}
+            onDismiss={this.dismissConnectionSnackBar}
+          >
+              <Text style={styles.textSnack}>No internet connection.</Text>
+          </Snackbar>
         </ScrollView>
 
       </SafeAreaView>)
@@ -185,5 +216,17 @@ const styles = StyleSheet.create({
   loading:{
     flex: 1,
     marginTop:100,
-  }
+  },
+  textSnack:{
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingBottom: 5,
+  },
+
+  snackBar:{
+    backgroundColor: "#787777",
+    height:70,
+  },
+
 });

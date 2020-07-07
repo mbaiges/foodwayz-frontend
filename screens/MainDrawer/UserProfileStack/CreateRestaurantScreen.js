@@ -63,6 +63,12 @@ class CreateRestaurantComponent extends Component {
             });
           }
 
+          dismissConnectionSnackBar = () => {
+            this.setState({
+              snackbarConnectionVisible: false
+            });
+          }
+
         async onChooseImagePress(){
             let result = await ImagePicker.launchCameraAsync();
 
@@ -134,11 +140,26 @@ class CreateRestaurantComponent extends Component {
                     restaurant.a_rest_chain_id = this.state.selectedChain.a_rest_chain_id;
                 }
 
-                const resp = await RestaurantApi.add(restaurant);
-                console.log(resp);
-                if(resp.status == 200){
-                    await this.uploadImages(resp.response.result);
-                }
+                try {
+                    const resp = await RestaurantApi.add(restaurant);
+                    switch(resp.status) {
+                      case 200:
+                        await this.uploadImages(resp.response.result);
+                        break;
+                    default:
+                      console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+                      // Show snackbar ?
+                      break;
+                    }
+                  }
+                  catch (error) {
+                    console.log(error);
+                    this.setState({
+                      snackbarConnectionVisible: true
+                    });
+                    // Show snackbar (Internet connecion, maybe?)
+                  }
+
 
                 this.setState({
                     activityIndicator: false
@@ -155,9 +176,25 @@ class CreateRestaurantComponent extends Component {
         }
 
         async fetchChains(){
-            const resp = await RestaurantChainApi.getAll();
-            this.setState({ chains: resp.response.result });
-            console.log(resp);
+            try {
+                const resp = await RestaurantChainApi.getAll();
+                switch(resp.status) {
+                  case 200:
+                    this.setState({ chains: resp.response.result });
+                    break;
+                default:
+                  console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+                  // Show snackbar ?
+                  break;
+                }
+              }
+              catch (error) {
+                console.log(error);
+                this.setState({
+                  snackbarConnectionVisible: true
+                });
+                // Show snackbar (Internet connecion, maybe?)
+              }
         }
 
         async componentDidMount() {
@@ -424,6 +461,15 @@ class CreateRestaurantComponent extends Component {
               onDismiss={this.dismissFieldsSnackBar}
         >
              <Text style={styles.textSnack}> Please fill all the fields.</Text>
+        </Snackbar>
+
+        <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+        >
+             <Text style={styles.textSnack}>No internet connection.</Text>
         </Snackbar>
 
 

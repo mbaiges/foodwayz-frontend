@@ -14,6 +14,8 @@ import {
   Keyboard,
 } from "react-native";
 
+import { Snackbar } from 'react-native-paper';
+
 import { Icon, } from 'react-native-elements';
 
 import { User, AuthApi } from '../../api'; 
@@ -37,10 +39,33 @@ class EmailVerifiedComponent extends Component {
  
   }
 
+  dismissConnectionSnackBar = () => {
+    this.setState({
+      snackbarConnectionVisible: false
+    });
+  }
+
   async verifyEmail(token){
-    const resp = await AuthApi.verifyEmail(token);
-    if(resp.status === 200 && resp.response.result === true){
-      this.setState({isVerified: true});
+    try {
+      const resp = await AuthApi.verifyEmail(token);
+      switch(resp.status) {
+        case 200:
+          if(resp.response.result === true){
+            this.setState({isVerified: true});
+          }
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
     }
   }
   
@@ -82,7 +107,15 @@ class EmailVerifiedComponent extends Component {
               
       </View>     
    
-        
+      <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+        >
+             <Text style={styles.textSnack}>No internet connection.</Text>
+        </Snackbar>
+
 
           
       </SafeAreaView>
@@ -145,4 +178,17 @@ const styles = StyleSheet.create({
     padding: 13,
     height: 48,
   },
+
+  textSnack:{
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingBottom: 5,
+  },
+
+  snackBar:{
+    backgroundColor: "#787777",
+    height:70,
+  },
+
 });

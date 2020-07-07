@@ -12,6 +12,8 @@ import {
 
 import { Card } from 'react-native-elements';
 
+import { Snackbar } from 'react-native-paper';
+
 
 import { UserContext } from '../../../context/UserContext';
 
@@ -29,12 +31,28 @@ class CategoriesScreenComponent extends Component {
 
   async fetchTypes() {
 
-    const resp = await TypeApi.getAll();
-    this.setState({
-      types: resp.response.result
-    })
+    try {
+      const resp = await TypeApi.getAll();
+      switch(resp.status) {
+        case 200:
+          this.setState({
+            types: resp.response.result
+          })
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
 
-    console.log(resp);
   }
 
   async componentDidMount() {
@@ -46,6 +64,12 @@ class CategoriesScreenComponent extends Component {
       activityIndicator: false
     })
 
+  }
+
+  dismissConnectionSnackBar = () => {
+    this.setState({
+      snackbarConnectionVisible: false
+    });
   }
 
   render() {
@@ -89,6 +113,14 @@ class CategoriesScreenComponent extends Component {
               }
             </ScrollView>
           </View>
+          <Snackbar
+            style={styles.snackBar}
+            duration={4000}
+            visible={this.state.snackbarConnectionVisible}
+            onDismiss={this.dismissConnectionSnackBar}
+          >
+              <Text style={styles.textSnack}>No internet connection.</Text>
+          </Snackbar>
         </ScrollView>
 
       </SafeAreaView>)
@@ -171,5 +203,18 @@ const styles = StyleSheet.create({
   loading:{
     flex: 1,
     marginTop:100,
-  }
+  },
+
+  textSnack:{
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingBottom: 5,
+  },
+
+  snackBar:{
+    backgroundColor: "#787777",
+    height:70,
+  },
+
 });
