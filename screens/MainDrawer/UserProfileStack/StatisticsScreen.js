@@ -226,6 +226,13 @@ class RestaurantStatisticsProfileComponent extends Component {
 
     }
 
+    async recalculateAll(){
+        await this.recalculateFoodDisplay();
+        await this.recalculateIntervalChartInfo();
+        await this.recalculatePieChartData();
+        await this.recalculateScoreData();
+    }
+
     // --------------------------------- DATE CHANGED -----------------------------------------------
 
     async handleDateChanged(timeStamp){

@@ -148,7 +148,7 @@ class CreateRestaurantComponent extends Component {
                             break;
                         default:
                             console.log(`Status Received: ${resp.status} --->`);
-                            console.log(`${resp.response}`);
+                            console.log(resp.response);
                             // Show snackbar ?
                             break;
                     }
