@@ -31,41 +31,19 @@ class EditProfileComponent extends Component {
 
     console.log('fetching user');
 
-    try {
-      const resp = await UserApi.getMe();
-      switch(resp.status) {
-        case 200:
-          this.setState({
-            user: resp.response.result
-          })
-          this.setState({
-            date: this.state.user.a_birthdate ? new Date(this.state.user.a_birthdate) : new Date()
-          })
-          console.log('done fetching user');
-          console.log(this.state.user);
-          break;
-      default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
-        // Show snackbar ?
-        break;
-      }
-    }
-    catch (error) {
-      console.log(error);
-      this.setState({
-        snackbarConnectionVisible: true
-      });
-      // Show snackbar (Internet connecion, maybe?)
-    }
+    this.setState({
+      user: user,
+      date: user.a_birthdate ? new Date(user.a_birthdate) : new Date()
+    })
 
-
-
-    
+    console.log(this.state.user);
   }
 
   async updateUser(){
     const { route } = this.props;
     const { userUpdater } = route.params;
+
+    console.log(userUpdater);
 
     try {
       const resp = await UserApi.modifyMe(this.state.user);

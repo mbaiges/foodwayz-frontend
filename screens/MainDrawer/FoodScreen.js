@@ -210,7 +210,7 @@ class FoodScreenComponent extends Component {
             style={styles.button}
             onPress={() => {navigation.navigate("RateFood", {food: this.state.food});}}
           >
-            <Text style={styles.buttonItemsContainer}>RATE DISH</Text>
+            <Text style={styles.buttonItemsContainer}>RATE FOOD</Text>
           </TouchableOpacity>
         </View>
 

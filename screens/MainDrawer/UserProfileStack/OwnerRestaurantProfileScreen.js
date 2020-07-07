@@ -55,6 +55,10 @@ class OwnerRestaurantProfileComponent extends Component {
     this.setState({ restaurant: restaurant });
   }
 
+  updateDishes() {
+    this.fetchDishes();
+  }
+
   async fetchRestaurant() {
     const { route } = this.props;
     console.log(route);
@@ -322,7 +326,7 @@ class OwnerRestaurantProfileComponent extends Component {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
                 style={styles.button}
-                onPress={async () => {navigation.navigate("AddDish", {restaurant: this.state.restaurant})}}
+                onPress={async () => {navigation.navigate("AddDish", {restaurant: this.state.restaurant, dishesUpdater: this.updateDishes.bind(this)})}}
             >
                 <Text style={styles.buttonText}>Add New Food!</Text>
             </TouchableOpacity>
