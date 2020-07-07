@@ -33,9 +33,10 @@ class AddDishComponent extends Component {
           dishDesc: "",
           dishType: undefined,
 
-          requestVisible: false,
-          requestIngrVisible: false,
-          requestTypesVisible: false,
+          requestTypesVisible:false,
+          requestIngrVisible:false,
+          requestCharsVisible:false,
+
 
           ingredientsVisible: false,
           characteristicsVisible:false,
@@ -88,14 +89,37 @@ class AddDishComponent extends Component {
     });
   }
 
+  dismissTypeSnackBar = () => {
+    this.setState({
+      snackbarTypeVisible: false
+    });
+  }
+
+  dismissSentSnackBar = () => {
+    this.setState({
+      snackbarSentVisible: false
+    });
+  }
+
 
   async sendNewTypeMail(){
     if(this.state.newTypeRequest != ""){
       try {
+        this.setState({
+          activityIndicator: true
+        });
         const resp = await ContactUsApi.typeRequest(this.state.newTypeRequest);
         switch(resp.status) {
           case 200:
-            // Do what its supposed to
+            this.setState({
+              activityIndicator: false
+            });
+            this.setState({
+              requestTypesVisible:false
+            });
+            this.setState({
+              snackbarSentVisible:true
+            });
             break;
         default:
           console.log(`Status Received: ${resp.status} --->`);
@@ -112,17 +136,31 @@ class AddDishComponent extends Component {
         // Show snackbar (Internet connecion, maybe?)
       }
     }else{
+      this.setState({
+        snackbarTypeVisible:true
+      });
       console.log("fill Type");
     }
   }
 
   async sendNewIngrMail(){
-    if(this.state.newTypeRequest != ""){
+    if(this.state.newIngrRequest != ""){
       try {
+        this.setState({
+          activityIndicator: true
+        });
         const resp = await ContactUsApi.ingredientRequest(this.state.newTypeRequest);
         switch(resp.status) {
           case 200:
-            // Do what its supposed to
+            this.setState({
+              activityIndicator: false
+            });
+            this.setState({
+              requestIngrVisible:false
+            });
+            this.setState({
+              snackbarSentVisible:true
+            });
             break;
         default:
           console.log(`Status Received: ${resp.status} --->`);
@@ -141,19 +179,30 @@ class AddDishComponent extends Component {
 
     }else{
       this.setState({
-        snackbarIngrVisible: false
+        snackbarIngrVisible: true
       });
       console.log("fill Ingredient");
     }
   }
 
   async sendNewCharMail(){
-    if(this.state.newTypeRequest != ""){
-      try {
+    if(this.state.newRequest != ""){
+      try {      
+        this.setState({
+          activityIndicator: true
+        });
         const resp = await ContactUsApi.characteristicRequest(this.state.newTypeRequest);
         switch(resp.status) {
           case 200:
-            // Do what its supposed to
+            this.setState({
+              activityIndicator: false
+            });
+            this.setState({
+              requestCharsVisible:false
+            });
+            this.setState({
+              snackbarSentVisible:true
+            });
             break;
         default:
           console.log(`Status Received: ${resp.status} --->`);
@@ -201,7 +250,7 @@ class AddDishComponent extends Component {
   }
 
   setRequestCharsVisible = (visible) => {
-    this.setState({ setRequestCharsVisible: visible });
+    this.setState({ requestCharsVisible: visible });
   }
 
   //----------------------------DELETE TAGS------------------------------------
@@ -414,21 +463,26 @@ class AddDishComponent extends Component {
 
           try {
             const resp = await FoodApi.add(dish);
+            console.log('caca1');
             switch(resp.status) {
               case 200:
                 console.log(resp.response.result);
-                await this.uploadImage(resp.response.result);  
+                console.log('caca2');
+                await this.uploadImage(resp.response.result); 
+                console.log('caca3');
                 await this.uploadIngredients(resp.response.result);
+                console.log('caca4');
                 await this.uploadCharacteristics(resp.response.result); 
+                console.log('caca5');
                 this.setState({
                   activityIndicator: false
                 })
-                dishesUpdater();
+                //dishesUpdater();
                 navigation.goBack();
                 break;
             default:
               console.log(`Status Received: ${resp.status} --->`);
-              console.log(`${resp.response}`);
+              console.log(resp);
               // Show snackbar ?
               break;
             }
@@ -661,7 +715,7 @@ class AddDishComponent extends Component {
         (<SafeAreaView style={styles.backgroundContainer}>
             <ScrollView vertical = {true}>
 
-                <Text style={styles.addDishTitle}> Add Food </Text>
+                <Text style={styles.addDishTitle}> Add food </Text>
 
                 <TouchableOpacity onPress={() => { this.setState({modalImageVisible: true});  }}> 
                     <View style={styles.mainImage}>
@@ -708,7 +762,7 @@ class AddDishComponent extends Component {
                               <View>
                                     <TouchableOpacity style={styles.buttonTag}>
                                           <View style={styles.rowItemsContainer}>
-                                              <Text style={styles.tagText}>{ this.state.typeChosen.a_type_name}</Text>
+                                              <Text style={styles.tagText}>{this.state.typeChosen.a_type_name.charAt(0).toUpperCase() + this.state.typeChosen.a_type_name.slice(1)}</Text>
                                               <TouchableOpacity
                                                   onPress={() => this.deleteType()}
                                               >
@@ -757,7 +811,7 @@ class AddDishComponent extends Component {
                                 <View key={idx}>
                                     <TouchableOpacity style={styles.buttonTag}>
                                         <View style={styles.rowItemsContainer}>
-                                            <Text style={styles.tagText}>{ingredient.a_ingr_name}</Text>
+                                            <Text style={styles.tagText}>{ingredient.a_ingr_name.charAt(0).toUpperCase() + ingredient.a_ingr_name.slice(1)}</Text>
                                             <TouchableOpacity
                                                 onPress={() => this.deleteInredient(idx)}
                                             >
@@ -804,7 +858,7 @@ class AddDishComponent extends Component {
                                   <View key={idx}>
                                       <TouchableOpacity style={styles.buttonTag}>
                                           <View style={styles.rowItemsContainer}>
-                                              <Text style={styles.tagText}>{char.a_char_name}</Text>
+                                              <Text style={styles.tagText}>{char.a_char_name.charAt(0).toUpperCase() + char.a_char_name.slice(1)}</Text>
                                               <TouchableOpacity
                                                   onPress={() => this.deleteCharacteristic(idx)}
                                               >
@@ -824,7 +878,7 @@ class AddDishComponent extends Component {
                     <TouchableOpacity
                         
                         onPress={() => { 
-                          this.setRequestVisible(true);
+                          this.setRequestCharsVisible(true);
                         }}
                     >
                         <Text style={styles.requestText}>I can't find my characteristics</Text>
@@ -875,7 +929,7 @@ class AddDishComponent extends Component {
                                               this.setTypesVisible(false);
                                             }}
                                         >
-                                            <Text style={styles.ingredient}>{type.a_type_name}</Text>
+                                            <Text style={styles.ingredient}>{type.a_type_name.charAt(0).toUpperCase() + type.a_type_name.slice(1)}</Text>
                                         </TouchableOpacity>
                                   </View>
                                 );
@@ -908,14 +962,13 @@ class AddDishComponent extends Component {
                         <Text style={styles.inputTitle}>Request a new food type</Text>
                         <Input
                             placeholder={""}
-                            onChangeText={(value) => (this.newTypeRequest = value)}
+                            onChangeText={(value) => (this.state.newTypeRequest = value)}
                         />
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity
                                 style={styles.button}
                                 onPress={async () => { 
                                   await this.sendNewTypeMail();
-                                  this.setRequestTypesVisible(false)
                                 }}
                             >
                                 <Text style={styles.buttonText}>Send</Text>
@@ -960,7 +1013,7 @@ class AddDishComponent extends Component {
                                               this.setIngredientsVisible(false);
                                             }}
                                         >
-                                            <Text style={styles.ingredient}>{ingr.a_ingr_name}</Text>
+                                            <Text style={styles.ingredient}>{ingr.a_ingr_name.charAt(0).toUpperCase() + ingr.a_ingr_name.slice(1)}</Text>
                                         </TouchableOpacity>
                                   </View>
                                 );
@@ -993,14 +1046,13 @@ class AddDishComponent extends Component {
                         <Text style={styles.inputTitle}>Request a new ingredient</Text>
                         <Input
                             placeholder={""}
-                            onChangeText={(value) => (this.newIngrRequest = value)}
+                            onChangeText={(value) => (this.state.newIngrRequest = value)}
                         />
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity
                                 style={styles.button}
                                 onPress={async() => { 
                                   await this.sendNewIngrMail();
-                                  this.setRequestIngrVisible(false)
                                 }}
                             >
                                 <Text style={styles.buttonText}>Send</Text>
@@ -1044,7 +1096,7 @@ class AddDishComponent extends Component {
                                               this.setCharacteristicsVisible(false);
                                           }}
                                       >
-                                          <Text style={styles.ingredient}>{char.a_char_name}</Text>
+                                          <Text style={styles.ingredient}>{char.a_char_name.charAt(0).toUpperCase() + char.a_char_name.slice(1)}</Text>
                                       </TouchableOpacity>
                                   </View>
                                 );
@@ -1067,7 +1119,7 @@ class AddDishComponent extends Component {
             <Modal
               animationType="slide"
               transparent={true}
-              visible={this.state.requestVisible}
+              visible={this.state.requestCharsVisible}
               onRequestClose={() => {
                 this.setState({requestVisible: false});
               }}
@@ -1078,15 +1130,13 @@ class AddDishComponent extends Component {
                         <Text style={styles.inputTitle}>Request a new characteristic</Text>
                         <Input
                             placeholder={""}
-                            onChangeText={(value) => (this.newRequest = value)}
+                            onChangeText={(value) => (this.state.newRequest = value)}
                         />
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity
                                 style={styles.button}
                                 onPress={async() => { 
-                                    await this.sendNewCharMail();
-                                    this.setRequestVisible(false)
-                                }}
+                                    await this.sendNewCharMail();}}
                             >
                                 <Text style={styles.buttonText}>Send</Text>
                             </TouchableOpacity>
@@ -1116,7 +1166,7 @@ class AddDishComponent extends Component {
                                 this.setState({modalImageVisible: false});
                               }}
                         >
-                            <Text style={styles.buttonText}>Camera</Text>
+                            <Text style={styles.blackButtonText}>Camera</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.chainButton}
@@ -1125,7 +1175,7 @@ class AddDishComponent extends Component {
                                 this.setState({modalImageVisible: false});
                             }}
                         >
-                            <Text style={styles.buttonText}>Gallery</Text>
+                            <Text style={styles.blackButtonText}>Gallery</Text>
                         </TouchableOpacity>
                     </View>         
                 </View>
@@ -1169,6 +1219,25 @@ class AddDishComponent extends Component {
               onDismiss={this.dismissCharSnackBar}
         >
              <Text style={styles.textSnack}> Please fill characteristic name.</Text>
+        </Snackbar>
+
+        <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarTypeVisible}
+              onDismiss={this.dismissTypeSnackBar}
+        >
+             <Text style={styles.textSnack}> Please fill type name.</Text>
+        </Snackbar>
+
+
+        <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarSentVisible}
+              onDismiss={this.dismissSentSnackBar}
+        >
+           <Text style={styles.textSnack}> Sent.</Text>
         </Snackbar>
 
         </SafeAreaView>)
@@ -1321,7 +1390,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",    
   },
 
-  buttonText:{
+  blackButtonText:{
     color: "black",
     fontWeight: "bold",    
     fontSize: 15,      

@@ -452,7 +452,7 @@ class RestaurantStatisticsProfileComponent extends Component {
             auxViewsPerGenderPieData.push({
                 key: idx,
                 amount: element[1],
-                svg: { fill: '#600080' },
+                svg: { fill: "#FC987E" },
                 tag: element[0]
             })
         })
@@ -462,7 +462,7 @@ class RestaurantStatisticsProfileComponent extends Component {
             auxViewsPerAgeGroupPieData.push({
                 key: idx,
                 amount: element[1],
-                svg: { fill: '#600080' },
+                svg: { fill: "#FC987E" },
                 tag: element[0]
             })
         })
@@ -472,7 +472,7 @@ class RestaurantStatisticsProfileComponent extends Component {
             auxViewsPerCharPieData.push({
                 key: idx,
                 amount: element[1],
-                svg: { fill: '#600080' },
+                svg: { fill: "#FC987E" },
                 tag: element[0]
             })
         })
@@ -492,7 +492,7 @@ class RestaurantStatisticsProfileComponent extends Component {
             auxReviewsPerGenderPieData.push({
                 key: idx,
                 amount: element[1].a_amount,
-                svg: { fill: '#600080' },
+                svg: { fill: "#FC987E" },
                 tag: element[0]
             });
             auxGenderScoreData.push( element[1].a_score );
@@ -506,7 +506,7 @@ class RestaurantStatisticsProfileComponent extends Component {
             auxReviewsPerAgeGroupPieData.push({
                 key: idx,
                 amount: element[1].a_amount,
-                svg: { fill: '#600080' },
+                svg: { fill: "#FC987E" },
                 tag: element[0]
             })
             auxAgeScoreDate.push( element[1].a_score );
@@ -520,7 +520,7 @@ class RestaurantStatisticsProfileComponent extends Component {
             auxReviewsPerCharPieData.push({
                 key: idx,
                 amount: element[1].a_amount,
-                svg: { fill: '#600080' },
+                svg: { fill: "#FC987E" },
                 tag: element[0]
             })
             auxCharScoreData.push( element[1].a_score );
@@ -735,7 +735,7 @@ class RestaurantStatisticsProfileComponent extends Component {
                                             style={{ flex: 1, marginLeft: 8 }}
                                             data={this.state.firstChartData}
                                             xAccessor={({ item }) => item.value}
-                                            svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
+                                            svg={{ fill: "#FC987E" }}
                                             contentInset={{ top: 10, bottom: 10 }}
                                             spacing={0.2}
                                             gridMin={0}
@@ -791,7 +791,7 @@ class RestaurantStatisticsProfileComponent extends Component {
                                             style={{ flex: 1, marginLeft: 8 }}
                                             data={this.state.secondChartData}
                                             xAccessor={({ item }) => item.value}
-                                            svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
+                                            svg={{ fill: "#FC987E" }}
                                             contentInset={{ top: 10, bottom: 10 }}
                                             spacing={0.2}
                                             gridMin={0}
@@ -907,7 +907,7 @@ class RestaurantStatisticsProfileComponent extends Component {
                                             style={{ flex: 1, marginLeft: 8 }}
                                             data={this.state.scoreChosenData}
                                             xAccessor={({ item }) => item.value}
-                                            svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
+                                            svg={{ fill: "#FC987E" }}
                                             contentInset={{ top: 10, bottom: 10 }}
                                             spacing={0.2}
                                             gridMin={0}
