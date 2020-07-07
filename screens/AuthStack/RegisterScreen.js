@@ -19,6 +19,8 @@ import CheckBox from "@react-native-community/checkbox";
 import { User, AuthApi } from '../../api'; 
 import { UserContext } from '../../context/UserContext';
 
+import { validateSignupFields } from '../../utils';
+
 class RegisterScreenComponent extends Component {
   constructor() {
     super();
@@ -37,34 +39,41 @@ class RegisterScreenComponent extends Component {
   }
 
   signUp = async function({ state, setAuthState, navigation }) {
-    /*
-    if (!validateSignupFields(state)) {
-      // Mensajito de error
+    
+    const inputs = {
+      username: this.state.username,
+      email: this.state.email,
+      password1: this.state.password1,
+      password2: this.state.password2,
+    };
+
+    if (!validateSignupFields(inputs)) {
+      // El Mensajito de error lo manda validateSignupFields
       console.log("Something went wrong.");
-    }
-    */
+    }else{
+      const user = new User({
+        a_name: state.username,
+        a_email: state.email,
+        a_password: state.password1
+      });
 
-    const user = new User({
-      a_name: state.username,
-      a_email: state.email,
-      a_password: state.password1
-    });
-
-    try {
-      const ans = await AuthApi.signUp(user);
-      if(ans){
-        console.log(ans);
-        console.log("User successfully registered");
-        this.setState({emailVerificationModal: true}); 
-        const auth = {
-          state: 'SIGNED_UP',
-          token: ''
-        };
-        await setAuthState(auth);
-        //navigation.navigate("Login")
+      try {
+        const ans = await AuthApi.signUp(user);
+        if(ans){
+          console.log(ans);
+          console.log("User successfully registered");
+          this.setState({emailVerificationModal: true}); 
+          const auth = {
+            state: 'SIGNED_UP',
+            token: ''
+          };
+          await setAuthState(auth);
+          //navigation.navigate("Login")
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
+
     }
   }
 

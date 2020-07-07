@@ -149,7 +149,7 @@ class HomeScreenComponent extends Component {
       :
       (
       <SafeAreaView style={styles.backgroundContainer}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View>
             <Text style={styles.homeSubtitle}>Recommended Foods For You</Text>
             <ScrollView>
