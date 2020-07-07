@@ -47,6 +47,7 @@ class AddDishComponent extends Component {
           newRequest: "",
           newIngrRequest: "",
           newTypeRequest: "",
+          newCharRequest: "",
 
           ingredientsChosen: [],
           characteristicsChosen: [],
@@ -106,17 +107,11 @@ class AddDishComponent extends Component {
     if(this.state.newTypeRequest != ""){
       try {
         this.setState({
-          activityIndicator: true
+          requestTypesVisible:false
         });
         const resp = await ContactUsApi.typeRequest(this.state.newTypeRequest);
         switch(resp.status) {
           case 200:
-            this.setState({
-              activityIndicator: false
-            });
-            this.setState({
-              requestTypesVisible:false
-            });
             this.setState({
               snackbarSentVisible:true
             });
@@ -147,17 +142,11 @@ class AddDishComponent extends Component {
     if(this.state.newIngrRequest != ""){
       try {
         this.setState({
-          activityIndicator: true
+          requestIngrVisible:false
         });
-        const resp = await ContactUsApi.ingredientRequest(this.state.newTypeRequest);
+        const resp = await ContactUsApi.ingredientRequest(this.state.newIngrRequest);
         switch(resp.status) {
           case 200:
-            this.setState({
-              activityIndicator: false
-            });
-            this.setState({
-              requestIngrVisible:false
-            });
             this.setState({
               snackbarSentVisible:true
             });
@@ -186,20 +175,14 @@ class AddDishComponent extends Component {
   }
 
   async sendNewCharMail(){
-    if(this.state.newRequest != ""){
-      try {      
+    if(this.state.newCharRequest != ""){
+      try { 
         this.setState({
-          activityIndicator: true
-        });
-        const resp = await ContactUsApi.characteristicRequest(this.state.newTypeRequest);
+          requestCharsVisible:false
+        });     
+        const resp = await ContactUsApi.characteristicRequest(this.state.newCharRequest);
         switch(resp.status) {
           case 200:
-            this.setState({
-              activityIndicator: false
-            });
-            this.setState({
-              requestCharsVisible:false
-            });
             this.setState({
               snackbarSentVisible:true
             });
@@ -1123,7 +1106,7 @@ class AddDishComponent extends Component {
                         <Text style={styles.inputTitle}>Request a new characteristic</Text>
                         <Input
                             placeholder={""}
-                            onChangeText={(value) => (this.state.newRequest = value)}
+                            onChangeText={(value) => (this.state.newCharRequest = value)}
                         />
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity

@@ -4,8 +4,17 @@ import { View, StyleSheet, Text } from "react-native";
 
 import { Search } from "../screens/MainDrawer";
 
+import {
+  Food,
+  RestaurantProfile,
+  Reviews,
+  ReviewInfo,
+  RateFood
+} from "../screens/MainDrawer";
+
 import { Ionicons } from "@expo/vector-icons";
 import BackButtonNavBar from "./NavBars/BackButtonNavBar";
+import BackButtonProfileNavBar from "./NavBars/BackButtonProfileNavBar";
 
 const Stack = createStackNavigator();
 const INITIAL_ROUTE_NAME = "Search";
@@ -23,6 +32,13 @@ export default function StackNavigator({ navigation, route }) {
       }
     >
       <Stack.Screen name="Search" component={Search} />
+
+      <Stack.Screen name="Food" component={Food} options={BackButtonProfileNavBar({ title: getHeaderTitle(route), navigation })}/>
+      <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} options={BackButtonProfileNavBar({ title: getHeaderTitle(route), navigation })} />
+      
+      <Stack.Screen name="Reviews" component={Reviews} options={BackButtonNavBar({ title: getHeaderTitle(route), navigation })}/>
+      <Stack.Screen name="ReviewInfo" component={ReviewInfo} options={BackButtonNavBar({ title: getHeaderTitle(route), navigation })}/>
+      <Stack.Screen name="RateFood" component={RateFood} options={BackButtonNavBar({ title: getHeaderTitle(route), navigation })}/>
     </Stack.Navigator>
   );
 }
