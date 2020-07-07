@@ -486,8 +486,8 @@ class CreateRestaurantComponent extends Component {
 const { width: WIDTH } = Dimensions.get('window')
 const { height: HEIGHT } = Dimensions.get('window').height
 
-export default function CreateRestaurant({ navigation }) {
-  return <CreateRestaurantComponent navigation={navigation} />;
+export default function CreateRestaurant(props) {
+  return <CreateRestaurantComponent {...props} />;
 }
 
 const styles = StyleSheet.create({
