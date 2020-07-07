@@ -288,10 +288,11 @@ class OwnerRestaurantProfileComponent extends Component {
                         source={{uri: image.a_image_url}}
                       />
                       <View style={styles.iconContainer}>
-                      <Icon
-                        name='close'
-                        onPress={() => this.setState({verificationModalImage: true, lastImageClicked: image})} />
-                    </View> 
+                        <Icon
+                          name='close'
+                          onPress={() => this.setState({verificationModalImage: true, lastImageClicked: image})} />
+                      </View> 
+                    
                     </Card>
                   </View>
                 )
@@ -415,17 +416,21 @@ class OwnerRestaurantProfileComponent extends Component {
                   title={dish.a_title}
                   subtitle={
                     <View flexDirection="row" justifyContent="space-between">  
-                    <View width={320}>  
-                      <Text>{dish.a_description}</Text>
-                      <Rating imageSize={10} readonly startingValue={dish.a_score}  style={styles.rating}/> 
-                    </View>
-                      <View >
-                        <Icon
-                          style={styles.icon}
-                          name='close'
-                          onPress={() => this.setState({verificationModal: true, lastDishClicked: dish})} />
+                      <View>  
+                        <Text>{dish.a_description}</Text>
+                        <Rating imageSize={15} readonly startingValue={dish.a_score}  style={styles.rating}/> 
+                      
                       </View>
+                      <View style={styles.foodDeleteIconContainer}>
+                          <Icon
+                            style={styles.icon}
+                            name='close'
+                            onPress={() => this.setState({verificationModal: true, lastDishClicked: dish})} />
+                        
+                        </View>  
+                        
                     </View>
+                      
                   }
                   bottomDivider={true}
                   topDivider={true}
@@ -448,7 +453,7 @@ class OwnerRestaurantProfileComponent extends Component {
 
               <View style = {styles.centeredView}>
                 <View style = {styles.modalView}>
-                  <Text>Are you sure that you want to delete this food. This action is irreversible</Text>
+                  <Text style = {styles.subtitleText}>Are you sure that you want to delete this food. This action is irreversible</Text>
                   <View flexDirection = 'row'>
                     <View style={styles.buttonContainer}>
                       <TouchableOpacity
@@ -490,7 +495,8 @@ class OwnerRestaurantProfileComponent extends Component {
 
               <View style = {styles.centeredView}>
                 <View style = {styles.modalView}>
-                  <Text>Are you sure that you want to delete this image. This action is irreversible</Text>
+
+                  <Text style={styles.subtitleText}>Are you sure that you want to delete this image. This action is irreversible</Text>
                   <View flexDirection = 'row'>
                     <View style={styles.buttonContainer}>
                       <TouchableOpacity
@@ -777,7 +783,7 @@ const styles = StyleSheet.create({
 
   icon: {
     alignSelf: "flex-end",
-    
+
   },
   
   buttonContainer:{
@@ -856,7 +862,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    height: 300,
+    height: 200,
   },
 
   iconContainer:{
@@ -966,6 +972,11 @@ imageStyle: {
   height: 250,
   alignSelf: 'center',
 
+},
+
+foodDeleteIconContainer:{
+  position:'absolute',
+  marginLeft: Dimensions.get('window').width -120,
 },
 
 
