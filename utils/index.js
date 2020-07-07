@@ -4,7 +4,7 @@ export function validateEmail(email) {
   };
   
 export function validateUsername(username) {
-    let re = /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
+    let re = /^(?=[a-zA-Z0-9._]{5,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
     return re.test(username);
   };
   
@@ -78,7 +78,7 @@ export function validateSigninFields({ email, password }) {
     }
 
     /*
-    ^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
+    ^(?=.{5,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
       └─────┬────┘└───┬──┘└─────┬─────┘└─────┬─────┘ └───┬───┘
             │         │         │            │           no _ or . at the end
             │         │         │            │
@@ -88,7 +88,7 @@ export function validateSigninFields({ email, password }) {
             │         │
             │         no _ or . at the beginning
             │
-            username is 8-20 characters long
+            username is 5-20 characters long
     */
     if (!validateEmail(email)) {
       alert("Please enter a valid email");
