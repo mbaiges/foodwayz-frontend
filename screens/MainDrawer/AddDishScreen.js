@@ -391,7 +391,8 @@ class AddDishComponent extends Component {
 
 
   async uploadDish(){
-      const {navigation} = this.props;
+      const {navigation, route} = this.props;
+      const {dishesUpdater} = route.params;
 
       if(this.state.dishTitle != "" && this.state.dishDesc != "" && this.state.dishImage != "" && this.state.typeChosen.a_type_id){
         this.setState({
@@ -415,10 +416,10 @@ class AddDishComponent extends Component {
                 this.setState({
                   activityIndicator: false
                 })
+                dishesUpdater();
+                navigation.goBack();
                 break;
             default:
-
-                navigation.goBack();
               console.log(`Status Received: ${resp.status} --> ${resp.response}`);
               // Show snackbar ?
               break;
@@ -646,7 +647,7 @@ class AddDishComponent extends Component {
         (<SafeAreaView style={styles.backgroundContainer}>
             <ScrollView vertical = {true}>
 
-                <Text style={styles.addDishTitle}> Add Dish </Text>
+                <Text style={styles.addDishTitle}> Add Food </Text>
 
                 <TouchableOpacity onPress={() => { this.setState({modalImageVisible: true});  }}> 
                     <View style={styles.mainImage}>
@@ -820,9 +821,9 @@ class AddDishComponent extends Component {
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => { this.Dish(); }}
+                        onPress={() => { this.uploadDish(); }}
                     >
-                        <Text style={styles.buttonText}>Add Dish</Text>
+                        <Text style={styles.buttonText}>Add Food</Text>
                     </TouchableOpacity>
                 </View>
 
