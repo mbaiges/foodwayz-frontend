@@ -700,7 +700,7 @@ class RestaurantStatisticsProfileComponent extends Component {
                             </ScrollView> 
                         </View>
                         <View>
-                            <Text2 style={styles.subtitleText}>Least rated</Text2>
+                            <Text2 style={styles.subtitleText}>Worst rated</Text2>
                         </View>
                         <View>
                         
