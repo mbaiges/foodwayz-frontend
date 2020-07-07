@@ -47,7 +47,8 @@ class ContactUs extends Component {
                 console.log("Email Sent")
                 break;
             default:
-              console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+              console.log(`Status Received: ${resp.status} --->`);
+              console.log(`${resp.response}`);
               // Show snackbar ?
               break;
             }

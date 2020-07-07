@@ -56,6 +56,7 @@ class OwnerRestaurantProfileComponent extends Component {
   }
 
   updateDishes() {
+    console.log("Updating dishes");
     this.fetchDishes();
   }
 
@@ -91,7 +92,8 @@ class OwnerRestaurantProfileComponent extends Component {
           })
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -118,7 +120,8 @@ class OwnerRestaurantProfileComponent extends Component {
           })
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }

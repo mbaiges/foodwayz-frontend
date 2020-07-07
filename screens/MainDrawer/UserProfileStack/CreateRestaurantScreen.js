@@ -143,13 +143,14 @@ class CreateRestaurantComponent extends Component {
                 try {
                     const resp = await RestaurantApi.add(restaurant);
                     switch(resp.status) {
-                      case 200:
-                        await this.uploadImages(resp.response.result);
-                        break;
-                    default:
-                      console.log(`Status Received: ${resp.status} --> ${resp.response}`);
-                      // Show snackbar ?
-                      break;
+                        case 200:
+                            await this.uploadImages(resp.response.result);
+                            break;
+                        default:
+                            console.log(`Status Received: ${resp.status} --->`);
+                            console.log(`${resp.response}`);
+                            // Show snackbar ?
+                            break;
                     }
                   }
                   catch (error) {
@@ -183,8 +184,9 @@ class CreateRestaurantComponent extends Component {
                     this.setState({ chains: resp.response.result });
                     break;
                 default:
-                  console.log(`Status Received: ${resp.status} --> ${resp.response}`);
-                  // Show snackbar ?
+                    console.log(`Status Received: ${resp.status} --->`);
+                    console.log(`${resp.response}`);
+                    // Show snackbar ?
                   break;
                 }
               }
