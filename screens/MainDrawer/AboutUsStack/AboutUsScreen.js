@@ -62,7 +62,7 @@ class AboutUsComponent extends Component {
           </View>
         <TouchableOpacity 
           style={styles.button}
-          onPress={() => {navigation.navigate("Home");}}
+          onPress={() => {navigation.navigate("HomeStack");}}
           >
           <Text style={styles.back}>BACK</Text>
         
