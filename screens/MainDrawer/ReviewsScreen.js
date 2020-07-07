@@ -3,6 +3,8 @@ import { StyleSheet,  View,  SafeAreaView,  Text,  Image,  TextInput, ActivityIn
 import { ReviewApi } from '../../api';
 import ReviewCard from "../components/ReviewCard";
 
+import { StackActions } from '@react-navigation/native';
+
 const { width } = Dimensions.get("window");
 
 class ReviewsComponent extends Component {
@@ -57,7 +59,11 @@ class ReviewsComponent extends Component {
             reviewCards.push(
                 <View key={i}>
                     <TouchableOpacity
-                        onPress={() => {navigation.navigate("ReviewInfo", { review: review });}}  
+                        onPress={() => {
+                            const pushAction = StackActions.push("ReviewInfo", { review: review });
+                            navigation.dispatch(pushAction);
+                            //navigation.navigate("ReviewInfo", { review: review });
+                        }}  
                     >
                         <ReviewCard
                             name = {review.a_user.a_name}

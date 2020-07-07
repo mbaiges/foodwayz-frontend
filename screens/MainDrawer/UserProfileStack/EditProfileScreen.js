@@ -12,6 +12,8 @@ import Colors from "../../../constants/Colors";
 
 import { Snackbar } from 'react-native-paper';
 
+import { StackActions } from '@react-navigation/native';
+
 class EditProfileComponent extends Component {
 
   constructor(){
@@ -298,14 +300,22 @@ class EditProfileComponent extends Component {
                 onChange={ date => { this.handleDateChanged(date.nativeEvent.timestamp)}}/>
             )}
           <View>
-            <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("EditProfilePassword") }} >
+            <TouchableOpacity style={styles.button} onPress={() => { 
+                const pushAction = StackActions.push("EditProfilePassword");
+                navigation.dispatch(pushAction);
+                //navigation.navigate("EditProfilePassword") 
+              }} >
                 <Text style={styles.buttonText}>CHANGE PASSWORD</Text>
             </TouchableOpacity>
           </View>
 
         </View>
         <View>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("EditProfileAllergies", { user: this.state.user })} >
+          <TouchableOpacity style={styles.button} onPress={() => {
+              const pushAction = StackActions.push("EditProfileAllergies", { user: this.state.user });
+              navigation.dispatch(pushAction);
+              //navigation.navigate("EditProfileAllergies", { user: this.state.user })
+            }} >
               <Text style={styles.buttonText}>SET FOOD PREFERENCES</Text>
           </TouchableOpacity>
         </View>

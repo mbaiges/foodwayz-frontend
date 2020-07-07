@@ -16,6 +16,8 @@ import { RestaurantApi } from "../../../api";
 import { Snackbar } from 'react-native-paper';
 import { color } from "react-native-reanimated";
 
+import { StackActions } from '@react-navigation/native';
+
 //import { Constants } from 'expo';
 
 const { width } = Dimensions.get("window");
@@ -159,7 +161,11 @@ class PremiumComponent extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.cancelButton}
-                    onPress={() => {navigation.navigate("UserProfile");}}
+                    onPress={() => {
+                      const pushAction = StackActions.push("UserProfile");
+                      navigation.dispatch(pushAction);
+                      //navigation.navigate("UserProfile");
+                    }}
                 >
                     <Text style={styles.cancel}>Cancel</Text>
                  

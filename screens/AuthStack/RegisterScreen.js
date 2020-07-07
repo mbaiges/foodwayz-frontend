@@ -19,6 +19,8 @@ import CheckBox from "@react-native-community/checkbox";
 import { User, AuthApi } from '../../api'; 
 import { UserContext } from '../../context/UserContext';
 
+import { StackActions } from '@react-navigation/native';
+
 class RegisterScreenComponent extends Component {
   constructor() {
     super();
@@ -79,7 +81,9 @@ class RegisterScreenComponent extends Component {
     const codeType = resp.response.code;
     if(isVerified){
       this.setState({emailVerificationModal: false});
-      this.props.navigation.navigate("EmailVerified", {isVerified});
+      const pushAction = StackActions.push("Login");
+      this.props.navigation.dispatch(pushAction);
+      //this.props.navigation.navigate("EmailVerified", {isVerified});
     }else if(codeType === "expired-code"){
       this.setState({wrongVerificationMessage: "The code expired"});
       this.showWrongVerificationMessage();
@@ -148,7 +152,10 @@ class RegisterScreenComponent extends Component {
                               style={styles.cancelButton}
                               onPress={async () => {
                                 this.setState({emailVerificationModal: false});
-                                navigation.navigate("Login");}}
+                                const pushAction = StackActions.push("Login");
+                                navigation.dispatch(pushAction);
+                                //navigation.navigate("Login");
+                              }}
                           >
                               <Text style={styles.blackButtonText}>Return to LogIn</Text>
                           </TouchableOpacity>
@@ -244,6 +251,8 @@ class RegisterScreenComponent extends Component {
               <Text
                 style={styles.termAndConds}
                 onPress={() => {
+                  //const pushAction = StackActions.push("RestaurantProfile", {restaurant: this.state.rest});
+                  //navigation.dispatch(pushAction);
                   //navigation.navigate("Terms&Conditions");
                   console.log("Clicked on terms and conditions");
                 }}

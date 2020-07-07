@@ -18,6 +18,8 @@ import FoodCard from "../../components/FoodCard";
 
 import { UserContext } from '../../../context/UserContext';
 
+import { StackActions } from '@react-navigation/native';
+
 import { FoodApi, SearchApi } from '../../../api';
 import { color } from "react-native-reanimated";
 
@@ -117,7 +119,9 @@ class CategorieScreenComponent extends Component {
                       title={food.a_title}
                       brand={food.a_rest.a_name}
                       onPress={async () => {
-                        navigation.navigate("Food", { food: food });
+                        const pushAction = StackActions.push("Food", { food: food });
+                        navigation.dispatch(pushAction);
+                        //navigation.navigate("Food", { food: food });
                         console.log("I want to navigate to Dish page");
                       }}
                       rating={food.a_score}

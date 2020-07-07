@@ -3,7 +3,18 @@ import * as React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
 import DiscoverScreen from "../screens/MainDrawer/DiscoverStack/DiscoverScreen";
+
+import {
+  Food,
+  RestaurantProfile,
+  Reviews,
+  ReviewInfo,
+  RateFood
+} from "../screens/MainDrawer";
+
 import DefaultNavBar from "./NavBars/DefaultNavBar";
+import BackButtonNavBar from "./NavBars/BackButtonNavBar";
+import BackButtonProfileNavBar from "./NavBars/BackButtonProfileNavBar";
 import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
@@ -22,6 +33,13 @@ export default function StackNavigator({ navigation, route }) {
       }
     >
       <Stack.Screen name="Discover" component={DiscoverScreen} />
+
+      <Stack.Screen name="Food" component={Food} options={BackButtonProfileNavBar({ title: getHeaderTitle(route), navigation })}/>
+      <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} options={BackButtonProfileNavBar({ title: getHeaderTitle(route), navigation })} />
+      
+      <Stack.Screen name="Reviews" component={Reviews} options={BackButtonNavBar({ title: getHeaderTitle(route), navigation })}/>
+      <Stack.Screen name="ReviewInfo" component={ReviewInfo} options={BackButtonNavBar({ title: getHeaderTitle(route), navigation })}/>
+      <Stack.Screen name="RateFood" component={RateFood} options={BackButtonNavBar({ title: getHeaderTitle(route), navigation })}/>
     </Stack.Navigator>
   );
 }
