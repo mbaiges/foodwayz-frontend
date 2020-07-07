@@ -159,6 +159,21 @@ class RestaurantProfileComponent extends Component {
   render(){
     const {navigation} = this.props;
 
+      navigation.setOptions({
+          headerTitle: () => <Text style={styles.headerText}>{this.state.restaurant.a_name}</Text>
+      });
+      
+
+      //   navigation.setOptions({
+      //     headerTitle: () => <Text style={styles.headerText}>{this.state.food.a_title}'s Statistics</Text>
+      // });
+      // headerText: {
+      //   fontWeight: "bold",
+      //   fontSize: 20,
+      //   color: "white",
+      //   letterSpacing: 1,
+      // },
+
     return (
       (this.state.activityIndicator) ?
             (<SafeAreaView>
@@ -524,6 +539,13 @@ const styles = StyleSheet.create({
     height: 250,
     alignSelf: 'center',
 
+  },
+
+  headerText: {
+    fontWeight: "bold",
+    fontSize: 20,
+    color: "white",
+    letterSpacing: 1,
   },
 
 });
