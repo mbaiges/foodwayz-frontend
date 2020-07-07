@@ -62,7 +62,7 @@ class RestaurantStatisticsProfileComponent extends Component {
             worstFoodSet: [],
             bestFoods: [],
             worstFoods: [],
-            chosenFoodDisplay: "precentation",
+            chosenFoodDisplay: "presentation",
             
             //User Data 
             userData: {},
@@ -201,7 +201,7 @@ class RestaurantStatisticsProfileComponent extends Component {
                     worstFoods: worstSelected.a_food_quality_score
                 });
             break;
-            case "precentation":
+            case "presentation":
                 this.setState({
                     bestFoods: bestSelected.a_presentation_score,
                     worstFoods: worstSelected.a_presentation_score
@@ -701,7 +701,7 @@ class RestaurantStatisticsProfileComponent extends Component {
                                     await this.recalculateFoodDisplay();
                             }}>
                                 <Picker.Item label="Quality" value="quality" />
-                                <Picker.Item label="Precentation" value="precentation" />
+                                <Picker.Item label="Presentation" value="presentation" />
                                 <Picker.Item label="Price" value="price" />
                             </Picker>
                         </View>          

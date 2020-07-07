@@ -44,7 +44,7 @@ class FoodScreenComponent extends Component {
     console.log(food);
     let aux = {
       quality: food.a_food_quality_score,
-      precentation: food.a_presentation_score,
+      presentation: food.a_presentation_score,
       price: food.a_price_quality_score
     }
     this.setState({
@@ -195,8 +195,8 @@ class FoodScreenComponent extends Component {
           </View>
           <Text style={styles.secondaryText}>Presentation Score</Text>
           <View style={styles.ratingContainer}>
-            <Text style={styles.ratingText}>{this.state.reviews.precentation}</Text>
-            <Rating imageSize={30} readonly startingValue={this.state.reviews.precentation} style={styles.rating} />
+            <Text style={styles.ratingText}>{this.state.reviews.presentation}</Text>
+            <Rating imageSize={30} readonly startingValue={this.state.reviews.presentation} style={styles.rating} />
           </View>
           <Text style={styles.secondaryText}>Price-quality Score</Text>
           <View style={styles.ratingContainer}>

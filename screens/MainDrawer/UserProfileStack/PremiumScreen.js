@@ -110,7 +110,7 @@ class PremiumComponent extends Component {
               <Card style={ this.state.selectedCard == 0 ? styles.selectedCard : styles.card }>
                 <Text style={styles.subtitle}>No Premium</Text>
                 <Text style={styles.text}>You will be able to se:</Text>
-                <Text style={styles.text}>- The top 5 best and worst dishes in your restaurant acording to price, quality or precentation</Text>
+                <Text style={styles.text}>- The top 5 best and worst dishes in your restaurant acording to price, quality or presentation</Text>
               </Card>
             </TouchableOpacity>
             
