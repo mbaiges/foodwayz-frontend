@@ -103,6 +103,13 @@ class RestaurantStatisticsProfileComponent extends Component {
       
     }
 
+    updatePremiumLevel = (premiumLevel) => {
+        const { route } = this.props;
+        const { updateRestaurantPremium } = route.params;
+
+        updateRestaurantPremium(premiumLevel);
+    }
+
     // --------------------------------- RECALCULCULATE -----------------------------------------------
 
     dismissConnectionSnackBar = () => {

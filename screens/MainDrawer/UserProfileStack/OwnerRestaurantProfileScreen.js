@@ -363,7 +363,7 @@ class OwnerRestaurantProfileComponent extends Component {
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() => {
-                    const pushAction = StackActions.push("RestaurantStatisticsProfile", {rest: this.state.restaurant });
+                    const pushAction = StackActions.push("RestaurantStatisticsProfile", {rest: this.state.restaurant, updateRestaurantPremium: this.updateRestaurantPremium.bind(this) });
                     navigation.dispatch(pushAction);
                     //navigation.navigate("RestaurantStatisticsProfile", {rest: this.state.restaurant })
                   }}
