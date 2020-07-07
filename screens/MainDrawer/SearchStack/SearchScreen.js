@@ -475,12 +475,12 @@ class SearchScreenComponent extends React.Component {
             }}
           >
             <View style={styles.buttonItemsContainer}>
-              <Text style={styles.filter}>FILTERS </Text>
-              <Icon
+              <Text style={styles.filter}>CUSTOMIZE</Text>
+              {/* <Icon
                 name='filter'
                 type='material-community'
                 color="white"
-              />
+              /> */}
             </View>
           </TouchableOpacity>
         </View>
