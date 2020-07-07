@@ -32,6 +32,7 @@ class PremiumComponent extends Component {
     
     async uploadPrimium(){
       const { route, navigation } = this.props;
+      const { updateRestaurantPremium } = route.params;
 
       if(this.state.chosenPlanIndex){
         try {
@@ -39,6 +40,7 @@ class PremiumComponent extends Component {
           console.log(resp);
           switch(resp.status) {
             case 200:
+              updateRestaurantPremium(this.state.chosenPlanIndex);
               navigation.goBack();
               break;
           default:
