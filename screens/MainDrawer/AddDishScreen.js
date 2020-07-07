@@ -47,6 +47,7 @@ class AddDishComponent extends Component {
           newRequest: "",
           newIngrRequest: "",
           newTypeRequest: "",
+          newCharRequest: "",
 
           ingredientsChosen: [],
           characteristicsChosen: [],
@@ -191,7 +192,7 @@ class AddDishComponent extends Component {
         this.setState({
           activityIndicator: true
         });
-        const resp = await ContactUsApi.characteristicRequest(this.state.newTypeRequest);
+        const resp = await ContactUsApi.characteristicRequest(this.state.newCharRequest);
         switch(resp.status) {
           case 200:
             this.setState({
@@ -1123,7 +1124,7 @@ class AddDishComponent extends Component {
                         <Text style={styles.inputTitle}>Request a new characteristic</Text>
                         <Input
                             placeholder={""}
-                            onChangeText={(value) => (this.state.newRequest = value)}
+                            onChangeText={(value) => (this.state.newCharRequest = value)}
                         />
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity
