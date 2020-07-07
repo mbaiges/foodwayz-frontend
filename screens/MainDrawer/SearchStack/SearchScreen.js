@@ -818,7 +818,7 @@ export default SearchScreen = (props) => {
 };
 
 
-const { width: WIDTH } = Dimensions.get("window");
+const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   screenContainer: {
@@ -1115,7 +1115,7 @@ const styles = StyleSheet.create({
     elevation: 20,
     position: "absolute",
     alignSelf: 'center',
-    marginTop: 580,
+    marginTop: HEIGHT-75,
   },
 
   button: {
@@ -1139,5 +1139,10 @@ const styles = StyleSheet.create({
   searchScrollView: {
     minHeight: 0,
     maxHeight:300,
+  },
+
+  loading:{
+    flex: 1,
+    marginTop:100,
   },
 });
