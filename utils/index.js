@@ -10,8 +10,9 @@ export function validateUsername(username) {
   
   // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:
 export function validatePassword(password) {
-    let re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return re.test(password);
+    //let re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    //return re.test(password);
+    return password.length > 0;
   };
   
 export function validateSignupFields({
