@@ -72,8 +72,8 @@ class AuthApi{
     return Api.post(`${AuthApi.url}/reset_password`, {a_email: a_email});
   }
 
-  static resetPasswordConfirmation(a_email, {a_code, a_password_new}) {
-    return Api.post(`${AuthApi.url}/reset_password/confirm`, {a_code, a_password_new});
+  static resetPasswordConfirmation(a_email, {a_code, a_password_new }) {
+    return Api.post(`${AuthApi.url}/reset_password/confirm`, {a_email , a_code, a_password_new});
   }
 }
 

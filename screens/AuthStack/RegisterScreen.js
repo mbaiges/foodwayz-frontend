@@ -13,6 +13,8 @@ import {
   TouchableWithoutFeedback,
   Modal
 } from "react-native";
+
+import { Input } from "react-native-elements";
 import CheckBox from "@react-native-community/checkbox";
 import { User, AuthApi } from '../../api'; 
 import { UserContext } from '../../context/UserContext';
@@ -28,6 +30,9 @@ class RegisterScreenComponent extends Component {
       password2: "",
       checked: false,
       emailVerificationModal:false,
+      verificationCodeValue: "",
+      showWrongVerificationMessage: false,
+      wrongVerificationMessage:"",
     };
   }
 
@@ -68,6 +73,26 @@ class RegisterScreenComponent extends Component {
     await AuthApi.resendEmail(email);
   }
 
+  async verificateAccount(){
+    const resp = await AuthApi.verifyEmail(this.state.email,this.state.verificationCodeValue);
+    const isVerified = resp.response.result;
+    const codeType = resp.response.code;
+    if(isVerified){
+      this.setState({emailVerificationModal: false});
+      this.props.navigation.navigate("EmailVerified", {isVerified});
+    }else if(codeType === "expired-code"){
+      this.setState({wrongVerificationMessage: "The code expired"});
+      this.showWrongVerificationMessage();
+    }else if(codeType === "invalid-code"){
+      this.setState({wrongVerificationMessage: "Invalid code"});
+      this.showWrongVerificationMessage();
+    }
+  }
+
+  showWrongVerificationMessage(){
+    this.setState({showWrongVerificationMessage: true})
+  }
+
   render() {
     const { navigation, context } = this.props;
     const { authState, setAuthState } = context;
@@ -103,7 +128,20 @@ class RegisterScreenComponent extends Component {
 
                   <View style = {styles.centeredView}>
                     <View style = {styles.modalView}>
-                      <Text>A verification mail was sended to {this.state.email}. Please check your mailbox.</Text>
+                      <Text style={styles.modalText}>Verification mail sent to:</Text>
+                      <Text style={styles.modalText}>{this.state.email}</Text>
+                      <Text style={styles.modalText}>Please check your mailbox.</Text>
+                      
+                      
+                      <Input
+                          placeholder={"Insert Verification Code"}
+                          onChangeText={(value) => ( this.setState({ verificationCodeValue:value }))}
+                      />
+                      {this.state.showWrongVerificationMessage && 
+                        <View>
+                          <Text style={styles.errorText}>{this.state.wrongVerificationMessage}</Text>
+                        </View>  
+                      }
                       <View flexDirection = 'row'>
                         <View style={styles.buttonContainer}>
                           <TouchableOpacity
@@ -117,14 +155,22 @@ class RegisterScreenComponent extends Component {
                         </View>
                         <View style={styles.buttonContainer}>
                           <TouchableOpacity
-                              style={styles.deleteButton}
-                              onPress={() => {
-                                
+                              style={styles.cancelButton}
+                              onPress={async () => {
                                 this.resendEmail(this.state.email);
-
                               }}
                           >
-                              <Text style={styles.buttonText}>Resend email</Text>
+                              <Text style={styles.blackButtonText}>Resend Email</Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View style={styles.buttonContainer}>
+                          <TouchableOpacity
+                              style={styles.deleteButton}
+                              onPress={() => {
+                                this.verificateAccount();
+                              }}
+                          >
+                              <Text style={styles.buttonText}>Verify</Text>
                           </TouchableOpacity>
                         </View>
 
@@ -365,6 +411,7 @@ const styles = StyleSheet.create({
     alignItems:"center",
     paddingTop: 20,
     paddingBottom: 22,
+    paddingLeft: 8,
   },
 
   cancelButton: {
@@ -374,7 +421,9 @@ const styles = StyleSheet.create({
     color: "black",
     width: 100,
     alignItems: "center",
-    padding: 13,
+    padding: 8,
+    borderColor: 'black',
+    borderWidth:0.5,
     height: 48,
   },
 
@@ -388,6 +437,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 13,
     height: 48,
+    paddingLeft: 0,
   },
 
   buttonText:{
@@ -399,4 +449,21 @@ const styles = StyleSheet.create({
     color: "black",
       
   },
+
+  verificationInputTitle:{
+    fontSize: 25,
+    paddingBottom: 10,
+  },
+
+  modalText:{
+    fontSize: 20,
+    paddingBottom: 10,
+  },
+
+  errorText:{
+    bottom: 15,
+    paddingLeft: 25,
+    color: 'red'
+  },
+
 });
