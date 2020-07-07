@@ -16,9 +16,10 @@ import {
 
 import { Input } from "react-native-elements";
 import CheckBox from "@react-native-community/checkbox";
-import { User, AuthApi } from '../../api'; 
+import { User, AuthApi } from '../../api';
 import { UserContext } from '../../context/UserContext';
 
+import { validateSignupFields } from '../../utils';
 import { StackActions } from '@react-navigation/native';
 
 class RegisterScreenComponent extends Component {
@@ -39,34 +40,41 @@ class RegisterScreenComponent extends Component {
   }
 
   signUp = async function({ state, setAuthState, navigation }) {
-    /*
-    if (!validateSignupFields(state)) {
-      // Mensajito de error
+
+    const inputs = {
+      username: this.state.username,
+      email: this.state.email,
+      password1: this.state.password1,
+      password2: this.state.password2,
+    };
+
+    if (!validateSignupFields(inputs)) {
+      // El Mensajito de error lo manda validateSignupFields
       console.log("Something went wrong.");
-    }
-    */
+    }else{
+      const user = new User({
+        a_name: state.username,
+        a_email: state.email,
+        a_password: state.password1
+      });
 
-    const user = new User({
-      a_name: state.username,
-      a_email: state.email,
-      a_password: state.password1
-    });
-
-    try {
-      const ans = await AuthApi.signUp(user);
-      if(ans){
-        console.log(ans);
-        console.log("User successfully registered");
-        this.setState({emailVerificationModal: true}); 
-        const auth = {
-          state: 'SIGNED_UP',
-          token: ''
-        };
-        await setAuthState(auth);
-        //navigation.navigate("Login")
+      try {
+        const ans = await AuthApi.signUp(user);
+        if(ans){
+          console.log(ans);
+          console.log("User successfully registered");
+          this.setState({emailVerificationModal: true});
+          const auth = {
+            state: 'SIGNED_UP',
+            token: ''
+          };
+          await setAuthState(auth);
+          //navigation.navigate("Login")
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
+
     }
   }
 
@@ -103,23 +111,23 @@ class RegisterScreenComponent extends Component {
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
-        
+
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
           style={styles.container}
         >
-          
+
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.inner}>
               <Image
                 style={styles.logoImage}
                 source={require("../../assets/images/logo.png")}
               />
-              
+
               <Text style={styles.logoText}>FoodWayz</Text>
 
 {/* ---------------------------------------MODAL-----------------------------------------------------------------------*/}
-         
+
               <View style={styles.centeredView}>
                 <Modal
                   animationType="slide"
@@ -135,16 +143,16 @@ class RegisterScreenComponent extends Component {
                       <Text style={styles.modalText}>Verification mail sent to:</Text>
                       <Text style={styles.modalText}>{this.state.email}</Text>
                       <Text style={styles.modalText}>Please check your mailbox.</Text>
-                      
-                      
+
+
                       <Input
                           placeholder={"Insert Verification Code"}
                           onChangeText={(value) => ( this.setState({ verificationCodeValue:value }))}
                       />
-                      {this.state.showWrongVerificationMessage && 
+                      {this.state.showWrongVerificationMessage &&
                         <View>
                           <Text style={styles.errorText}>{this.state.wrongVerificationMessage}</Text>
-                        </View>  
+                        </View>
                       }
                       <View flexDirection = 'row'>
                         <View style={styles.buttonContainer}>
@@ -182,14 +190,14 @@ class RegisterScreenComponent extends Component {
                         </View>
 
                       </View>
-                      
+
                     </View>
                   </View>
 
                 </Modal>
               </View>
 
-{/* --------------------------------------------------------------------------------------------------------------------*/} 
+{/* --------------------------------------------------------------------------------------------------------------------*/}
 
 
               <View style={styles.inputBoxes}>
@@ -273,7 +281,7 @@ class RegisterScreenComponent extends Component {
             </TouchableOpacity>
           </View>
         </View>
-     
+
       </SafeAreaView>
     );
   }
@@ -390,7 +398,7 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
 
-    
+
   centeredView: {
     flex: 1,
     justifyContent: "center",
@@ -415,7 +423,7 @@ const styles = StyleSheet.create({
     height: 300,
   },
 
-    
+
   buttonContainer:{
     alignItems:"center",
     paddingTop: 20,
@@ -451,12 +459,12 @@ const styles = StyleSheet.create({
 
   buttonText:{
     color: "white",
-      
+
   },
 
   blackButtonText:{
     color: "black",
-      
+
   },
 
   verificationInputTitle:{

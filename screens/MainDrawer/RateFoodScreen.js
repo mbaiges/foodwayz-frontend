@@ -16,7 +16,7 @@ class RateFoodComponent extends Component {
         this.state = {
             comment: "",
             rating_quality: 2.5,
-            rating_precentation: 2.5,
+            rating_presentation: 2.5,
             rating_price: 2.5,
             food: {}
         };
@@ -40,7 +40,7 @@ class RateFoodComponent extends Component {
             a_desc: this.state.comment,
             a_food_id: this.state.food.a_food_id,
             a_food_quality_score: this.state.rating_quality,
-            a_presentation_score: this.state.rating_precentation,
+            a_presentation_score: this.state.rating_presentation,
             a_price_quality_score: this.state.rating_price,
             a_user_id: this.state.user.a_user_id
         }
@@ -158,7 +158,7 @@ class RateFoodComponent extends Component {
                     imageSize={60}
                     fractions={1}
                     showRating
-                    onFinishRating={(value) => (this.setState({rating_precentation: value}))}
+                    onFinishRating={(value) => (this.setState({rating_presentation: value}))}
                 />
 
                 <Text style={styles.logoText}>Price</Text>

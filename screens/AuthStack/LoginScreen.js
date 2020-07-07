@@ -12,7 +12,8 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-  Modal
+  Modal,
+  Alert,
 } from "react-native";
 import { Input } from "react-native-elements";
 import { UserContext } from '../../context/UserContext';
@@ -21,6 +22,8 @@ import { User, AuthApi } from '../../api';
 import { StackActions } from '@react-navigation/native';
 
 import { validateSigninFields } from '../../utils';
+
+
 
 class LoginScreenComponent extends Component {
   constructor() {
@@ -114,36 +117,44 @@ class LoginScreenComponent extends Component {
   }
 
   signIn = async function ({ state, setAuthState, navigation }) {
-    /*
-    if (!validateSigninFields(state)) {
-      // Mensajito de error
-      console.log("Something went wrong.");
-    }
-    */
-    const user = new User({
-      a_email: state.email,
-      a_password: state.password
-    });
+    
+    const inputs = {email: this.state.email, password:this.state.password};
+   
+
+    // if (!validateSigninFields(inputs)) {  // DESCOMENTAR ANTES DE LA ENTREGA
+    //   // El Mensajito de error lo manda validateSigninFields
+    //   console.log("Something went wrong.");
+    // }else{
+      const user = new User({
+        a_email: state.email,
+        a_password: state.password
+      });
 
 
-    try {
-      const ans = await AuthApi.signIn(user);
-      if (ans && ans.status === 200) {
-        console.log(ans.response);
-        console.log("User successfully logged");
-        const auth = {
-          state: 'SIGNED_IN',
-          token: ans.response.accessToken
-        };
-        await setAuthState(auth);
-      }else if(ans && ans.status === 401 && ans.response.code === "not-verified"){
-        this.setState({emailVerificationModal: true});
-      }else if(ans && ans.status === 401 && ans.response.code === "invalid-auth"){
-        //CONTRASEÑA INVALIDAAAAAAAA
+      try {
+        const ans = await AuthApi.signIn(user);
+        console.log(ans);
+        if (ans && ans.status === 200) {
+          console.log(ans.response);
+          console.log("User successfully logged");
+          const auth = {
+            state: 'SIGNED_IN',
+            token: ans.response.accessToken
+          };
+          await setAuthState(auth);
+        }else if(ans && ans.status === 401 && ans.response.code === "not-verified"){
+          this.setState({emailVerificationModal: true});
+        }else if(ans && ans.status === 401 && ans.response.code === "invalid-auth"){
+          alert("Incorrect password");
+        }else if(ans && ans.status === 400 && ans.response.code === "user-not-exists"){
+          alert("A user with that mail address was not found.");
+        }
+
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
-    }
+
+    //}
   }
 
   render() {

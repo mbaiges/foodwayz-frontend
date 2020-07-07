@@ -312,7 +312,49 @@ class OwnerRestaurantProfileComponent extends Component {
 
             </ScrollView>
             <Text style={styles.logoText}>{this.state.restaurant.a_name}</Text>
-              
+                
+            <View alignItems='flex-start'>    
+                        {/* //-----------------------------NUEVO----------------------------      */}
+            <Text style={styles.subtitleText}>Address</Text>  
+            <Text style = {styles.addressText}>{this.state.restaurant.a_state +", " + this.state.restaurant.a_city}</Text>
+            <Text style = {styles.addressText}>{this.state.restaurant.a_address +", " + this.state.restaurant.a_postal_code}</Text>
+
+            <Text style= {styles.subtitleText}>Scores </Text>
+            <Text style={styles.secondaryText}>Quality Score</Text>
+            <View style={styles.ratingContainer}>
+              <Text style={styles.ratingText}>{this.state.restaurant.a_food_quality_score}</Text>
+              <Rating imageSize={30} readonly startingValue={this.state.restaurant.a_food_quality_score} style={styles.rating} />
+            </View>
+            <Text style={styles.secondaryText}>Presentation Score</Text>
+            <View style={styles.ratingContainer}>
+              <Text style={styles.ratingText}>{this.state.restaurant.a_presentation_score}</Text>
+              <Rating imageSize={30} readonly startingValue={this.state.restaurant.a_presentation_score} style={styles.rating} />
+            </View>
+            <Text style={styles.secondaryText}>Price-quality Score</Text>
+            <View style={styles.ratingContainer}>
+              <Text style={styles.ratingText}>{this.state.restaurant.a_price_quality_score}</Text>
+              <Rating imageSize={30} readonly startingValue={this.state.restaurant.a_price_quality_score} style={styles.rating} />
+            </View>
+
+            { this.state.restaurant.a_rest_chain &&
+              <View>
+                <Text style={styles.subtitleText}>Chain Info</Text> 
+                <Card title={this.state.restaurant.a_rest_chain.a_name}>
+                  <Image source={{ uri: this.state.restaurant.a_rest_chain.a_image_url}}
+                  style={styles.imageStyle} />
+
+                  <View style={styles.ratingContainer}>
+                    <Text style={styles.chainRatingText}>{this.state.restaurant.a_rest_chain.a_score}</Text>
+                    <Rating imageSize={30} readonly startingValue={this.state.restaurant.a_rest_chain.a_score} style={styles.rating} />
+                  </View>
+                </Card>
+              </View>
+            
+            }
+
+            {/* //---------------------------------------------------------      */}
+            </View> 
+
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={styles.button}
@@ -735,6 +777,7 @@ const styles = StyleSheet.create({
 
   icon: {
     alignSelf: "flex-end",
+    
   },
   
   buttonContainer:{
@@ -886,6 +929,43 @@ textSnack:{
 snackBar:{
   backgroundColor: "#787777",
   height:70,
+},
+
+
+
+addressText:{
+  paddingLeft: 20,
+  fontSize:18,
+},
+
+ratingContainer: {
+  marginTop: 0,
+  flexDirection: 'row'
+},
+
+ratingText: {
+  textAlign: "left",
+  fontWeight: "bold",
+  fontSize: 27,
+  paddingLeft: 40,
+  paddingRight: 20,
+
+},
+
+chainRatingText:{
+  textAlign: "left",
+  fontWeight: "bold",
+  fontSize: 24,
+  paddingLeft: 40,
+  paddingRight: 20,
+
+},
+
+imageStyle: {
+  width: 250,
+  height: 250,
+  alignSelf: 'center',
+
 },
 
 
