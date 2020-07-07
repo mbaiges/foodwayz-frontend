@@ -74,7 +74,7 @@ class FoodSpecificStatisticsComponent extends Component {
             worstFoodSet: [],
             bestFoods: [],
             worstFoods: [],
-            chosenFoodDisplay: "precentation",
+            chosenFoodDisplay: "presentation",
             
             //User Data 
             userData: {},
