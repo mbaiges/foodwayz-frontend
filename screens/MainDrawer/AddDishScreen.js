@@ -107,17 +107,11 @@ class AddDishComponent extends Component {
     if(this.state.newTypeRequest != ""){
       try {
         this.setState({
-          activityIndicator: true
+          requestTypesVisible:false
         });
         const resp = await ContactUsApi.typeRequest(this.state.newTypeRequest);
         switch(resp.status) {
           case 200:
-            this.setState({
-              activityIndicator: false
-            });
-            this.setState({
-              requestTypesVisible:false
-            });
             this.setState({
               snackbarSentVisible:true
             });
@@ -148,17 +142,11 @@ class AddDishComponent extends Component {
     if(this.state.newIngrRequest != ""){
       try {
         this.setState({
-          activityIndicator: true
+          requestIngrVisible:false
         });
         const resp = await ContactUsApi.ingredientRequest(this.state.newIngrRequest);
         switch(resp.status) {
           case 200:
-            this.setState({
-              activityIndicator: false
-            });
-            this.setState({
-              requestIngrVisible:false
-            });
             this.setState({
               snackbarSentVisible:true
             });
@@ -188,19 +176,13 @@ class AddDishComponent extends Component {
 
   async sendNewCharMail(){
     if(this.state.newCharRequest != ""){
-      try {      
+      try { 
         this.setState({
-          activityIndicator: true
-        });
+          requestCharsVisible:false
+        });     
         const resp = await ContactUsApi.characteristicRequest(this.state.newCharRequest);
         switch(resp.status) {
           case 200:
-            this.setState({
-              activityIndicator: false
-            });
-            this.setState({
-              requestCharsVisible:false
-            });
             this.setState({
               snackbarSentVisible:true
             });

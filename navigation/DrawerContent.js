@@ -40,7 +40,7 @@ export default function CustomDrawerContent(props) {
         labelStyle={{color:"white", fontSize:22}}
         onPress={() => props.navigation.navigate("CategoriesStack")} 
         icon= {({  }) => <Ionicons
-                            name="md-options"
+                            name="md-grid"
                             size={24}
                             color="white"
                           />}

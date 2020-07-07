@@ -103,6 +103,14 @@ class RestaurantStatisticsProfileComponent extends Component {
       
     }
 
+    updatePremiumLevel = (premiumLevel) => {
+        const { route } = this.props;
+        const { updateRestaurantPremium } = route.params;
+
+        updateRestaurantPremium(premiumLevel);
+        this.recalculateAll();
+    }
+
     // --------------------------------- RECALCULCULATE -----------------------------------------------
 
     dismissConnectionSnackBar = () => {
@@ -224,6 +232,13 @@ class RestaurantStatisticsProfileComponent extends Component {
             break;
         }
 
+    }
+
+    async recalculateAll(){
+        await this.recalculateFoodDisplay();
+        await this.recalculateIntervalChartInfo();
+        await this.recalculatePieChartData();
+        await this.recalculateScoreData();
     }
 
     // --------------------------------- DATE CHANGED -----------------------------------------------
@@ -855,7 +870,7 @@ class RestaurantStatisticsProfileComponent extends Component {
                                     <TouchableOpacity
                                         style={styles.button}
                                         onPress={() => { 
-                                            const pushAction = StackActions.push("Premium", {restaurant: this.state.restaurant});
+                                            const pushAction = StackActions.push("Premium", {restaurant: this.state.rest, updateRestaurantPremium: this.updatePremiumLevel.bind(this)});
                                             navigation.dispatch(pushAction);
                                             //navigation.navigate("Premium", {restaurant: this.state.restaurant}) 
                                         }}
