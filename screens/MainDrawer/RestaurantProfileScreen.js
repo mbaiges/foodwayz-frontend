@@ -15,6 +15,8 @@ import {
 import { RestaurantApi, FoodApi, ViewsApi } from "../../api";
 import { Snackbar } from 'react-native-paper';
 
+import { StackActions } from '@react-navigation/native';
+
 //import { Constants } from 'expo';
 
 const { width } = Dimensions.get("window");
@@ -256,7 +258,10 @@ class RestaurantProfileComponent extends Component {
                 {this.state.dishes.map(dish =>{
                   return(
                     (dish.a_score >= 4) ? 
-                    <TouchableOpacity onPress={async () => {navigation.navigate("Food"); //falta pasar los params para que pase a la pag correcta
+                    <TouchableOpacity onPress={async () => {
+                      const pushAction = StackActions.push("Food", {food: dish});
+                      navigation.dispatch(pushAction);
+                      //navigation.navigate("Food"); //falta pasar los params para que pase a la pag correcta
                     }}>  
                       <Card
                         image={{ uri: dish.a_image_url }}
@@ -292,7 +297,11 @@ class RestaurantProfileComponent extends Component {
             {this.state.dishes.map(dish =>{
               return( 
                 <ListItem
-                  onPress={async () => {navigation.navigate("Food");}}
+                  onPress={async () => {
+                    const pushAction = StackActions.push("Food", {food: dish});
+                    navigation.dispatch(pushAction);
+                    //navigation.navigate("Food");
+                  }}
                   key={dish.a_food_id}
                   leftAvatar={{ source: { uri: dish.a_image_url } }}
                   title={dish.a_title}
