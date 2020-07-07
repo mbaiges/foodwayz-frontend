@@ -820,6 +820,18 @@ class RestaurantStatisticsProfileComponent extends Component {
                     }
                     {/* -------------------------------------------------------------------------------- */}
 
+                    <View style={ styles.center } >
+                        <Text2 style={styles.subtitleText}>Want more stats?</Text2>
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => { navigation.navigate("Premium", {restaurant: this.state.restaurant}) }}
+                            >
+                                <Text2 style={styles.buttonText}>Premium</Text2>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
                     {/* --------------------------- USER PIE CHARTS --------------------------- */}
                     {
                         (this.state.rest.a_premium_level >= 2) ? 
@@ -948,7 +960,7 @@ class RestaurantStatisticsProfileComponent extends Component {
                                                 // </View>    
 
                                                 <ListItem
-                                                    onPress={async () => {navigation.navigate("FoodSpecificStatistics", { food: food});}}
+                                                    onPress={async () => {navigation.navigate("FoodSpecificStatistics", { food: food, rest: this.state.rest});}}
                                                     key={food.a_food_id}
                                                     leftAvatar={{ source: { uri: food.a_image_url } }}
                                                     title={food.a_title}
@@ -1015,6 +1027,10 @@ const styles = StyleSheet.create({
         position: "relative",
         width: width,
         flexDirection: "row",
+    },
+
+    center: {
+        alignItems: "center",
     },
     
     reviewImage: {
@@ -1112,10 +1128,10 @@ const styles = StyleSheet.create({
         alignItems:"center",
         paddingTop: 20,
         paddingBottom: 22,
-    },
-
-  
-    button: {
+      },
+    
+    
+      button: {
         elevation: 15,
         borderRadius: 25,
         backgroundColor: "#FC987E",
@@ -1124,12 +1140,42 @@ const styles = StyleSheet.create({
         alignItems: "center",
         padding: 13,
         height: 48,
-    },
+      },
+    
+      cancelButton: {
+        elevation: 15,
+        borderRadius: 5,
+        backgroundColor: "white",
+        color: "black",
+        width: 100,
+        alignItems: "center",
+        padding: 13,
+        height: 48,
+      },
+    
+      deleteButton: {
+        elevation: 15,
+        borderRadius: 5,
+        backgroundColor: "red",
+        color: "white",
+        width: 100,
+        alignItems: "center",
+        padding: 13,
+        height: 48,
+      },
+    
+      buttonText:{
+        color: "white",   
+      },
+    
+      blackButtonText:{
+        color: "black",
+          
+      },
 
     
     buttonText:{
-        color: "white",
-        
+        color: "#FFFFFF",
     },
 
     reviewContainer: {
