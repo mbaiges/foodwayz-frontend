@@ -18,7 +18,7 @@ import { Snackbar } from 'react-native-paper';
 
 import { Icon, } from 'react-native-elements';
 
-import { User, AuthApi } from '../../api'; 
+import { User, AuthApi } from '../../api';
 import { Api } from "../../api/api";
 
 class EmailVerifiedComponent extends Component {
@@ -33,46 +33,20 @@ class EmailVerifiedComponent extends Component {
   componentDidMount() {
     const {route} = this.props;
     const {params} = route;
-    // ESTE DEBERíA IR CUANDO FUNCIONE //this.verifyEmail(params.token);
-   //this.verifyEmail("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkYWh3ZHd1YWRoYXd1aWRoYSIsInN1YiI6MTUsImV4cGlyYXRpb25fZGF0ZSI6IjIwMjAtMDctMDVUMTQ6NTE6MDkuNDY2WiIsImlhdCI6MTU5Mzg3NDI2OTQ2NiwiZXhwIjoxNTkzODc0MzU1ODY2fQ.u5iua2qcVcbM_qvwCdcSGTLohkNBtaigU5ms_h75W70");    
-   // ESTE TIRA FALSE //this.verifyEmail("");    
- 
+    this.verifyEmail(params.isVerified);
+
   }
 
-  dismissConnectionSnackBar = () => {
-    this.setState({
-      snackbarConnectionVisible: false
-    });
+  async verifyEmail(isVerified){
+    if(isVerified)
+      this.setState({isVerified: true});
+
   }
 
-  async verifyEmail(token){
-    try {
-      const resp = await AuthApi.verifyEmail(token);
-      switch(resp.status) {
-        case 200:
-          if(resp.response.result === true){
-            this.setState({isVerified: true});
-          }
-          break;
-      default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
-        // Show snackbar ?
-        break;
-      }
-    }
-    catch (error) {
-      console.log(error);
-      this.setState({
-        snackbarConnectionVisible: true
-      });
-      // Show snackbar (Internet connecion, maybe?)
-    }
-  }
-  
   render() {
 
     const {navigation} = this.props;
-    
+
     return (
       <SafeAreaView style={styles.backgroundContainer}>
         <View style={styles.inner}>
@@ -84,7 +58,7 @@ class EmailVerifiedComponent extends Component {
             style={{ height: 200, width: 200 }}
             source={require("../../assets/images/HamburguesitaFeliz.png")}
           />
-        </View>  
+        </View>
         ) : (
         <View alignItems= 'center'>
           <Text style={styles.logoText}>Sorry, your email could not be verified</Text>
@@ -92,21 +66,21 @@ class EmailVerifiedComponent extends Component {
             style={{ height: 200, width: 200 }}
             source={require("../../assets/images/HamburguesitaTriste.png")}
           />
-        </View>  
-        ) 
+        </View>
+        )
       }
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => { 
+          onPress={() => {
             navigation.navigate("Login");
           }}
         >
           <Text>GO TO LOGIN SCREEN</Text>
         </TouchableOpacity>
-              
-      </View>     
-   
+
+      </View>
+
       <Snackbar
               style={styles.snackBar}
               duration={4000}
@@ -117,7 +91,7 @@ class EmailVerifiedComponent extends Component {
         </Snackbar>
 
 
-          
+
       </SafeAreaView>
     );
   }
