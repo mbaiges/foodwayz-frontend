@@ -1,4 +1,5 @@
 import React, { Component, useContext} from 'react';
+import{ActivityIndicator} from 'react-native'
 import { Card, ListItem, Button, Icon, Input} from 'react-native-elements';
 import { SafeAreaView, StyleSheet, View, Text, Image, Picker, TextInput, ScrollView, TouchableOpacity, Dimensions, Alert, Modal} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -163,7 +164,9 @@ class EditProfileComponent extends Component {
   }
 
   async componentDidMount() {
-
+    this.setState({
+      activityIndicator: true
+    })
     const { route } = this.props;
     const { food } = route.params;
     console.log(food);
@@ -171,6 +174,9 @@ class EditProfileComponent extends Component {
     console.log(JSON.stringify(this.updateProfile));
     console.log('mounting');
     await this.fetchUser();
+    this.setState({
+      activityIndicator: false
+    })
   }
 
   render() {
@@ -194,8 +200,14 @@ class EditProfileComponent extends Component {
     });
 
     return (
-      
-      <ScrollView>
+      (this.state.activityIndicator) ?
+      (<SafeAreaView>
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#000000" />
+        </View>
+      </SafeAreaView>)
+      :
+      (<ScrollView>
         <View style={styles.backgroundContainer}>
           <View style={styles.mainPage}>
               <Image style={styles.logoImage} source={{ uri: this.state.user.a_image_url ? this.state.user.a_image_url : "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Funknown.png?alt=media&token=7bec299d-aefa-486e-8aa1-6f11c874ee2f" }}/>
@@ -320,7 +332,7 @@ class EditProfileComponent extends Component {
              <Text style={styles.textSnack}>No internet connection.</Text>
         </Snackbar>
 
-      </ScrollView>
+      </ScrollView>)
       
     );
   }
@@ -557,4 +569,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#787777",
     height:70,
   },
+
+  loading:{
+    flex: 1,
+    marginTop:100,
+  }
   });

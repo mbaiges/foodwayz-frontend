@@ -106,7 +106,7 @@ class CategorieScreenComponent extends Component {
       (<SafeAreaView style={styles.backgroundContainer}>
         <ScrollView>
           <View>
-      <Text style={styles.homeSubtitle}>{this.state.type.a_type_name}s</Text>
+      <Text style={styles.homeSubtitle}>{this.state.type.a_type_name.charAt(0).toUpperCase() + this.state.type.a_type_name.slice(1)}s</Text>
             <ScrollView>
               {
                 this.state.foods.map(food => {

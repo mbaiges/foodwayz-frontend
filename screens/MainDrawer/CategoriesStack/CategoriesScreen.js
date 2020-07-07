@@ -106,7 +106,7 @@ class CategoriesScreenComponent extends Component {
                         }}
 
                       >
-                        <Text style={styles.foodName}>{type.a_type_name}</Text>
+                        <Text style={styles.foodName}>{type.a_type_name.charAt(0).toUpperCase() + type.a_type_name.slice(1)}</Text>
                       </Card>
                     </TouchableOpacity>
                   )
