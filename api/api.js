@@ -4,7 +4,7 @@ class Api {
   static getToken = () => {return ''};
 
   static get baseUrl() {
-    return 'http://10.0.2.2:3002';
+    return 'http://foodwayz-back.herokuapp.com:3002';
   }
 
   static get timeout() {
