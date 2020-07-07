@@ -17,6 +17,8 @@ import {
 import { AuthApi } from "../../api";
 import { ScrollView } from "react-native-gesture-handler";
 
+import { StackActions } from '@react-navigation/native';
+
 class ForgotPassScreenComponent extends Component {
   constructor() {
     super();
@@ -64,7 +66,9 @@ class ForgotPassScreenComponent extends Component {
     const resp = await AuthApi.resetPasswordConfirmation(a_email, aux);
     console.log(resp);
     if(resp.response.result){
-      this.props.navigation.navigate("Login");      
+      const pushAction = StackActions.push("Login");
+      this.props.navigation.dispatch(pushAction);
+      //this.props.navigation.navigate("Login");      
     }else{
       
       if(resp.response.code === "expired-code"){

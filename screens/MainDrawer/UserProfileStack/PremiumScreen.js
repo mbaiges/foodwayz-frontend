@@ -16,6 +16,8 @@ import { RestaurantApi } from "../../../api";
 import { Snackbar } from 'react-native-paper';
 import { color } from "react-native-reanimated";
 
+import { StackActions } from '@react-navigation/native';
+
 //import { Constants } from 'expo';
 
 const { width } = Dimensions.get("window");
@@ -109,8 +111,8 @@ class PremiumComponent extends Component {
 
               <Card style={ this.state.selectedCard == 0 ? styles.selectedCard : styles.card }>
                 <Text style={styles.subtitle}>No Premium</Text>
-                <Text style={styles.text}>You will be able to se:</Text>
-                <Text style={styles.text}>- The top 5 best and worst dishes in your restaurant acording to price, quality or presentation</Text>
+                <Text style={styles.text}>You will be able to see:</Text>
+                <Text style={styles.text}>- The top 5 best and worst rated foods in your restaurant according to price, quality or presentation</Text>
               </Card>
             </TouchableOpacity>
             
@@ -119,12 +121,12 @@ class PremiumComponent extends Component {
             >
               <Card style={ this.state.selectedCard == 1 ? styles.selectedCard : styles.card }>
                 <Text style={styles.subtitle}>Copper - $100 a month!</Text>
-                <Text style={styles.text}>You will be able to se:</Text>
+                <Text style={styles.text}>You will be able to see:</Text>
                 <Text style={styles.text}>- All non premium Perks</Text>
                 <Text style={styles.text}>- The restaurants views on the last week, month, or year</Text>
-                <Text style={styles.text}>- Detaild hour by hour info on your restaurants views on a specific day</Text>
+                <Text style={styles.text}>- Detailed hour by hour info on your restaurants views on a specific day</Text>
                 <Text style={styles.text}>- Each Foods views on the last week, month, or year</Text>
-                <Text style={styles.text}>- Detaild hour by hour info on each foods views on a specific day</Text>
+                <Text style={styles.text}>- Detailed hour by hour info on each food views on a specific day</Text>
               </Card>
             </TouchableOpacity>
 
@@ -133,9 +135,9 @@ class PremiumComponent extends Component {
             >
             <Card style={ this.state.selectedCard == 2 ? styles.selectedCard : styles.card }>
                 <Text style={styles.subtitle}>Silver - $300 a month!</Text>
-                <Text style={styles.text}>You will be able to se:</Text>
+                <Text style={styles.text}>You will be able to see:</Text>
                 <Text style={styles.text}>- All Copper level Perks</Text>
-                <Text style={styles.text}>- All the user statistics for your restaurant including: Views per gender, Views per Age, Views per Characteristic (Vegan, Celiac, etc) and the same information for reviews made</Text>
+                <Text style={styles.text}>- All the user statistics for your restaurant including: Views per gender, Views per age, Views per characteristic (Vegan, Celiac, etc) and the same information for the reviews</Text>
               </Card>
             </TouchableOpacity>
 
@@ -144,9 +146,9 @@ class PremiumComponent extends Component {
             >
             <Card style={ this.state.selectedCard == 3 ? styles.selectedCard : styles.card }>
                 <Text style={styles.subtitle}>Gold - $500 a month!</Text>
-                <Text style={styles.text}>You will be able to se:</Text>
+                <Text style={styles.text}>You will be able to see:</Text>
                 <Text style={styles.text}>- All Silver level Perks</Text>
-                <Text style={styles.text}>- Same user statistics as on silver but not onley for your restaurant but for all of its foods!</Text>
+                <Text style={styles.text}>- Same user statistics as on silver but not only for your restaurant but for all of the foods!</Text>
               </Card>
             </TouchableOpacity>
 
@@ -159,7 +161,11 @@ class PremiumComponent extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.cancelButton}
-                    onPress={() => {navigation.navigate("UserProfile");}}
+                    onPress={() => {
+                      const pushAction = StackActions.push("UserProfile");
+                      navigation.dispatch(pushAction);
+                      //navigation.navigate("UserProfile");
+                    }}
                 >
                     <Text style={styles.cancel}>Cancel</Text>
                  
