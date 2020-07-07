@@ -13,6 +13,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 
+import { Snackbar } from 'react-native-paper';
+
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {Text} from 'react-native-svg'
 
@@ -102,6 +104,12 @@ class RestaurantStatisticsProfileComponent extends Component {
     }
 
     // --------------------------------- RECALCULCULATE -----------------------------------------------
+
+    dismissConnectionSnackBar = () => {
+        this.setState({
+          snackbarConnectionVisible: false
+        });
+      }
 
     async recalculateIntervalChartInfo(){
 
@@ -233,21 +241,32 @@ class RestaurantStatisticsProfileComponent extends Component {
     // --------------------------------- FETCH DATA -----------------------------------------------
 
     async fetchfoodData(){
-
-        const resp = await StatisticsApi.getBestWorstFoods(this.state.rest.a_rest_id, 5);
-
-        if(resp.status == 200){
-            
-            let foodInfo = resp.response.result;
+        try {
+            const resp = await StatisticsApi.getBestWorstFoods(this.state.rest.a_rest_id, 5);
+            switch(resp.status) {
+              case 200:
+                let foodInfo = resp.response.result;
+                this.setState({
+                    bestFoodSet: foodInfo.a_best,
+                    worstFoodSet: foodInfo.a_worst
+                });
+        
+                this.recalculateFoodDisplay();
+                break;
+            default:
+              console.log(`Status Received: ${resp.status} --->`);
+              console.log(`${resp.response}`);
+              // Show snackbar ?
+              break;
+            }
+          }
+          catch (error) {
+            console.log(error);
             this.setState({
-                bestFoodSet: foodInfo.a_best,
-                worstFoodSet: foodInfo.a_worst
+              snackbarConnectionVisible: true
             });
-    
-            this.recalculateFoodDisplay();
-        }else{
-            console.log("error");
-        }
+            // Show snackbar (Internet connecion, maybe?)
+          }
    
     }
 
@@ -1003,7 +1022,14 @@ class RestaurantStatisticsProfileComponent extends Component {
                         )
                         : (<View></View>)
                     }
-
+                    <Snackbar
+                        style={styles.snackBar}
+                        duration={4000}
+                        visible={this.state.snackbarConnectionVisible}
+                        onDismiss={this.dismissConnectionSnackBar}
+                    >
+                        <Text style={styles.textSnack}>No internet connection.</Text>
+                    </Snackbar>
                     {/* -------------------------------------------------------------------------------- */}
                 </ScrollView>
             </SafeAreaView>
@@ -1210,5 +1236,17 @@ const styles = StyleSheet.create({
     loading:{
         flex: 1,
         marginTop:100,
-    }
+    },
+
+    textSnack:{
+        color: 'white',
+        fontSize: 20,
+        fontWeight: 'bold',
+        paddingBottom: 5,
+      },
+    
+      snackBar:{
+        backgroundColor: "#787777",
+        height:70,
+      },
 });

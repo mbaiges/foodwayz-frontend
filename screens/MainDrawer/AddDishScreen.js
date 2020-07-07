@@ -463,21 +463,16 @@ class AddDishComponent extends Component {
 
           try {
             const resp = await FoodApi.add(dish);
-            console.log('caca1');
             switch(resp.status) {
               case 200:
                 console.log(resp.response.result);
-                console.log('caca2');
                 await this.uploadImage(resp.response.result); 
-                console.log('caca3');
                 await this.uploadIngredients(resp.response.result);
-                console.log('caca4');
                 await this.uploadCharacteristics(resp.response.result); 
-                console.log('caca5');
                 this.setState({
                   activityIndicator: false
                 })
-                //dishesUpdater();
+                dishesUpdater();
                 navigation.goBack();
                 break;
             default:
@@ -543,8 +538,6 @@ class AddDishComponent extends Component {
         // Show snackbar (Internet connecion, maybe?)
       }
 
-      
-      console.log(resp);
   }
 
   async uploadCharacteristics(food){

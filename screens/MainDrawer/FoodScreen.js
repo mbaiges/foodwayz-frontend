@@ -96,6 +96,13 @@ class FoodScreenComponent extends Component {
   render() {
 
     const { navigation } = this.props;
+
+      navigation.setOptions({
+        headerTitle: () => <Text style={styles.headerText}>{this.state.food.a_title}</Text>
+      });
+
+      
+
     return (
       <SafeAreaView style={styles.backgroundContainer}>
         <ScrollView justifyContent='flex-start'>
@@ -131,7 +138,7 @@ class FoodScreenComponent extends Component {
                 style={styles.buttonTag}
                 onPress={() => {}}
               >
-                <Text>{this.state.type.a_type_name}</Text>
+                <Text>{`${(this.state.type && this.state.type.a_type_name)?(new String(this.state.type.a_type_name).charAt(0).toUpperCase() + new String(this.state.type.a_type_name).slice(1)):""}`}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -354,6 +361,13 @@ const styles = StyleSheet.create({
   snackBar:{
     backgroundColor: "#787777",
     height:70,
+  },
+
+  headerText: {
+    fontWeight: "bold",
+    fontSize: 20,
+    color: "white",
+    letterSpacing: 1,
   },
 
 
