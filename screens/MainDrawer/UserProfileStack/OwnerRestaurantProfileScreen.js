@@ -265,6 +265,15 @@ class OwnerRestaurantProfileComponent extends Component {
                   <Text style={styles.buttonText}>Statistics</Text>
                 </TouchableOpacity>
             </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => { navigation.navigate("Premium", {restaurant: this.state.restaurant}) }}
+              >
+                <Text style={styles.buttonText}>Premium</Text>
+              </TouchableOpacity>
+            </View>
+            
             
             {/* <Text style={styles.primaryText}>About us</Text>
             <Text style={styles.secondaryText}>Somos un restaurante asiático basado en la película Kung Fu Panda.

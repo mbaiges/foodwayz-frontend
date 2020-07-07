@@ -59,7 +59,7 @@ class StatisticsApi{
     return Api.post(`${StatisticsApi.url}/restaurant/${restId}/views_by_hour`, {a_date});
   }
 
-  static getRestaurantUserStatistics(restId, a_date) {
+  static getRestaurantUserStatistics(restId, a_first_date, a_last_date) {
     return Api.post(`${StatisticsApi.url}/restaurant/${restId}/user`, {a_first_date, a_last_date});
   }
   

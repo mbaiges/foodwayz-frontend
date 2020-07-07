@@ -230,9 +230,11 @@ class FoodSpecificStatisticsComponent extends Component {
         const isoDate = date.toISOString();
 
         // llanada a la api
+        const resp = await StatisticsApi.getFoodViewsByHour(this.state.food.a_food_id, isoDate)
         
         await this.setState({
-            secondChartData:[2,0,10,0,0,4,25,3,0,0,0,0,3,2,6,2,5,7,4,2,10,25,30,7],
+            //secondChartData:[2,0,10,0,0,4,25,3,0,0,0,0,3,2,6,2,5,7,4,2,10,25,30,7],
+            secondChartData: resp.response.result,
             secondChartLabels: ["00hs", "06hs", "12hs", "18hs", "24hs"],
         });
 
@@ -241,64 +243,68 @@ class FoodSpecificStatisticsComponent extends Component {
     async fetchUserChartData(){
         //llamada a la api
 
-        let userData = {
-            a_views_info: {
-                a_gender: {
-                    male: 10,
-                    female: 4,
-                    other: 25
-                },
-                a_age: {
-                    22: 45,
-                    23: 17,
-                    88: 2
-                },
-                a_characteristic: {
-                    vegan: 12,
-                    diabetic: 10
-                }
-            },
-            a_reviews_info: {
-                a_gender: {
-                    male: {
-                        a_score: 4.8,
-                        a_amount: 10
-                    },
-                    female: {
-                        a_score: 3.2,
-                        a_amount: 4
-                    },
-                    other: {
-                        a_score: 1.5,
-                        a_amount: 25
-                    }
-                },
-                a_age: {
-                    22: {
-                        a_score: 3.3,
-                        a_amount: 45
-                    },
-                    23: {
-                        a_score: 2.4,
-                        a_amount: 17
-                    },
-                    88: {
-                        a_score: 1.8,
-                        a_amount: 2
-                    },
-                },
-                a_characteristic: {
-                    vegan: {
-                        a_score: 2.3,
-                        a_amount: 12
-                    },
-                    diabetic: {
-                        a_score: 4.1,
-                        a_amount: 10
-                    }
-                }
-            }
-        };
+        const resp = await StatisticsApi.getFoodUserStatistics(this.state.food.a_food_id)
+
+        let userData = resp.response.result;
+        
+        // let userData = {
+        //     a_views_info: {
+        //         a_gender: {
+        //             male: 10,
+        //             female: 4,
+        //             other: 25
+        //         },
+        //         a_age: {
+        //             22: 45,
+        //             23: 17,
+        //             88: 2
+        //         },
+        //         a_characteristic: {
+        //             vegan: 12,
+        //             diabetic: 10
+        //         }
+        //     },
+        //     a_reviews_info: {
+        //         a_gender: {
+        //             male: {
+        //                 a_score: 4.8,
+        //                 a_amount: 10
+        //             },
+        //             female: {
+        //                 a_score: 3.2,
+        //                 a_amount: 4
+        //             },
+        //             other: {
+        //                 a_score: 1.5,
+        //                 a_amount: 25
+        //             }
+        //         },
+        //         a_age: {
+        //             22: {
+        //                 a_score: 3.3,
+        //                 a_amount: 45
+        //             },
+        //             23: {
+        //                 a_score: 2.4,
+        //                 a_amount: 17
+        //             },
+        //             88: {
+        //                 a_score: 1.8,
+        //                 a_amount: 2
+        //             },
+        //         },
+        //         a_characteristic: {
+        //             vegan: {
+        //                 a_score: 2.3,
+        //                 a_amount: 12
+        //             },
+        //             diabetic: {
+        //                 a_score: 4.1,
+        //                 a_amount: 10
+        //             }
+        //         }
+        //     }
+        // };
 
         //------------------------------------ VIEWS INFO -------------------------------------------
         

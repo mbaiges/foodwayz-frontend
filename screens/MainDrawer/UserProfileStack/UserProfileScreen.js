@@ -251,6 +251,9 @@ class UserProfileComponent extends Component {
               </View>
               )
           }
+
+          
+
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               onPress={() => {
@@ -263,6 +266,7 @@ class UserProfileComponent extends Component {
             >
               <Text style={styles.buttonText}>Sign Out</Text>
             </TouchableOpacity>
+
           </View>
         </ScrollView>
       </SafeAreaView>)

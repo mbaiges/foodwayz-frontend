@@ -230,7 +230,7 @@ class RestaurantStatisticsProfileComponent extends Component {
     async fetchfoodData(){
 
         const resp = await StatisticsApi.getBestWorstFoods(this.state.rest.a_rest_id, 5);
-        
+
         // const resp = await FoodApi.getAll();
         // let foodInfo = {
         //     a_best: {
@@ -252,11 +252,6 @@ class RestaurantStatisticsProfileComponent extends Component {
                 bestFoodSet: foodInfo.a_best,
                 worstFoodSet: foodInfo.a_worst
             });
-
-            console.log("-------------------------------");
-            console.log(this.state.bestFoodSet);
-            //console.log(this.state.worstFoodSet);
-            console.log("-------------------------------");
     
             this.recalculateFoodDisplay();
         }else{
@@ -266,6 +261,23 @@ class RestaurantStatisticsProfileComponent extends Component {
     }
 
     async fetchFirstGraphData(){
+
+        const today = new Date();
+        const lastWeek = new Date();
+        const lastMonth = new Date();
+        const lastYear = new Date();
+        lastWeek.setDate(today.getDate() - 7);
+        lastMonth.setDate(today.getDate() - 31);
+        lastYear.setDate(today.getDate() - 365);
+        const weekResp = await StatisticsApi.getRestaurantViewsByDay(this.state.rest.a_rest_id, lastWeek, today);
+        const monthResp = await StatisticsApi.getRestaurantViewsByDay(this.state.rest.a_rest_id, lastMonth, today)
+        const yearResp = await StatisticsApi.getRestaurantViewsByDay(this.state.rest.a_rest_id, lastYear, today)
+
+        console.log("-------------------------")
+        console.log(weekResp);
+        console.log(monthResp);
+        console.log(yearResp);
+        console.log("-------------------------")
 
         await this.setState({
             weekDayValueData:[50, 10, 40, 95, 85, 5, 30],
@@ -283,78 +295,86 @@ class RestaurantStatisticsProfileComponent extends Component {
     }
 
     async fetchSecondGraphData(date){
-        const isoDate = date.toISOString();
 
+        const isoDate = date.toISOString();
+        
+        const resp = await StatisticsApi.getRestaurantViewsByHour(this.state.rest.a_rest_id, isoDate)
+
+        console.log(resp);
         // llanada a la api
         
         await this.setState({
-            secondChartData:[2,0,10,0,0,4,25,3,0,0,0,0,3,2,6,2,5,7,4,2,10,25,30,7],
+            //secondChartData:[2,0,10,0,0,4,25,3,0,0,0,0,3,2,6,2,5,7,4,2,10,25,30,7],
+            secondChartData: resp.response.result,
             secondChartLabels: ["00hs", "06hs", "12hs", "18hs", "24hs"],
         });
 
     }
 
     async fetchUserChartData(){
-        //llamada a la api
+        
+        const resp = await StatisticsApi.getRestaurantUserStatistics(this.state.rest.a_rest_id)
 
-        let userData = {
-            a_views_info: {
-                a_gender: {
-                    male: 10,
-                    female: 4,
-                    other: 25
-                },
-                a_age: {
-                    22: 45,
-                    23: 17,
-                    88: 2
-                },
-                a_characteristic: {
-                    vegan: 12,
-                    diabetic: 10
-                }
-            },
-            a_reviews_info: {
-                a_gender: {
-                    male: {
-                        a_score: 4.8,
-                        a_amount: 10
-                    },
-                    female: {
-                        a_score: 3.2,
-                        a_amount: 4
-                    },
-                    other: {
-                        a_score: 1.5,
-                        a_amount: 25
-                    }
-                },
-                a_age: {
-                    22: {
-                        a_score: 3.3,
-                        a_amount: 45
-                    },
-                    23: {
-                        a_score: 2.4,
-                        a_amount: 17
-                    },
-                    88: {
-                        a_score: 1.8,
-                        a_amount: 2
-                    },
-                },
-                a_characteristic: {
-                    vegan: {
-                        a_score: 2.3,
-                        a_amount: 12
-                    },
-                    diabetic: {
-                        a_score: 4.1,
-                        a_amount: 10
-                    }
-                }
-            }
-        };
+        let userData = resp.response.result;
+
+        // let userData = {
+        //     a_views_info: {
+        //         a_gender: {
+        //             male: 10,
+        //             female: 4,
+        //             other: 25
+        //         },
+        //         a_age: {
+        //             22: 45,
+        //             23: 17,
+        //             88: 2
+        //         },
+        //         a_characteristic: {
+        //             vegan: 12,
+        //             diabetic: 10
+        //         }
+        //     },
+        //     a_reviews_info: {
+        //         a_gender: {
+        //             male: {
+        //                 a_score: 4.8,
+        //                 a_amount: 10
+        //             },
+        //             female: {
+        //                 a_score: 3.2,
+        //                 a_amount: 4
+        //             },
+        //             other: {
+        //                 a_score: 1.5,
+        //                 a_amount: 25
+        //             }
+        //         },
+        //         a_age: {
+        //             22: {
+        //                 a_score: 3.3,
+        //                 a_amount: 45
+        //             },
+        //             23: {
+        //                 a_score: 2.4,
+        //                 a_amount: 17
+        //             },
+        //             88: {
+        //                 a_score: 1.8,
+        //                 a_amount: 2
+        //             },
+        //         },
+        //         a_characteristic: {
+        //             vegan: {
+        //                 a_score: 2.3,
+        //                 a_amount: 12
+        //             },
+        //             diabetic: {
+        //                 a_score: 4.1,
+        //                 a_amount: 10
+        //             }
+        //         }
+        //     }
+        // };
 
         //------------------------------------ VIEWS INFO -------------------------------------------
         
