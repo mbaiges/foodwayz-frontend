@@ -55,6 +55,12 @@ class OwnerRestaurantProfileComponent extends Component {
     this.setState({ restaurant: restaurant });
   }
 
+  updateRestaurantPremium(premiumLevel) {
+    let rest = this.state.restaurant;
+    rest.a_premium_level = premiumLevel;
+    this.setState({restaurant: rest});
+  }
+
   updateDishes() {
     console.log("Updating dishes");
     this.fetchDishes();
@@ -313,7 +319,7 @@ class OwnerRestaurantProfileComponent extends Component {
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => { navigation.navigate("Premium", {restaurant: this.state.restaurant}) }}
+                onPress={() => { navigation.navigate("Premium", {restaurant: this.state.restaurant, updateRestaurantPremium: this.updateRestaurantPremium.bind(this)}) }}
               >
                 <Text style={styles.buttonText}>Premium</Text>
               </TouchableOpacity>
