@@ -39,6 +39,10 @@ class UserProfileComponent extends Component {
     this.setState({user});
   }
 
+  updateRestaurants() {
+    this.fetchRestaurants();
+  }
+
   async fetchUser() {
     console.log('fetching user');
     const resp = await UserApi.getMe();
@@ -217,7 +221,7 @@ class UserProfileComponent extends Component {
                         name='add'
                         onPress={() => {
                           this.setState({restaurantsModalVisible: false});
-                          const pushAction = StackActions.push("CreateRestaurant");
+                          const pushAction = StackActions.push("CreateRestaurant", {restaurantsUpdater: this.updateRestaurants.bind(this)});
                           navigation.dispatch(pushAction);
                           //navigation.navigate("CreateRestaurant");
                         }}/>
@@ -244,7 +248,7 @@ class UserProfileComponent extends Component {
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() => { 
-                    const pushAction = StackActions.push("CreateRestaurant");
+                    const pushAction = StackActions.push("CreateRestaurant", {restaurantsUpdater: this.updateRestaurants.bind(this)});
                     navigation.dispatch(pushAction);
                     //navigation.navigate("CreateRestaurant") 
                   }}

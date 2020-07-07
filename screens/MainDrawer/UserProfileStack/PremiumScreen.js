@@ -38,7 +38,7 @@ class PremiumComponent extends Component {
       const { route, navigation } = this.props;
       const { updateRestaurantPremium } = route.params;
 
-      if(this.state.chosenPlanIndex){
+      if(this.state.chosenPlanIndex != null){
         try {
           const resp = await RestaurantApi.updatePremiumStatus(this.state.rest.a_rest_id, this.state.chosenPlanIndex)
           console.log(resp);
@@ -162,8 +162,8 @@ class PremiumComponent extends Component {
                 <TouchableOpacity
                     style={styles.cancelButton}
                     onPress={() => {
-                      const pushAction = StackActions.push("UserProfile");
-                      navigation.dispatch(pushAction);
+                      const popAction = StackActions.pop(1);
+                      navigation.dispatch(popAction);
                       //navigation.navigate("UserProfile");
                     }}
                 >
