@@ -131,7 +131,7 @@ class FoodScreenComponent extends Component {
                 style={styles.buttonTag}
                 onPress={() => {}}
               >
-                <Text>{this.state.type.a_type_name}</Text>
+                <Text>{`${(this.state.type && this.state.type.a_type_name)?(new String(this.state.type.a_type_name).charAt(0).toUpperCase() + new String(this.state.type.a_type_name).slice(1)):""}`}</Text>
               </TouchableOpacity>
             </View>
           </View>
