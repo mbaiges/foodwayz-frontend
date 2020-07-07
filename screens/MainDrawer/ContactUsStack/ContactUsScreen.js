@@ -152,7 +152,7 @@ class ContactUs extends Component {
                     style={styles.message}
                     multiline
                     numberOfLines={10}
-                    placeholder={"I hava a message for you!"}
+                    placeholder={"I have a message for you!"}
                     placeholderTextColor={"rgba(0,0,0,0.4)"}
                     underLineColorAndroid="transparent"
                     onChangeText={(value) => (this.state.comment = value)}
