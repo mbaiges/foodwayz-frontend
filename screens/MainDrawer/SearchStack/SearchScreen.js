@@ -467,7 +467,7 @@ class SearchScreenComponent extends React.Component {
           }
         </ScrollView>
         
-        <View style={styles.buttonContainer}>
+        <View style={styles.floatingButtonContainer}>
           <TouchableOpacity
             style={styles.button}
             onPress={() => { 
@@ -1111,7 +1111,7 @@ const styles = StyleSheet.create({
     marginLeft: "22%",
   },
 
-  buttonContainer: {
+  floatingButtonContainer: {
     elevation: 20,
     position: "absolute",
     alignSelf: 'center',
