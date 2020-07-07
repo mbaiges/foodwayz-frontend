@@ -20,6 +20,8 @@ import { UserContext } from '../../../context/UserContext';
 import { TypeApi } from '../../../api';
 import { color } from "react-native-reanimated";
 
+import { StackActions } from '@react-navigation/native';
+
 class CategoriesScreenComponent extends Component {
   constructor() {
     super();
@@ -95,7 +97,9 @@ class CategoriesScreenComponent extends Component {
                   return (
                     <TouchableOpacity
                     onPress={async () => {
-                      navigation.navigate("Categorie", { type: type });
+                      const pushAction = StackActions.push("Categorie", { type: type });
+                      navigation.dispatch(pushAction);
+                      //navigation.navigate("Categorie", { type: type });
                       //console.log("I want to navigate to Dish page");
                     }}>
                       <Card

@@ -18,6 +18,7 @@ import {
 } from "react-native";
 import { RestaurantApi, FoodApi, UserApi, OwnsApi } from "../../../api";
 
+import { StackActions } from '@react-navigation/native';
 
 import * as ImagePicker from 'expo-image-picker';
 import * as firebase from 'firebase';
@@ -255,7 +256,11 @@ class OwnerRestaurantProfileComponent extends Component {
             name="md-create"
             size={38}
             style={styles.navbar_r_icon}
-            onPress={() => navigation.navigate("EditRestaurant", {restaurant: this.state.restaurant, restaurantUpdater: this.updateRestaurant.bind(this)})}
+            onPress={() => {
+              const pushAction = StackActions.push("EditRestaurant", {restaurant: this.state.restaurant, restaurantUpdater: this.updateRestaurant.bind(this)});
+              navigation.dispatch(pushAction);
+              //navigation.navigate("EditRestaurant", {restaurant: this.state.restaurant, restaurantUpdater: this.updateRestaurant.bind(this)})
+            }}
           />
         </View>
       ),
@@ -307,11 +312,57 @@ class OwnerRestaurantProfileComponent extends Component {
 
             </ScrollView>
             <Text style={styles.logoText}>{this.state.restaurant.a_name}</Text>
-              
+                
+            <View alignItems='flex-start'>    
+                        {/* //-----------------------------NUEVO----------------------------      */}
+            <Text style={styles.subtitleText}>Address</Text>  
+            <Text style = {styles.addressText}>{this.state.restaurant.a_state +", " + this.state.restaurant.a_city}</Text>
+            <Text style = {styles.addressText}>{this.state.restaurant.a_address +", " + this.state.restaurant.a_postal_code}</Text>
+
+            <Text style= {styles.subtitleText}>Scores </Text>
+            <Text style={styles.secondaryText}>Quality Score</Text>
+            <View style={styles.ratingContainer}>
+              <Text style={styles.ratingText}>{this.state.restaurant.a_food_quality_score}</Text>
+              <Rating imageSize={30} readonly startingValue={this.state.restaurant.a_food_quality_score} style={styles.rating} />
+            </View>
+            <Text style={styles.secondaryText}>Presentation Score</Text>
+            <View style={styles.ratingContainer}>
+              <Text style={styles.ratingText}>{this.state.restaurant.a_presentation_score}</Text>
+              <Rating imageSize={30} readonly startingValue={this.state.restaurant.a_presentation_score} style={styles.rating} />
+            </View>
+            <Text style={styles.secondaryText}>Price-quality Score</Text>
+            <View style={styles.ratingContainer}>
+              <Text style={styles.ratingText}>{this.state.restaurant.a_price_quality_score}</Text>
+              <Rating imageSize={30} readonly startingValue={this.state.restaurant.a_price_quality_score} style={styles.rating} />
+            </View>
+
+            { this.state.restaurant.a_rest_chain &&
+              <View>
+                <Text style={styles.subtitleText}>Chain Info</Text> 
+                <Card title={this.state.restaurant.a_rest_chain.a_name}>
+                  <Image source={{ uri: this.state.restaurant.a_rest_chain.a_image_url}}
+                  style={styles.imageStyle} />
+
+                  <View style={styles.ratingContainer}>
+                    <Text style={styles.chainRatingText}>{this.state.restaurant.a_rest_chain.a_score}</Text>
+                    <Rating imageSize={30} readonly startingValue={this.state.restaurant.a_rest_chain.a_score} style={styles.rating} />
+                  </View>
+                </Card>
+              </View>
+            
+            }
+
+            {/* //---------------------------------------------------------      */}
+            </View> 
+
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={styles.button}
-                  onPress={() => { navigation.navigate("RestaurantStatisticsProfile", {rest: this.state.restaurant }) }}
+                  onPress={() => { 
+                    const pushAction = StackActions.push("RestaurantStatisticsProfile", {rest: this.state.restaurant });
+                    navigation.dispatch(pushAction);
+                    //navigation.navigate("RestaurantStatisticsProfile", {rest: this.state.restaurant }) 
+                  }}
                 >
                   <Text style={styles.buttonText}>Statistics</Text>
                 </TouchableOpacity>
@@ -319,7 +370,11 @@ class OwnerRestaurantProfileComponent extends Component {
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => { navigation.navigate("Premium", {restaurant: this.state.restaurant, updateRestaurantPremium: this.updateRestaurantPremium.bind(this)}) }}
+                onPress={() => { 
+                  const pushAction = StackActions.push("Premium", {restaurant: this.state.restaurant, updateRestaurantPremium: this.updateRestaurantPremium.bind(this)});
+                  navigation.dispatch(pushAction);
+                  //navigation.navigate("Premium", {restaurant: this.state.restaurant, updateRestaurantPremium: this.updateRestaurantPremium.bind(this)}) 
+                }}
               >
                 <Text style={styles.buttonText}>Premium</Text>
               </TouchableOpacity>
@@ -335,7 +390,11 @@ class OwnerRestaurantProfileComponent extends Component {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
                 style={styles.button}
-                onPress={async () => {navigation.navigate("AddDish", {restaurant: this.state.restaurant, dishesUpdater: this.updateDishes.bind(this)})}}
+                onPress={async () => {
+                  const pushAction = StackActions.push("AddDish", {restaurant: this.state.restaurant, dishesUpdater: this.updateDishes.bind(this)});
+                  navigation.dispatch(pushAction);
+                  //navigation.navigate("AddDish", {restaurant: this.state.restaurant, dishesUpdater: this.updateDishes.bind(this)})
+                }}
             >
                 <Text style={styles.buttonText}>Add New Food!</Text>
             </TouchableOpacity>
@@ -346,7 +405,11 @@ class OwnerRestaurantProfileComponent extends Component {
             {this.state.dishes.map(dish =>{
               return( 
                 <ListItem
-                  onPress={async () => {navigation.navigate("Food", { food: dish} );}}
+                  onPress={async () => {
+                    const pushAction = StackActions.push("Food", { food: dish} );
+                    navigation.dispatch(pushAction);
+                    //navigation.navigate("Food", { food: dish} );
+                  }}
                   key={dish.a_food_id}
                   leftAvatar={{ source: { uri: dish.a_image_url } }}
                   title={dish.a_title}
@@ -714,6 +777,7 @@ const styles = StyleSheet.create({
 
   icon: {
     alignSelf: "flex-end",
+    
   },
   
   buttonContainer:{
@@ -865,6 +929,43 @@ textSnack:{
 snackBar:{
   backgroundColor: "#787777",
   height:70,
+},
+
+
+
+addressText:{
+  paddingLeft: 20,
+  fontSize:18,
+},
+
+ratingContainer: {
+  marginTop: 0,
+  flexDirection: 'row'
+},
+
+ratingText: {
+  textAlign: "left",
+  fontWeight: "bold",
+  fontSize: 27,
+  paddingLeft: 40,
+  paddingRight: 20,
+
+},
+
+chainRatingText:{
+  textAlign: "left",
+  fontWeight: "bold",
+  fontSize: 24,
+  paddingLeft: 40,
+  paddingRight: 20,
+
+},
+
+imageStyle: {
+  width: 250,
+  height: 250,
+  alignSelf: 'center',
+
 },
 
 

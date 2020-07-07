@@ -25,7 +25,6 @@ export default function AuthStackNavigator({ navigation, route }) {
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="EmailVerified" component={EmailVerifiedScreen} />
       <Stack.Screen name="ResetPassEmail" component={ResetPassEmail} />
-      <Stack.Screen name="Main" component={MainDrawer} />
     </Stack.Navigator>
   );
 }

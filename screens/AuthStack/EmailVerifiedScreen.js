@@ -18,6 +18,8 @@ import { Snackbar } from 'react-native-paper';
 
 import { Icon, } from 'react-native-elements';
 
+import { StackActions } from '@react-navigation/native';
+
 import { User, AuthApi } from '../../api';
 import { Api } from "../../api/api";
 
@@ -73,7 +75,9 @@ class EmailVerifiedComponent extends Component {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            navigation.navigate("Login");
+            const pushAction = StackActions.push("Login");
+            navigation.dispatch(pushAction);
+            //navigation.navigate("Login");
           }}
         >
           <Text>GO TO LOGIN SCREEN</Text>

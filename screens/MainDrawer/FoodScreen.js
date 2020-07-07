@@ -19,6 +19,8 @@ import { Image, ListItem, Icon, Input, Rating } from 'react-native-elements';
 
 import { ViewsApi } from '../../api';
 
+import { StackActions } from '@react-navigation/native';
+
 const screenWidth = Dimensions.get('window').width
 
 import {
@@ -44,7 +46,7 @@ class FoodScreenComponent extends Component {
     console.log(food);
     let aux = {
       quality: food.a_food_quality_score,
-      precentation: food.a_presentation_score,
+      presentation: food.a_presentation_score,
       price: food.a_price_quality_score
     }
     this.setState({
@@ -107,7 +109,11 @@ class FoodScreenComponent extends Component {
           <View style={styles.showAll} flexDirection='row' justifyContent='space-between' >
             <Text style={styles.secondaryText}>from: {this.state.rest.a_name}</Text>
             <View >
-              <TouchableOpacity onPress={() => {navigation.navigate("RestaurantProfile", {restaurant: this.state.rest});}}>
+              <TouchableOpacity onPress={() => {
+                  const pushAction = StackActions.push("RestaurantProfile", {restaurant: this.state.rest});
+                  navigation.dispatch(pushAction);
+                  //navigation.navigate("RestaurantProfile", {restaurant: this.state.rest});
+                }}>
                 <Text style={styles.secondaryText}>VISIT</Text>
                 <Icon name='arrow-right' type='material-community' />
               </TouchableOpacity>
@@ -178,7 +184,11 @@ class FoodScreenComponent extends Component {
           <View style={styles.showAll} flexDirection='row' justifyContent='space-between'  >
             <Text style={styles.primaryText}>Rating:</Text>
             <View>
-              <TouchableOpacity onPress={() => {navigation.navigate("Reviews", {food: this.state.food});}}>
+              <TouchableOpacity onPress={() => {
+                  const pushAction = StackActions.push("Reviews", {food: this.state.food});
+                  navigation.dispatch(pushAction);
+                  //navigation.navigate("Reviews", {food: this.state.food});
+                }}>
                 <Text style={styles.secondaryText}>SHOW ALL</Text>
                 <Icon
                       name='arrow-right'
@@ -195,8 +205,8 @@ class FoodScreenComponent extends Component {
           </View>
           <Text style={styles.secondaryText}>Presentation Score</Text>
           <View style={styles.ratingContainer}>
-            <Text style={styles.ratingText}>{this.state.reviews.precentation}</Text>
-            <Rating imageSize={30} readonly startingValue={this.state.reviews.precentation} style={styles.rating} />
+            <Text style={styles.ratingText}>{this.state.reviews.presentation}</Text>
+            <Rating imageSize={30} readonly startingValue={this.state.reviews.presentation} style={styles.rating} />
           </View>
           <Text style={styles.secondaryText}>Price-quality Score</Text>
           <View style={styles.ratingContainer}>
@@ -208,7 +218,11 @@ class FoodScreenComponent extends Component {
         <View alignItems="center">
           <TouchableOpacity
             style={styles.button}
-            onPress={() => {navigation.navigate("RateFood", {food: this.state.food});}}
+            onPress={() => {
+              const pushAction = StackActions.push("RateFood", {food: this.state.food});
+              navigation.dispatch(pushAction);
+              //navigation.navigate("RateFood", {food: this.state.food});
+            }}
           >
             <Text style={styles.buttonItemsContainer}>RATE FOOD</Text>
           </TouchableOpacity>

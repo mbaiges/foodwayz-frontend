@@ -16,6 +16,7 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {Text} from 'react-native-svg'
 
+import { StackActions } from '@react-navigation/native';
 
 import { ScrollView } from "react-native-gesture-handler";
 import { ListItem, Card,Rating, Icon } from "react-native-elements";
@@ -62,7 +63,7 @@ class RestaurantStatisticsProfileComponent extends Component {
             worstFoodSet: [],
             bestFoods: [],
             worstFoods: [],
-            chosenFoodDisplay: "precentation",
+            chosenFoodDisplay: "presentation",
             
             //User Data 
             userData: {},
@@ -201,7 +202,7 @@ class RestaurantStatisticsProfileComponent extends Component {
                     worstFoods: worstSelected.a_food_quality_score
                 });
             break;
-            case "precentation":
+            case "presentation":
                 this.setState({
                     bestFoods: bestSelected.a_presentation_score,
                     worstFoods: worstSelected.a_presentation_score
@@ -640,7 +641,10 @@ class RestaurantStatisticsProfileComponent extends Component {
                                 {this.state.bestFoods.map((food, idx) =>{
                                     return(
                                         <View key={idx}>
-                                            <TouchableOpacity onPress={async () => {navigation.navigate("Food", { food: food});
+                                            <TouchableOpacity onPress={async () => {
+                                                const pushAction = StackActions.push("Food", { food: food});
+                                                navigation.dispatch(pushAction);
+                                                //navigation.navigate("Food", { food: food});
                                                 console.log("I want to navigate to Dish page");
                                                 }}>
                                                 <Card
@@ -671,7 +675,10 @@ class RestaurantStatisticsProfileComponent extends Component {
                                 {this.state.worstFoods.map((food, idx) =>{
                                     return(
                                         <View key={idx}>
-                                            <TouchableOpacity onPress={async () => {navigation.navigate("Food", { food: food});
+                                            <TouchableOpacity onPress={async () => {
+                                                const pushAction = StackActions.push("Food", { food: food});
+                                                navigation.dispatch(pushAction);
+                                                //navigation.navigate("Food", { food: food});
                                                 console.log("I want to navigate to Dish page");
                                                 }}>
                                                 <Card
@@ -701,7 +708,7 @@ class RestaurantStatisticsProfileComponent extends Component {
                                     await this.recalculateFoodDisplay();
                             }}>
                                 <Picker.Item label="Quality" value="quality" />
-                                <Picker.Item label="Precentation" value="precentation" />
+                                <Picker.Item label="Presentation" value="presentation" />
                                 <Picker.Item label="Price" value="price" />
                             </Picker>
                         </View>          
@@ -828,7 +835,11 @@ class RestaurantStatisticsProfileComponent extends Component {
                                 <View style={styles.buttonContainer}>
                                     <TouchableOpacity
                                         style={styles.button}
-                                        onPress={() => { navigation.navigate("Premium", {restaurant: this.state.restaurant}) }}
+                                        onPress={() => { 
+                                            const pushAction = StackActions.push("Premium", {restaurant: this.state.restaurant});
+                                            navigation.dispatch(pushAction);
+                                            //navigation.navigate("Premium", {restaurant: this.state.restaurant}) 
+                                        }}
                                     >
                                         <Text2 style={styles.buttonText}>Premium</Text2>
                                     </TouchableOpacity>
@@ -966,7 +977,11 @@ class RestaurantStatisticsProfileComponent extends Component {
                                                 // </View>    
 
                                                 <ListItem
-                                                    onPress={async () => {navigation.navigate("FoodSpecificStatistics", { food: food, rest: this.state.rest});}}
+                                                    onPress={async () => {
+                                                        const pushAction = StackActions.push("FoodSpecificStatistics", { food: food, rest: this.state.rest});
+                                                        navigation.dispatch(pushAction);
+                                                        //navigation.navigate("FoodSpecificStatistics", { food: food, rest: this.state.rest});
+                                                    }}
                                                     key={food.a_food_id}
                                                     leftAvatar={{ source: { uri: food.a_image_url } }}
                                                     title={food.a_title}

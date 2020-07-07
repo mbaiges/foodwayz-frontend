@@ -18,6 +18,8 @@ import { Snackbar } from 'react-native-paper';
 
 import { UserContext } from '../../../context/UserContext';
 
+import { StackActions } from '@react-navigation/native';
+
 import { SearchApi, UserApi, UserHasCharacteristicApi } from '../../../api';
 import { color } from "react-native-reanimated";
 
@@ -152,7 +154,7 @@ class HomeScreenComponent extends Component {
       :
       (
       <SafeAreaView style={styles.backgroundContainer}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View>
             <Text style={styles.homeSubtitle}>Recommended Foods For You</Text>
             <ScrollView>
@@ -165,7 +167,9 @@ class HomeScreenComponent extends Component {
                       title={food.a_title}
                       brand={food.a_rest.a_name}
                       onPress={async () => {
-                        navigation.navigate("Food", { food: food });
+                        const pushAction = StackActions.push("Food", { food: food });
+                        navigation.dispatch(pushAction);
+                        //navigation.navigate("Food", { food: food });
                         console.log("I want to navigate to Dish page");
                       }}
                       rating={food.a_score}

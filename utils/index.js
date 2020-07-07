@@ -61,7 +61,7 @@ export function validateSignupFields({
       alert("Please enter a valid password");
       return false;
     } else if (!checked) {
-      alert("You must agree terms and conds before continuing");
+      alert("You must agree terms and conditions before continuing");
       return false;
     }
   

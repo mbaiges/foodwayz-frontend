@@ -19,6 +19,8 @@ import { Picker } from 'react-native';
 
 import { Snackbar } from 'react-native-paper';
 
+import { StackActions } from '@react-navigation/native';
+
 import {IngredientApi, CharacteristicApi, TypeApi, FoodApi, FoodHasCharacteristicApi, FoodHasIngredientApi, SearchApi } from '../../../api';
 
 const { width } = Dimensions.get("window");
@@ -439,7 +441,9 @@ class SearchScreenComponent extends React.Component {
                   title={food.a_title}
                   brand={food.a_rest.a_name}
                   onPress={async () => {
-                    navigation.navigate("Food", { food: food });
+                    const pushAction = StackActions.push("Food", { food: food });
+                    navigation.dispatch(pushAction);
+                    //navigation.navigate("Food", { food: food });
                     console.log("I want to navigate to Dish page");
                   }}
                   rating={food.a_score}

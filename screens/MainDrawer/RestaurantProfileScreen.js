@@ -185,12 +185,52 @@ class RestaurantProfileComponent extends Component {
             </ScrollView>
             <Text style={styles.logoText}>{this.state.restaurant.a_name}</Text>
                 
+
+          
           {/* <Text style={styles.primaryText}>About us</Text>
           <Text style={styles.secondaryText}>Somos un restaurante asiático basado en la película Kung Fu Panda.
           Nuestros cocineros panda trabajan las 24h sin descansar para que tú puedas comer
           una sopa a las 2 de la madrugada si así lo deseas!</Text> */}
         </View>
+          {/* //-----------------------------NUEVO----------------------------      */}
+          <Text style={styles.subtitleText}>Address</Text>  
+          <Text style = {styles.addressText}>{this.state.restaurant.a_state +", " + this.state.restaurant.a_city}</Text>
+          <Text style = {styles.addressText}>{this.state.restaurant.a_address +", " + this.state.restaurant.a_postal_code}</Text>
 
+          <Text style= {styles.subtitleText}>Scores </Text>
+          <Text style={styles.secondaryText}>Quality Score</Text>
+          <View style={styles.ratingContainer}>
+            <Text style={styles.ratingText}>{this.state.restaurant.a_food_quality_score}</Text>
+            <Rating imageSize={30} readonly startingValue={this.state.restaurant.a_food_quality_score} style={styles.rating} />
+          </View>
+          <Text style={styles.secondaryText}>Presentation Score</Text>
+          <View style={styles.ratingContainer}>
+            <Text style={styles.ratingText}>{this.state.restaurant.a_presentation_score}</Text>
+            <Rating imageSize={30} readonly startingValue={this.state.restaurant.a_presentation_score} style={styles.rating} />
+          </View>
+          <Text style={styles.secondaryText}>Price-quality Score</Text>
+          <View style={styles.ratingContainer}>
+            <Text style={styles.ratingText}>{this.state.restaurant.a_price_quality_score}</Text>
+            <Rating imageSize={30} readonly startingValue={this.state.restaurant.a_price_quality_score} style={styles.rating} />
+          </View>
+
+          { this.state.restaurant.a_rest_chain &&
+            <View>
+              <Text style={styles.subtitleText}>Chain Info</Text> 
+              <Card title={this.state.restaurant.a_rest_chain.a_name}>
+                <Image source={{ uri: this.state.restaurant.a_rest_chain.a_image_url}}
+                style={styles.imageStyle} />
+
+                <View style={styles.ratingContainer}>
+                  <Text style={styles.chainRatingText}>{this.state.restaurant.a_rest_chain.a_score}</Text>
+                  <Rating imageSize={30} readonly startingValue={this.state.restaurant.a_rest_chain.a_score} style={styles.rating} />
+                </View>
+              </Card>
+            </View>
+          
+          }
+
+          {/* //---------------------------------------------------------      */}  
         {
           (this.state.hasPopularDishes) ? 
           (
@@ -314,13 +354,9 @@ const styles = StyleSheet.create({
   },
 
   secondaryText: {
-    textAlign: "left",
+
     fontSize: 14,
-    marginLeft: 10,
-    marginRight: 10,
-    marginBottom: 10,
-    padding: 15,
-    textAlign: "justify",
+    paddingLeft: 15,
   },
 
   popular: {
@@ -356,7 +392,7 @@ const styles = StyleSheet.create({
   },
 
   subtitleText: {
-    paddingTop:10,
+    paddingTop:15,
     textAlign: "left",
     fontWeight: "bold",
     fontSize: 20,
@@ -446,5 +482,39 @@ const styles = StyleSheet.create({
   },
 
 
+  addressText:{
+    paddingLeft: 20,
+    fontSize:18,
+  },
+
+  ratingContainer: {
+    marginTop: 0,
+    flexDirection: 'row'
+  },
+
+  ratingText: {
+    textAlign: "left",
+    fontWeight: "bold",
+    fontSize: 27,
+    paddingLeft: 40,
+    paddingRight: 20,
+
+  },
+
+  chainRatingText:{
+    textAlign: "left",
+    fontWeight: "bold",
+    fontSize: 24,
+    paddingLeft: 40,
+    paddingRight: 20,
+
+  },
+
+  imageStyle: {
+    width: 250,
+    height: 250,
+    alignSelf: 'center',
+
+  },
 
 });
