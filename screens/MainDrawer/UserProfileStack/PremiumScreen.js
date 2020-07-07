@@ -36,6 +36,7 @@ class PremiumComponent extends Component {
       if(this.state.chosenPlanIndex){
         try {
           const resp = await RestaurantApi.updatePremiumStatus(this.state.rest.a_rest_id, this.state.chosenPlanIndex)
+          console.log(resp);
           switch(resp.status) {
             case 200:
               navigation.goBack();

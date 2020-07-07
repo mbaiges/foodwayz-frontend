@@ -54,7 +54,7 @@ export function usePersistedAuthState(key, initialState) {
 export default function App(props) {
 
   // In case all blows up
-  AsyncStorage.removeItem(StorageKey);
+  //AsyncStorage.removeItem(StorageKey);
 
   const isLoadingComplete = useCachedResources();
   const [authState, setPersistedAuthState] = usePersistedAuthState(StorageKey, { state: 'SIGNED_OUT', token: '' });
