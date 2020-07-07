@@ -27,6 +27,9 @@ const screenWidth = Dimensions.get('window').width
 
 const { width } = Dimensions.get("window");
 
+const weekDayLabelsInfo = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const yearMonthLabelsInfo = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
 class RestaurantStatisticsProfileComponent extends Component {
     constructor() {
         super();
@@ -279,19 +282,88 @@ class RestaurantStatisticsProfileComponent extends Component {
         console.log(yearResp);
         console.log("-------------------------")
 
+        let auxWeekDayValueData = new Array(7).fill(0);
+        let auxMonthDayValueData = new Array(31).fill(0);
+        let auxYearMonthValueData = new Array(365).fill(0);
+
+        const todayDow = today.getDay();
+        const todayDate = today.getDate();
+        const todayMonth = today.getMonth();
+        
+        let dow;
+        let day;
+        let month;
+        let aux;
+        let num;
+
+        let dowIndex = todayDow + 1;
+        let monthIndex = todayMonth + 1; 
+        
+        let auxWeekDayObjects = []
+
+        for (let i = 0; i < 7; i++) {
+            if(dowIndex == 7){
+                dowIndex = 0;
+            }
+            auxWeekDayObjects.push({
+                dow: dowIndex++,
+                value: 0
+            });
+        }
+
+        weekResp.response.result.forEach( (obj) => {
+            dow = new Date(obj.a_time).getDay();
+            aux = (dow - (todayDow + 1));
+            num = aux < 0 ? aux + 7 : aux;
+            auxWeekDayObjects[num].value += obj.a_amount;
+        });
+
+        console.log("AUX WEEK DAY");
+        console.log(auxWeekDayObjects);
+
+        let auxMonthDayData = new Array(31).fill(0);
+
+        monthResp.response.result.forEach( (obj) => {
+            day = new Date(obj.a_time).getDate();
+            aux = (day - (todayDate + 1));
+            num = aux < 0 ? aux + 31 : aux;
+            auxMonthDayData[num] += obj.a_amount;
+        });
+
+        let auxYearMonthObjects = [];
+
+        for (let i = 0; i < 12; i++) {
+            if(monthIndex == 12){
+                monthIndex = 0;
+            }
+            auxYearMonthObjects.push({
+                month: monthIndex++,
+                value: 0
+            });
+        }
+
+        yearResp.response.result.forEach( (obj) => {
+            month = new Date(obj.a_time).getMonth();
+            aux = (month - (todayMonth + 1));
+            num = aux < 0 ? aux + 12 : aux;
+            auxYearMonthObjects[num].value += obj.a_amount;
+        });
+
+        console.log("AUX YEAR MONTH");
+        console.log(auxYearMonthObjects);
+
         await this.setState({
-            weekDayValueData:[50, 10, 40, 95, 85, 5, 30],
-            weekDayLabels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            weekDayValueData: auxWeekDayObjects.map(o => o.value),
+            weekDayLabels: auxWeekDayObjects.map(o => weekDayLabelsInfo[o.dow]),
     
-            monthDayValueData:[50, 10, 40, 95, 85, 5, 30, 50, 10, 40, 95, 85, 5, 30 ,50 , 10, 40, 95, 85, 5, 30, 50, 10, 40, 95, 85, 5, 30, 50, 10, 40, 95, 85, 5],
-            monthDayLabels:[],
+            monthDayValueData: auxMonthDayData,
+            monthDayLabels: [],
                 
-            yearMonthValueData:[50, 10, 40, 95, 85, 5, 30, 50, 10, 40, 95, 85],
-            yearMonthLabels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            yearMonthValueData: auxYearMonthObjects.map(o => o.value),
+            yearMonthLabels:auxYearMonthObjects.map(o => yearMonthLabelsInfo[o.month])
         });
 
         await this.recalculateIntervalChartInfo();
-
     }
 
     async fetchSecondGraphData(date){
