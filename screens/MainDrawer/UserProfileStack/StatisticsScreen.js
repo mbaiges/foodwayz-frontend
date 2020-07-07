@@ -665,7 +665,7 @@ class RestaurantStatisticsProfileComponent extends Component {
 
                 <ScrollView>
 
-                    <Card title='Best and least rated foods'>
+                    <Card title='Best and worst rated foods'>
                         <View>
                             <Text2 style={styles.subtitleText}>Best rated</Text2>
                         </View>
