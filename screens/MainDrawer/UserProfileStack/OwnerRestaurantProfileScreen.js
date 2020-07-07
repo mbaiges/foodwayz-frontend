@@ -428,7 +428,7 @@ class OwnerRestaurantProfileComponent extends Component {
                   title={dish.a_title}
                   subtitle={
                     <View flexDirection="row" justifyContent="space-between">
-                      <View>
+                      <View paddingRight={20}>
                         <Text>{dish.a_description}</Text>
                         <Rating imageSize={15} readonly startingValue={dish.a_score}  style={styles.rating}/>
 
