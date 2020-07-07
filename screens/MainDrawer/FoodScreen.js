@@ -93,7 +93,6 @@ class FoodScreenComponent extends Component {
   render() {
 
     const { navigation } = this.props;
-
     return (
       <SafeAreaView style={styles.backgroundContainer}>
         <ScrollView justifyContent='flex-start'>
@@ -143,7 +142,7 @@ class FoodScreenComponent extends Component {
                       style={styles.buttonTag}
                       onPress={() => {}}
                     >
-                      <Text>{tag.a_ingr_name}</Text>
+                      <Text>{tag.a_ingr_name.charAt(0).toUpperCase() + tag.a_ingr_name.slice(1)}</Text>
                     </TouchableOpacity>
                   )
                 }))
@@ -165,7 +164,7 @@ class FoodScreenComponent extends Component {
                       style={styles.buttonTag}
                       onPress={() => {}}
                     >
-                      <Text>{tag.a_char_name}</Text>
+                      <Text>{tag.a_char_name.charAt(0).toUpperCase() + tag.a_char_name.slice(1)}</Text>
                     </TouchableOpacity>
                   )
                 }))

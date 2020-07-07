@@ -202,7 +202,7 @@ class EditProfileAllergiesComponent extends Component {
         optionButtons.push(
             <View key={i}>
                 <CheckBox
-                    title = {this.state.chars[i].a_char_name}
+                    title = {this.state.chars[i].a_char_name.charAt(0).toUpperCase() + this.state.chars[i].a_char_name.slice(1)}
                     checked = {this.state.values[i]}
                     onPress={async () => await this.changeValue(i)}
                 />

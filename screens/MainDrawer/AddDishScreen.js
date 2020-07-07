@@ -694,7 +694,7 @@ class AddDishComponent extends Component {
                               <View>
                                     <TouchableOpacity style={styles.buttonTag}>
                                           <View style={styles.rowItemsContainer}>
-                                              <Text style={styles.tagText}>{ this.state.typeChosen.a_type_name}</Text>
+                                              <Text style={styles.tagText}>{this.state.typeChosen.a_type_name.charAt(0).toUpperCase() + this.state.typeChosen.a_type_name.slice(1)}</Text>
                                               <TouchableOpacity
                                                   onPress={() => this.deleteType()}
                                               >
@@ -743,7 +743,7 @@ class AddDishComponent extends Component {
                                 <View key={idx}>
                                     <TouchableOpacity style={styles.buttonTag}>
                                         <View style={styles.rowItemsContainer}>
-                                            <Text style={styles.tagText}>{ingredient.a_ingr_name}</Text>
+                                            <Text style={styles.tagText}>{ingredient.a_ingr_name.charAt(0).toUpperCase() + ingredient.a_ingr_name.slice(1)}</Text>
                                             <TouchableOpacity
                                                 onPress={() => this.deleteInredient(idx)}
                                             >
@@ -790,7 +790,7 @@ class AddDishComponent extends Component {
                                   <View key={idx}>
                                       <TouchableOpacity style={styles.buttonTag}>
                                           <View style={styles.rowItemsContainer}>
-                                              <Text style={styles.tagText}>{char.a_char_name}</Text>
+                                              <Text style={styles.tagText}>{char.a_char_name.charAt(0).toUpperCase() + char.a_char_name.slice(1)}</Text>
                                               <TouchableOpacity
                                                   onPress={() => this.deleteCharacteristic(idx)}
                                               >
@@ -861,7 +861,7 @@ class AddDishComponent extends Component {
                                               this.setTypesVisible(false);
                                             }}
                                         >
-                                            <Text style={styles.ingredient}>{type.a_type_name}</Text>
+                                            <Text style={styles.ingredient}>{type.a_type_name.charAt(0).toUpperCase() + type.a_type_name.slice(1)}</Text>
                                         </TouchableOpacity>
                                   </View>
                                 );
@@ -946,7 +946,7 @@ class AddDishComponent extends Component {
                                               this.setIngredientsVisible(false);
                                             }}
                                         >
-                                            <Text style={styles.ingredient}>{ingr.a_ingr_name}</Text>
+                                            <Text style={styles.ingredient}>{ingr.a_ingr_name.charAt(0).toUpperCase() + ingr.a_ingr_name.slice(1)}</Text>
                                         </TouchableOpacity>
                                   </View>
                                 );
@@ -1030,7 +1030,7 @@ class AddDishComponent extends Component {
                                               this.setCharacteristicsVisible(false);
                                           }}
                                       >
-                                          <Text style={styles.ingredient}>{char.a_char_name}</Text>
+                                          <Text style={styles.ingredient}>{char.a_char_name.charAt(0).toUpperCase() + char.a_char_name.slice(1)}</Text>
                                       </TouchableOpacity>
                                   </View>
                                 );
