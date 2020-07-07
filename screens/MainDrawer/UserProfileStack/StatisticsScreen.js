@@ -870,7 +870,7 @@ class RestaurantStatisticsProfileComponent extends Component {
                                     <TouchableOpacity
                                         style={styles.button}
                                         onPress={() => { 
-                                            const pushAction = StackActions.push("Premium", {restaurant: this.state.restaurant, updateRestaurantPremium: this.updatePremiumLevel.bind(this)});
+                                            const pushAction = StackActions.push("Premium", {restaurant: this.state.rest, updateRestaurantPremium: this.updatePremiumLevel.bind(this)});
                                             navigation.dispatch(pushAction);
                                             //navigation.navigate("Premium", {restaurant: this.state.restaurant}) 
                                         }}
