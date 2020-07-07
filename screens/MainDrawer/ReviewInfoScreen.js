@@ -16,6 +16,8 @@ import CheckBox from "@react-native-community/checkbox";
 import { FoodApi } from '../../api';
 //import { Constants } from 'expo';
 
+import { Snackbar } from 'react-native-paper';
+
 import FoodCard from "../components/FoodCard.js";
 
 const { width } = Dimensions.get("window");
@@ -30,6 +32,12 @@ class ReviewInfoComponent extends Component {
       food: {},
       rest: {}
     }
+  }
+
+  dismissConnectionSnackBar = () => {
+    this.setState({
+      snackbarConnectionVisible: false
+    });
   }
 
   async fetchInfo() {
@@ -48,7 +56,28 @@ class ReviewInfoComponent extends Component {
   }
 
   async fetchFood(){
-    const resp = FoodApi.get()
+    try {
+      const resp = FoodApi.get()
+      switch(resp.status) {
+        case 200:
+ 
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
+
+
+
   }
 
   async componentDidMount() {
@@ -108,6 +137,14 @@ class ReviewInfoComponent extends Component {
           </TouchableOpacity>
     
             </ScrollView>
+        <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+        >
+             <Text style={styles.textSnack}>No internet connection.</Text>
+        </Snackbar>
         </SafeAreaView>)
     );
   };
@@ -260,7 +297,19 @@ const styles = StyleSheet.create({
       loading:{
         flex: 1,
         marginTop:100,
-      }
+      },
+
+      textSnack:{
+        color: 'white',
+        fontSize: 20,
+        fontWeight: 'bold',
+        paddingBottom: 5,
+      },
+    
+      snackBar:{
+        backgroundColor: "#787777",
+        height:70,
+      },
     
 });
 

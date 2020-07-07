@@ -14,6 +14,8 @@ import { Image, ListItem, Button, Icon, Input, Rating } from 'react-native-eleme
 
 import FoodCard from "../../components/FoodCard";
 
+import { Snackbar } from 'react-native-paper';
+
 import { UserContext } from '../../../context/UserContext';
 
 import { SearchApi, UserApi, UserHasCharacteristicApi } from '../../../api';
@@ -29,23 +31,62 @@ class HomeScreenComponent extends Component {
     }
   }
 
+  dismissConnectionSnackBar = () => {
+    this.setState({
+      snackbarConnectionVisible: false
+    });
+  }
 
   async fetchUser() {
-    const resp = await UserApi.getMe();
-    this.setState({ user: resp.response.result });
-    console.log(resp);
+    try {
+      const resp = await UserApi.getMe();
+      switch(resp.status) {
+        case 200:
+          this.setState({ user: resp.response.result });
+          console.log(resp);
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
 
-    const resp2 = await UserHasCharacteristicApi.getCharactersticsByUser(this.state.user.a_user_id);
-    console.log(resp2);
 
-    let aux = []
-    resp2.response.result.forEach(char => {
-      aux.push(char.a_char_id);
-    });
+    try {
+      const resp2 = await UserHasCharacteristicApi.getCharactersticsByUser(this.state.user.a_user_id);
+      switch(resp.status) {
+        case 200:
+          let aux = []
+          resp2.response.result.forEach(char => {
+            aux.push(char.a_char_id);
+          });
+      
+          this.setState({ userChars: aux })
+      
+          console.log(this.state.userChars)
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
 
-    this.setState({ userChars: aux })
-
-    console.log(this.state.userChars)
   }
 
   async fetchFoods() {
@@ -59,10 +100,27 @@ class HomeScreenComponent extends Component {
       sort_by: "most_reviews"
     };
 
-    const resp = await SearchApi.searchFoods(queryBody);
-    this.setState({ foods: resp.response.result });
+    try {
+      const resp = await SearchApi.searchFoods(queryBody);
+      switch(resp.status) {
+        case 200:
+          this.setState({ foods: resp.response.result });
+          console.log(resp);
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
 
-    console.log(resp);
   }
 
   async componentDidMount() {
@@ -114,6 +172,14 @@ class HomeScreenComponent extends Component {
               }
             </ScrollView>
           </View>
+          <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+        >
+             <Text style={styles.textSnack}>No internet connection.</Text>
+        </Snackbar>
         </ScrollView>
       </SafeAreaView>)
       )
@@ -194,5 +260,16 @@ const styles = StyleSheet.create({
   loading:{
     flex: 1,
     marginTop:100,
-  }
+  },
+  textSnack:{
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingBottom: 5,
+  },
+
+  snackBar:{
+    backgroundColor: "#787777",
+    height:70,
+  },
 });

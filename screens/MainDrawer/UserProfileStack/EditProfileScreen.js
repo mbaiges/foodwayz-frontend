@@ -10,6 +10,8 @@ import * as firebase from 'firebase';
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../../../constants/Colors";
 
+import { Snackbar } from 'react-native-paper';
+
 class EditProfileComponent extends Component {
 
   constructor(){
@@ -28,13 +30,37 @@ class EditProfileComponent extends Component {
     const { user } = route.params;
 
     console.log('fetching user');
-    //const resp = await UserApi.getMe();
-    this.setState({
-      user: user,
-      date: user.a_birthdate ? new Date(user.a_birthdate) : new Date()
-    })
-    console.log('done fetching user');
-    console.log(this.state.user);
+
+    try {
+      const resp = await UserApi.getMe();
+      switch(resp.status) {
+        case 200:
+          this.setState({
+            user: resp.response.result
+          })
+          this.setState({
+            date: this.state.user.a_birthdate ? new Date(this.state.user.a_birthdate) : new Date()
+          })
+          console.log('done fetching user');
+          console.log(this.state.user);
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
+
+
+
+    
   }
 
   async updateUser(){
@@ -126,6 +152,12 @@ class EditProfileComponent extends Component {
           a_gender: text
       }
     }))
+  }
+
+  dismissConnectionSnackBar = () => {
+    this.setState({
+      snackbarConnectionVisible: false
+    });
   }
 
   handleDateChanged(timeStamp){
@@ -299,6 +331,16 @@ class EditProfileComponent extends Component {
               <Text style={styles.buttonText}>SET FOOD PREFERENCES</Text>
           </TouchableOpacity>
         </View>
+
+
+        <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+        >
+             <Text style={styles.textSnack}>No internet connection.</Text>
+        </Snackbar>
 
       </ScrollView>
       
@@ -523,5 +565,18 @@ const styles = StyleSheet.create({
   blackButtonText:{
     color: "black",
       
+  },
+
+
+  textSnack:{
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingBottom: 5,
+  },
+
+  snackBar:{
+    backgroundColor: "#787777",
+    height:70,
   },
   });

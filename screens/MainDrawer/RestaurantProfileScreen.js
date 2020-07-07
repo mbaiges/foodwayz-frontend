@@ -13,7 +13,7 @@ import {
   ActivityIndicator
 } from "react-native";
 import { RestaurantApi, FoodApi, ViewsApi } from "../../api";
-
+import { Snackbar } from 'react-native-paper';
 
 //import { Constants } from 'expo';
 
@@ -31,6 +31,11 @@ class RestaurantProfileComponent extends Component {
     }
   }
 
+  dismissConnectionSnackBar = () => {
+    this.setState({
+      snackbarConnectionVisible: false
+    });
+  }
 
   async fetchRestaurant() {
     const { route } = this.props;
@@ -43,25 +48,65 @@ class RestaurantProfileComponent extends Component {
 
   async fetchImages() {
     const aux = this.state.restaurant;
-    const resp = await RestaurantApi.getImages(aux.a_rest_id);
-    
-    console.log("-----------------------------------------------------------------------------------------");
-    console.log(resp);
-    
+    try {
+      const resp = await RestaurantApi.getImages(aux.a_rest_id);
+      switch(resp.status) {
+        case 200:
+          console.log("-----------------------------------------------------------------------------------------");
+          console.log(resp);
+          
+      
+          this.setState({
+            images: resp.response.result,
+          })
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
 
-    this.setState({
-      images: resp.response.result,
-    })
+
+
+    
+    
+    
   }
 
   async fetchDishes() {
     const aux = this.state.restaurant;
-    const resp = await RestaurantApi.getFoods(aux.a_rest_id);
-    console.log("-----------------------------------------------------------------------------------------");
-    console.log(resp);
-    this.setState({
-      dishes: resp.response.result,
-    })
+    try {
+      const resp = await RestaurantApi.getFoods(aux.a_rest_id);
+      switch(resp.status) {
+        case 200:
+          console.log("-----------------------------------------------------------------------------------------");
+          console.log(resp);
+          this.setState({
+            dishes: resp.response.result,
+          })
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
+  
   }
 
   chechPolularDishes(){
@@ -81,11 +126,28 @@ class RestaurantProfileComponent extends Component {
     await this.fetchImages();
     await this.fetchDishes();
     this.chechPolularDishes();
-    const resp = await ViewsApi.registerRestaurantView(this.state.restaurant.a_rest_id);
-    console.log(resp);
-    this.setState({
-      activityIndicator: false
-    })
+    try {
+      const resp = await ViewsApi.registerRestaurantView(this.state.restaurant.a_rest_id);
+      switch(resp.status) {
+        case 200:
+          console.log(resp);
+          this.setState({
+            activityIndicator: false
+          })
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
   }
 
 
@@ -190,6 +252,14 @@ class RestaurantProfileComponent extends Component {
         </View>
 
         </ScrollView>
+        <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+        >
+             <Text style={styles.textSnack}>No internet connection.</Text>
+        </Snackbar>
       </SafeAreaView>)
     );
   }
@@ -358,7 +428,19 @@ const styles = StyleSheet.create({
   loading:{
     flex: 1,
     marginTop:100,
-  }
+  },
+
+  textSnack:{
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingBottom: 5,
+  },
+
+  snackBar:{
+    backgroundColor: "#787777",
+    height:70,
+  },
 
 
 

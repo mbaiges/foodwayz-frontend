@@ -17,6 +17,8 @@ import {
   ActivityIndicator
 } from "react-native";
 
+import { Snackbar } from 'react-native-paper';
+
 import { UserApi, ReviewApi, RestaurantApi, Owns, OwnsApi } from '../../../api';
 
 const { width } = Dimensions.get("window");
@@ -33,39 +35,97 @@ class UserProfileComponent extends Component {
     }
   }
 
+  dismissConnectionSnackBar = () => {
+    this.setState({
+      snackbarConnectionVisible: false
+    });
+  }
+
   updateUser(user) {
     this.setState({ user });
   }
 
   async fetchUser() {
     console.log('fetching user');
-    const resp = await UserApi.getMe();
-    let user = resp.response.result;
-    if(!user.a_image_url || user.a_image_url == null){
-      user.a_image_url = "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Funknown.png?alt=media&token=7bec299d-aefa-486e-8aa1-6f11c874ee2f"
+    try {
+      const resp = await UserApi.getMe();
+      switch(resp.status) {
+        case 200:
+          let user = resp.response.result;
+          if(!user.a_image_url || user.a_image_url == null){
+            user.a_image_url = "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Funknown.png?alt=media&token=7bec299d-aefa-486e-8aa1-6f11c874ee2f"
+          }
+          this.setState({
+            user: resp.response.result
+          })
+      
+          console.log('done fetching user');
+          console.log("User is: " + this.state.user);
+          console.log(JSON.stringify(resp.response.result));
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
     }
-    this.setState({
-      user: resp.response.result
-    })
-
-    console.log('done fetching user');
-    console.log("User is: " + this.state.user);
-    console.log(JSON.stringify(resp.response.result));
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
   }
 
   async fetchReviews() {
-    const resp = await ReviewApi.getReviewsByUser(this.state.user.a_user_id);
-    this.setState({
-      reviews: resp.response.result
-    })
-    console.log(resp);
+    try {
+      const resp = await ReviewApi.getReviewsByUser(this.state.user.a_user_id);
+      switch(resp.status) {
+        case 200:
+          this.setState({
+            reviews: resp.response.result
+          })
+          console.log(resp);
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
   }
 
   async fetchRestaurants() { 
-    const resp = await OwnsApi.getMyRestaurants();
-    this.setState({
-      restaurants: resp.response.result
-    })
+    try {
+      const resp = await OwnsApi.getMyRestaurants();
+      switch(resp.status) {
+        case 200:
+          this.setState({
+            restaurants: resp.response.result
+          })
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
+
   }
 
   async componentDidMount() {
@@ -268,6 +328,14 @@ class UserProfileComponent extends Component {
             </TouchableOpacity>
 
           </View>
+          <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+        >
+             <Text style={styles.textSnack}>No internet connection.</Text>
+        </Snackbar>
         </ScrollView>
       </SafeAreaView>)
     );
@@ -464,6 +532,19 @@ const styles = StyleSheet.create({
   loading:{
     flex: 1,
     marginTop:100,
-  }
+  },
+
+  textSnack:{
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingBottom: 5,
+  },
+
+  snackBar:{
+    backgroundColor: "#787777",
+    height:70,
+  },
+
 
 });

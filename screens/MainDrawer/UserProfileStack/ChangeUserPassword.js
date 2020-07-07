@@ -60,28 +60,43 @@ class EditProfilePasswordComponent extends Component {
         activityIndicator: true
       })
       if(this.state.newPass == this.state.newPass2){
-        const resp = await AuthApi.changePassword(this.state.oldPass, this.state.newPass);
-        console.log(resp)
-
-        switch(resp.code){
-          case "password-changed":
-            console.log("password changed")
-            navigation.goBack();
-          break;
-          case "invalid-auth":
-            console.log("incorrect old password");
-            this.setState({
-              snackbarWrongPassVisible: true
-            });
-          break;
-          default : 
-            console.log("an error ocurred");
-          break;
-
+        try {
+          const resp = await AuthApi.changePassword(this.state.oldPass, this.state.newPass);
+          switch(resp.status) {
+            case 200:
+              switch(resp.code){
+                case "password-changed":
+                  console.log("password changed")
+                  navigation.goBack();
+                break;
+                case "invalid-auth":
+                  console.log("incorrect old password");
+                  this.setState({
+                    snackbarWrongPassVisible: true
+                  });
+                break;
+                default : 
+                  console.log("an error ocurred");
+                break;
+      
+              }
+              this.setState({
+                activityIndicator: true
+              })
+              break;
+          default:
+            console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+            // Show snackbar ?
+            break;
+          }
         }
-        this.setState({
-          activityIndicator: true
-        })
+        catch (error) {
+          console.log(error);
+          this.setState({
+            snackbarConnectionVisible: true
+          });
+          // Show snackbar (Internet connecion, maybe?)
+        }
 
       }else{  
         this.setState({
@@ -95,6 +110,12 @@ class EditProfilePasswordComponent extends Component {
       });
       console.log("fill fields")
     }
+  }
+
+  dismissConnectionSnackBar = () => {
+    this.setState({
+      snackbarConnectionVisible: false
+    });
   }
   
   render() {
@@ -179,6 +200,14 @@ class EditProfilePasswordComponent extends Component {
         >
               <Text style={styles.textSnack}>Wrong password.</Text>
         </Snackbar>
+        <Snackbar
+                  style={styles.snackBar}
+                  duration={4000}
+                  visible={this.state.snackbarConnectionVisible}
+                  onDismiss={this.dismissConnectionSnackBar}
+                >
+                    <Text style={styles.textSnack}>No internet connection.</Text>
+                </Snackbar>
         </View>  )
 
 

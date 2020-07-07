@@ -61,6 +61,8 @@ class AddDishComponent extends Component {
 
           dish: {},
           rest: {},
+
+          lastImageClicked: {},
           
           filterTimer: undefined,
 
@@ -68,7 +70,11 @@ class AddDishComponent extends Component {
 
   }
 
-
+  dismissConnectionSnackBar = () => {
+    this.setState({
+      snackbarConnectionVisible: false
+    });
+  }
 
   dismissIngrSnackBar = () => {
     this.setState({
@@ -85,8 +91,25 @@ class AddDishComponent extends Component {
 
   async sendNewTypeMail(){
     if(this.state.newTypeRequest != ""){
-      const resp = await ContactUsApi.typeRequest(this.state.newTypeRequest);
-      console.log(resp);
+      try {
+        const resp = await ContactUsApi.typeRequest(this.state.newTypeRequest);
+        switch(resp.status) {
+          case 200:
+            // Do what its supposed to
+            break;
+        default:
+          console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+          // Show snackbar ?
+          break;
+        }
+      }
+      catch (error) {
+        console.log(error);
+        this.setState({
+          snackbarConnectionVisible: true
+        });
+        // Show snackbar (Internet connecion, maybe?)
+      }
     }else{
       console.log("fill Type");
     }
@@ -94,8 +117,26 @@ class AddDishComponent extends Component {
 
   async sendNewIngrMail(){
     if(this.state.newTypeRequest != ""){
-      const resp = await ContactUsApi.ingredientRequest(this.state.newTypeRequest);
-      console.log(resp);
+      try {
+        const resp = await ContactUsApi.ingredientRequest(this.state.newTypeRequest);
+        switch(resp.status) {
+          case 200:
+            // Do what its supposed to
+            break;
+        default:
+          console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+          // Show snackbar ?
+          break;
+        }
+      }
+      catch (error) {
+        console.log(error);
+        this.setState({
+          snackbarConnectionVisible: true
+        });
+        // Show snackbar (Internet connecion, maybe?)
+      }
+
     }else{
       this.setState({
         snackbarIngrVisible: false
@@ -106,8 +147,25 @@ class AddDishComponent extends Component {
 
   async sendNewCharMail(){
     if(this.state.newTypeRequest != ""){
-      const resp = await ContactUsApi.characteristicRequest(this.state.newTypeRequest);
-      console.log(resp);
+      try {
+        const resp = await ContactUsApi.characteristicRequest(this.state.newTypeRequest);
+        switch(resp.status) {
+          case 200:
+            // Do what its supposed to
+            break;
+        default:
+          console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+          // Show snackbar ?
+          break;
+        }
+      }
+      catch (error) {
+        console.log(error);
+        this.setState({
+          snackbarConnectionVisible: true
+        });
+        // Show snackbar (Internet connecion, maybe?)
+      }
     }else{
       this.setState({
         snackbarCharVisible: true
@@ -212,23 +270,50 @@ class AddDishComponent extends Component {
     let auxFilterQueryBody = {
       raw_input: input
     }
-    const resp = await SearchApi.searchTypes(auxFilterQueryBody)
-    if(resp.status == 200){
-      this.setState({ allTypes: resp.response.result });
-    }else{
-      console.log("error");
+    try {
+      const resp = await SearchApi.searchTypes(auxFilterQueryBody)
+      switch(resp.status) {
+        case 200:
+          this.setState({ allTypes: resp.response.result });
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
     }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
+
   }
 
   async filterIngrQuery(input){
     let auxFilterQueryBody = {
       raw_input: input
     }
-    const resp = await SearchApi.searchIngredients(auxFilterQueryBody)
-    if(resp.status == 200){
-      this.setState({ allIngredients: resp.response.result });
-    }else{
-      console.log("error");
+    try {
+      const resp = await SearchApi.searchIngredients(auxFilterQueryBody)
+      switch(resp.status) {
+        case 200:
+          this.setState({ allIngredients: resp.response.result });
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
     }
   }
 
@@ -236,11 +321,24 @@ class AddDishComponent extends Component {
     let auxFilterQueryBody = {
       raw_input: input
     }
-    const resp = await SearchApi.searchCharacteristics(auxFilterQueryBody)
-    if(resp.status == 200){
-      this.setState({ allCharacteristics: resp.response.result });
-    }else{
-      console.log("error");
+    try {
+      const resp = await SearchApi.searchCharacteristics(auxFilterQueryBody)
+      switch(resp.status) {
+        case 200:
+          this.setState({ allCharacteristics: resp.response.result });
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
     }
   }
 
@@ -306,20 +404,35 @@ class AddDishComponent extends Component {
             a_rest_id: this.state.rest.a_rest_id,
             a_image_url: undefined
           }
-              
-          const resp = await FoodApi.add(dish);
-          console.log(resp);
 
-          if(resp.status == 200){
-            await this.uploadImage(resp.response.result);  
-            await this.uploadIngredients(resp.response.result);
-            await this.uploadCharacteristics(resp.response.result); 
+          try {
+            const resp = await FoodApi.add(dish);
+            switch(resp.status) {
+              case 200:
+                await this.uploadImage(resp.response.result);  
+                await this.uploadIngredients(resp.response.result);
+                await this.uploadCharacteristics(resp.response.result); 
+                this.setState({
+                  activityIndicator: false
+                })
+                break;
+            default:
+
+                navigation.goBack();
+              console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+              // Show snackbar ?
+              break;
+            }
           }
-          this.setState({
-            activityIndicator: false
-          })
+          catch (error) {
+            console.log(error);
+            this.setState({
+              snackbarConnectionVisible: true
+            });
+            // Show snackbar (Internet connecion, maybe?)
+          }
 
-          navigation.goBack();
+
 
       }else{
         this.setState({
@@ -346,39 +459,155 @@ class AddDishComponent extends Component {
       console.log("---------------------------------------")
       console.log("---------------------------------------")
 
-      const resp = await FoodApi.modify(dish);
+      try {
+        const resp = await FoodApi.modify(dish);
+        switch(resp.status) {
+          case 200:
+   
+            break;
+        default:
+          console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+          // Show snackbar ?
+          break;
+        }
+      }
+      catch (error) {
+        console.log(error);
+        this.setState({
+          snackbarConnectionVisible: true
+        });
+        // Show snackbar (Internet connecion, maybe?)
+      }
+
+      
       console.log(resp);
   }
 
   async uploadCharacteristics(food){
-    const resp = await FoodHasCharacteristicApi.addCharacteristicsToFood(food.a_food_id, this.state.characteristicsChosen);
-    console.log(resp);
+    try {
+      const resp = await FoodHasCharacteristicApi.addCharacteristicsToFood(food.a_food_id, this.state.characteristicsChosen);
+      switch(resp.status) {
+        case 200:
+ 
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
+
+
   }
 
   async uploadIngredients(food){
-    const resp = await FoodHasIngredientApi.addIngredientsToFood(food.a_food_id, this.state.ingredientsChosen);
-    console.log(resp);
+    try {
+      const resp = await FoodHasIngredientApi.addIngredientsToFood(food.a_food_id, this.state.ingredientsChosen);
+      switch(resp.status) {
+        case 200:
+ 
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
+
+
+   
   }
 
   //------------------------------FETCHS------------------------------------------------
 
   async fetchTypes(){
+    try {
+      
     const resp = await TypeApi.getAll();
-    this.setState({ allTypes: resp.response.result });
-    console.log(resp);
+      switch(resp.status) {
+        case 200:
+          this.setState({ allTypes: resp.response.result });
+          break;
+      default:
+        
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
+
   }
 
   async fetchIngredients(){
-    const resp = await IngredientApi.getAll();
-    this.setState({ allIngredients: resp.response.result });
-    console.log(resp);
+    try {
+      
+      const resp = await IngredientApi.getAll();
+        switch(resp.status) {
+          case 200:
+            this.setState({ allIngredients: resp.response.result });
+            break;
+        default:
+         
+          console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+          // Show snackbar ?
+          break;
+        }
+      }
+      catch (error) {
+        console.log(error);
+        this.setState({
+          snackbarConnectionVisible: true
+        });
+        // Show snackbar (Internet connecion, maybe?)
+      }
+
   }
 
   async fetchCharacteristics(){
+    try{
     const resp = await CharacteristicApi.getAll();
-    this.setState({ allCharacteristics: resp.response.result });
-    console.log(resp);
+    switch(resp.status) {
+      case 200:
+        this.setState({ allCharacteristics: resp.response.result });
+        break;
+    default:
+     
+      console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+      // Show snackbar ?
+      break;
+    }
   }
+  catch (error) {
+    console.log(error);
+    this.setState({
+      snackbarConnectionVisible: true
+    });
+    // Show snackbar (Internet connecion, maybe?)
+  }
+}
+
+
 
   async fetchRest(){
     const { route } = this.props;
@@ -907,6 +1136,15 @@ class AddDishComponent extends Component {
               onDismiss={this.dismissIngrSnackBar}
         >
              <Text style={styles.textSnack}> Please fill ingredient name.</Text>
+        </Snackbar>
+
+        <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+        >
+             <Text style={styles.textSnack}>No internet connection.</Text>
         </Snackbar>
 
         <Snackbar

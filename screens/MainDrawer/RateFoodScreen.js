@@ -6,6 +6,8 @@ import { ReviewApi, UserApi } from '../../api';
 
 const { width } = Dimensions.get("window");
 
+import { Snackbar } from 'react-native-paper';
+
 class RateFoodComponent extends Component {
 
     constructor() {
@@ -19,6 +21,12 @@ class RateFoodComponent extends Component {
             food: {}
         };
     }
+
+    dismissConnectionSnackBar = () => {
+        this.setState({
+          snackbarConnectionVisible: false
+        });
+      }
 
     async uploadReview(){
         this.setState({
@@ -37,24 +45,61 @@ class RateFoodComponent extends Component {
             a_user_id: this.state.user.a_user_id
         }
 
-        const resp = await ReviewApi.add(review);
-        console.log(resp);
+        try {
+            const resp = await ReviewApi.add(review);
+            switch(resp.status) {
+              case 200:
+                this.setState({
+                    activityIndicator: false
+                  })
+                
+                navigation.goBack();
+                break;
+            default:
+              console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+              // Show snackbar ?
+              break;
+            }
+          }
+          catch (error) {
+            console.log(error);
+            this.setState({
+              snackbarConnectionVisible: true
+            });
+            // Show snackbar (Internet connecion, maybe?)
+          }
 
-        this.setState({
-            activityIndicator: false
-          })
-        
-        navigation.goBack();
+
+
     }
 
     async fetchUser() {
-        console.log('fetching user');
-        const resp = await UserApi.getMe();
-        this.setState({
-          user: resp.response.result
-        })
-        console.log('done fetching user');
-        console.log("User is: " + resp.response.result);
+
+        try {
+            const resp = await UserApi.getMe();
+            switch(resp.status) {
+              case 200:
+                this.setState({
+                    user: resp.response.result
+                  })
+                  console.log('done fetching user');
+                  console.log("User is: " + resp.response.result);
+                break;
+            default:
+              console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+              // Show snackbar ?
+              break;
+            }
+          }
+          catch (error) {
+            console.log(error);
+            this.setState({
+              snackbarConnectionVisible: true
+            });
+            // Show snackbar (Internet connecion, maybe?)
+          }
+
+
     }
 
     async fetchFood(){
@@ -152,6 +197,14 @@ class RateFoodComponent extends Component {
                     </TouchableOpacity>
                 </View>
                 </ScrollView>
+                <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+        >
+             <Text style={styles.textSnack}>No internet connection.</Text>
+        </Snackbar>
             </SafeAreaView>)
         );
     };
@@ -232,11 +285,24 @@ const styles = StyleSheet.create({
         height: 40,
         borderColor: "#FC987E",
         borderWidth: 1,
+        paddingBottom:15,
       },
 
       loading:{
         flex: 1,
         marginTop:100,
-      }
+      },
+
+      textSnack:{
+        color: 'white',
+        fontSize: 20,
+        fontWeight: 'bold',
+        paddingBottom: 5,
+      },
+    
+      snackBar:{
+        backgroundColor: "#787777",
+        height:70,
+      },
 });
 

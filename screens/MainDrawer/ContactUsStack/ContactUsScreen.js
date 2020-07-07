@@ -37,8 +37,32 @@ class ContactUs extends Component {
           reason: this.state.type,
           body: this.state.comment,
         }
-        const resp = await ContactUsApi.customEmail(email)
-        console.log(resp);
+        try {
+          const resp = await ContactUsApi.customEmail(email)
+          switch(resp.status) {
+            case 200:
+     
+              break;
+          default:
+            console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+            // Show snackbar ?
+            break;
+          }
+        }
+        catch (error) {
+          console.log(error);
+          this.setState({
+            snackbarConnectionVisible: true
+          });
+          // Show snackbar (Internet connecion, maybe?)
+        }
+
+      }
+
+      dismissConnectionSnackBar = () => {
+        this.setState({
+          snackbarConnectionVisible: false
+        });
       }
 
       dismissFieldsSnackBar = () => {
@@ -108,6 +132,15 @@ class ContactUs extends Component {
                  
                 </TouchableOpacity>
             </View>
+               
+      <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+        >
+             <Text style={styles.textSnack}>No internet connection.</Text>
+        </Snackbar>
             </ScrollView>
         </SafeAreaView>
     );
@@ -203,7 +236,17 @@ const styles = StyleSheet.create({
       marginBottom:15
     },
     
+  textSnack:{
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingBottom: 5,
+  },
 
+  snackBar:{
+    backgroundColor: "#787777",
+    height:70,
+  },
     
 });
 

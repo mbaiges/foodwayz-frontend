@@ -13,6 +13,8 @@ import {
   Alert
 } from "react-native";
 
+import { Snackbar } from 'react-native-paper';
+
 import { Image, ListItem, Icon, Input, Rating } from 'react-native-elements';
 
 import { ViewsApi } from '../../api';
@@ -50,10 +52,34 @@ class FoodScreenComponent extends Component {
     })
   }
 
+  dismissConnectionSnackBar = () => {
+    this.setState({
+      snackbarConnectionVisible: false
+    });
+  }
+
   async componentDidMount() {
     await this.fetchFood();
-    const resp = await ViewsApi.registerFoodView(this.state.food.a_food_id);
-    console.log(resp);
+    try {
+      const resp = await ViewsApi.registerFoodView(this.state.food.a_food_id);
+      switch(resp.status) {
+        case 200:
+ 
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
+
   }
 
   render() {
@@ -217,6 +243,15 @@ class FoodScreenComponent extends Component {
 
         </ScrollView>
 
+        <Snackbar
+              style={styles.snackBar}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+        >
+             <Text style={styles.textSnack}>No internet connection.</Text>
+        </Snackbar>
+
       </SafeAreaView>
     );
   }
@@ -320,6 +355,18 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
     paddingRight: 20,
 
+  },
+
+  textSnack:{
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingBottom: 5,
+  },
+
+  snackBar:{
+    backgroundColor: "#787777",
+    height:70,
   },
 
 
