@@ -25,7 +25,7 @@ class ContactUs extends Component {
         super();
     
         this.state = {
-          type: "",
+          type: "suggestion",
           comment: "",
           selectedIndex: 1
         };
@@ -33,12 +33,18 @@ class ContactUs extends Component {
       }
 
       async sendMail(){
+        if()
         let email = {
           reason: this.state.type,
           body: this.state.comment,
         }
+        //console.log('asd')
+        //console.log(email);
         const resp = await ContactUsApi.customEmail(email)
         console.log(resp);
+        if(resp.status == 200){
+          console.log("Email Sent")
+        }
       }
 
       dismissFieldsSnackBar = () => {
@@ -47,14 +53,16 @@ class ContactUs extends Component {
         });
       }
 
-      updateIndex (selected) {
+      async updateIndex (selected) {
         this.setState({selectedIndex: selected})
         if(selected == 0)
           this.setState({type: "comment"})
         else if(selected == 1)
-          this.setState({type: "suggestion"})
+          this.setState({type: "suggestion"});
         else if(selected == 2)
-          this.setState({type: "complaint"})
+          this.setState({type: "complaint"});
+        
+        await console.log(this.state.type);
       }
       
     
@@ -67,12 +75,18 @@ class ContactUs extends Component {
         <SafeAreaView style={styles.backgroundContainer}>
           <ScrollView>
             <Text style={styles.logoText}>Contact us</Text>
+
+            {/* <Image
+              style={styles.logoImage}
+              source={require("../../assets/images/logo.png")}
+            /> */}
+
             <View style={styles.inputBoxes}></View>
 
             <Text style={styles.subtitle}>Why you want to contact us?</Text>
 
             <ButtonGroup
-                onPress={this.updateIndex}
+                onPress={ async(index) => await this.updateIndex(index) }
                 selectedIndex={this.state.selectedIndex}
                 buttons={buttons}
                 containerStyle={styles.opacities}
@@ -94,15 +108,15 @@ class ContactUs extends Component {
             <View style={styles.buttons}>
                 <TouchableOpacity
                     style={styles.saveButton}
+                    onPress={async() => {
+                      await this.sendMail();
+                      navigation.navigate("Home");
+                    }}
                 >
                     <Text style={styles.save}>Send</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.cancelButton}
-                    onPress={async() => {
-                      await this.sendMail();
-                      navigation.navigate("Home");
-                    }}
                 >
                     <Text style={styles.cancel}>Cancel</Text>
                  
