@@ -34,20 +34,7 @@ export function validateSignupFields({
       alert("Please repeat password");
       return false;
     }
-  
-    /*
-    ^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
-      └─────┬────┘└───┬──┘└─────┬─────┘└─────┬─────┘ └───┬───┘
-            │         │         │            │           no _ or . at the end
-            │         │         │            │
-            │         │         │            allowed characters
-            │         │         │
-            │         │         no __ or _. or ._ or .. inside
-            │         │
-            │         no _ or . at the beginning
-            │
-            username is 8-20 characters long
-    */
+
     if (!validateUsername(username)) {
       alert("Please enter a valid username");
       return false;
@@ -77,19 +64,6 @@ export function validateSigninFields({ email, password }) {
       return false;
     }
 
-    /*
-    ^(?=.{5,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
-      └─────┬────┘└───┬──┘└─────┬─────┘└─────┬─────┘ └───┬───┘
-            │         │         │            │           no _ or . at the end
-            │         │         │            │
-            │         │         │            allowed characters
-            │         │         │
-            │         │         no __ or _. or ._ or .. inside
-            │         │
-            │         no _ or . at the beginning
-            │
-            username is 5-20 characters long
-    */
     if (!validateEmail(email)) {
       alert("Please enter a valid email");
       return false;
