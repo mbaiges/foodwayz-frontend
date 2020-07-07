@@ -49,7 +49,8 @@ class EditProfileAllergiesComponent extends Component {
    
             break;
         default:
-          console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+          console.log(`Status Received: ${resp.status} --->`);
+          console.log(`${resp.response}`);
           // Show snackbar ?
           break;
         }
@@ -71,7 +72,8 @@ class EditProfileAllergiesComponent extends Component {
    
             break;
         default:
-          console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+          console.log(`Status Received: ${resp.status} --->`);
+          console.log(`${resp.response}`);
           // Show snackbar ?
           break;
         }
@@ -107,7 +109,8 @@ class EditProfileAllergiesComponent extends Component {
           }
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -133,7 +136,8 @@ class EditProfileAllergiesComponent extends Component {
           } 
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -159,7 +163,8 @@ class EditProfileAllergiesComponent extends Component {
           })
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }

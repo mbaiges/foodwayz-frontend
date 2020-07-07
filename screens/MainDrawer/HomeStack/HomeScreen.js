@@ -46,7 +46,8 @@ class HomeScreenComponent extends Component {
           console.log(resp);
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -74,7 +75,8 @@ class HomeScreenComponent extends Component {
           console.log(this.state.userChars)
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -108,7 +110,8 @@ class HomeScreenComponent extends Component {
           console.log(resp);
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }

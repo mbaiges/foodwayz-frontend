@@ -31,7 +31,7 @@ class PremiumComponent extends Component {
      }
     
     async uploadPrimium(){
-      const { navigation } = this.props;
+      const { route, navigation } = this.props;
 
       if(this.state.chosenPlanIndex){
         try {
@@ -42,7 +42,8 @@ class PremiumComponent extends Component {
               navigation.goBack();
               break;
           default:
-            console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+            console.log(`Status Received: ${resp.status} --->`);
+            console.log(`${resp.response}`);
             // Show snackbar ?
             break;
           }

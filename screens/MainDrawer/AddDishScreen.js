@@ -98,7 +98,8 @@ class AddDishComponent extends Component {
             // Do what its supposed to
             break;
         default:
-          console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+          console.log(`Status Received: ${resp.status} --->`);
+          console.log(`${resp.response}`);
           // Show snackbar ?
           break;
         }
@@ -124,7 +125,8 @@ class AddDishComponent extends Component {
             // Do what its supposed to
             break;
         default:
-          console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+          console.log(`Status Received: ${resp.status} --->`);
+          console.log(`${resp.response}`);
           // Show snackbar ?
           break;
         }
@@ -154,7 +156,8 @@ class AddDishComponent extends Component {
             // Do what its supposed to
             break;
         default:
-          console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+          console.log(`Status Received: ${resp.status} --->`);
+          console.log(`${resp.response}`);
           // Show snackbar ?
           break;
         }
@@ -277,7 +280,8 @@ class AddDishComponent extends Component {
           this.setState({ allTypes: resp.response.result });
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -303,7 +307,8 @@ class AddDishComponent extends Component {
           this.setState({ allIngredients: resp.response.result });
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -328,7 +333,8 @@ class AddDishComponent extends Component {
           this.setState({ allCharacteristics: resp.response.result });
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -421,7 +427,8 @@ class AddDishComponent extends Component {
                 navigation.goBack();
                 break;
             default:
-              console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+              console.log(`Status Received: ${resp.status} --->`);
+              console.log(`${resp.response}`);
               // Show snackbar ?
               break;
             }
@@ -468,7 +475,8 @@ class AddDishComponent extends Component {
    
             break;
         default:
-          console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+          console.log(`Status Received: ${resp.status} --->`);
+          console.log(`${resp.response}`);
           // Show snackbar ?
           break;
         }
@@ -493,7 +501,8 @@ class AddDishComponent extends Component {
  
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -517,7 +526,8 @@ class AddDishComponent extends Component {
  
           break;
       default:
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -546,7 +556,8 @@ class AddDishComponent extends Component {
           break;
       default:
         
-        console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
         // Show snackbar ?
         break;
       }
@@ -571,7 +582,8 @@ class AddDishComponent extends Component {
             break;
         default:
          
-          console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+          console.log(`Status Received: ${resp.status} --->`);
+          console.log(`${resp.response}`);
           // Show snackbar ?
           break;
         }
@@ -595,7 +607,8 @@ class AddDishComponent extends Component {
         break;
     default:
      
-      console.log(`Status Received: ${resp.status} --> ${resp.response}`);
+      console.log(`Status Received: ${resp.status} --->`);
+      console.log(`${resp.response}`);
       // Show snackbar ?
       break;
     }
