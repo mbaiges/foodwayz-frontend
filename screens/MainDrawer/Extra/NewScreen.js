@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, Button, View, SafeAreaView } from "react-native";
 
-const OtherScreen = ({ navigation }) => {
+export default function  OtherScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.textScreen}>New Screen</Text>
@@ -29,5 +29,3 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
-
-export default OtherScreen;

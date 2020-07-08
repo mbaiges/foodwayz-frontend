@@ -12,7 +12,6 @@ import {
   Dimensions,
   ActivityIndicator
 } from "react-native";
-import CheckBox from "@react-native-community/checkbox";
 import { Snackbar } from 'react-native-paper';
 import { ContactUsApi } from '../../../api';
 
@@ -20,7 +19,7 @@ import { ContactUsApi } from '../../../api';
 
 const { width } = Dimensions.get("window");
 
-class ContactUs extends Component {
+class ContactUsComponent extends Component {
 
     constructor() {
         super();
@@ -323,4 +322,6 @@ const styles = StyleSheet.create({
     
 });
 
-export default ContactUs;
+export default function ContactUs(props) {
+  return <ContactUsComponent {...props}/>
+};

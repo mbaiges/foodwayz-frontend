@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, SafeAreaView, Button } from "react-native";
 
-const Tab1Screen = ({ navigation }) => {
+export default function Tab1Screen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.textScreen}>Home Screen</Text>
@@ -32,5 +32,3 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
-
-export default Tab1Screen;

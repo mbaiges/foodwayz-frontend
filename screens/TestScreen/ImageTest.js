@@ -79,7 +79,7 @@ class TestComp extends React.Component {
     }
 }
 
-export default TestScreen = (props) => {
+export default function TestScreen(props) {
     return <TestComp {...props} />;
 };
 

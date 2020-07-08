@@ -12,7 +12,6 @@ import {
   Dimensions,
   ActivityIndicator
 } from "react-native";
-import CheckBox from "@react-native-community/checkbox";
 import { FoodApi } from '../../api';
 //import { Constants } from 'expo';
 

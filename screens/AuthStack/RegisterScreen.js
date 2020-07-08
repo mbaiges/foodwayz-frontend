@@ -16,7 +16,7 @@ import {
 } from "react-native";
 
 import { Input } from "react-native-elements";
-import CheckBox from "@react-native-community/checkbox";
+//import CheckBox from "@react-native-community/checkbox";
 import { User, AuthApi } from '../../api';
 import { UserContext } from '../../context/UserContext';
 
@@ -457,7 +457,7 @@ Credit and Contact Information{"\n"}
                 this.setState({ checked: !this.state.checked })
               }
             />
-            <View style={styles.checkboxText}>
+            {/* <View style={styles.checkboxText}>
               <Text>I have read and accepted </Text>
               <Text
                 style={styles.termAndConds}
@@ -468,7 +468,7 @@ Credit and Contact Information{"\n"}
               >
                 terms and conditions.
               </Text>
-            </View>
+            </View> */}
           </View>
           <View>
             <TouchableOpacity
@@ -488,7 +488,7 @@ Credit and Contact Information{"\n"}
   }
 }
 
-export default RegisterScreen = (props) => {
+export default function RegisterScreen (props) {
   const { authState, setAuthState } = useContext(UserContext);
   return <RegisterScreenComponent {...props} context={{authState, setAuthState}} />;
 };

@@ -8,7 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   Dimensions,
-  KeyboardAvoidingView,
+  // KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
@@ -46,35 +46,35 @@ class LoginScreenComponent extends Component {
     this.imageHeight = new Animated.Value(this.imageHeights.IMAGE_HEIGHT);
   }
 
-  componentDidMount() {
-    keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      this._keyboardDidShow
-    );
-    keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      this._keyboardDidHide
-    );
-  }
+  // componentDidMount() {
+  //   keyboardDidShowListener = Keyboard.addListener(
+  //     "keyboardDidShow",
+  //     this._keyboardDidShow
+  //   );
+  //   keyboardDidHideListener = Keyboard.addListener(
+  //     "keyboardDidHide",
+  //     this._keyboardDidHide
+  //   );
+  // }
 
-  componentWillUnmount() {
-    keyboardDidShowListener.remove();
-    keyboardDidHideListener.remove();
-  }
+  // componentWillUnmount() {
+  //   keyboardDidShowListener.remove();
+  //   keyboardDidHideListener.remove();
+  // }
 
-  _keyboardDidShow = () => {
-    Animated.timing(this.imageHeight, {
-      duration: 500,
-      toValue: this.imageHeights.IMAGE_HEIGHT_SMALL,
-    }).start();
-  };
+  // _keyboardDidShow = () => {
+  //   Animated.timing(this.imageHeight, {
+  //     duration: 500,
+  //     toValue: this.imageHeights.IMAGE_HEIGHT_SMALL,
+  //   }).start();
+  // };
 
-  _keyboardDidHide = () => {
-    Animated.timing(this.imageHeight, {
-      duration: 500,
-      toValue: this.imageHeights.IMAGE_HEIGHT,
-    }).start();
-  };
+  // _keyboardDidHide = () => {
+  //   Animated.timing(this.imageHeight, {
+  //     duration: 500,
+  //     toValue: this.imageHeights.IMAGE_HEIGHT,
+  //   }).start();
+  // };
 
 
   showWrongVerificationMessage(){
@@ -163,8 +163,7 @@ class LoginScreenComponent extends Component {
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS == "ios" ? "padding" : "height"}
+        <View
           style={styles.container}
         >
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -272,7 +271,7 @@ class LoginScreenComponent extends Component {
               </View>
             </View>
           </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+        </View>
         <View alignItems="center">
           <TouchableOpacity
             style={styles.button}
@@ -313,7 +312,7 @@ class LoginScreenComponent extends Component {
   }
 }
 
-export default LoginScreen = (props) => {
+export default function LoginScreen(props) {
   const { authState, setAuthState } = useContext(UserContext);
   return <LoginScreenComponent {...props} context={{ authState, setAuthState }} />;
 };

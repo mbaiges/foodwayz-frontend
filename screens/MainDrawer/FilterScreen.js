@@ -67,7 +67,7 @@ class FilterScreenComponent extends Component {
   }
 }
 
-export default FilterScreen = (props) => {
+export default function FilterScreen(props) {
   return <FilterScreenComponent {...props} />;
 };
 

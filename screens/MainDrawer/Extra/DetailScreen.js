@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, SafeAreaView, Text, Button } from "react-native";
 
-const DetailScreen = ({ navigation }) => {
+export default function DetailScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.textScreen}>Detail Screen</Text>
@@ -27,5 +27,3 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
-
-export default DetailScreen;

@@ -45,7 +45,7 @@ class ResetPassEmailComponent extends Component {
   }
 }
 
-export default ResetPassEmailScreen = (navigation) => {
+export default function ResetPassEmailScreen(navigation) {
     return <ResetPassEmailComponent navigation={navigation}/>;
 };
 

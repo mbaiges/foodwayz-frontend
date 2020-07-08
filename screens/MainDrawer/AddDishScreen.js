@@ -1221,7 +1221,7 @@ class AddDishComponent extends Component {
   }
 }
 
-export default AddDish = (props) => {
+export default function AddDish(props) {
   return <AddDishComponent {...props} />;
 };
 

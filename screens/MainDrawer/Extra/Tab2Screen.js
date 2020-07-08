@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, SafeAreaView } from "react-native";
 
-const Tab2Screen = () => {
+export default function Tab2Screen() {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.textScreen}>Tab2 Screen</Text>
@@ -21,5 +21,3 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
-
-export default Tab2Screen;

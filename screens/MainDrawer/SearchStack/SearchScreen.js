@@ -813,7 +813,7 @@ class SearchScreenComponent extends React.Component {
   }
 }
 
-export default SearchScreen = (props) => {
+export default function SearchScreen(props) {
   return <SearchScreenComponent {...props} />;
 };
 

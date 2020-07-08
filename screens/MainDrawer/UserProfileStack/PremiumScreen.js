@@ -11,7 +11,6 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import CheckBox from "@react-native-community/checkbox";
 import { RestaurantApi } from "../../../api";
 import { Snackbar } from 'react-native-paper';
 import { color } from "react-native-reanimated";

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Card, ListItem, Button, Icon, Rating, AirbnbRating} from "react-native-elements";
 import { StyleSheet, View, SafeAreaView, Text, Image, TextInput, ActivityIndicator, ScrollView, TouchableOpacity, Dimensions} from "react-native";
-import CheckBox from "@react-native-community/checkbox";
 import { ReviewApi, UserApi } from '../../api';
 
 const { width } = Dimensions.get("window");

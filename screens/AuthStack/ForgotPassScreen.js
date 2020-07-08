@@ -191,7 +191,7 @@ class ForgotPassScreenComponent extends Component {
   }
 }
 
-export default ForgotPassScreen = (props) => {
+export default function ForgotPassScreen(props) {
   return <ForgotPassScreenComponent {...props} />;
 };
 

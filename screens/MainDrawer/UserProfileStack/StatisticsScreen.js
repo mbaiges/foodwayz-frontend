@@ -1053,7 +1053,7 @@ class RestaurantStatisticsProfileComponent extends Component {
     }
 }
 
-export default RestaurantStatisticsProfile = (props) => {
+export default function RestaurantStatisticsProfile(props) {
   return <RestaurantStatisticsProfileComponent {...props} />;
 };
 

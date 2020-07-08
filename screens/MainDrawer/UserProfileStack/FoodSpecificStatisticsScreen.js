@@ -818,7 +818,7 @@ class FoodSpecificStatisticsComponent extends Component {
     }
 }
 
-export default FoodSpecificStatistics = (props) => {
+export default function FoodSpecificStatistics(props) {
   return <FoodSpecificStatisticsComponent {...props} />;
 };
 

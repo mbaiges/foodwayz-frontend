@@ -101,7 +101,7 @@ class EmailVerifiedComponent extends Component {
   }
 }
 
-export default EmailVerifiedScreen = (props) => {
+export default function EmailVerifiedScreen(props) {
     return <EmailVerifiedComponent {...props}/>;
 };
 

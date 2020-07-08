@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, KeyboardAvoidingView, TextInput, StyleSheet, Text, Platform, TouchableWithoutFeedback, Button, Keyboard  } from 'react-native';
 
-const KeyboardAvoidingComponent = () => {
+export default function KeyboardAvoidingComponent() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -44,5 +44,3 @@ const styles = StyleSheet.create({
     marginTop: 12
   }
 });
-
-export default KeyboardAvoidingComponent;
