@@ -95,7 +95,7 @@ function getHeaderTitle(route) {
     case "FoodSpecificStatistics":
       return "Food Statistics";
     case "AddDish":
-      return "Add Dish";
+      return "Add Food";
     case "EditRestaurant":
       return "Edit Restaurant";
     case "Premium":

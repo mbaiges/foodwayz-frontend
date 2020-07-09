@@ -56,5 +56,15 @@ function getHeaderTitle(route) {
       return "Categories";
     case "Categorie":
       return "Categories";
+    case "Food":
+      return "Food";
+    case "RestaurantProfile":
+      return "Restaurant";
+    case "Reviews":
+      return "Reviews";
+    case "ReviewInfo":
+      return "Review";
+    case "RateFood":
+      return "Review";
   }
 }
