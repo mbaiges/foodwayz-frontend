@@ -102,7 +102,7 @@ function getHeaderTitle(route) {
       return "Plans";
 
     case "Food":
-      return "Dish";
+      return "Food";
     case "RestaurantProfile":
       return "Restaurant";
     case "Reviews":

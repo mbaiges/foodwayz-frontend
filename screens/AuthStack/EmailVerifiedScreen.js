@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    elevation: 15,
+    elevation: 5,
     borderRadius: 25,
     backgroundColor: "white",
     color: "black",

@@ -409,7 +409,7 @@ class OwnerRestaurantProfileComponent extends Component {
                   //navigation.navigate("AddDish", {restaurant: this.state.restaurant, dishesUpdater: this.updateDishes.bind(this)})
                 }}
             >
-                <Text style={styles.buttonText}>Add New Food!</Text>
+                <Text style={styles.buttonText}>Add new food</Text>
             </TouchableOpacity>
           </View>
 
@@ -806,7 +806,7 @@ const styles = StyleSheet.create({
 
 
   button: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 25,
     backgroundColor: "#FC987E",
     color: "black",
@@ -817,7 +817,7 @@ const styles = StyleSheet.create({
   },
 
   cancelButton: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 5,
     backgroundColor: "white",
     color: "black",
@@ -828,7 +828,7 @@ const styles = StyleSheet.create({
   },
 
   deleteButton: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 5,
     backgroundColor: "red",
     color: "white",
@@ -881,14 +881,14 @@ const styles = StyleSheet.create({
     position:"absolute",
     marginTop: 0,
     marginLeft: 0,
-    elevation:20
+    elevation:10
   },
 
   closeModalIconContainer:{
     position:"absolute",
     marginTop: 0,
     marginLeft: 200,
-    elevation:20,
+    elevation:10,
   },
 
 

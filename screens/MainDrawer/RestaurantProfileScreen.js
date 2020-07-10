@@ -454,7 +454,7 @@ const styles = StyleSheet.create({
 
 
   button: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 25,
     backgroundColor: "#FC987E",
     color: "black",

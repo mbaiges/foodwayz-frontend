@@ -28,43 +28,47 @@ const { width } = Dimensions.get("window");
 const statusBarHeight = Constants.statusBarHeight;
 
 class SearchScreenComponent extends React.Component {
-  state = {
-    search: '',
-    timer: undefined,
-    filterTimer: undefined,
-    queryResult: [],
 
-    typesVisible: false,
-    ingredientsVisible: false,
-    characteristicsVisible: false,
-    filterByVisible: false,
-
-    allTypes: [],
-    allIngredients: [],
-    allCharacteristics: [],
-
-    chosenTypes: [],
-    chosenIngredients: [],
-    chosenCharacteristics: [],
-
-    typeModalInput: "",
-    ingrModalInput: "",
-    charModalInput: "",
-
-    queryBody: {
-      raw_input: "",
-      filters: {
-        a_type_ids: [],
-        a_ingr_ids: [],
-        a_char_ids: []
+  constructor() {
+    super();
+    this.state = {
+      search: '',
+      timer: undefined,
+      filterTimer: undefined,
+      queryResult: [],
+  
+      typesVisible: false,
+      ingredientsVisible: false,
+      characteristicsVisible: false,
+      filterByVisible: false,
+  
+      allTypes: [],
+      allIngredients: [],
+      allCharacteristics: [],
+  
+      chosenTypes: [],
+      chosenIngredients: [],
+      chosenCharacteristics: [],
+  
+      typeModalInput: "",
+      ingrModalInput: "",
+      charModalInput: "",
+  
+      queryBody: {
+        raw_input: "",
+        filters: {
+          a_type_ids: [],
+          a_ingr_ids: [],
+          a_char_ids: []
+        },
+        sort_by: "most_reviews"
       },
-      sort_by: "most_reviews"
-    },
-
-    sortBy: "most_reviews",
-    sortType: "sort_asc",
-
-  };
+  
+      sortBy: "most_reviews",
+      sortType: "sort_asc",
+  
+    };
+  }
 
   async updateSearch(text){
 
@@ -92,9 +96,9 @@ class SearchScreenComponent extends React.Component {
     
   };
 
-  async querySearch(){
+  async querySearch(initialQueryBody){
     try {
-      const resp = await SearchApi.searchFoods(this.state.queryBody);
+      const resp = await SearchApi.searchFoods(initialQueryBody? initialQueryBody : this.state.queryBody);
       switch(resp.status) {
         case 200:
           this.setState({ queryResult: resp.response.result });
@@ -261,7 +265,7 @@ class SearchScreenComponent extends React.Component {
 
     queryBody.filters.a_type_ids = aux;
 
-    console.log(queryBody);
+    //console.log(queryBody);
 
     await this.setState({ queryBody: queryBody });
 
@@ -278,7 +282,7 @@ class SearchScreenComponent extends React.Component {
 
     queryBody.filters.a_ingr_ids = aux;
 
-    console.log(queryBody);
+    //console.log(queryBody);
 
     await this.setState({ queryBody: queryBody });
 
@@ -295,7 +299,7 @@ class SearchScreenComponent extends React.Component {
 
     queryBody.filters.a_char_ids = aux;
 
-    console.log(queryBody);
+    //console.log(queryBody);
 
     await this.setState({ queryBody: queryBody });
 
@@ -389,7 +393,7 @@ class SearchScreenComponent extends React.Component {
       switch(resp.status) {
         case 200:
           this.setState({ allCharacteristics: resp.response.result });
-          console.log(resp);
+          //console.log(resp);
           break;
       default:
         console.log(`Status Received: ${resp.status} --->`);
@@ -410,16 +414,76 @@ class SearchScreenComponent extends React.Component {
   //--------------------------------MOUNT---------------------------------------------
 
   async componentDidMount() {
-    this.setState({
-      activityIndicator: true
+    const { route, navigation } = this.props;
+
+    const focusListener = navigation.addListener('focus', () => {
+      this.initialQuerySearch();
     });
-    this.querySearch();
+
+    this.addFocusListener(focusListener);
+
+    if (route.params) {
+      this.initialQuerySearch();
+    }
+    else {
+      this.setState({
+        activityIndicator: true
+      });
+      this.querySearch();
+    }
     await this.fetchTypes();
     await this.fetchIngredients();
     await this.fetchCharacteristics();
     this.setState({
       activityIndicator: false
     });
+  }
+
+  async initialQuerySearch() {
+    const { route } = this.props;
+
+    let actualQueryBody = {
+      raw_input: "",
+      filters: {
+        a_type_ids: [],
+        a_ingr_ids: [],
+        a_char_ids: []
+      },
+      sort_by: "most_reviews"
+    };
+
+    if (route.params != undefined) {
+      const { a_type_id, a_char_id, a_ingr_id } = route.params;
+
+      if (a_ingr_id != undefined) {
+        actualQueryBody.filters.a_ingr_ids.push(a_ingr_id);
+      }
+      if (a_char_id != undefined) {
+        actualQueryBody.filters.a_char_ids.push(a_char_id);
+      }
+      if (a_type_id != undefined) {
+        actualQueryBody.filters.a_type_ids.push(a_type_id);
+      }
+    }
+    
+
+    this.setState({
+      activityIndicator: true
+    });
+
+    await this.querySearch(actualQueryBody);
+
+    this.setState({
+      activityIndicator: false
+    });
+
+    route.params = undefined;
+  }
+
+  async addFocusListener(focusListener) {
+    this.setState({
+      focusListener
+    })
   }
 
   render() {
@@ -469,7 +533,7 @@ class SearchScreenComponent extends React.Component {
         
         <View style={styles.floatingButtonContainer}>
           <TouchableOpacity
-            style={styles.button}
+            style={styles.floatingButton}
             onPress={() => { 
               this.setState({ filterByVisible: true }); 
             }}
@@ -949,7 +1013,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 25,
     backgroundColor: "#FC987E",
     color: "black",
@@ -961,7 +1025,7 @@ const styles = StyleSheet.create({
 
 
   buttonChar: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 25,
     backgroundColor: "#FC987E",
     color: "black",
@@ -1108,7 +1172,8 @@ const styles = StyleSheet.create({
 
   buttonItemsContainer: {
     flexDirection: 'row',
-    marginLeft: "22%",
+    justifyContent: "center",
+    alignItems: "center"
   },
 
   floatingButtonContainer: {
@@ -1118,17 +1183,19 @@ const styles = StyleSheet.create({
     marginTop: HEIGHT-75,
   },
 
-  button: {
+  floatingButton: {
     borderRadius: 25,
     backgroundColor: "#FC987E",
     color: "white",
     width: 150,
     padding: 13,
     height: 48,
+    elevation: 5
   },
 
   filter: {
     color:"white",
+    fontWeight: "bold"
   },
 
   tagScrollView: {

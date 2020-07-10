@@ -8,6 +8,8 @@ const { width } = Dimensions.get("window");
 
 import { Snackbar } from 'react-native-paper';
 
+import { StackActions } from '@react-navigation/native';
+
 class RateFoodComponent extends Component {
 
     constructor() {
@@ -193,7 +195,10 @@ class RateFoodComponent extends Component {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.cancelButton}
-                        onPress={ () => { navigation.goBack(); }}
+                        onPress={ () => { 
+                          const popAction = StackActions.pop(1);
+                          navigation.dispatch(popAction);
+                        }}
                     >
                         <Text style={styles.cancel}>Cancel</Text>
                     </TouchableOpacity>
@@ -260,10 +265,12 @@ const styles = StyleSheet.create({
     },
     buttons: {
         flexDirection:"row",
-        paddingTop:150,
+        marginTop:50,
+        marginBottom:25,
+        alignItems:"center",
+        justifyContent:"center"
     },
     saveButton: {
-        marginLeft:180,
         backgroundColor: "#FC987E",
         color: "white",
         width: 100,

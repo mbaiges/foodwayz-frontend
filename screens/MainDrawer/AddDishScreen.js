@@ -690,9 +690,6 @@ class AddDishComponent extends Component {
       :
         (<SafeAreaView style={styles.backgroundContainer}>
             <ScrollView vertical = {true}>
-
-                <Text style={styles.addDishTitle}> Add food </Text>
-
                 <TouchableOpacity onPress={() => { this.setState({modalImageVisible: true});  }}> 
                     <View style={styles.mainImage}>
                         <Image
@@ -1338,7 +1335,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 25,
     backgroundColor: "#FC987E",
     color: "black",
@@ -1350,7 +1347,7 @@ const styles = StyleSheet.create({
 
 
   buttonChar: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 25,
     backgroundColor: "#FC987E",
     color: "black",

@@ -432,7 +432,7 @@ const styles = StyleSheet.create({
     },
 
     input: {
-      elevation: 15,
+      elevation: 10,
       position: 'relative',
       width: WIDTH - 100 ,
       height: 60,
@@ -447,7 +447,7 @@ const styles = StyleSheet.create({
     },
 
     inputTitle:{
-      elevation: 15,
+      elevation: 10,
       position: "absolute",
       color: '#FC987E',
       paddingLeft: 20,

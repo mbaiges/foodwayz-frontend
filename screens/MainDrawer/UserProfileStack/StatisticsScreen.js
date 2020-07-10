@@ -1194,7 +1194,7 @@ const styles = StyleSheet.create({
     
     
       button: {
-        elevation: 15,
+        elevation: 10,
         borderRadius: 25,
         backgroundColor: "#FC987E",
         color: "black",
@@ -1205,7 +1205,7 @@ const styles = StyleSheet.create({
       },
     
       cancelButton: {
-        elevation: 15,
+        elevation: 10,
         borderRadius: 5,
         backgroundColor: "white",
         color: "black",
@@ -1216,7 +1216,7 @@ const styles = StyleSheet.create({
       },
     
       deleteButton: {
-        elevation: 15,
+        elevation: 10,
         borderRadius: 5,
         backgroundColor: "red",
         color: "white",

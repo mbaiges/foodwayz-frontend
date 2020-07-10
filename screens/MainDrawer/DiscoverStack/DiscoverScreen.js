@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    elevation: 20,
+    elevation: 10,
     position: "absolute",
     alignSelf: 'center',
     marginTop: 580,

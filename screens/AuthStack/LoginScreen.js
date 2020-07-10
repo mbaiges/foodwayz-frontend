@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    elevation: 15,
+    elevation: 10,
     position: "relative",
     width: WIDTH - 100,
     height: 60,
@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
   },
 
   inputTitle: {
-    elevation: 15,
+    elevation: 10,
     position: "absolute",
     color: "#FC987E",
     paddingLeft: 38,
@@ -405,7 +405,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 25,
     backgroundColor: "white",
     color: "black",
@@ -471,7 +471,7 @@ const styles = StyleSheet.create({
   },
 
   cancelButton: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 5,
     backgroundColor: "white",
     color: "black",
@@ -484,7 +484,7 @@ const styles = StyleSheet.create({
   },
 
   deleteButton: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 5,
     backgroundColor: "#FC987E",
     color: "white",
@@ -511,7 +511,7 @@ const styles = StyleSheet.create({
   },
 
   cancelButton2:{
-    elevation: 15,
+    elevation: 10,
     borderRadius: 5,
     backgroundColor: "white",
     color: "black",

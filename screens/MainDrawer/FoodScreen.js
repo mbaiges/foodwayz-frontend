@@ -114,7 +114,7 @@ class FoodScreenComponent extends Component {
           <Text style={styles.primaryText}>{this.state.food.a_title}</Text>
 
           <View style={styles.showAll} flexDirection='row' justifyContent='space-between' >
-            <Text style={styles.secondaryText}>from: {this.state.rest.a_name}</Text>
+            <Text style={styles.secondaryText}>From: {this.state.rest.a_name}</Text>
             <View >
               <TouchableOpacity onPress={() => {
                   const pushAction = StackActions.push("RestaurantProfile", {restaurant: this.state.rest});
@@ -136,7 +136,9 @@ class FoodScreenComponent extends Component {
             <View style={styles.tagsList}>
               <TouchableOpacity
                 style={styles.buttonTag}
-                onPress={() => {}}
+                onPress={() => {
+                  navigation.navigate('SearchStack', { screen: 'Search', params: {a_type_id: this.state.type.a_type_id} });
+                }}
               >
                 <Text>{`${(this.state.type && this.state.type.a_type_name)?(new String(this.state.type.a_type_name).charAt(0).toUpperCase() + new String(this.state.type.a_type_name).slice(1)):""}`}</Text>
               </TouchableOpacity>
@@ -154,7 +156,9 @@ class FoodScreenComponent extends Component {
                     <TouchableOpacity
                       key={idx}
                       style={styles.buttonTag}
-                      onPress={() => {}}
+                      onPress={() => {
+                        navigation.navigate('SearchStack', { screen: 'Search', params: {a_ingr_id: tag.a_ingr_id} });
+                      }}
                     >
                       <Text>{tag.a_ingr_name.charAt(0).toUpperCase() + tag.a_ingr_name.slice(1)}</Text>
                     </TouchableOpacity>
@@ -176,7 +180,9 @@ class FoodScreenComponent extends Component {
                     <TouchableOpacity
                       key={idx}
                       style={styles.buttonTag}
-                      onPress={() => {}}
+                      onPress={() => {
+                        navigation.navigate('SearchStack', { screen: 'Search', params: {a_char_id: tag.a_char_id} });
+                      }}
                     >
                       <Text>{tag.a_char_name.charAt(0).toUpperCase() + tag.a_char_name.slice(1)}</Text>
                     </TouchableOpacity>
@@ -305,7 +311,7 @@ const styles = StyleSheet.create({
 
 
   buttonContainer: {
-    elevation: 20,
+    elevation: 10,
     position: "absolute",
     alignSelf: 'center',
     marginTop: 580,

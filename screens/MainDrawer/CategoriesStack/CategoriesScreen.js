@@ -90,7 +90,6 @@ class CategoriesScreenComponent extends Component {
       (<SafeAreaView style={styles.backgroundContainer}>
         <ScrollView>
           <View>
-            <Text style={styles.homeSubtitle}>Categories</Text>
             <ScrollView>
               {
                 this.state.types.map(type => {
@@ -176,7 +175,7 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    elevation: 20,
+    elevation: 10,
     position: "absolute",
     alignSelf: 'center',
     marginTop: 580,

@@ -22,11 +22,9 @@ class AboutUsComponent extends Component {
 
   return (
     <SafeAreaView style={styles.backgroundContainer}>
-      <ScrollView>
-          <View>
-            <Text style={styles.logoText}>About us</Text>
-          </View>
-          
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        >        
           <View alignItems='center'>
             <Image
               style={styles.logoImage}
@@ -34,40 +32,34 @@ class AboutUsComponent extends Component {
             />
           </View> 
 
-          <View>
-            <Text style={styles.subtitle}>Who are we?</Text>
-            <Text style={styles.text}>
-              We are a team of students from Instituto Tecnológico de Buenos Aires,
-              named Dychromatic. Together we have created Foodwayz.
-            </Text>
+          <View style={styles.container}>
+            <View>
+              <Text style={styles.subtitle}>Who are we?</Text>
+              <Text style={styles.text}>
+                We are a team of students from Instituto Tecnológico de Buenos Aires,
+                named Dychromatic. Together we have created Foodwayz.
+              </Text>
+            </View>
+            <View>
+              <Text style={styles.subtitle}>What is Foodwayz?</Text>
+              <Text style={styles.text}>
+                Foodwayz is your solution to different problems that remain unsolved
+                by other food applications. Our aim is to provide our customers with a
+                different point of view. {"\n"}
+                {"\n"}What happens when you are allergic and the ingredients are not
+                specified in the description of the product? What if you go to a
+                restaurant for the first time and don&#39;t know what to order? Are
+                you tired of always ordering the sasme food because you are afraid of
+                not getting something you like?{"\n"}
+                {"\n"}Foodwayz is the solution! As our application is focused on the
+                ingredients as well as on the product itself. Our app has the option
+                to search by plate, ingredient, restaurant, area and price. It has an
+                accurate system of reviews that, combined with the detailed
+                description of each product, gives the user the most complete dining
+                experience.
+              </Text>
+            </View>
           </View>
-          <View>
-            <Text style={styles.subtitle}>What is Foodwayz?</Text>
-            <Text style={styles.text}>
-              Foodwayz is your solution to different problems that remain unsolved
-              by other food applications. Our aim is to provide our customers with a
-              different point of view. {"\n"}
-              {"\n"}What happens when you are allergic and the ingredients are not
-              specified in the description of the product? What if you go to a
-              restaurant for the first time and don&#39;t know what to order? Are
-              you tired of always ordering the sasme food because you are afraid of
-              not getting something you like?{"\n"}
-              {"\n"}Foodwayz is the solution! As our application is focused on the
-              ingredients as well as on the product itself. Our app has the option
-              to search by plate, ingredient, restaurant, area and price. It has an
-              accurate system of reviews that, combined with the detailed
-              description of each product, gives the user the most complete dining
-              experience.
-            </Text>
-          </View>
-        <TouchableOpacity 
-          style={styles.button}
-          onPress={() => {navigation.navigate("HomeStack");}}
-          >
-          <Text style={styles.back}>BACK</Text>
-        
-        </TouchableOpacity>
-
         
       </ScrollView>
     </SafeAreaView>
@@ -85,6 +77,8 @@ const styles = StyleSheet.create({
     width: null,
     height: null,
     backgroundColor: "white",
+    paddingLeft: 15,
+    paddingRight: 15
 },
 logoText: {
     position: "relative",
@@ -106,6 +100,7 @@ logoText: {
   text: {
     marginLeft:5,
     marginBottom:25,
+    textAlign: "justify"
   },
   button: {
     alignSelf:"center",
@@ -122,6 +117,8 @@ logoText: {
   },
   logoImage: {
     position: "relative",
+    marginTop: 15,
+    marginBottom: 15,
     width: 200,
     height: 200,
   },

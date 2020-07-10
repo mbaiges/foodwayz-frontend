@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   button: {
-    elevation: 15,
+    elevation: 5,
     borderRadius: 25,
     backgroundColor: "#FC987E",
     color: "black",
