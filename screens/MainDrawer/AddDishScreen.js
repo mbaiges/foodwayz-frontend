@@ -864,7 +864,7 @@ class AddDishComponent extends Component {
                         style={styles.button}
                         onPress={() => { this.uploadDish(); }}
                     >
-                        <Text style={styles.buttonText}>Add Food</Text>
+                        <Text style={styles.buttonText}>ADD FOOD</Text>
                     </TouchableOpacity>
                 </View>
 

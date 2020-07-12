@@ -43,6 +43,7 @@ class OwnerRestaurantProfileComponent extends Component {
       lastDishClicked: {},
       lastImageClicked: {},
       theBiggestExtra: 0,
+      noReviewsText: false,
     }
   }
 
@@ -116,14 +117,20 @@ class OwnerRestaurantProfileComponent extends Component {
 
   async fetchDishes() {
     const aux = this.state.restaurant;
+    let noReviewsText = false;
+    
     try {
       const resp = await RestaurantApi.getFoods(aux.a_rest_id);
       switch(resp.status) {
         case 200:
+          if(resp.response.result.length === 0){
+            noReviewsText = true;
+          }
           console.log("-----------------------------------------------------------------------------------------");
           console.log(resp);
           this.setState({
             dishes: resp.response.result,
+            noReviewsText: noReviewsText,
           })
           break;
       default:
@@ -415,6 +422,11 @@ class OwnerRestaurantProfileComponent extends Component {
 
           <View paddingTop={15}>
           <Text style={styles.subtitleText}>Our foods</Text>
+            {this.state.noReviewsText &&
+              <View style={styles.textNoReviewsContainer}>
+                <Text style={styles.textNoReviews}>This restaurant doesn't have foods yet.</Text>
+              </View>
+            }
             {this.state.dishes.map(dish =>{
               return(
                 <ListItem
@@ -1002,4 +1014,15 @@ headerText: {
     height:70,
   },
 
+  
+  textNoReviewsContainer:{
+    paddingLeft: 20,
+    paddingTop: 5,
+  },
+
+  textNoReviews:{
+    textAlign: "left",
+    fontSize: 15,
+    paddingLeft: 15,
+  },
 });

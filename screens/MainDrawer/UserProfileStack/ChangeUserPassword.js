@@ -134,42 +134,44 @@ class EditProfilePasswordComponent extends Component {
         (<View style={styles.backgroundContainer}>
             
             <Text style={styles.title}> Change Password</Text>
-            <View style={styles.inputView}>
-                <Text style={styles.inputTitle}>Old Password</Text>
-                <View style={styles.inputBox}>
-                    <Input
-                        secureTextEntry={true}
-                        style={styles.input}
-                        underLineColorAndroid="transparent"
-                        onChangeText={(value) => { this.setState({oldPass: value})}}
-                    />  
-                </View>
-            </View>
-            <View style={styles.inputView}>
-                <Text style={styles.inputTitle}>New Password</Text>
-                <View style={styles.inputBox}>
-                    <Input
-                        secureTextEntry={true}
-                        style={styles.input}
-                        underLineColorAndroid="transparent"
-                        onChangeText={(value) => { this.setState({newPass: value})}}
-                    />  
-                </View>
-            </View>
-            <View style={styles.inputView}>
-                <Text style={styles.inputTitle}>Repeat New Password</Text>
-                <View style={styles.inputBox}>
-                    <Input
-                        value={this.state.newPass2}
-                        secureTextEntry={true}
-                        style={styles.input}
-                        underLineColorAndroid="transparent"
-                        onChangeText={(value) => { this.setState({newPass2: value})}}
-                    />   
-                </View>
+            <View style={styles.inputsContainer}>
+              <View style={styles.inputView}>
+                  <Text style={styles.inputTitle}>Old Password</Text>
+                  <View style={styles.inputBox}>
+                      <Input
+                          secureTextEntry={true}
+                          style={styles.input}
+                          underLineColorAndroid="transparent"
+                          onChangeText={(value) => { this.setState({oldPass: value})}}
+                      />  
+                  </View>
+              </View>
+              <View style={styles.inputView}>
+                  <Text style={styles.inputTitle}>New Password</Text>
+                  <View style={styles.inputBox}>
+                      <Input
+                          secureTextEntry={true}
+                          style={styles.input}
+                          underLineColorAndroid="transparent"
+                          onChangeText={(value) => { this.setState({newPass: value})}}
+                      />  
+                  </View>
+              </View>
+              <View style={styles.inputView}>
+                  <Text style={styles.inputTitle}>Repeat New Password</Text>
+                  <View style={styles.inputBox}>
+                      <Input
+                          value={this.state.newPass2}
+                          secureTextEntry={true}
+                          style={styles.input}
+                          underLineColorAndroid="transparent"
+                          onChangeText={(value) => { this.setState({newPass2: value})}}
+                      />   
+                  </View>
+              </View>
             </View>
 
-            <View>
+            <View style={styles.container}>
                 <TouchableOpacity style={styles.button} onPress={async() => { await this.changePass();}} >
                     <Text style={styles.buttonText}>CHANGE PASSWORD</Text>
                 </TouchableOpacity>
@@ -250,7 +252,7 @@ const styles = StyleSheet.create({
     
     inputView: {
         position: 'relative',
-        padding: 0,
+        paddingTop: 0,
     
     },
     
@@ -312,8 +314,8 @@ const styles = StyleSheet.create({
         padding: 13,
         height: 48,
         alignSelf: "center",
-        marginTop: 300,
-        marginBottom:70
+        marginTop: 100,
+        marginBottom:0
     },
 
     snackBar:{
@@ -333,7 +335,13 @@ const styles = StyleSheet.create({
       backgroundColor: "#ff4d4d",
       height:70,
     },
-  
+    container:{
+      top: 0
+    },
+
+    inputsContainer:{
+      paddingTop: 20,
+    }
   });
 
 

@@ -875,7 +875,7 @@ class RestaurantStatisticsProfileComponent extends Component {
                                             //navigation.navigate("Premium", {restaurant: this.state.restaurant}) 
                                         }}
                                     >
-                                        <Text2 style={styles.buttonText}>Premium</Text2>
+                                        <Text2 style={styles.buttonText}>UPGRADE YOUR PLAN</Text2>
                                     </TouchableOpacity>
                                 </View>
                             </View>

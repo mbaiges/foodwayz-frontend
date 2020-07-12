@@ -52,7 +52,8 @@ class ContactUs extends Component {
                 console.log("Email Sent")
                 this.setState({
                   buttonDisabled: false,
-                  snackbarSentVisible: true
+                  snackbarSentVisible: true,
+                  comment: "",
                 });
                 break;
             default:
@@ -141,11 +142,12 @@ class ContactUs extends Component {
                 <TextInput
                     style={styles.message}
                     multiline
+                    value={this.state.comment}
                     numberOfLines={10}
                     placeholder={"I have a message for you!"}
                     placeholderTextColor={"rgba(0,0,0,0.4)"}
                     underLineColorAndroid="transparent"
-                    onChangeText={(value) => (this.state.comment = value)}
+                    onChangeText={(value) => (this.setState({comment: value}))}
                 />
             </View>
             <View style={styles.buttons}>

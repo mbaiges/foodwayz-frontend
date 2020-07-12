@@ -631,7 +631,7 @@ class SearchScreenComponent extends React.Component {
                           await this.applyTypeFiltersAndSearch(); 
                         }}
                     >
-                        <Text style={styles.buttonText}>Apply</Text>
+                        <Text style={styles.filter}>APPLY</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -710,7 +710,7 @@ class SearchScreenComponent extends React.Component {
                           await this.applyIngredientFiltersAndSearch(); 
                         }}
                     >
-                        <Text style={styles.buttonText}>Apply</Text>
+                        <Text style={styles.filter}>APPLY</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -790,7 +790,7 @@ class SearchScreenComponent extends React.Component {
                           await this.applyCharacteristicFiltersAndSearch(); 
                         }}
                     >
-                        <Text style={styles.buttonText}>Apply</Text>
+                        <Text style={styles.filter}>APPLY</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -1056,6 +1056,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",    
     fontSize: 15,      
   },
+
 
   ingredientsButton: {
     borderColor: 'black',

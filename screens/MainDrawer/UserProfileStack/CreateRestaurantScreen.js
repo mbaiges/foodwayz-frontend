@@ -459,7 +459,7 @@ class CreateRestaurantComponent extends Component {
 
                 <View>
                     <TouchableOpacity style={styles.button} onPress={async() => { await this.uploadRestaurant() }} >
-                        <Text style={styles.buttonText}>REGISTER</Text>
+                        <Text style={styles.buttonText}>CREATE RESTAURANT</Text>
                     </TouchableOpacity>
                 </View>
             </View>
