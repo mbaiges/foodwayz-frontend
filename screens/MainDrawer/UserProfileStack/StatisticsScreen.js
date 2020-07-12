@@ -707,24 +707,24 @@ class RestaurantStatisticsProfileComponent extends Component {
                             <ScrollView horizontal={true}
                             showsHorizontalScrollIndicator={false}>
                                 {this.state.worstFoods.map((food, idx) =>{
+                                    let rating;
+                                    switch(this.state.chosenFoodDisplay){
+                                        case "quality":
+                                            rating = food.a_food_quality_score
+                                        break;
+                                        case "presentation":
+                                            rating = food.a_presentation_score
+                                        break;
+                                        case "price":
+                                            rating = food.a_price_quality_score
+                                        break;
+                                    }
                                     return(
                                         <View key={idx}>
                                             <TouchableOpacity onPress={async () => {
                                                 const pushAction = StackActions.push("Food", { food: food});
                                                 navigation.dispatch(pushAction);
                                                 //navigation.navigate("Food", { food: food});
-                                                let rating;
-                                                switch(this.state.chosenFoodDisplay){
-                                                    case "quality":
-                                                        rating = food.a_food_quality_score
-                                                    break;
-                                                    case "presentation":
-                                                        rating = food.a_presentation_score
-                                                    break;
-                                                    case "price":
-                                                        rating = food.a_price_quality_score
-                                                    break;
-                                                }
                                                 console.log("I want to navigate to Dish page");
                                                 }}>
                                                 <Card
