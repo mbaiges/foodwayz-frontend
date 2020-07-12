@@ -673,6 +673,18 @@ class RestaurantStatisticsProfileComponent extends Component {
                             <ScrollView horizontal= {true}
                             showsHorizontalScrollIndicator={false}>        
                                 {this.state.bestFoods.map((food, idx) =>{
+                                    let rating;
+                                    switch(this.state.chosenFoodDisplay){
+                                        case "quality":
+                                            rating = food.a_food_quality_score
+                                        break;
+                                        case "presentation":
+                                            rating = food.a_presentation_score
+                                        break;
+                                        case "price":
+                                            rating = food.a_price_quality_score
+                                        break;
+                                    }
                                     return(
                                         <View key={idx}>
                                             <TouchableOpacity onPress={async () => {
@@ -691,7 +703,7 @@ class RestaurantStatisticsProfileComponent extends Component {
                                                     <View style={styles.cardFooter}>
                                                         <Text2 style={styles.foodName}>{food.a_title}</Text2>
                                                     </View>
-                                                    <Rating imageSize={20} readonly startingValue={food.a_score} style={styles.rating} /> 
+                                                    <Rating imageSize={20} readonly startingValue={rating} style={styles.rating} /> 
                                                 </Card>
                                             </TouchableOpacity>
                                         </View>    
