@@ -47,7 +47,7 @@ export default function StackNavigator({ navigation, route }) {
         BackButtonNavBar({ title: getHeaderTitle(route), navigation })
       }
     >
-      <Stack.Screen name="UserProfile" component={UserProfile} options={FirstBackButtonNavBar}/>
+      <Stack.Screen name="UserProfile" component={UserProfile} options={() => FirstBackButtonNavBar({ title: getHeaderTitle(route), navigation })}/>
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="EditProfilePassword" component={EditProfilePassword} />
       <Stack.Screen name="EditProfileAllergies" component={EditProfileAllergies} />
@@ -95,14 +95,14 @@ function getHeaderTitle(route) {
     case "FoodSpecificStatistics":
       return "Food Statistics";
     case "AddDish":
-      return "Add Dish";
+      return "Add Food";
     case "EditRestaurant":
       return "Edit Restaurant";
     case "Premium":
       return "Plans";
 
     case "Food":
-      return "Dish";
+      return "Food";
     case "RestaurantProfile":
       return "Restaurant";
     case "Reviews":

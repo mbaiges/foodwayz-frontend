@@ -686,13 +686,12 @@ class AddDishComponent extends Component {
           <View style={styles.loading}>
           <ActivityIndicator size="large" color="#000000" />
           </View>
+
+          
       </SafeAreaView>)
       :
         (<SafeAreaView style={styles.backgroundContainer}>
             <ScrollView vertical = {true}>
-
-                <Text style={styles.addDishTitle}> Add food </Text>
-
                 <TouchableOpacity onPress={() => { this.setState({modalImageVisible: true});  }}> 
                     <View style={styles.mainImage}>
                         <Image
@@ -1180,7 +1179,7 @@ class AddDishComponent extends Component {
         </Snackbar>
 
         <Snackbar
-              style={styles.snackBar}
+              style={styles.snackBarError}
               duration={4000}
               visible={this.state.snackbarConnectionVisible}
               onDismiss={this.dismissConnectionSnackBar}
@@ -1320,6 +1319,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 
+  snackBarError:{
+    backgroundColor: "#ff4d4d",
+    height:70,
+  },
+
 
   allergiesContainer:{
     paddingBottom: 20,
@@ -1338,7 +1342,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 25,
     backgroundColor: "#FC987E",
     color: "black",
@@ -1350,7 +1354,7 @@ const styles = StyleSheet.create({
 
 
   buttonChar: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 25,
     backgroundColor: "#FC987E",
     color: "black",

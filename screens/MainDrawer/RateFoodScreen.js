@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import { Card, ListItem, Button, Icon, Rating, AirbnbRating} from "react-native-elements";
-import { StyleSheet, View, SafeAreaView, Text, Image, TextInput, ActivityIndicator, ScrollView, TouchableOpacity, Dimensions} from "react-native";
+import { StyleSheet, View, SafeAreaView, Text, Image, TextInput, ActivityIndicator, ScrollView, TouchableOpacity, Dimensions, A} from "react-native";
 import CheckBox from "@react-native-community/checkbox";
 import { ReviewApi, UserApi } from '../../api';
 
 const { width } = Dimensions.get("window");
 
 import { Snackbar } from 'react-native-paper';
+
+import { StackActions } from '@react-navigation/native';
 
 class RateFoodComponent extends Component {
 
@@ -134,6 +136,7 @@ class RateFoodComponent extends Component {
                 <View style={styles.loading}>
                 <ActivityIndicator size="large" color="#000000" />
                 </View>
+
             </SafeAreaView>)
             :
             (<SafeAreaView style={styles.backgroundContainer}>
@@ -193,18 +196,21 @@ class RateFoodComponent extends Component {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.cancelButton}
-                        onPress={ () => { navigation.goBack(); }}
+                        onPress={ () => { 
+                          const popAction = StackActions.pop(1);
+                          navigation.dispatch(popAction);
+                        }}
                     >
                         <Text style={styles.cancel}>Cancel</Text>
                     </TouchableOpacity>
                 </View>
                 </ScrollView>
                 <Snackbar
-              style={styles.snackBar}
-              duration={4000}
-              visible={this.state.snackbarConnectionVisible}
-              onDismiss={this.dismissConnectionSnackBar}
-        >
+                    style={styles.snackBarError}
+                    duration={4000}
+                    visible={this.state.snackbarConnectionVisible}
+                    onDismiss={this.dismissConnectionSnackBar}
+              >
              <Text style={styles.textSnack}>No internet connection.</Text>
         </Snackbar>
             </SafeAreaView>)
@@ -260,10 +266,12 @@ const styles = StyleSheet.create({
     },
     buttons: {
         flexDirection:"row",
-        paddingTop:150,
+        marginTop:50,
+        marginBottom:25,
+        alignItems:"center",
+        justifyContent:"center"
     },
     saveButton: {
-        marginLeft:180,
         backgroundColor: "#FC987E",
         color: "white",
         width: 100,
@@ -304,6 +312,11 @@ const styles = StyleSheet.create({
     
       snackBar:{
         backgroundColor: "#787777",
+        height:70,
+      },
+
+      snackBarError:{
+        backgroundColor: "#ff4d4d",
         height:70,
       },
 });

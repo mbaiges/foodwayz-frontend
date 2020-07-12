@@ -49,6 +49,7 @@ class RegisterScreenComponent extends Component {
       email: this.state.email,
       password1: this.state.password1,
       password2: this.state.password2,
+      checked: this.state.checked
     };
 
     if (!validateSignupFields(inputs)) {
@@ -115,8 +116,8 @@ class RegisterScreenComponent extends Component {
     return (
       <SafeAreaView style={styles.backgroundContainer}>
 
-        <KeyboardAvoidingView
-          behavior={Platform.OS == "ios" ? "padding" : "height"}
+        <ScrollView
+          showsVerticalScrollIndicator={false}
           style={styles.container}
         >
 
@@ -446,42 +447,42 @@ Credit and Contact Information{"\n"}
               </View>
             </View>
           </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-        <View alignItems="center">
-          <View style={styles.checkboxLine}>
-          <CheckBox
-              value={this.state.checked}
-              tintColors={{ true: "white", false: "black" }}
-              onValueChange={() =>
-                this.setState({ checked: !this.state.checked })
-              }
-            />
-            <View style={styles.checkboxText}>
-              <Text>I have read and accepted </Text>
-              <Text
-                style={styles.termAndConds}
-                onPress={() => {
-                  this.setState({termAndCondsModal: true})
-                  console.log("Clicked on terms and conditions");
+        
+          <View style = {styles.buttonsContainer} >
+            <View style={styles.checkboxLine}>
+            <CheckBox
+                value={this.state.checked}
+                tintColors={{ true: "white", false: "black" }}
+                onValueChange={() =>
+                  this.setState({ checked: !this.state.checked })
+                }
+              />
+              <View style={styles.checkboxText}>
+                <Text>I have read and accepted </Text>
+                <Text
+                  style={styles.termAndConds}
+                  onPress={() => {
+                    this.setState({termAndCondsModal: true})
+                    console.log("Clicked on terms and conditions");
+                  }}
+                >
+                  terms and conditions.
+                </Text>
+              </View>
+            </View>
+            <View>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={async () => {
+                  console.log("I want to navigate to Main");
+                  this.signUp({state: this.state, navigation, setAuthState});
                 }}
               >
-                terms and conditions.
-              </Text>
+                <Text>REGISTER</Text>
+              </TouchableOpacity>
             </View>
           </View>
-          <View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={async () => {
-                console.log("I want to navigate to Main");
-                this.signUp({state: this.state, navigation, setAuthState});
-              }}
-            >
-              <Text>REGISTER</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -504,8 +505,8 @@ const styles = StyleSheet.create({
     width: null,
     height: null,
     backgroundColor: "#FC987E",
-    paddingBottom: 30,
-    paddingTop: 30,
+    paddingBottom: 0,
+    paddingTop: 20,
   },
 
   inner: {
@@ -534,15 +535,15 @@ const styles = StyleSheet.create({
 
   inputView: {
     position: "relative",
-    padding: 10,
+    padding: 0,
   },
 
   inputBoxes: {
-    top: -10,
+    top: -60,
   },
 
   input: {
-    elevation: 15,
+    elevation: 10,
     position: "relative",
     width: WIDTH - 100,
     height: 60,
@@ -557,11 +558,12 @@ const styles = StyleSheet.create({
   },
 
   inputTitle: {
-    elevation: 15,
-    position: "absolute",
+    elevation: 10,
+    top: -50,
+    position: "relative",
     color: "#FC987E",
     paddingLeft: 38,
-    paddingTop: 14,
+    paddingTop: 0,
     fontSize: 11,
     fontWeight: "500",
     opacity: 1,
@@ -574,7 +576,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 25,
     backgroundColor: "white",
     color: "black",
@@ -649,7 +651,7 @@ const styles = StyleSheet.create({
   },
 
   cancelButton: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 5,
     backgroundColor: "white",
     color: "black",
@@ -663,7 +665,7 @@ const styles = StyleSheet.create({
 
 
   deleteButton: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 5,
     backgroundColor: "#FC987E",
     color: "white",
@@ -702,6 +704,11 @@ const styles = StyleSheet.create({
 
   scrollViewTermsConds:{
     height: 400,
-  }
+  },
+
+  buttonsContainer:{
+    alignItems: "center",
+    top: -60,
+  },
 
 });

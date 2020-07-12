@@ -4,7 +4,7 @@ import {
   View,
   SafeAreaView,
   Text,
-  Animated,
+  Image,
   TextInput,
   TouchableOpacity,
   Dimensions,
@@ -14,6 +14,7 @@ import {
   Keyboard,
   Modal,
   Alert,
+  ScrollView
 } from "react-native";
 import { Input } from "react-native-elements";
 import { UserContext } from '../../context/UserContext';
@@ -37,15 +38,9 @@ class LoginScreenComponent extends Component {
       showWrongVerificationMessage: false,
       wrongVerificationMessage:"",
     };
-
-    this.imageHeights = {
-      IMAGE_HEIGHT_SMALL: 84,
-      IMAGE_HEIGHT: 200,
-    };
-
-    this.imageHeight = new Animated.Value(this.imageHeights.IMAGE_HEIGHT);
   }
 
+  /*
   componentDidMount() {
     keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
@@ -75,13 +70,12 @@ class LoginScreenComponent extends Component {
       toValue: this.imageHeights.IMAGE_HEIGHT,
     }).start();
   };
-
+  */
 
   showWrongVerificationMessage(){
     this.setState({showWrongVerificationMessage: true})
   }
 
-  
   async verificateAccount(){
     const {context} = this.props;
     const {setAuthState} = context;
@@ -120,16 +114,14 @@ class LoginScreenComponent extends Component {
     
     const inputs = {email: this.state.email, password:this.state.password};
    
-
-    // if (!validateSigninFields(inputs)) {  // DESCOMENTAR ANTES DE LA ENTREGA
-    //   // El Mensajito de error lo manda validateSigninFields
-    //   console.log("Something went wrong.");
-    // }else{
+    if (!validateSigninFields(inputs)) {  // DESCOMENTAR ANTES DE LA ENTREGA
+        // El Mensajito de error lo manda validateSigninFields
+        console.log("Something went wrong.");
+    }else{
       const user = new User({
         a_email: state.email,
         a_password: state.password
       });
-
 
       try {
         const ans = await AuthApi.signIn(user);
@@ -154,7 +146,7 @@ class LoginScreenComponent extends Component {
         console.log(err);
       }
 
-    //}
+    }
   }
 
   render() {
@@ -163,14 +155,14 @@ class LoginScreenComponent extends Component {
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS == "ios" ? "padding" : "height"}
+        <ScrollView
+          
           style={styles.container}
         >
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.inner}>
-              <Animated.Image
-                style={{ height: this.imageHeight, width: this.imageHeight }}
+              <Image
+                style={{ height: 200, width: 200 }}
                 source={require("../../assets/images/logo.png")}
               />
               <Text style={styles.logoText}>FoodWayz</Text>
@@ -272,42 +264,46 @@ class LoginScreenComponent extends Component {
               </View>
             </View>
           </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-        <View alignItems="center">
-          <TouchableOpacity
-            style={styles.button}
-            onPress={async () => {
-              console.log("I want to navigate to Main");
-              this.signIn({ state: this.state, navigation, setAuthState });
-            }}
-          >
-            <Text>LOG IN</Text>
-          </TouchableOpacity>
-        </View>
-        <View alignItems="center">
-          <Text
-            style={styles.forgotpassword}
-            onPress={() => {
-              const pushAction = StackActions.push("ForgotPass");
-              navigation.dispatch(pushAction);
-              //navigation.navigate("ForgotPass");
-            }}
-          >
-            {" "}
-            Forgot your password? Get new!{" "}
-          </Text>
-          <Text
-            style={styles.signUp}
-            onPress={() => {
-              const pushAction = StackActions.push("Register");
-              navigation.dispatch(pushAction);
-              //navigation.navigate("Register");
-            }}
-          >
-            {" "}
-            Don't have an account yet? Sign up!{" "}
-          </Text>
-        </View>
+        
+          <View style={styles.buttons}>
+            <View alignItems="center">
+              <TouchableOpacity
+                style={styles.button}
+                onPress={async () => {
+                  console.log("I want to navigate to Main");
+                  this.signIn({ state: this.state, navigation, setAuthState });
+                }}
+              >
+                <Text>LOG IN</Text>
+              </TouchableOpacity>
+            </View>
+            <View alignItems="center">
+              <Text
+                style={styles.forgotpassword}
+                onPress={() => {
+                  const pushAction = StackActions.push("ForgotPass");
+                  navigation.dispatch(pushAction);
+                  //navigation.navigate("ForgotPass");
+                }}
+              >
+                {" "}
+                Forgot your password? Get new!{" "}
+              </Text>
+              <Text
+                style={styles.signUp}
+                onPress={() => {
+                  const pushAction = StackActions.push("Register");
+                  navigation.dispatch(pushAction);
+                  //navigation.navigate("Register");
+                }}
+              >
+                {" "}
+                Don't have an account yet? Sign up!{" "}
+              </Text>
+            </View>
+          </View>
+          
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -324,13 +320,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  buttons: {
+    top: -50,
+  },
   backgroundContainer: {
     flex: 1,
     width: null,
     height: null,
     backgroundColor: "#FC987E",
-    paddingBottom: 30,
-    paddingTop: 30,
+    paddingBottom: 0,
+    paddingTop: 0,
   },
   inner: {
     position: "relative",
@@ -369,11 +368,11 @@ const styles = StyleSheet.create({
   },
 
   inputBoxes: {
-    top: -30,
+    top: -60,
   },
 
   input: {
-    elevation: 15,
+    elevation: 10,
     position: "relative",
     width: WIDTH - 100,
     height: 60,
@@ -388,7 +387,7 @@ const styles = StyleSheet.create({
   },
 
   inputTitle: {
-    elevation: 15,
+    elevation: 10,
     position: "absolute",
     color: "#FC987E",
     paddingLeft: 38,
@@ -405,7 +404,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 25,
     backgroundColor: "white",
     color: "black",
@@ -471,7 +470,7 @@ const styles = StyleSheet.create({
   },
 
   cancelButton: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 5,
     backgroundColor: "white",
     color: "black",
@@ -484,7 +483,7 @@ const styles = StyleSheet.create({
   },
 
   deleteButton: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 5,
     backgroundColor: "#FC987E",
     color: "white",
@@ -511,7 +510,7 @@ const styles = StyleSheet.create({
   },
 
   cancelButton2:{
-    elevation: 15,
+    elevation: 10,
     borderRadius: 5,
     backgroundColor: "white",
     color: "black",

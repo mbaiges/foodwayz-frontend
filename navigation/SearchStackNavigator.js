@@ -50,5 +50,15 @@ function getHeaderTitle(route) {
   switch (routeName) {
     case "Search":
       return "Search";
+    case "Food":
+      return "Food";
+    case "RestaurantProfile":
+      return "Restaurant";
+    case "Reviews":
+      return "Reviews";
+    case "ReviewInfo":
+      return "Review";
+    case "RateFood":
+      return "Review";
   }
 }

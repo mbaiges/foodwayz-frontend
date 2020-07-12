@@ -10,14 +10,15 @@ import {
   TouchableWithoutFeedback,
   Button,
   Dimensions,
-  Alert
+  Alert,
+  ActivityIndicator
 } from "react-native";
 
 import { Snackbar } from 'react-native-paper';
 
 import { Image, ListItem, Icon, Input, Rating } from 'react-native-elements';
 
-import { ViewsApi } from '../../api';
+import { ViewsApi, FoodApi } from '../../api';
 
 import { StackActions } from '@react-navigation/native';
 
@@ -62,6 +63,40 @@ class FoodScreenComponent extends Component {
 
   }
 
+  async updateFood() {
+    try {
+      const resp = await FoodApi.get(this.state.food.a_food_id);
+      switch(resp.status) {
+        case 200:
+          let food = resp.response.result;
+          let aux = {
+            quality: food.a_food_quality_score,
+            presentation: food.a_presentation_score,
+            price: food.a_price_quality_score
+          }
+          this.setState({
+            food: food,
+            type: food.a_type,
+            reviews: aux
+          })
+          this.setState({
+            ingrs: food.a_ingredients,
+            chars: food.a_characteristics,
+            rest: food.a_rest
+          })
+          break;
+        default:
+          console.log(`Status Received: ${resp.status} --->`);
+          console.log(`${resp.response}`);
+          // Show snackbar ?
+          break;
+      }
+    }
+    catch(error) {
+      console.log(error);
+    }
+  }
+
   dismissConnectionSnackBar = () => {
     this.setState({
       snackbarConnectionVisible: false
@@ -69,12 +104,19 @@ class FoodScreenComponent extends Component {
   }
 
   async componentDidMount() {
+    const { navigation } = this.props;
+
+    this.setState({
+      ActivityIndicator:true
+    })
     await this.fetchFood();
     try {
       const resp = await ViewsApi.registerFoodView(this.state.food.a_food_id);
       switch(resp.status) {
         case 200:
- 
+          this.setState({
+            ActivityIndicator:false
+          })
           break;
       default:
         console.log(`Status Received: ${resp.status} --->`);
@@ -91,6 +133,17 @@ class FoodScreenComponent extends Component {
       // Show snackbar (Internet connecion, maybe?)
     }
 
+    this.setState({
+      updateWhenFocus: navigation.addListener('focus', async() => {
+        console.log("Updating");
+        await this.updateFood();
+      })
+    });
+
+  }
+
+  async componentWillUnmount() {
+    this.state.updateWhenFocus.remove();
   }
 
   render() {
@@ -104,7 +157,16 @@ class FoodScreenComponent extends Component {
       
 
     return (
-      <SafeAreaView style={styles.backgroundContainer}>
+      (this.state.activityIndicator) ?
+      (<SafeAreaView>
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#000000" />
+        </View>
+
+           
+      </SafeAreaView>)
+      :
+      (<SafeAreaView style={styles.backgroundContainer}>
         <ScrollView justifyContent='flex-start'>
           <View style={{ alignItems: 'center' }}>
             <Image source={{ uri: this.state.food.a_image_url }}
@@ -114,7 +176,7 @@ class FoodScreenComponent extends Component {
           <Text style={styles.primaryText}>{this.state.food.a_title}</Text>
 
           <View style={styles.showAll} flexDirection='row' justifyContent='space-between' >
-            <Text style={styles.secondaryText}>from: {this.state.rest.a_name}</Text>
+            <Text style={styles.secondaryText}>From: {this.state.rest.a_name}</Text>
             <View >
               <TouchableOpacity onPress={() => {
                   const pushAction = StackActions.push("RestaurantProfile", {restaurant: this.state.rest});
@@ -136,7 +198,9 @@ class FoodScreenComponent extends Component {
             <View style={styles.tagsList}>
               <TouchableOpacity
                 style={styles.buttonTag}
-                onPress={() => {}}
+                onPress={() => {
+                  navigation.navigate('SearchStack', { screen: 'Search', params: {a_type_id: this.state.type.a_type_id} });
+                }}
               >
                 <Text>{`${(this.state.type && this.state.type.a_type_name)?(new String(this.state.type.a_type_name).charAt(0).toUpperCase() + new String(this.state.type.a_type_name).slice(1)):""}`}</Text>
               </TouchableOpacity>
@@ -154,7 +218,9 @@ class FoodScreenComponent extends Component {
                     <TouchableOpacity
                       key={idx}
                       style={styles.buttonTag}
-                      onPress={() => {}}
+                      onPress={() => {
+                        navigation.navigate('SearchStack', { screen: 'Search', params: {a_ingr_id: tag.a_ingr_id} });
+                      }}
                     >
                       <Text>{tag.a_ingr_name.charAt(0).toUpperCase() + tag.a_ingr_name.slice(1)}</Text>
                     </TouchableOpacity>
@@ -176,7 +242,9 @@ class FoodScreenComponent extends Component {
                     <TouchableOpacity
                       key={idx}
                       style={styles.buttonTag}
-                      onPress={() => {}}
+                      onPress={() => {
+                        navigation.navigate('SearchStack', { screen: 'Search', params: {a_char_id: tag.a_char_id} });
+                      }}
                     >
                       <Text>{tag.a_char_name.charAt(0).toUpperCase() + tag.a_char_name.slice(1)}</Text>
                     </TouchableOpacity>
@@ -238,7 +306,7 @@ class FoodScreenComponent extends Component {
         </ScrollView>
 
         <Snackbar
-              style={styles.snackBar}
+              style={styles.snackBarError}
               duration={4000}
               visible={this.state.snackbarConnectionVisible}
               onDismiss={this.dismissConnectionSnackBar}
@@ -246,7 +314,7 @@ class FoodScreenComponent extends Component {
              <Text style={styles.textSnack}>No internet connection.</Text>
         </Snackbar>
 
-      </SafeAreaView>
+      </SafeAreaView>)
     );
   }
 }
@@ -286,6 +354,11 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
 
+  snackBarError:{
+    backgroundColor: "#ff4d4d",
+    height:70,
+  },
+
   buttonTag: {
     borderRadius: 25,
     color: "black",
@@ -305,7 +378,7 @@ const styles = StyleSheet.create({
 
 
   buttonContainer: {
-    elevation: 20,
+    elevation: 10,
     position: "absolute",
     alignSelf: 'center',
     marginTop: 580,
@@ -369,6 +442,9 @@ const styles = StyleSheet.create({
     color: "white",
     letterSpacing: 1,
   },
-
+  loading:{
+    flex: 1,
+    marginTop:100,
+  },
 
 });

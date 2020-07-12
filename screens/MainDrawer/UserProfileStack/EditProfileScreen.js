@@ -14,6 +14,7 @@ import Colors from "../../../constants/Colors";
 import { Snackbar } from 'react-native-paper';
 
 import { StackActions } from '@react-navigation/native';
+import { Api } from '../../../api/api';
 
 class EditProfileComponent extends Component {
 
@@ -33,7 +34,7 @@ class EditProfileComponent extends Component {
     const { user } = route.params;
 
     console.log('fetching user');
-
+    console.log(user);
     this.setState({
       user: user,
       date: user.a_birthdate ? new Date(user.a_birthdate) : new Date()
@@ -95,7 +96,7 @@ class EditProfileComponent extends Component {
 
       console.log("imageName: " + newStr);
 
-      var ref = firebase.storage().ref().child(`images/users/${newStr}.jpg`);
+      var ref = firebase.storage().ref().child(`images/users/${this.state.user.a_user_id}.jpg`);
       return ref.put(blob);
   }
 
@@ -103,7 +104,7 @@ class EditProfileComponent extends Component {
       var myStr = this.state.user.a_email;
       var newStr = myStr.replace(/\./g, "_");
 
-      firebase.storage().ref().child(`images/users/${newStr}.jpg`).getDownloadURL().then(async (url) => {
+      firebase.storage().ref().child(`images/users/${this.state.user.a_user_id}.jpg`).getDownloadURL().then(async (url) => {
         this.setState(prevState => ({
           user: {
               ...prevState.user,
@@ -141,8 +142,9 @@ class EditProfileComponent extends Component {
     });
   }
 
-  handleDateChanged(timeStamp){
-    var newDate = timeStamp ? new Date(timeStamp) : new Date();
+  async handleDateChanged(timeStamp){
+    var newDate = timeStamp ? new Date(timeStamp) : this.state.date;
+    
     this.setState({
       date: newDate,
       showDatePicker: false}
@@ -156,12 +158,19 @@ class EditProfileComponent extends Component {
           ...prevState.user,
           a_birthdate: isoDate
       }
-    }))
+    }));
+
   }
 
-  async saveChanges(){
+  async saveChanges(){    
+    this.setState({
+      activityIndicator: true
+    })
     const { navigation } = this.props;
     await this.updateUser();
+    this.setState({
+      activityIndicator: false
+    })
     navigation.goBack();
   }
 
@@ -180,6 +189,8 @@ class EditProfileComponent extends Component {
       activityIndicator: false
     })
   }
+
+  asy
 
   render() {
 
@@ -207,6 +218,7 @@ class EditProfileComponent extends Component {
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#000000" />
         </View>
+        
       </SafeAreaView>)
       :
       (<ScrollView>
@@ -265,76 +277,78 @@ class EditProfileComponent extends Component {
 
 
 {/* --------------------------------------------------------------------------------------- */}
-          <Text style={styles.subtitle}> Personal Information</Text>
-          <View style={styles.inputView}>
-            <Text style={styles.inputTitle}>Name</Text>
-            <View style={styles.inputBox}>
-                <Input type="text" value={this.state.user.a_name} onChangeText={ text => this.handleNameChange(text) } placeholder='Name'></Input>
-            </View>
-          </View>
-          <Text style={styles.genderTitle}>Gender</Text>
-          <View style={styles.genderContainer}>
-            <Picker
-              selectedValue={this.state.user.a_gender}
-              style={{ height: 50, width: 150,  }}
-              onValueChange={(itemValue, itemIndex) => this.handleGenderChange(itemValue)}>
-              <Picker.Item label="Unknown" value="Undefined" />
-              <Picker.Item label="Female" value="Female" />
-              <Picker.Item label="Male" value="Male" />
-              <Picker.Item label="Other" value="Other" />
-            </Picker>
-          </View>
-
-          <View style={styles.showAll} flexDirection='row' justifyContent='space-between'  >
-          <View style={styles.inputView}>
-            <Text style={styles.inputTitle}>Birth Date</Text>
-            <View>
-                <Text style={styles.dateStyle}>{this.state.date.getDate()} / {this.state.date.getMonth() + 1} / {this.state.date.getFullYear()}</Text>
-            </View>
-          </View>
-
-          <View paddingTop={10}>
-                <TouchableOpacity onPress={() => this.setState({showDatePicker: true})}>
-                  <Text style={styles.secondaryText}>CHANGE DATE</Text>
-                  <Icon
-                        name='calendar-check-outline'
-                        type='material-community'  
-                      />
-                </TouchableOpacity>
+          <View style={styles.container}>
+            <Text style={styles.subtitle}> Personal Information</Text>
+            <View style={styles.inputView}>
+              <Text style={styles.inputTitle}>Name</Text>
+              <View style={styles.inputBox}>
+                  <Input type="text" value={this.state.user.a_name} onChangeText={ text => this.handleNameChange(text) } placeholder='Name'></Input>
               </View>
-          </View>
+            </View>
+            <Text style={styles.genderTitle}>Gender</Text>
+            <View style={styles.genderContainer}>
+              <Picker
+                selectedValue={this.state.user.a_gender}
+                style={{ height: 50, width: 150,  }}
+                onValueChange={(itemValue, itemIndex) => this.handleGenderChange(itemValue)}>
+                <Picker.Item label="Unknown" value="Undefined" />
+                <Picker.Item label="Female" value="Female" />
+                <Picker.Item label="Male" value="Male" />
+                <Picker.Item label="Other" value="Other" />
+              </Picker>
+            </View>
 
-            {this.state.showDatePicker && (
-              <DateTimePicker
-                value={ this.state.date }
-                mode='default'
-                display='default'
-                onChange={ date => { this.handleDateChanged(date.nativeEvent.timestamp)}}/>
-            )}
-          <View>
-            <TouchableOpacity style={styles.button} onPress={() => { 
-                const pushAction = StackActions.push("EditProfilePassword");
-                navigation.dispatch(pushAction);
-                //navigation.navigate("EditProfilePassword") 
-              }} >
-                <Text style={styles.buttonText}>CHANGE PASSWORD</Text>
-            </TouchableOpacity>
-          </View>
+            <View style={styles.showAll} flexDirection='row' justifyContent='space-between'  >
+            <View style={styles.inputView}>
+              <Text style={styles.inputTitle}>Birth Date</Text>
+              <View>
+                  <Text style={styles.dateStyle}>{this.state.date.getDate()} / {this.state.date.getMonth() + 1} / {this.state.date.getFullYear()}</Text>
+              </View>
+            </View>
 
-        </View>
-        <View>
-          <TouchableOpacity style={styles.button} onPress={() => {
-              const pushAction = StackActions.push("EditProfileAllergies", { user: this.state.user });
-              navigation.dispatch(pushAction);
-              //navigation.navigate("EditProfileAllergies", { user: this.state.user })
-            }} >
-              <Text style={styles.buttonText}>SET FOOD PREFERENCES</Text>
-          </TouchableOpacity>
+            <View paddingTop={10}>
+                  <TouchableOpacity onPress={() => this.setState({showDatePicker: true})}>
+                    <Text style={styles.secondaryText}>CHANGE DATE</Text>
+                    <Icon
+                          name='calendar-check-outline'
+                          type='material-community'  
+                        />
+                  </TouchableOpacity>
+                </View>
+            </View>
+
+              {this.state.showDatePicker && (
+                <DateTimePicker
+                  value={ this.state.date }
+                  mode='default'
+                  display='default'
+                  onChange={ date => { this.handleDateChanged(date.nativeEvent.timestamp)}}/>
+              )}
+            <View>
+              <TouchableOpacity style={styles.button} onPress={() => { 
+                  const pushAction = StackActions.push("EditProfilePassword");
+                  navigation.dispatch(pushAction);
+                  //navigation.navigate("EditProfilePassword") 
+                }} >
+                  <Text style={styles.buttonText}>CHANGE PASSWORD</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View>
+              <TouchableOpacity style={styles.button} onPress={() => {
+                  const pushAction = StackActions.push("EditProfileAllergies", { user: this.state.user });
+                  navigation.dispatch(pushAction);
+                  //navigation.navigate("EditProfileAllergies", { user: this.state.user })
+                }} >
+                  <Text style={styles.buttonText}>SET FOOD PREFERENCES</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
 
 
         <Snackbar
-              style={styles.snackBar}
+              style={styles.snackBarError}
               duration={4000}
               visible={this.state.snackbarConnectionVisible}
               onDismiss={this.dismissConnectionSnackBar}
@@ -357,8 +371,9 @@ export default function EditProfile(props) {
 
 const styles = StyleSheet.create({
     backgroundContainer: {
-      flex: 1,
-
+      height: Dimensions.get("window").height - 80,
+      
+      backgroundColor: 'white',
       color: 'white',
     },
 
@@ -375,7 +390,7 @@ const styles = StyleSheet.create({
     mainPage: {
       flex: 3,
       position: 'relative',
-      paddingTop: 20,
+      paddingTop: 25,
       //paddingBottom: 40,
       alignItems: 'center',
     },
@@ -432,7 +447,7 @@ const styles = StyleSheet.create({
     },
 
     input: {
-      elevation: 15,
+      elevation: 10,
       position: 'relative',
       width: WIDTH - 100 ,
       height: 60,
@@ -447,7 +462,7 @@ const styles = StyleSheet.create({
     },
 
     inputTitle:{
-      elevation: 15,
+      elevation: 10,
       position: "absolute",
       color: '#FC987E',
       paddingLeft: 20,
@@ -583,5 +598,15 @@ const styles = StyleSheet.create({
   loading:{
     flex: 1,
     marginTop:100,
-  }
+  },
+
+  container:{
+    top: -35,
+  },
+  
+
+  snackBarError:{
+    backgroundColor: "#ff4d4d",
+    height:70,
+  },
   });

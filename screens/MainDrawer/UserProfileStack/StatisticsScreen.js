@@ -1038,7 +1038,7 @@ class RestaurantStatisticsProfileComponent extends Component {
                         : (<View></View>)
                     }
                     <Snackbar
-                        style={styles.snackBar}
+                        style={styles.snackBarError}
                         duration={4000}
                         visible={this.state.snackbarConnectionVisible}
                         onDismiss={this.dismissConnectionSnackBar}
@@ -1194,7 +1194,7 @@ const styles = StyleSheet.create({
     
     
       button: {
-        elevation: 15,
+        elevation: 10,
         borderRadius: 25,
         backgroundColor: "#FC987E",
         color: "black",
@@ -1205,7 +1205,7 @@ const styles = StyleSheet.create({
       },
     
       cancelButton: {
-        elevation: 15,
+        elevation: 10,
         borderRadius: 5,
         backgroundColor: "white",
         color: "black",
@@ -1216,7 +1216,7 @@ const styles = StyleSheet.create({
       },
     
       deleteButton: {
-        elevation: 15,
+        elevation: 10,
         borderRadius: 5,
         backgroundColor: "red",
         color: "white",
@@ -1262,6 +1262,11 @@ const styles = StyleSheet.create({
     
       snackBar:{
         backgroundColor: "#787777",
+        height:70,
+      },
+
+      snackBarError:{
+        backgroundColor: "#ff4d4d",
         height:70,
       },
 });

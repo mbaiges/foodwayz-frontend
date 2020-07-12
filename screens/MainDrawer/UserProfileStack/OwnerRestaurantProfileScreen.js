@@ -14,7 +14,8 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
-  Modal
+  Modal,
+  ActivityIndicator,
 } from "react-native";
 import { RestaurantApi, FoodApi, UserApi, OwnsApi } from "../../../api";
 
@@ -143,10 +144,16 @@ class OwnerRestaurantProfileComponent extends Component {
   }
 
   async componentDidMount() {
+    this.setState({
+      activityIndicator: true
+    })
     console.log("Mounting");
     await this.fetchRestaurant();
     await this.fetchImages();
     await this.fetchDishes();
+    this.setState({
+      activityIndicator: false
+    })
   }
 
 
@@ -270,10 +277,15 @@ class OwnerRestaurantProfileComponent extends Component {
 
 
     return (
-      <SafeAreaView style={styles.backgroundContainer}>
-
-
-
+      (this.state.activityIndicator) ?
+      (<SafeAreaView>
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#000000" />
+        </View>
+        
+      </SafeAreaView>)
+      :
+      (<SafeAreaView style={styles.backgroundContainer}>
 
         <ScrollView>
 
@@ -409,7 +421,7 @@ class OwnerRestaurantProfileComponent extends Component {
                   //navigation.navigate("AddDish", {restaurant: this.state.restaurant, dishesUpdater: this.updateDishes.bind(this)})
                 }}
             >
-                <Text style={styles.buttonText}>Add New Food!</Text>
+                <Text style={styles.buttonText}>Add new food</Text>
             </TouchableOpacity>
           </View>
 
@@ -630,7 +642,7 @@ class OwnerRestaurantProfileComponent extends Component {
 
 
         <Snackbar
-              style={styles.snackBar}
+              style={styles.snackBarError}
               duration={4000}
               visible={this.state.snackbarConnectionVisible}
               onDismiss={this.dismissConnectionSnackBar}
@@ -639,7 +651,7 @@ class OwnerRestaurantProfileComponent extends Component {
         </Snackbar>
 
         </ScrollView>
-      </SafeAreaView>
+      </SafeAreaView>)
     );
   }
 
@@ -806,7 +818,7 @@ const styles = StyleSheet.create({
 
 
   button: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 25,
     backgroundColor: "#FC987E",
     color: "black",
@@ -817,7 +829,7 @@ const styles = StyleSheet.create({
   },
 
   cancelButton: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 5,
     backgroundColor: "white",
     color: "black",
@@ -828,7 +840,7 @@ const styles = StyleSheet.create({
   },
 
   deleteButton: {
-    elevation: 15,
+    elevation: 10,
     borderRadius: 5,
     backgroundColor: "red",
     color: "white",
@@ -881,14 +893,14 @@ const styles = StyleSheet.create({
     position:"absolute",
     marginTop: 0,
     marginLeft: 0,
-    elevation:20
+    elevation:10
   },
 
   closeModalIconContainer:{
     position:"absolute",
     marginTop: 0,
     marginLeft: 200,
-    elevation:20,
+    elevation:10,
   },
 
 
@@ -995,6 +1007,16 @@ headerText: {
     fontSize: 20,
     color: "white",
     letterSpacing: 1,
+  },
+
+  snackBarError:{
+    backgroundColor: "#ff4d4d",
+    height:70,
+  },
+
+  loading:{
+    flex: 1,
+    marginTop:100,
   },
 
 });

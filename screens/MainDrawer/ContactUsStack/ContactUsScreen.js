@@ -28,7 +28,8 @@ class ContactUs extends Component {
         this.state = {
           type: "suggestion",
           comment: "",
-          selectedIndex: 1
+          selectedIndex: 1,
+          buttonDisabled: false,
         };
         this.updateIndex = this.updateIndex.bind(this)
       }
@@ -43,16 +44,14 @@ class ContactUs extends Component {
         if( this.state.comment != "" ){
           try {
             this.setState({
-              activityIndicator: true
-            })
+              buttonDisabled: true,
+            });
             const resp = await ContactUsApi.customEmail(email)
             switch(resp.status) {
               case 200:
                 console.log("Email Sent")
                 this.setState({
-                  activityIndicator: false
-                })
-                this.setState({
+                  buttonDisabled: false,
                   snackbarSentVisible: true
                 });
                 break;
@@ -116,17 +115,8 @@ class ContactUs extends Component {
         const { selectedIndex } = this.state.selectedIndex
 
     return (
-      (this.state.activityIndicator) ?
-      (<SafeAreaView>
-        <View style={styles.loading}>
-          <ActivityIndicator size="large" color="#000000" />
-        </View>
-      </SafeAreaView>)
-      :
-        (<SafeAreaView style={styles.backgroundContainer}>
+        <SafeAreaView style={styles.backgroundContainer}>
           <ScrollView>
-            <Text style={styles.logoText}>Contact us</Text>
-            
             <View alignItems='center'>
               <Image
                 style={styles.logoImage}
@@ -165,19 +155,14 @@ class ContactUs extends Component {
                       await this.sendMail();
                     
                     }}
+                    disabled={this.state.buttonDisabled}
                 >
                     <Text style={styles.save}>Send</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.cancelButton}
-                >
-                    <Text style={styles.cancel}>Cancel</Text>
-                 
                 </TouchableOpacity>
             </View>
                
         <Snackbar
-              style={styles.snackBar}
+              style={styles.snackBarError}
               duration={4000}
               visible={this.state.snackbarConnectionVisible}
               onDismiss={this.dismissConnectionSnackBar}
@@ -203,9 +188,9 @@ class ContactUs extends Component {
              <Text style={styles.textSnack}>Email sent!</Text>
         </Snackbar>
             </ScrollView>
-        </SafeAreaView>)
-    );
-    };
+        </SafeAreaView>
+          );
+      }
 }
 
 
@@ -263,16 +248,16 @@ const styles = StyleSheet.create({
     buttons: {
         flexDirection:"row",
         paddingTop:10,
+        alignItems:"center",
+        justifyContent:"center"
     },
     saveButton: {
-        marginLeft:180,
         backgroundColor: "#FC987E",
         color: "white",
         width: 100,
         alignItems: "center",
         paddingTop:8,
         height: 40,
-        marginRight:15,
       },
     save: {
         color:"white",
@@ -312,6 +297,8 @@ const styles = StyleSheet.create({
 
   logoImage: {
     position: "relative",
+    marginTop: 15,
+    marginBottom: 15,
     width: 200,
     height: 200,
   },
@@ -319,7 +306,12 @@ const styles = StyleSheet.create({
   loading:{
     flex: 1,
     marginTop:100,
-  }
+  },
+
+  snackBarError:{
+    backgroundColor: "#ff4d4d",
+    height:70,
+  },
     
 });
 

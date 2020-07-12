@@ -212,6 +212,12 @@ class CreateRestaurantComponent extends Component {
               })
         }
 
+        checkIfHasChain(){
+            if(!this.state.chainSelected){
+                this.setState({isChain: false});
+            }
+        }
+
         render() {
 
             const {navigation} = this.props;
@@ -246,7 +252,7 @@ class CreateRestaurantComponent extends Component {
                     <TouchableOpacity style={styles.button} onPress={() => {
                         this.setModalVisible(true);
                      }} >
-                        <Text>Change Chain</Text>
+                        <Text style={styles.buttonText}>CHANGE CHAIN</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -259,6 +265,7 @@ class CreateRestaurantComponent extends Component {
                 <View style={styles.loading}>
                 <ActivityIndicator size="large" color="#000000" />
                 </View>
+                
             </SafeAreaView>)
             :
           (<ScrollView>
@@ -424,6 +431,7 @@ class CreateRestaurantComponent extends Component {
                         visible={this.state.modalVisible}
                         onRequestClose={() => {
                             this.setState({modalVisible: false});
+                            this.checkIfHasChain();
                           }}
 
                     >
@@ -468,7 +476,7 @@ class CreateRestaurantComponent extends Component {
         </Snackbar>
 
         <Snackbar
-              style={styles.snackBar}
+              style={styles.snackBarError}
               duration={4000}
               visible={this.state.snackbarConnectionVisible}
               onDismiss={this.dismissConnectionSnackBar}
@@ -535,7 +543,7 @@ const styles = StyleSheet.create({
 
 
     inputTitle:{
-        elevation: 15,
+        elevation: 10,
         position: "absolute",
         color: '#FC987E',
         paddingLeft: 20,
@@ -547,7 +555,7 @@ const styles = StyleSheet.create({
 
 
     input: {
-        elevation: 15,
+        elevation: 10,
         position: "relative",
         width: WIDTH - 100,
         height: 60,
@@ -705,6 +713,10 @@ const styles = StyleSheet.create({
     loading:{
         flex: 1,
         marginTop:100,
-      }
+      },
     
+      snackBarError:{
+        backgroundColor: "#ff4d4d",
+        height:70,
+      },
   });

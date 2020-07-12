@@ -10,6 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  ActivityIndicator
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
 import { RestaurantApi } from "../../../api";
@@ -90,14 +91,29 @@ class PremiumComponent extends Component {
     }
 
     async componentDidMount() {
+      this.setState({
+        activityIndicator: true
+      })
       console.log('mounting');
       await this.fetchRestaurant();
+      this.setState({
+        activityIndicator: false
+      })
     }
 
     render() {
       const { navigation } = this.props;
 
       return (
+        (this.state.activityIndicator) ?
+      (<SafeAreaView>
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#000000" />
+        </View>
+        
+      </SafeAreaView>)
+      :
+      (
         <SafeAreaView style={styles.backgroundContainer}>
           <ScrollView>
             <Text style={styles.logoText}>Sign up for premium</Text>
@@ -172,7 +188,7 @@ class PremiumComponent extends Component {
                 </TouchableOpacity>
             </View>
             <Snackbar
-              style={styles.snackBar}
+              style={styles.snackBarError}
               duration={4000}
               visible={this.state.snackbarConnectionVisible}
               onDismiss={this.dismissConnectionSnackBar}
@@ -180,7 +196,7 @@ class PremiumComponent extends Component {
                 <Text style={styles.textSnack}>No internet connection.</Text>
             </Snackbar>
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView>)
       );
     };
 }
@@ -310,5 +326,9 @@ const styles = StyleSheet.create({
         height:70,
       },
     
+      snackBarError:{
+        backgroundColor: "#ff4d4d",
+        height:70,
+      },
 });
 

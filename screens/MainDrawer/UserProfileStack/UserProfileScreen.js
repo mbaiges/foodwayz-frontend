@@ -16,8 +16,9 @@ import {
   Modal,
   ActivityIndicator
 } from "react-native";
-
+import * as firebase from 'firebase';
 import { StackActions } from '@react-navigation/native';
+import { Snackbar } from 'react-native-paper';
 
 import { UserApi, ReviewApi, RestaurantApi, Owns, OwnsApi } from '../../../api';
 
@@ -31,7 +32,8 @@ class UserProfileComponent extends Component {
       reviews: [],
       restaurants: [],
       restaurantsModalVisible: false,
-
+      noReviewsText: false,
+      
     }
   }
 
@@ -46,36 +48,124 @@ class UserProfileComponent extends Component {
 
   async fetchUser() {
     console.log('fetching user');
-    const resp = await UserApi.getMe();
-    let user = resp.response.result;
-    if(!user.a_image_url || user.a_image_url == null){
-      user.a_image_url = "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Funknown.png?alt=media&token=7bec299d-aefa-486e-8aa1-6f11c874ee2f"
-    }
-    this.setState({
-      user: resp.response.result
-    })
+    try {
+      const resp = await UserApi.getMe();
+      switch(resp.status) {
+        case 200:
+          let user = resp.response.result;
+    
+          if(!user.a_image_url || user.a_image_url == null){
+            await this.getImage(user.a_user_id);
+          }
 
-    console.log('done fetching user');
-    console.log("User is: " + this.state.user);
-    console.log(JSON.stringify(resp.response.result));
+          this.setState({
+            user: user
+          })
+
+          console.log('done fetching user');
+          console.log("User is: " + this.state.user);
+          console.log(JSON.stringify(resp.response.result));
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
+    }
+
+
+
+    
+    
+  }
+
+  async getImage(id){
+    let pugId = (id%16);
+    let str = "pug"+pugId;
+    console.log("geting string: " + str);
+
+    firebase.storage().ref().child(`images/users/${str}.png`).getDownloadURL().then(async (url) => {
+        let user = this.state.user;
+        user.a_image_url = url; 
+        this.setState({user:user});
+    }).catch(function (error) {
+        Alert.alert(error.message);
+        return "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Funknown.png?alt=media&token=7bec299d-aefa-486e-8aa1-6f11c874ee2f";
+    });
   }
 
   async fetchReviews() {
-    const resp = await ReviewApi.getReviewsByUser(this.state.user.a_user_id);
-    this.setState({
-      reviews: resp.response.result
-    })
-    console.log(resp);
+    try {
+      const resp = await ReviewApi.getReviewsByUser(this.state.user.a_user_id);
+      switch(resp.status) {
+        case 200:
+          let noReviewsText = false;
+          if(resp.response.result.length === 0){
+            noReviewsText = true;
+          }
+          this.setState({
+            reviews: resp.response.result,
+            noReviewsText: noReviewsText,
+          })
+
+          console.log(resp);
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+    }
+    
   }
 
   async fetchRestaurants() { 
-    const resp = await OwnsApi.getMyRestaurants();
-    this.setState({
-      restaurants: resp.response.result
-    })
+    try {
+      const resp = await OwnsApi.getMyRestaurants();
+      switch(resp.status) {
+        case 200:
+          this.setState({
+            restaurants: resp.response.result
+          })
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+    }
+
+
+
+    
+
   }
 
   async componentDidMount() {
+    const { navigation } = this.props;
+
     this.setState({
       activityIndicator: true
     })
@@ -85,9 +175,18 @@ class UserProfileComponent extends Component {
     await this.fetchReviews();
     await this.fetchRestaurants();
     this.setState({
-      activityIndicator: false
-    })
+      activityIndicator: false,
+      updateWhenFocus: navigation.addListener('focus', async () => {
+        await this.fetchUser();
+        await this.fetchReviews();
+        await this.fetchRestaurants();
+      })
+    });
 
+  }
+
+  async componentWillUnmount() {
+    this.state.updateWhenFocus.remove();
   }
 
   async componentDidUpdate(){
@@ -152,6 +251,8 @@ class UserProfileComponent extends Component {
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#000000" />
         </View>
+        
+           
       </SafeAreaView>)
       :
       (<SafeAreaView style={styles.backgroundContainer}>
@@ -171,9 +272,13 @@ class UserProfileComponent extends Component {
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
               >
-                {
+                {this.state.noReviewsText &&
+                <View style={styles.textNoReviewsContainer}>
+                  <Text style={styles.textNoReviews}>You don't have any reviews yet.</Text>
+                </View>
+                }
 
-                  this.state.reviews.map((review, idx) => {
+                {this.state.reviews.map((review, idx) => {
                     return (
                       <TouchableOpacity
                         key={idx}
@@ -289,6 +394,14 @@ class UserProfileComponent extends Component {
               <Text style={styles.buttonText}>Sign Out</Text>
             </TouchableOpacity>
           </View>
+          <Snackbar
+              style={styles.snackBarError}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+            >
+                <Text style={styles.textSnack}>No internet connection.</Text>
+          </Snackbar>
         </ScrollView>
       </SafeAreaView>)
     );
@@ -415,7 +528,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   button: {
-    elevation: 15,
+    elevation: 5,
     borderRadius: 25,
     backgroundColor: "#FC987E",
     color: "black",
@@ -486,7 +599,30 @@ const styles = StyleSheet.create({
   loading:{
     flex: 1,
     marginTop:100,
-  }
+  },
+
+  snackBarError:{
+    backgroundColor: "#ff4d4d",
+    height:70,
+  },
+
+  textNoReviewsContainer:{
+    paddingLeft: 20,
+    paddingTop: 5,
+  },
+
+  textNoReviews:{
+    textAlign: "left",
+    fontSize: 15,
+    paddingLeft: 15,
+  },
+
+  textSnack:{
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingBottom: 5,
+  },
 
 });
 

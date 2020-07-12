@@ -11,6 +11,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  ActivityIndicator
 } from "react-native";
 
 
@@ -66,6 +67,9 @@ class EditRestaurantComponent extends Component {
         }
     
         async saveChanges(){
+            this.setState({
+                activityIndicator: true
+              })
             const { route } = this.props;
             const { restaurantUpdater } = route.params;
 
@@ -80,6 +84,9 @@ class EditRestaurantComponent extends Component {
 
             await RestaurantApi.modify(this.state.restaurant);
             restaurantUpdater(aux);
+            this.setState({
+                activityIndicator: false
+              })
         }
 
         render() {
@@ -88,7 +95,14 @@ class EditRestaurantComponent extends Component {
     
         
             return (
-            <ScrollView>
+            (this.state.activityIndicator) ?
+                (<SafeAreaView>
+                    <View style={styles.loading}>
+                    <ActivityIndicator size="large" color="#000000" />
+                    </View>
+                </SafeAreaView>)
+                :
+            (<ScrollView>
                 <View style={styles.backgroundContainer}>
                     
                     <Text style={styles.title}> Edit Restaurant</Text>
@@ -164,6 +178,7 @@ class EditRestaurantComponent extends Component {
                     </View>
                 </View>  
             </ScrollView>
+            )
             );
        }
 }
@@ -207,7 +222,7 @@ const styles = StyleSheet.create({
 
 
     inputTitle:{
-        elevation: 15,
+        elevation: 10,
         position: "absolute",
         color: '#FC987E',
         paddingLeft: 20,
@@ -219,7 +234,7 @@ const styles = StyleSheet.create({
   
     
     input: {
-        elevation: 15,
+        elevation: 10,
         position: "relative",
         width: WIDTH - 100,
         height: 60,
@@ -255,6 +270,11 @@ const styles = StyleSheet.create({
         color:"white",
         textAlign:"center"
       },
+
+      loading:{
+        flex: 1,
+        marginTop:100,
+    },
 
   });
 

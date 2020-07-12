@@ -90,7 +90,6 @@ class CategoriesScreenComponent extends Component {
       (<SafeAreaView style={styles.backgroundContainer}>
         <ScrollView>
           <View>
-            <Text style={styles.homeSubtitle}>Categories</Text>
             <ScrollView>
               {
                 this.state.types.map(type => {
@@ -119,7 +118,7 @@ class CategoriesScreenComponent extends Component {
             </ScrollView>
           </View>
           <Snackbar
-            style={styles.snackBar}
+            style={styles.snackBarError}
             duration={4000}
             visible={this.state.snackbarConnectionVisible}
             onDismiss={this.dismissConnectionSnackBar}
@@ -176,7 +175,7 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    elevation: 20,
+    elevation: 10,
     position: "absolute",
     alignSelf: 'center',
     marginTop: 580,
@@ -219,6 +218,11 @@ const styles = StyleSheet.create({
 
   snackBar:{
     backgroundColor: "#787777",
+    height:70,
+  },
+
+  snackBarError:{
+    backgroundColor: "#ff4d4d",
     height:70,
   },
 

@@ -102,29 +102,42 @@ class ReviewInfoComponent extends Component {
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#000000" />
         </View>
+
       </SafeAreaView>)
       :
        ( <SafeAreaView style={styles.backgroundContainer}>
           <ScrollView>
-            <Text style={styles.logoText}>Review</Text>
-
             <Text style={styles.subtitle}>Review by</Text>
       
             <View style={styles.userInfo}>
-            <Text style={styles.text}>{this.state.user.a_name}</Text>
             <Image
               style={styles.userImage}
               resizeMode="cover"
               source={{ uri: this.state.user.a_image_url }}
             />
+            <Text style={styles.text}>{this.state.user.a_name}</Text>
             </View>
 
             <Text style={styles.subtitle}>User rating</Text>
-            <Rating imageSize={30} readonly startingValue={this.state.review.a_score} style={styles.rating} />
+            <Text style={styles.secondaryText}>Quality Score</Text>
+            <View style={styles.ratingContainer}>
+              <Text style={styles.ratingText}>{this.state.review.a_food_quality_score}</Text>
+              <Rating imageSize={30} readonly startingValue={this.state.review.a_food_quality_score} style={styles.rating} />
+            </View>
+            <Text style={styles.secondaryText}>Presentation Score</Text>
+            <View style={styles.ratingContainer}>
+              <Text style={styles.ratingText}>{this.state.review.a_presentation_score}</Text>
+              <Rating imageSize={30} readonly startingValue={this.state.review.a_presentation_score} style={styles.rating} />
+            </View>
+            <Text style={styles.secondaryText}>Price-quality Score</Text>
+            <View style={styles.ratingContainer}>
+              <Text style={styles.ratingText}>{this.state.review.a_price_quality_score}</Text>
+              <Rating imageSize={30} readonly startingValue={this.state.review.a_price_quality_score} style={styles.rating} />
+            </View>
 
             <Text style={styles.subtitle}>Comments</Text>    
             <Text style={styles.text}>{this.state.review.a_desc}</Text>   
-            <Text style={styles.subtitle}>Food reviewed</Text>
+            <Text style={styles.lastSubtitle}>Food reviewed</Text>
             <TouchableOpacity>
               <FoodCard
                   image={{ uri: this.state.food.a_image_url }}
@@ -141,7 +154,7 @@ class ReviewInfoComponent extends Component {
     
             </ScrollView>
         <Snackbar
-              style={styles.snackBar}
+              style={styles.snackBarError}
               duration={4000}
               visible={this.state.snackbarConnectionVisible}
               onDismiss={this.dismissConnectionSnackBar}
@@ -158,161 +171,190 @@ export default function ReviewInfoScreen( props ) {
 }
 
 const styles = StyleSheet.create({
-    backgroundContainer: {
-        flex: 1,
-        width: null,
-        height: null,
-        backgroundColor: "white",
-    },
-    subtitle: {
-      fontSize: 16,
-      fontWeight: "bold",
+  backgroundContainer: {
+      flex: 1,
+      width: null,
+      height: null,
+      backgroundColor: "white",
+  },
+  secondaryText: {
+
+    fontSize: 14,
+    paddingLeft: 15,
+  },
+  subtitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "black",
+    marginTop: 16,
+    marginLeft:15,
+    marginBottom:10,
+  },
+  lastSubtitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "black",
+    marginTop: 16,
+    marginLeft:15,
+  },
+  text: {
+      fontSize: 14,
       color: "black",
       marginLeft:15,
       marginBottom:10,
     },
-    text: {
-        fontSize: 14,
-        color: "black",
-        marginLeft:15,
-        marginBottom:10,
-      },
-    userInfo: {
-        flexDirection:"row",
-        margin:20,
-        alignItems:"center"
-    },
-    userImage:{ 
-        position: "relative",
-        width: 40,
-        height: 40,
-        marginLeft:20,
-        justifyContent: "center",
-        borderRadius: 40 / 2,
-    },
-    message: {
-      marginTop:10,
-      position: "relative",
-      borderColor:"gray",
-      borderWidth:1,
-      paddingLeft: 5,
-      fontSize: 16,
-      backgroundColor: "white",
-      color: "#000000",
-      marginHorizontal: 25,
-      textAlignVertical:"top",
+  userInfo: {
+      flexDirection:"row",
+      margin:20,
+      alignItems:"center"
   },
-    logoText: {
-        position: "relative",
-        color: "black",
-        fontSize: 20,
-        paddingTop: 10,
-        paddingLeft:15,
-        paddingBottom: 25,
-        fontWeight: "bold",
-        opacity: 1,
-        textAlign: "left",
+  userImage:{ 
+      position: "relative",
+      width: 40,
+      height: 40,
+      marginLeft:20,
+      justifyContent: "center",
+      borderRadius: 40 / 2,
+  },
+  message: {
+    marginTop:10,
+    position: "relative",
+    borderColor:"gray",
+    borderWidth:1,
+    paddingLeft: 5,
+    fontSize: 16,
+    backgroundColor: "white",
+    color: "#000000",
+    marginHorizontal: 25,
+    textAlignVertical:"top",
+  },
+  logoText: {
+      position: "relative",
+      color: "black",
+      fontSize: 20,
+      paddingTop: 10,
+      paddingLeft:15,
+      paddingBottom: 25,
+      fontWeight: "bold",
+      opacity: 1,
+      textAlign: "left",
+  },
+  buttons: {
+      flexDirection:"row",
+      paddingTop:10,
+  },
+  saveButton: {
+      marginLeft:180,
+      backgroundColor: "#FC987E",
+      color: "white",
+      width: 100,
+      alignItems: "center",
+      paddingTop:8,
+      height: 40,
+      marginRight:15,
     },
-    buttons: {
-        flexDirection:"row",
-        paddingTop:10,
-    },
-    saveButton: {
-        marginLeft:180,
-        backgroundColor: "#FC987E",
-        color: "white",
-        width: 100,
-        alignItems: "center",
-        paddingTop:8,
-        height: 40,
-        marginRight:15,
-      },
-    save: {
-        color:"white",
-    },
-    cancel: {
-        color:"#FC987E",
-    },
-    cancelButton: {
-        backgroundColor: "white",
-        paddingTop:8,
-        width: 100,
-        alignItems: "center",
-        padding: 13,
-        height: 40,
-        borderColor: "#FC987E",
-        borderWidth: 1,
-      },
-      logoImage: {
-        position: "relative",
-        width: 120,
-        height: 120,
-        justifyContent: "center",
-        borderRadius: 120 / 2,
-      },
-    
-      review: {
-        position: "relative",
-        width: width,
-        flexDirection: "row",
-      },
-    
-      reviewImage: {
-        width: 120,
-        height: 120,
-        justifyContent: "center",
-      },
-    
-      starNumber: {
-        position: "relative",
-        fontWeight: "bold",
-        fontSize: 15,
-        paddingLeft: 15,
-        color: "black",
-      },
-    
-      foodName: {
-        textAlign: "left",
-        fontWeight: "bold",
-        fontSize: 15,
-        paddingLeft: 3,
-      },
-    
-      cardFooter: {
-        justifyContent: "space-between",
-        flexDirection: "row",
-      },
-    
+  save: {
+      color:"white",
+  },
+  cancel: {
+      color:"#FC987E",
+  },
+  cancelButton: {
+    backgroundColor: "white",
+    paddingTop:8,
+    width: 100,
+    alignItems: "center",
+    padding: 13,
+    height: 40,
+    borderColor: "#FC987E",
+    borderWidth: 1,
+  },
+  logoImage: {
+    position: "relative",
+    width: 120,
+    height: 120,
+    justifyContent: "center",
+    borderRadius: 120 / 2,
+  },
 
-      rating: {
-        alignSelf: "center",
-      },
+  review: {
+    position: "relative",
+    width: width,
+    flexDirection: "row",
+  },
 
-    
-      reviewContainer: {
-        flex: 2,
-      },
-      favouritesContainer: {
-        flex: 2,
-        paddingTop: 5,
-      },
-    
-      loading:{
-        flex: 1,
-        marginTop:100,
-      },
+  reviewImage: {
+    width: 120,
+    height: 120,
+    justifyContent: "center",
+  },
 
-      textSnack:{
-        color: 'white',
-        fontSize: 20,
-        fontWeight: 'bold',
-        paddingBottom: 5,
-      },
-    
-      snackBar:{
-        backgroundColor: "#787777",
-        height:70,
-      },
+  starNumber: {
+    position: "relative",
+    fontWeight: "bold",
+    fontSize: 15,
+    paddingLeft: 15,
+    color: "black",
+  },
+
+  foodName: {
+    textAlign: "left",
+    fontWeight: "bold",
+    fontSize: 15,
+    paddingLeft: 3,
+  },
+
+  cardFooter: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+  },
+
+
+  rating: {
+    alignSelf: "center",
+  },
+  ratingContainer: {
+    marginTop: 0,
+    flexDirection: 'row'
+  },
+  ratingText: {
+    textAlign: "left",
+    fontWeight: "bold",
+    fontSize: 27,
+    paddingLeft: 40,
+    paddingRight: 20,
+
+  },
+
+  reviewContainer: {
+    flex: 2,
+  },
+  favouritesContainer: {
+    flex: 2,
+    paddingTop: 5,
+  },
+
+  loading:{
+    flex: 1,
+    marginTop:100,
+  },
+
+  textSnack:{
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingBottom: 5,
+  },
+
+  snackBar:{
+    backgroundColor: "#787777",
+    height:70,
+  },
+
+  snackBarError:{
+    backgroundColor: "#ff4d4d",
+    height:70,
+  },
     
 });
 

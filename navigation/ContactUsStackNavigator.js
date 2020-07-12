@@ -8,7 +8,7 @@ import { ContactUs} from "../screens/MainDrawer";
 import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
-const INITIAL_ROUTE_NAME = "Home";
+const INITIAL_ROUTE_NAME = "ContactUs";
 
 export default function StackNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the

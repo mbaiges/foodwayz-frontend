@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Foodwayz",
+    "name": "FoodWayz",
     "slug": "foodwayz",
     "platforms": [
       "ios",
@@ -23,6 +23,8 @@
       "**/*"
     ],
     "android": {
+      "package": "ar.edu.itba.dychromatic.foodwayz",
+      "versionCode": 1,
       "intentFilters": [
         {
           "action": "VIEW",

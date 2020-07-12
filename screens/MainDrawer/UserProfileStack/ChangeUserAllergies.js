@@ -221,6 +221,7 @@ class EditProfileAllergiesComponent extends Component {
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#000000" />
         </View>
+        
       </SafeAreaView>)
       :
         
@@ -241,7 +242,7 @@ class EditProfileAllergiesComponent extends Component {
                   </TouchableOpacity>
                 </View>
                 <Snackbar
-                  style={styles.snackBar}
+                  style={styles.snackBarError}
                   duration={4000}
                   visible={this.state.snackbarConnectionVisible}
                   onDismiss={this.dismissConnectionSnackBar}
@@ -338,6 +339,16 @@ const styles = StyleSheet.create({
   snackBar:{
     backgroundColor: "#787777",
     height:70,
+  },
+
+  snackBarError:{
+    backgroundColor: "#ff4d4d",
+    height:70,
+  },
+
+  loading:{
+    flex: 1,
+    marginTop:100,
   },
 
 });
