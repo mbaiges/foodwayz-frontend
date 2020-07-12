@@ -95,7 +95,7 @@ class EditProfileComponent extends Component {
 
       console.log("imageName: " + newStr);
 
-      var ref = firebase.storage().ref().child(`images/users/${newStr}.jpg`);
+      var ref = firebase.storage().ref().child(`images/users/${this.state.user.a_user_id}.jpg`);
       return ref.put(blob);
   }
 
@@ -103,7 +103,7 @@ class EditProfileComponent extends Component {
       var myStr = this.state.user.a_email;
       var newStr = myStr.replace(/\./g, "_");
 
-      firebase.storage().ref().child(`images/users/${newStr}.jpg`).getDownloadURL().then(async (url) => {
+      firebase.storage().ref().child(`images/users/${this.state.user.a_user_id}.jpg`).getDownloadURL().then(async (url) => {
         this.setState(prevState => ({
           user: {
               ...prevState.user,

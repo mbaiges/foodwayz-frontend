@@ -16,7 +16,7 @@ import {
   Modal,
   ActivityIndicator
 } from "react-native";
-
+import * as firebase from 'firebase';
 import { StackActions } from '@react-navigation/native';
 
 import { UserApi, ReviewApi, RestaurantApi, Owns, OwnsApi } from '../../../api';
@@ -48,16 +48,33 @@ class UserProfileComponent extends Component {
     console.log('fetching user');
     const resp = await UserApi.getMe();
     let user = resp.response.result;
+    
     if(!user.a_image_url || user.a_image_url == null){
-      user.a_image_url = "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Funknown.png?alt=media&token=7bec299d-aefa-486e-8aa1-6f11c874ee2f"
+      await this.getImage(user.a_user_id);
     }
+
     this.setState({
-      user: resp.response.result
+      user: user
     })
 
     console.log('done fetching user');
     console.log("User is: " + this.state.user);
     console.log(JSON.stringify(resp.response.result));
+  }
+
+  async getImage(id){
+    let pugId = (id%16);
+    let str = "pug"+pugId;
+    console.log("geting string: " + str);
+
+    firebase.storage().ref().child(`images/users/${str}.png`).getDownloadURL().then(async (url) => {
+        let user = this.state.user;
+        user.a_image_url = url; 
+        this.setState({user:user});
+    }).catch(function (error) {
+        Alert.alert(error.message);
+        return "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Funknown.png?alt=media&token=7bec299d-aefa-486e-8aa1-6f11c874ee2f";
+    });
   }
 
   async fetchReviews() {
