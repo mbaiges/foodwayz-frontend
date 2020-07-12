@@ -109,36 +109,36 @@ class CategorieScreenComponent extends Component {
       </SafeAreaView>)
       :
       (<SafeAreaView style={styles.backgroundContainer}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}>
-              {
-                this.state.foods.map(food => {
-                  return (
-                    <FoodCard
-                      key={food.a_food_id}
-                      image={{ uri: food.a_image_url }}
-                      title={food.a_title}
-                      brand={food.a_rest.a_name}
-                      onPress={async () => {
-                        const pushAction = StackActions.push("Food", { food: food });
-                        navigation.dispatch(pushAction);
-                        //navigation.navigate("Food", { food: food });
-                        console.log("I want to navigate to Dish page");
-                      }}
-                      rating={food.a_score}
-                    />
-                  )
-                })
-              }
-          </ScrollView>
-          <Snackbar
-            style={styles.snackBarError}
-            duration={4000}
-            visible={this.state.snackbarConnectionVisible}
-            onDismiss={this.dismissConnectionSnackBar}
-          >
-              <Text style={styles.textSnack}>No internet connection.</Text>
-          </Snackbar>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {
+            this.state.foods.map(food => {
+              return (
+                <FoodCard
+                  key={food.a_food_id}
+                  image={{ uri: food.a_image_url }}
+                  title={food.a_title}
+                  brand={food.a_rest.a_name}
+                  onPress={async () => {
+                    const pushAction = StackActions.push("Food", { food: food });
+                    navigation.dispatch(pushAction);
+                    //navigation.navigate("Food", { food: food });
+                    console.log("I want to navigate to Dish page");
+                  }}
+                  rating={food.a_score}
+                />
+              )
+            })
+          }
+        </ScrollView>
+        <Snackbar
+          style={styles.snackBar}
+          duration={4000}
+          visible={this.state.snackbarConnectionVisible}
+          onDismiss={this.dismissConnectionSnackBar}
+        >
+            <Text style={styles.textSnack}>No internet connection.</Text>
+        </Snackbar>
+
       </SafeAreaView>)
 
     );
