@@ -244,7 +244,7 @@ class FoodScreenComponent extends Component {
         </ScrollView>
 
         <Snackbar
-              style={styles.snackBar}
+              style={styles.snackBarError}
               duration={4000}
               visible={this.state.snackbarConnectionVisible}
               onDismiss={this.dismissConnectionSnackBar}
@@ -290,6 +290,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
+  },
+
+  snackBarError:{
+    backgroundColor: "#ff4d4d",
+    height:70,
   },
 
   buttonTag: {
