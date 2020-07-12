@@ -17,7 +17,7 @@ import {
 
 import * as ImagePicker from 'expo-image-picker';
 import * as firebase from 'firebase';
-import { UserApi, RestaurantChainApi, RestaurantApi } from '../../../api';
+import { UserApi, RestaurantChainApi, RestaurantApi, SearchApi } from '../../../api';
 import { makeUrl } from "expo-linking";
 import { Snackbar } from 'react-native-paper';
 
@@ -34,13 +34,14 @@ class CreateRestaurantComponent extends Component {
             city: "",
             postalCode: "",
             address: "",
-            isChain: false,
-            selectedChain: {},
+            isChain: false,    
             modalVisible: false,
             modalImageVisible: false,
             chainSelected: false,
             imagesUrl: [],
             chains: [],
+            modalInput: "",
+            selectedChain: {},
         }
 
     }
@@ -180,7 +181,10 @@ class CreateRestaurantComponent extends Component {
 
         async fetchChains(){
             try {
-                const resp = await RestaurantChainApi.getAll();
+                let auxQueryBody = {
+                    raw_input: this.state.modalInput
+                }
+                const resp = await SearchApi.searchRestaurantChains(auxQueryBody)
                 switch(resp.status) {
                   case 200:
                     this.setState({ chains: resp.response.result });
@@ -206,7 +210,7 @@ class CreateRestaurantComponent extends Component {
                 activityIndicator: true
               })
             console.log('mounting');
-            await this.fetchChains();
+            await this.fetchChains(this.modalInput);
             this.setState({
                 activityIndicator: false
               })
@@ -219,7 +223,6 @@ class CreateRestaurantComponent extends Component {
         }
 
         render() {
-
             const {navigation} = this.props;
             var modalInput = "";
             var chainOptionButtons = [];
@@ -445,7 +448,10 @@ class CreateRestaurantComponent extends Component {
                                         name='search'
                                         />
                                       }
-                                    onChangeText={(value) => (modalInput = value)}
+                                    onChangeText={async(value) => {
+                                        await this.setState({modalInput:value});
+                                        await this.fetchChains();
+                                    }}
                                 />
                                 <ScrollView>
                                     {chainOptionButtons}
