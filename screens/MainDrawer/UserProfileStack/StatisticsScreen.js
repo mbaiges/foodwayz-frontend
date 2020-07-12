@@ -713,6 +713,18 @@ class RestaurantStatisticsProfileComponent extends Component {
                                                 const pushAction = StackActions.push("Food", { food: food});
                                                 navigation.dispatch(pushAction);
                                                 //navigation.navigate("Food", { food: food});
+                                                let rating;
+                                                switch(this.state.chosenFoodDisplay){
+                                                    case "quality":
+                                                        rating = food.a_food_quality_score
+                                                    break;
+                                                    case "presentation":
+                                                        rating = food.a_presentation_score
+                                                    break;
+                                                    case "price":
+                                                        rating = food.a_price_quality_score
+                                                    break;
+                                                }
                                                 console.log("I want to navigate to Dish page");
                                                 }}>
                                                 <Card
@@ -725,7 +737,7 @@ class RestaurantStatisticsProfileComponent extends Component {
                                                     <View style={styles.cardFooter}>
                                                         <Text2 style={styles.foodName}>{food.a_title}</Text2>
                                                     </View>
-                                                    <Rating imageSize={20} readonly startingValue={food.a_score} style={styles.rating} /> 
+                                                    <Rating imageSize={20} readonly startingValue={rating} style={styles.rating} /> 
                                                 </Card>
                                             </TouchableOpacity>
                                         </View>    
