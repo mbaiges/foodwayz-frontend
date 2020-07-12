@@ -47,7 +47,7 @@ export default function StackNavigator({ navigation, route }) {
         BackButtonNavBar({ title: getHeaderTitle(route), navigation })
       }
     >
-      <Stack.Screen name="UserProfile" component={UserProfile} options={FirstBackButtonNavBar}/>
+      <Stack.Screen name="UserProfile" component={UserProfile} options={() => FirstBackButtonNavBar({ title: getHeaderTitle(route), navigation })}/>
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="EditProfilePassword" component={EditProfilePassword} />
       <Stack.Screen name="EditProfileAllergies" component={EditProfileAllergies} />
