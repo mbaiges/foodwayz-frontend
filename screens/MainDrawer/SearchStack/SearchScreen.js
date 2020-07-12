@@ -116,9 +116,9 @@ class SearchScreenComponent extends React.Component {
     }
     catch (error) {
       console.log(error);
-      this.setState({
-        snackbarConnectionVisible: true
-      });
+      // this.setState({
+      //    snackbarConnectionVisible: true
+      // });
       // Show snackbar (Internet connecion, maybe?)
     }
   }
@@ -195,9 +195,9 @@ class SearchScreenComponent extends React.Component {
     }
     catch (error) {
       console.log(error);
-      this.setState({
-        snackbarConnectionVisible: true
-      });
+      // this.setState({
+      //   snackbarConnectionVisible: true
+      // });
       // Show snackbar (Internet connecion, maybe?)
     }
 
@@ -222,9 +222,9 @@ class SearchScreenComponent extends React.Component {
     }
     catch (error) {
       console.log(error);
-      this.setState({
-        snackbarConnectionVisible: true
-      });
+      // this.setState({
+      //   snackbarConnectionVisible: true
+      // });
       // Show snackbar (Internet connecion, maybe?)
     }
   }
@@ -248,9 +248,9 @@ class SearchScreenComponent extends React.Component {
     }
     catch (error) {
       console.log(error);
-      this.setState({
-        snackbarConnectionVisible: true
-      });
+      // this.setState({
+      //   snackbarConnectionVisible: true
+      // });
       // Show snackbar (Internet connecion, maybe?)
     }
 
@@ -360,9 +360,9 @@ class SearchScreenComponent extends React.Component {
     }
     catch (error) {
       console.log(error);
-      this.setState({
-        snackbarConnectionVisible: true
-      });
+      // this.setState({
+      //   snackbarConnectionVisible: true
+      // });
       // Show snackbar (Internet connecion, maybe?)
     }
 
@@ -384,9 +384,9 @@ class SearchScreenComponent extends React.Component {
     }
     catch (error) {
       console.log(error);
-      this.setState({
-        snackbarConnectionVisible: true
-      });
+      // this.setState({
+      //   snackbarConnectionVisible: true
+      // });
       // Show snackbar (Internet connecion, maybe?)
     }
   }
@@ -408,9 +408,9 @@ class SearchScreenComponent extends React.Component {
     }
     catch (error) {
       console.log(error);
-      this.setState({
-        snackbarConnectionVisible: true
-      });
+      // this.setState({
+      //   snackbarConnectionVisible: true
+      // });
       // Show snackbar (Internet connecion, maybe?)
     }
   }
@@ -485,14 +485,76 @@ class SearchScreenComponent extends React.Component {
       actualQueryBody.filters.a_ingr_ids.length > 0 ||
       actualQueryBody.filters.a_char_ids.length > 0 ||
       actualQueryBody.filters.a_type_ids.length > 0 ))) {
-        chosenCharacteristics = actualQueryBody.filters.a_char_ids;
-        chosenIngredients = actualQueryBody.filters.a_ingr_ids;
-        chosenTypes = actualQueryBody.filters.a_type_ids;
+
+        for (let i = 0; i < actualQueryBody.filters.a_char_ids.length; i++) {
+          try {
+            const resp = await CharacteristicApi.get(actualQueryBody.filters.a_char_ids[i]);
+            switch(resp.status) {
+              case 200:
+                let item = resp.response.result;
+                if (Array.isArray(item)) {
+                  item = item[0];
+                }
+                actualQueryBody.filters.a_char_ids[i] = item;
+                break;
+              default:
+                break;
+            }
+          } catch(error) {
+            console.log(error);
+          }
+        }
+
+        console.log(this.state.chosenTypes);
         console.log("Changes from:");
         console.log(JSON.stringify(this.state.queryBody));
         console.log("to");
         console.log(JSON.stringify(actualQueryBody));
         await this.querySearch(actualQueryBody);
+
+        for (let i = 0; i < actualQueryBody.filters.a_ingr_ids.length; i++) {
+          try {
+            const resp = await IngredientApi.get(actualQueryBody.filters.a_ingr_ids[i]);
+            switch(resp.status) {
+              case 200:
+                let item = resp.response.result;
+                if (Array.isArray(item)) {
+                  item = item[0];
+                }
+                actualQueryBody.filters.a_ingr_ids[i] = item;
+                break;
+              default:
+                break;
+            }
+          } catch(error) {
+            console.log(error);
+          }
+        }
+
+        for (let i = 0; i < actualQueryBody.filters.a_type_ids.length; i++) {
+          try {
+            const resp = await TypeApi.get(actualQueryBody.filters.a_type_ids[i]);
+            switch(resp.status) {
+              case 200:
+                let item = resp.response.result;
+                if (Array.isArray(item)) {
+                  item = item[0];
+                }
+                actualQueryBody.filters.a_type_ids[i] = item;
+                break;
+              default:
+                break;
+            }
+          } catch(error) {
+            console.log(error);
+          }
+        }
+
+        this.setState({
+          chosenCharacteristics: [...actualQueryBody.filters.a_char_ids],
+          chosenIngredients: [...actualQueryBody.filters.a_ingr_ids],
+          chosenTypes: [...actualQueryBody.filters.a_type_ids]
+        });
     }
 
 
@@ -603,7 +665,7 @@ class SearchScreenComponent extends React.Component {
                                         <View key={idx}>
                                             <TouchableOpacity style={styles.buttonTag}>
                                                 <View style={styles.rowItemsContainer}>
-                                                    <Text style={styles.tagText}>{type.a_type_name.charAt(0).toUpperCase() + type.a_type_name.slice(1)}</Text>
+                                                    <Text style={styles.tagText}>{`${(type && type.a_type_name)?(new String(type.a_type_name).charAt(0).toUpperCase() + new String(type.a_type_name).slice(1)):""}`}</Text>
                                                     <TouchableOpacity
                                                         onPress={() => this.deleteType(idx)}
                                                     >
@@ -631,7 +693,7 @@ class SearchScreenComponent extends React.Component {
                                               this.setState({chosenTypes: aux});
                                             }}
                                         >
-                                            <Text style={styles.ingredient}>{type.a_type_name.charAt(0).toUpperCase() + type.a_type_name.slice(1)}</Text>
+                                            <Text style={styles.ingredient}>{`${(type && type.a_type_name)?(new String(type.a_type_name).charAt(0).toUpperCase() + new String(type.a_type_name).slice(1)):""}`}</Text>
                                         </TouchableOpacity>
                                   </View>
                                 );
