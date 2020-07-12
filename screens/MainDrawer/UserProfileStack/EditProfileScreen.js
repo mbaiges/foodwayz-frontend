@@ -142,7 +142,8 @@ class EditProfileComponent extends Component {
   }
 
   handleDateChanged(timeStamp){
-    var newDate = timeStamp ? new Date(timeStamp) : new Date();
+    var newDate = timeStamp ? new Date(timeStamp) : this.state.date;
+    
     this.setState({
       date: newDate,
       showDatePicker: false}
@@ -265,71 +266,73 @@ class EditProfileComponent extends Component {
 
 
 {/* --------------------------------------------------------------------------------------- */}
-          <Text style={styles.subtitle}> Personal Information</Text>
-          <View style={styles.inputView}>
-            <Text style={styles.inputTitle}>Name</Text>
-            <View style={styles.inputBox}>
-                <Input type="text" value={this.state.user.a_name} onChangeText={ text => this.handleNameChange(text) } placeholder='Name'></Input>
-            </View>
-          </View>
-          <Text style={styles.genderTitle}>Gender</Text>
-          <View style={styles.genderContainer}>
-            <Picker
-              selectedValue={this.state.user.a_gender}
-              style={{ height: 50, width: 150,  }}
-              onValueChange={(itemValue, itemIndex) => this.handleGenderChange(itemValue)}>
-              <Picker.Item label="Unknown" value="Undefined" />
-              <Picker.Item label="Female" value="Female" />
-              <Picker.Item label="Male" value="Male" />
-              <Picker.Item label="Other" value="Other" />
-            </Picker>
-          </View>
-
-          <View style={styles.showAll} flexDirection='row' justifyContent='space-between'  >
-          <View style={styles.inputView}>
-            <Text style={styles.inputTitle}>Birth Date</Text>
-            <View>
-                <Text style={styles.dateStyle}>{this.state.date.getDate()} / {this.state.date.getMonth() + 1} / {this.state.date.getFullYear()}</Text>
-            </View>
-          </View>
-
-          <View paddingTop={10}>
-                <TouchableOpacity onPress={() => this.setState({showDatePicker: true})}>
-                  <Text style={styles.secondaryText}>CHANGE DATE</Text>
-                  <Icon
-                        name='calendar-check-outline'
-                        type='material-community'  
-                      />
-                </TouchableOpacity>
+          <View style={styles.container}>
+            <Text style={styles.subtitle}> Personal Information</Text>
+            <View style={styles.inputView}>
+              <Text style={styles.inputTitle}>Name</Text>
+              <View style={styles.inputBox}>
+                  <Input type="text" value={this.state.user.a_name} onChangeText={ text => this.handleNameChange(text) } placeholder='Name'></Input>
               </View>
-          </View>
+            </View>
+            <Text style={styles.genderTitle}>Gender</Text>
+            <View style={styles.genderContainer}>
+              <Picker
+                selectedValue={this.state.user.a_gender}
+                style={{ height: 50, width: 150,  }}
+                onValueChange={(itemValue, itemIndex) => this.handleGenderChange(itemValue)}>
+                <Picker.Item label="Unknown" value="Undefined" />
+                <Picker.Item label="Female" value="Female" />
+                <Picker.Item label="Male" value="Male" />
+                <Picker.Item label="Other" value="Other" />
+              </Picker>
+            </View>
 
-            {this.state.showDatePicker && (
-              <DateTimePicker
-                value={ this.state.date }
-                mode='default'
-                display='default'
-                onChange={ date => { this.handleDateChanged(date.nativeEvent.timestamp)}}/>
-            )}
-          <View>
-            <TouchableOpacity style={styles.button} onPress={() => { 
-                const pushAction = StackActions.push("EditProfilePassword");
-                navigation.dispatch(pushAction);
-                //navigation.navigate("EditProfilePassword") 
-              }} >
-                <Text style={styles.buttonText}>CHANGE PASSWORD</Text>
-            </TouchableOpacity>
-          </View>
+            <View style={styles.showAll} flexDirection='row' justifyContent='space-between'  >
+            <View style={styles.inputView}>
+              <Text style={styles.inputTitle}>Birth Date</Text>
+              <View>
+                  <Text style={styles.dateStyle}>{this.state.date.getDate()} / {this.state.date.getMonth() + 1} / {this.state.date.getFullYear()}</Text>
+              </View>
+            </View>
 
-        </View>
-        <View>
-          <TouchableOpacity style={styles.button} onPress={() => {
-              const pushAction = StackActions.push("EditProfileAllergies", { user: this.state.user });
-              navigation.dispatch(pushAction);
-              //navigation.navigate("EditProfileAllergies", { user: this.state.user })
-            }} >
-              <Text style={styles.buttonText}>SET FOOD PREFERENCES</Text>
-          </TouchableOpacity>
+            <View paddingTop={10}>
+                  <TouchableOpacity onPress={() => this.setState({showDatePicker: true})}>
+                    <Text style={styles.secondaryText}>CHANGE DATE</Text>
+                    <Icon
+                          name='calendar-check-outline'
+                          type='material-community'  
+                        />
+                  </TouchableOpacity>
+                </View>
+            </View>
+
+              {this.state.showDatePicker && (
+                <DateTimePicker
+                  value={ this.state.date }
+                  mode='default'
+                  display='default'
+                  onChange={ date => { this.handleDateChanged(date.nativeEvent.timestamp)}}/>
+              )}
+            <View>
+              <TouchableOpacity style={styles.button} onPress={() => { 
+                  const pushAction = StackActions.push("EditProfilePassword");
+                  navigation.dispatch(pushAction);
+                  //navigation.navigate("EditProfilePassword") 
+                }} >
+                  <Text style={styles.buttonText}>CHANGE PASSWORD</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View>
+              <TouchableOpacity style={styles.button} onPress={() => {
+                  const pushAction = StackActions.push("EditProfileAllergies", { user: this.state.user });
+                  navigation.dispatch(pushAction);
+                  //navigation.navigate("EditProfileAllergies", { user: this.state.user })
+                }} >
+                  <Text style={styles.buttonText}>SET FOOD PREFERENCES</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
 
 
@@ -357,7 +360,8 @@ export default function EditProfile(props) {
 
 const styles = StyleSheet.create({
     backgroundContainer: {
-      flex: 1,
+      height: Dimensions.get("window").height - 80,
+      
       backgroundColor: 'white',
       color: 'white',
     },
@@ -375,7 +379,7 @@ const styles = StyleSheet.create({
     mainPage: {
       flex: 3,
       position: 'relative',
-      paddingTop: 20,
+      paddingTop: 25,
       //paddingBottom: 40,
       alignItems: 'center',
     },
@@ -583,5 +587,9 @@ const styles = StyleSheet.create({
   loading:{
     flex: 1,
     marginTop:100,
+  },
+
+  container:{
+    top: -55,
   }
   });

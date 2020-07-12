@@ -31,7 +31,7 @@ class UserProfileComponent extends Component {
       reviews: [],
       restaurants: [],
       restaurantsModalVisible: false,
-
+      noReviewsText: false,
     }
   }
 
@@ -79,9 +79,15 @@ class UserProfileComponent extends Component {
 
   async fetchReviews() {
     const resp = await ReviewApi.getReviewsByUser(this.state.user.a_user_id);
+    let noReviewsText = false;
+    if(resp.response.result.length === 0){
+      noReviewsText = true;
+    }
     this.setState({
-      reviews: resp.response.result
+      reviews: resp.response.result,
+      noReviewsText: noReviewsText,
     })
+
     console.log(resp);
   }
 
@@ -188,9 +194,13 @@ class UserProfileComponent extends Component {
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
               >
-                {
+                {this.state.noReviewsText &&
+                <View style={styles.textNoReviewsContainer}>
+                  <Text style={styles.textNoReviews}>You don't have any reviews yet.</Text>
+                </View>
+                }
 
-                  this.state.reviews.map((review, idx) => {
+                {this.state.reviews.map((review, idx) => {
                     return (
                       <TouchableOpacity
                         key={idx}
@@ -503,7 +513,18 @@ const styles = StyleSheet.create({
   loading:{
     flex: 1,
     marginTop:100,
-  }
+  },
+
+  textNoReviewsContainer:{
+    paddingLeft: 20,
+    paddingTop: 5,
+  },
+
+  textNoReviews:{
+    textAlign: "left",
+    fontSize: 15,
+    paddingLeft: 15,
+  },
 
 });
 
