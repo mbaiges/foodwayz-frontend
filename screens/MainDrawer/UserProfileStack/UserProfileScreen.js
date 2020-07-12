@@ -186,7 +186,7 @@ class UserProfileComponent extends Component {
   }
 
   async componentWillUnmount() {
-    this.state.updateWhenFocus.remove();
+    //this.state.updateWhenFocus.remove();
   }
 
   async componentDidUpdate(){
