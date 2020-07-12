@@ -116,8 +116,8 @@ class RegisterScreenComponent extends Component {
     return (
       <SafeAreaView style={styles.backgroundContainer}>
 
-        <KeyboardAvoidingView
-          behavior={Platform.OS == "ios" ? "padding" : "height"}
+        <ScrollView
+          showsVerticalScrollIndicator={false}
           style={styles.container}
         >
 
@@ -447,42 +447,42 @@ Credit and Contact Information{"\n"}
               </View>
             </View>
           </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-        <View alignItems="center">
-          <View style={styles.checkboxLine}>
-          <CheckBox
-              value={this.state.checked}
-              tintColors={{ true: "white", false: "black" }}
-              onValueChange={() =>
-                this.setState({ checked: !this.state.checked })
-              }
-            />
-            <View style={styles.checkboxText}>
-              <Text>I have read and accepted </Text>
-              <Text
-                style={styles.termAndConds}
-                onPress={() => {
-                  this.setState({termAndCondsModal: true})
-                  console.log("Clicked on terms and conditions");
+        
+          <View alignItems="center">
+            <View style={styles.checkboxLine}>
+            <CheckBox
+                value={this.state.checked}
+                tintColors={{ true: "white", false: "black" }}
+                onValueChange={() =>
+                  this.setState({ checked: !this.state.checked })
+                }
+              />
+              <View style={styles.checkboxText}>
+                <Text>I have read and accepted </Text>
+                <Text
+                  style={styles.termAndConds}
+                  onPress={() => {
+                    this.setState({termAndCondsModal: true})
+                    console.log("Clicked on terms and conditions");
+                  }}
+                >
+                  terms and conditions.
+                </Text>
+              </View>
+            </View>
+            <View>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={async () => {
+                  console.log("I want to navigate to Main");
+                  this.signUp({state: this.state, navigation, setAuthState});
                 }}
               >
-                terms and conditions.
-              </Text>
+                <Text>REGISTER</Text>
+              </TouchableOpacity>
             </View>
           </View>
-          <View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={async () => {
-                console.log("I want to navigate to Main");
-                this.signUp({state: this.state, navigation, setAuthState});
-              }}
-            >
-              <Text>REGISTER</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
+        </ScrollView>
       </SafeAreaView>
     );
   }
