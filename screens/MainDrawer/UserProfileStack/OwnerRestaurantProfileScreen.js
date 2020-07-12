@@ -14,7 +14,8 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
-  Modal
+  Modal,
+  ActivityIndicator,
 } from "react-native";
 import { RestaurantApi, FoodApi, UserApi, OwnsApi } from "../../../api";
 
@@ -118,7 +119,7 @@ class OwnerRestaurantProfileComponent extends Component {
   async fetchDishes() {
     const aux = this.state.restaurant;
     let noReviewsText = false;
-    
+
     try {
       const resp = await RestaurantApi.getFoods(aux.a_rest_id);
       switch(resp.status) {
@@ -150,10 +151,16 @@ class OwnerRestaurantProfileComponent extends Component {
   }
 
   async componentDidMount() {
+    this.setState({
+      activityIndicator: true
+    })
     console.log("Mounting");
     await this.fetchRestaurant();
     await this.fetchImages();
     await this.fetchDishes();
+    this.setState({
+      activityIndicator: false
+    })
   }
 
 
@@ -277,10 +284,15 @@ class OwnerRestaurantProfileComponent extends Component {
 
 
     return (
-      <SafeAreaView style={styles.backgroundContainer}>
+      (this.state.activityIndicator) ?
+      (<SafeAreaView>
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#000000" />
+        </View>
 
-
-
+      </SafeAreaView>)
+      :
+      (<SafeAreaView style={styles.backgroundContainer}>
 
         <ScrollView>
 
@@ -651,7 +663,7 @@ class OwnerRestaurantProfileComponent extends Component {
         </Snackbar>
 
         </ScrollView>
-      </SafeAreaView>
+      </SafeAreaView>)
     );
   }
 
@@ -1014,7 +1026,7 @@ headerText: {
     height:70,
   },
 
-  
+
   textNoReviewsContainer:{
     paddingLeft: 20,
     paddingTop: 5,
@@ -1024,5 +1036,10 @@ headerText: {
     textAlign: "left",
     fontSize: 15,
     paddingLeft: 15,
+  },
+
+  loading:{
+    flex: 1,
+    marginTop:100,
   },
 });

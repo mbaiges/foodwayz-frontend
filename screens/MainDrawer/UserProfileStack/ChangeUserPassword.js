@@ -129,6 +129,7 @@ class EditProfilePasswordComponent extends Component {
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#000000" />
         </View>
+        
       </SafeAreaView>)
       :
         (<View style={styles.backgroundContainer}>

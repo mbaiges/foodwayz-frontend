@@ -456,9 +456,11 @@ class SearchScreenComponent extends React.Component {
       sort_by: "most_reviews"
     };
 
+    console.log(route.params);
+
     if (route.params != undefined) {
       const { a_type_id, a_char_id, a_ingr_id } = route.params;
-
+  
       if (a_ingr_id != undefined) {
         actualQueryBody.filters.a_ingr_ids.push(a_ingr_id);
       }
@@ -476,9 +478,20 @@ class SearchScreenComponent extends React.Component {
       });
     }
 
-    if (this.state.queryBody.filters.a_ingr_ids !== actualQueryBody.filters.a_ingr_ids || 
-      this.state.queryBody.filters.a_char_ids !== actualQueryBody.filters.a_char_ids ||
-      this.state.queryBody.filters.a_type_id !== actualQueryBody.filters.a_type_id) {
+    if (!this.state.hasSearchedBefore ||
+      ( (this.state.queryBody.filters.a_ingr_ids != actualQueryBody.filters.a_ingr_ids || 
+      this.state.queryBody.filters.a_char_ids != actualQueryBody.filters.a_char_ids ||
+      this.state.queryBody.filters.a_type_ids != actualQueryBody.filters.a_type_ids) && (
+      actualQueryBody.filters.a_ingr_ids.length > 0 ||
+      actualQueryBody.filters.a_char_ids.length > 0 ||
+      actualQueryBody.filters.a_type_ids.length > 0 ))) {
+        chosenCharacteristics = actualQueryBody.filters.a_char_ids;
+        chosenIngredients = actualQueryBody.filters.a_ingr_ids;
+        chosenTypes = actualQueryBody.filters.a_type_ids;
+        console.log("Changes from:");
+        console.log(JSON.stringify(this.state.queryBody));
+        console.log("to");
+        console.log(JSON.stringify(actualQueryBody));
         await this.querySearch(actualQueryBody);
     }
 
@@ -519,7 +532,9 @@ class SearchScreenComponent extends React.Component {
             onChangeText={ async( text ) => await this.updateSearch(text) }
             value={this.state.search}
           />
-        <ScrollView marginBottom={80}>
+        <ScrollView 
+          showsVerticalScrollIndicator={false}
+          marginBottom={80}>
           {
             this.state.queryResult.map(food => {
               return (

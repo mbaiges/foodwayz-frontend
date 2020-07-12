@@ -162,9 +162,15 @@ class EditProfileComponent extends Component {
 
   }
 
-  async saveChanges(){
+  async saveChanges(){    
+    this.setState({
+      activityIndicator: true
+    })
     const { navigation } = this.props;
     await this.updateUser();
+    this.setState({
+      activityIndicator: false
+    })
     navigation.goBack();
   }
 
@@ -212,6 +218,7 @@ class EditProfileComponent extends Component {
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#000000" />
         </View>
+        
       </SafeAreaView>)
       :
       (<ScrollView>
