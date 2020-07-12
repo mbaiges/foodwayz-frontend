@@ -18,6 +18,7 @@ import {
 } from "react-native";
 import * as firebase from 'firebase';
 import { StackActions } from '@react-navigation/native';
+import { Snackbar } from 'react-native-paper';
 
 import { UserApi, ReviewApi, RestaurantApi, Owns, OwnsApi } from '../../../api';
 
@@ -46,20 +47,43 @@ class UserProfileComponent extends Component {
 
   async fetchUser() {
     console.log('fetching user');
-    const resp = await UserApi.getMe();
-    let user = resp.response.result;
+    try {
+      const resp = await UserApi.getMe();
+      switch(resp.status) {
+        case 200:
+          let user = resp.response.result;
     
-    if(!user.a_image_url || user.a_image_url == null){
-      await this.getImage(user.a_user_id);
+          if(!user.a_image_url || user.a_image_url == null){
+            await this.getImage(user.a_user_id);
+          }
+
+          this.setState({
+            user: user
+          })
+
+          console.log('done fetching user');
+          console.log("User is: " + this.state.user);
+          console.log(JSON.stringify(resp.response.result));
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+      // Show snackbar (Internet connecion, maybe?)
     }
 
-    this.setState({
-      user: user
-    })
 
-    console.log('done fetching user');
-    console.log("User is: " + this.state.user);
-    console.log(JSON.stringify(resp.response.result));
+
+    
+    
   }
 
   async getImage(id){
@@ -78,24 +102,64 @@ class UserProfileComponent extends Component {
   }
 
   async fetchReviews() {
-    const resp = await ReviewApi.getReviewsByUser(this.state.user.a_user_id);
-    let noReviewsText = false;
-    if(resp.response.result.length === 0){
-      noReviewsText = true;
-    }
-    this.setState({
-      reviews: resp.response.result,
-      noReviewsText: noReviewsText,
-    })
+    try {
+      const resp = await ReviewApi.getReviewsByUser(this.state.user.a_user_id);
+      switch(resp.status) {
+        case 200:
+          let noReviewsText = false;
+          if(resp.response.result.length === 0){
+            noReviewsText = true;
+          }
+          this.setState({
+            reviews: resp.response.result,
+            noReviewsText: noReviewsText,
+          })
 
-    console.log(resp);
+          console.log(resp);
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+    }
+    
   }
 
   async fetchRestaurants() { 
-    const resp = await OwnsApi.getMyRestaurants();
-    this.setState({
-      restaurants: resp.response.result
-    })
+    try {
+      const resp = await OwnsApi.getMyRestaurants();
+      switch(resp.status) {
+        case 200:
+          this.setState({
+            restaurants: resp.response.result
+          })
+          break;
+      default:
+        console.log(`Status Received: ${resp.status} --->`);
+        console.log(`${resp.response}`);
+        // Show snackbar ?
+        break;
+      }
+    }
+    catch (error) {
+      console.log(error);
+      this.setState({
+        snackbarConnectionVisible: true
+      });
+    }
+
+
+
+    
+
   }
 
   async componentDidMount() {
@@ -175,6 +239,8 @@ class UserProfileComponent extends Component {
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#000000" />
         </View>
+        
+           
       </SafeAreaView>)
       :
       (<SafeAreaView style={styles.backgroundContainer}>
@@ -316,6 +382,14 @@ class UserProfileComponent extends Component {
               <Text style={styles.buttonText}>Sign Out</Text>
             </TouchableOpacity>
           </View>
+          <Snackbar
+              style={styles.snackBarError}
+              duration={4000}
+              visible={this.state.snackbarConnectionVisible}
+              onDismiss={this.dismissConnectionSnackBar}
+            >
+                <Text style={styles.textSnack}>No internet connection.</Text>
+          </Snackbar>
         </ScrollView>
       </SafeAreaView>)
     );
@@ -515,6 +589,11 @@ const styles = StyleSheet.create({
     marginTop:100,
   },
 
+  snackBarError:{
+    backgroundColor: "#ff4d4d",
+    height:70,
+  },
+
   textNoReviewsContainer:{
     paddingLeft: 20,
     paddingTop: 5,
@@ -524,6 +603,13 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontSize: 15,
     paddingLeft: 15,
+  },
+
+  textSnack:{
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingBottom: 5,
   },
 
 });

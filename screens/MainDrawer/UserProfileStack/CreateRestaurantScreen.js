@@ -259,6 +259,7 @@ class CreateRestaurantComponent extends Component {
                 <View style={styles.loading}>
                 <ActivityIndicator size="large" color="#000000" />
                 </View>
+                
             </SafeAreaView>)
             :
           (<ScrollView>

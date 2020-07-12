@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Card, ListItem, Button, Icon, Rating, AirbnbRating} from "react-native-elements";
-import { StyleSheet, View, SafeAreaView, Text, Image, TextInput, ActivityIndicator, ScrollView, TouchableOpacity, Dimensions} from "react-native";
+import { StyleSheet, View, SafeAreaView, Text, Image, TextInput, ActivityIndicator, ScrollView, TouchableOpacity, Dimensions, A} from "react-native";
 import CheckBox from "@react-native-community/checkbox";
 import { ReviewApi, UserApi } from '../../api';
 
@@ -136,6 +136,7 @@ class RateFoodComponent extends Component {
                 <View style={styles.loading}>
                 <ActivityIndicator size="large" color="#000000" />
                 </View>
+
             </SafeAreaView>)
             :
             (<SafeAreaView style={styles.backgroundContainer}>
@@ -205,11 +206,11 @@ class RateFoodComponent extends Component {
                 </View>
                 </ScrollView>
                 <Snackbar
-              style={styles.snackBarError}
-              duration={4000}
-              visible={this.state.snackbarConnectionVisible}
-              onDismiss={this.dismissConnectionSnackBar}
-        >
+                    style={styles.snackBarError}
+                    duration={4000}
+                    visible={this.state.snackbarConnectionVisible}
+                    onDismiss={this.dismissConnectionSnackBar}
+              >
              <Text style={styles.textSnack}>No internet connection.</Text>
         </Snackbar>
             </SafeAreaView>)

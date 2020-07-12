@@ -10,7 +10,8 @@ import {
   TouchableWithoutFeedback,
   Button,
   Dimensions,
-  Alert
+  Alert,
+  ActivityIndicator
 } from "react-native";
 
 import { Snackbar } from 'react-native-paper';
@@ -69,12 +70,17 @@ class FoodScreenComponent extends Component {
   }
 
   async componentDidMount() {
+    this.setState({
+      ActivityIndicator:true
+    })
     await this.fetchFood();
     try {
       const resp = await ViewsApi.registerFoodView(this.state.food.a_food_id);
       switch(resp.status) {
         case 200:
- 
+          this.setState({
+            ActivityIndicator:false
+          })
           break;
       default:
         console.log(`Status Received: ${resp.status} --->`);
@@ -104,7 +110,16 @@ class FoodScreenComponent extends Component {
       
 
     return (
-      <SafeAreaView style={styles.backgroundContainer}>
+      (this.state.activityIndicator) ?
+      (<SafeAreaView>
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#000000" />
+        </View>
+
+           
+      </SafeAreaView>)
+      :
+      (<SafeAreaView style={styles.backgroundContainer}>
         <ScrollView justifyContent='flex-start'>
           <View style={{ alignItems: 'center' }}>
             <Image source={{ uri: this.state.food.a_image_url }}
@@ -252,7 +267,7 @@ class FoodScreenComponent extends Component {
              <Text style={styles.textSnack}>No internet connection.</Text>
         </Snackbar>
 
-      </SafeAreaView>
+      </SafeAreaView>)
     );
   }
 }
@@ -380,6 +395,9 @@ const styles = StyleSheet.create({
     color: "white",
     letterSpacing: 1,
   },
-
+  loading:{
+    flex: 1,
+    marginTop:100,
+  },
 
 });
