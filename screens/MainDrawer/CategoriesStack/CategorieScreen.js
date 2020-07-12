@@ -94,8 +94,11 @@ class CategorieScreenComponent extends Component {
   }
 
   render() {
-    const { navigation, context } = this.props;
-    const { authState, setAuthState } = context;
+    const { navigation } = this.props;
+
+    navigation.setOptions({
+      headerTitle: () => <Text style={styles.headerText}>{`${(this.state.type && this.state.type.a_type_name)?(new String(this.state.type.a_type_name).charAt(0).toUpperCase() + new String(this.state.type.a_type_name).slice(1)):""}`}</Text>
+    });
 
     return (
       (this.state.activityIndicator) ?
@@ -106,10 +109,8 @@ class CategorieScreenComponent extends Component {
       </SafeAreaView>)
       :
       (<SafeAreaView style={styles.backgroundContainer}>
-        <ScrollView>
-          <View>
-      <Text style={styles.homeSubtitle}>{`${(this.state.type && this.state.type.a_type_name)?(new String(this.state.type.a_type_name).charAt(0).toUpperCase() + new String(this.state.type.a_type_name).slice(1)):""}`}</Text>
-            <ScrollView>
+        <ScrollView
+          showsVerticalScrollIndicator={false}>
               {
                 this.state.foods.map(food => {
                   return (
@@ -129,8 +130,7 @@ class CategorieScreenComponent extends Component {
                   )
                 })
               }
-            </ScrollView>
-          </View>
+          </ScrollView>
           <Snackbar
             style={styles.snackBarError}
             duration={4000}
@@ -139,8 +139,6 @@ class CategorieScreenComponent extends Component {
           >
               <Text style={styles.textSnack}>No internet connection.</Text>
           </Snackbar>
-        </ScrollView>
-
       </SafeAreaView>)
 
     );
@@ -159,7 +157,7 @@ const styles = StyleSheet.create({
     height: null,
     backgroundColor: "#FFFFFF",
     paddingBottom: 30,
-    paddingTop: 30,
+    paddingTop: 0,
   },
 
   homeSubtitle: {
@@ -237,6 +235,13 @@ const styles = StyleSheet.create({
   snackBarError:{
     backgroundColor: "#ff4d4d",
     height:70,
+  },
+
+  headerText: {
+    fontWeight: "bold",
+    fontSize: 20,
+    color: "white",
+    letterSpacing: 1,
   },
 
 });

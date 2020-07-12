@@ -17,7 +17,7 @@ import {
 import DefaultNavBar from "./NavBars/DefaultNavBar";
 import BackButtonNavBar from "./NavBars/BackButtonNavBar";
 import BackButtonProfileNavBar from "./NavBars/BackButtonProfileNavBar";
-import { Ionicons } from "@expo/vector-icons";
+import BackButtonSearchProfileNavBar from "./NavBars/BackButtonSearchProfileNavBar";
 
 const Stack = createStackNavigator();
 const INITIAL_ROUTE_NAME = "Categories";
@@ -35,7 +35,7 @@ export default function StackNavigator({ navigation, route }) {
       }
     >
       <Stack.Screen name="Categories" component={Categories} />
-      <Stack.Screen name="Categorie" component={Categorie} />
+      <Stack.Screen name="Categorie" component={Categorie} options={BackButtonSearchProfileNavBar({ title: getHeaderTitle(route), navigation })}/>
 
       <Stack.Screen name="Food" component={Food} options={BackButtonProfileNavBar({ title: getHeaderTitle(route), navigation })}/>
       <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} options={BackButtonProfileNavBar({ title: getHeaderTitle(route), navigation })} />
@@ -55,7 +55,7 @@ function getHeaderTitle(route) {
     case "Categories":
       return "Categories";
     case "Categorie":
-      return "Categories";
+      return "Category";
     case "Food":
       return "Food";
     case "RestaurantProfile":

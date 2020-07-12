@@ -88,44 +88,41 @@ class CategoriesScreenComponent extends Component {
       </SafeAreaView>)
       :
       (<SafeAreaView style={styles.backgroundContainer}>
-        <ScrollView>
-          <View>
-            <ScrollView>
-              {
-                this.state.types.map(type => {
-                  return (
-                    <TouchableOpacity
-                    onPress={async () => {
-                      const pushAction = StackActions.push("Categorie", { type: type });
-                      navigation.dispatch(pushAction);
-                      //navigation.navigate("Categorie", { type: type });
-                      //console.log("I want to navigate to Dish page");
-                    }}>
-                      <Card
-                        key={type.a_type_id}
-                        image={{ uri: type.a_image_url }}
-                        imageStyle={{
-                          height: 150,
-                        }}
+        <ScrollView
+          showsVerticalScrollIndicator={false}>
+          {
+            this.state.types.map(type => {
+              return (
+                <TouchableOpacity
+                onPress={async () => {
+                  const pushAction = StackActions.push("Categorie", { type: type });
+                  navigation.dispatch(pushAction);
+                  //navigation.navigate("Categorie", { type: type });
+                  //console.log("I want to navigate to Dish page");
+                }}>
+                  <Card
+                    key={type.a_type_id}
+                    image={{ uri: type.a_image_url }}
+                    imageStyle={{
+                      height: 150,
+                    }}
 
-                      >
-                        <Text style={styles.foodName}>{type.a_type_name.charAt(0).toUpperCase() + type.a_type_name.slice(1)}</Text>
-                      </Card>
-                    </TouchableOpacity>
-                  )
-                })
-              }
-            </ScrollView>
-          </View>
-          <Snackbar
-            style={styles.snackBarError}
-            duration={4000}
-            visible={this.state.snackbarConnectionVisible}
-            onDismiss={this.dismissConnectionSnackBar}
-          >
-              <Text style={styles.textSnack}>No internet connection.</Text>
-          </Snackbar>
+                  >
+                    <Text style={styles.foodName}>{type.a_type_name.charAt(0).toUpperCase() + type.a_type_name.slice(1)}</Text>
+                  </Card>
+                </TouchableOpacity>
+              )
+            })
+          }
         </ScrollView>
+        <Snackbar
+          style={styles.snackBarError}
+          duration={4000}
+          visible={this.state.snackbarConnectionVisible}
+          onDismiss={this.dismissConnectionSnackBar}
+        >
+            <Text style={styles.textSnack}>No internet connection.</Text>
+        </Snackbar>
 
       </SafeAreaView>)
 
