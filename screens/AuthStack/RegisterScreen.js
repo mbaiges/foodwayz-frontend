@@ -448,7 +448,7 @@ Credit and Contact Information{"\n"}
             </View>
           </TouchableWithoutFeedback>
         
-          <View alignItems="center">
+          <View style = {styles.buttonsContainer} >
             <View style={styles.checkboxLine}>
             <CheckBox
                 value={this.state.checked}
@@ -505,8 +505,8 @@ const styles = StyleSheet.create({
     width: null,
     height: null,
     backgroundColor: "#FC987E",
-    paddingBottom: 30,
-    paddingTop: 30,
+    paddingBottom: 0,
+    paddingTop: 20,
   },
 
   inner: {
@@ -535,11 +535,11 @@ const styles = StyleSheet.create({
 
   inputView: {
     position: "relative",
-    padding: 10,
+    padding: 0,
   },
 
   inputBoxes: {
-    top: -10,
+    top: -60,
   },
 
   input: {
@@ -704,6 +704,11 @@ const styles = StyleSheet.create({
 
   scrollViewTermsConds:{
     height: 400,
-  }
+  },
+
+  buttonsContainer:{
+    alignItems: "center",
+    top: -60,
+  },
 
 });
