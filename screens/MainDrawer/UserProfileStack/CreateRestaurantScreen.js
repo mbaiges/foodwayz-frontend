@@ -468,7 +468,7 @@ class CreateRestaurantComponent extends Component {
         </Snackbar>
 
         <Snackbar
-              style={styles.snackBar}
+              style={styles.snackBarError}
               duration={4000}
               visible={this.state.snackbarConnectionVisible}
               onDismiss={this.dismissConnectionSnackBar}
@@ -705,6 +705,10 @@ const styles = StyleSheet.create({
     loading:{
         flex: 1,
         marginTop:100,
-      }
+      },
     
+      snackBarError:{
+        backgroundColor: "#ff4d4d",
+        height:70,
+      },
   });

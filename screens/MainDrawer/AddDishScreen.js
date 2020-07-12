@@ -1177,7 +1177,7 @@ class AddDishComponent extends Component {
         </Snackbar>
 
         <Snackbar
-              style={styles.snackBar}
+              style={styles.snackBarError}
               duration={4000}
               visible={this.state.snackbarConnectionVisible}
               onDismiss={this.dismissConnectionSnackBar}
@@ -1315,6 +1315,11 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "500",
     fontWeight: "bold",
+  },
+
+  snackBarError:{
+    backgroundColor: "#ff4d4d",
+    height:70,
   },
 
 

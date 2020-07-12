@@ -630,7 +630,7 @@ class OwnerRestaurantProfileComponent extends Component {
 
 
         <Snackbar
-              style={styles.snackBar}
+              style={styles.snackBarError}
               duration={4000}
               visible={this.state.snackbarConnectionVisible}
               onDismiss={this.dismissConnectionSnackBar}
@@ -995,6 +995,11 @@ headerText: {
     fontSize: 20,
     color: "white",
     letterSpacing: 1,
+  },
+
+  snackBarError:{
+    backgroundColor: "#ff4d4d",
+    height:70,
   },
 
 });

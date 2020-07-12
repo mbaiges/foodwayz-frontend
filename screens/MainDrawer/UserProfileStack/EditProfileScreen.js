@@ -337,7 +337,7 @@ class EditProfileComponent extends Component {
 
 
         <Snackbar
-              style={styles.snackBar}
+              style={styles.snackBarError}
               duration={4000}
               visible={this.state.snackbarConnectionVisible}
               onDismiss={this.dismissConnectionSnackBar}
@@ -592,4 +592,10 @@ const styles = StyleSheet.create({
   container:{
     top: -55,
   }
+  },
+
+  snackBarError:{
+    backgroundColor: "#ff4d4d",
+    height:70,
+  },
   });
