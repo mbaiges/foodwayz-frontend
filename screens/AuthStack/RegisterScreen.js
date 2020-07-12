@@ -559,10 +559,11 @@ const styles = StyleSheet.create({
 
   inputTitle: {
     elevation: 10,
-    position: "absolute",
+    top: -50,
+    position: "relative",
     color: "#FC987E",
     paddingLeft: 38,
-    paddingTop: 14,
+    paddingTop: 0,
     fontSize: 11,
     fontWeight: "500",
     opacity: 1,
