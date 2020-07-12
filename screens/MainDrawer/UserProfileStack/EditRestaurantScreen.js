@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     backgroundContainer: {
       flex: 1,
       width: null,
-      height: null,
+      height: Dimensions.get("window").height - 80,
       backgroundColor: 'white',
     },
 
