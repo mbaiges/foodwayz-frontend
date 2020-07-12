@@ -592,6 +592,7 @@ const styles = StyleSheet.create({
   container:{
     top: -55,
   },
+  
 
   snackBarError:{
     backgroundColor: "#ff4d4d",
