@@ -36,7 +36,7 @@ class AboutUsComponent extends Component {
             <View>
               <Text style={styles.subtitle}>Who are we?</Text>
               <Text style={styles.text}>
-                We are a team of students from Instituto Tecnológico de Buenos Aires,
+                We are a team of students from Instituto Tecnologico de Buenos Aires,
                 named Dychromatic. Together we have created Foodwayz.
               </Text>
             </View>
