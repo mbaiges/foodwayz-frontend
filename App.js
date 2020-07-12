@@ -6,7 +6,8 @@ import MainDrawer from "./navigation/MainDrawerNavigator";
 import TestScreen from "./screens/TestScreen/ImageTest"
 
 import React, { useEffect, useState, useMemo } from "react";
-import { AsyncStorage, Platform, StatusBar, StyleSheet, View, Text } from "react-native";
+import { AsyncStorage, Platform, StyleSheet, View, Text } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 import useCachedResources from "./hooks/useCachedResources";
 
@@ -92,7 +93,8 @@ export default function App(props) {
   } else {
     return (
       <View style={styles.container}>
-        {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
+        <StatusBar style="light" />
+        {Platform.OS === "ios" && <StatusBar style="light" />}
         <NavigationContainer>
           <UserContext.Provider value={providerAuthState}>
             <Stack.Navigator headerMode="none">
