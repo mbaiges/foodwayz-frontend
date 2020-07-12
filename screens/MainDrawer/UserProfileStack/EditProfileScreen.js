@@ -592,7 +592,7 @@ const styles = StyleSheet.create({
   },
 
   container:{
-    top: -55,
+    top: -35,
   },
   
 
