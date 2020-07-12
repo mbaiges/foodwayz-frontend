@@ -115,7 +115,7 @@ class PremiumComponent extends Component {
       :
       (
         <SafeAreaView style={styles.backgroundContainer}>
-          <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
             <Text style={styles.logoText}>Sign up for premium</Text>
 
             <TouchableOpacity

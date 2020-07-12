@@ -156,7 +156,7 @@ class LoginScreenComponent extends Component {
     return (
       <SafeAreaView style={styles.backgroundContainer}>
         <ScrollView
-          
+          showsVerticalScrollIndicator={false}
           style={styles.container}
         >
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

@@ -256,7 +256,7 @@ class UserProfileComponent extends Component {
       </SafeAreaView>)
       :
       (<SafeAreaView style={styles.backgroundContainer}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.mainPage}>
             <Image
               style={styles.logoImage}
@@ -339,7 +339,7 @@ class UserProfileComponent extends Component {
                         onPress={() => this.setState({restaurantsModalVisible: false})} />
                       </View>
                   </View>
-                  <ScrollView>
+                  <ScrollView showsVerticalScrollIndicator={false}>
                     {restaurantOptions}
                   </ScrollView>
                 </View>

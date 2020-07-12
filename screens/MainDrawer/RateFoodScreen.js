@@ -140,7 +140,7 @@ class RateFoodComponent extends Component {
             </SafeAreaView>)
             :
             (<SafeAreaView style={styles.backgroundContainer}>
-                <ScrollView>
+                <ScrollView showsVerticalScrollIndicator={false}>
                 <View>
                 <Text style={styles.logoText}>Rate Food: {this.state.food.a_title}</Text>
 

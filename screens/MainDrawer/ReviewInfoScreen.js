@@ -106,7 +106,8 @@ class ReviewInfoComponent extends Component {
       </SafeAreaView>)
       :
        ( <SafeAreaView style={styles.backgroundContainer}>
-          <ScrollView>
+          <ScrollView
+            showsVerticalScrollIndicator={false}>
             <Text style={styles.subtitle}>Review by</Text>
       
             <View style={styles.userInfo}>

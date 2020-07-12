@@ -663,7 +663,7 @@ class RestaurantStatisticsProfileComponent extends Component {
             (
             <SafeAreaView style={styles.backgroundContainer}>
 
-                <ScrollView>
+                <ScrollView showsVerticalScrollIndicator={false}>
 
                     <Card title='Best and worst rated foods'>
                         <View>

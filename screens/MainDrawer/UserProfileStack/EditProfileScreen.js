@@ -221,7 +221,7 @@ class EditProfileComponent extends Component {
         
       </SafeAreaView>)
       :
-      (<ScrollView>
+      (<ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.backgroundContainer}>
           <View style={styles.mainPage}>
               <Image style={styles.logoImage} source={{ uri: this.state.user.a_image_url ? this.state.user.a_image_url : "https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Funknown.png?alt=media&token=7bec299d-aefa-486e-8aa1-6f11c874ee2f" }}/>

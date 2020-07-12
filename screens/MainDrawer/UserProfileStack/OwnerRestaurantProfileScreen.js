@@ -294,7 +294,7 @@ class OwnerRestaurantProfileComponent extends Component {
       :
       (<SafeAreaView style={styles.backgroundContainer}>
 
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
 
           <View style={styles.mainPage}>
             <ScrollView

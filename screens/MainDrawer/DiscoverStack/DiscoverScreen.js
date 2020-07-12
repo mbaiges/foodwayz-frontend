@@ -87,7 +87,7 @@ class DiscoverScreenComponent extends Component {
       </SafeAreaView>)
       :
       (<SafeAreaView style={styles.backgroundContainer}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View>
             <Text style={styles.homeSubtitle}>Discover New Food!</Text>
             <ScrollView>

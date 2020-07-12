@@ -592,7 +592,7 @@ class FoodSpecificStatisticsComponent extends Component {
             (
             <SafeAreaView style={styles.backgroundContainer}>
 
-                <ScrollView>
+                <ScrollView showsVerticalScrollIndicator={false}>
 
                     <View style={{ alignItems: 'center' }}>
                         <Image source={{ uri: this.state.food.a_image_url }}

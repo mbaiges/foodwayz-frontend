@@ -117,7 +117,8 @@ class ContactUs extends Component {
 
     return (
         <SafeAreaView style={styles.backgroundContainer}>
-          <ScrollView>
+          <ScrollView
+            showsVerticalScrollIndicator={false}>
             <View alignItems='center'>
               <Image
                 style={styles.logoImage}
