@@ -432,8 +432,13 @@ class CreateRestaurantComponent extends Component {
                         animationType="slide"
                         transparent={true}
                         visible={this.state.modalVisible}
-                        onRequestClose={() => {
-                            this.setState({modalVisible: false});
+                        onRequestClose={async() => {
+                            
+                            await this.setState({
+                                modalVisible: false,
+                                modalInput: "",
+                            });
+                            await this.fetchChains();
                             this.checkIfHasChain();
                           }}
 
