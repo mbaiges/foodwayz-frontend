@@ -358,7 +358,7 @@ export default function EditProfile(props) {
 const styles = StyleSheet.create({
     backgroundContainer: {
       flex: 1,
-
+      backgroundColor: 'white',
       color: 'white',
     },
 
