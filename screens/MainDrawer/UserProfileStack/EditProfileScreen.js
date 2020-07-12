@@ -184,6 +184,8 @@ class EditProfileComponent extends Component {
     })
   }
 
+  asy
+
   render() {
 
     const { navigation, context } = this.props;

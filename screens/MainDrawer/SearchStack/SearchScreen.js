@@ -476,8 +476,6 @@ class SearchScreenComponent extends React.Component {
     this.setState({
       activityIndicator: false
     });
-
-    route.params = undefined;
   }
 
   async addFocusListener(focusListener) {

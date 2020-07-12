@@ -32,6 +32,7 @@ class UserProfileComponent extends Component {
       restaurants: [],
       restaurantsModalVisible: false,
       noReviewsText: false,
+      
     }
   }
 
@@ -99,6 +100,8 @@ class UserProfileComponent extends Component {
   }
 
   async componentDidMount() {
+    const { navigation } = this.props;
+
     this.setState({
       activityIndicator: true
     })
@@ -108,9 +111,18 @@ class UserProfileComponent extends Component {
     await this.fetchReviews();
     await this.fetchRestaurants();
     this.setState({
-      activityIndicator: false
-    })
+      activityIndicator: false,
+      updateWhenFocus: navigation.addListener('focus', async () => {
+        await this.fetchUser();
+        await this.fetchReviews();
+        await this.fetchRestaurants();
+      })
+    });
 
+  }
+
+  async componentWillUnmount() {
+    this.state.updateWhenFocus.remove();
   }
 
   async componentDidUpdate(){
