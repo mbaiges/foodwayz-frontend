@@ -509,7 +509,7 @@ class SearchScreenComponent extends React.Component {
             onChangeText={ async( text ) => await this.updateSearch(text) }
             value={this.state.search}
           />
-        <ScrollView>
+        <ScrollView marginBottom={80}>
           {
             this.state.queryResult.map(food => {
               return (
