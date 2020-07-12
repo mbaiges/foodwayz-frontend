@@ -14,6 +14,7 @@ import Colors from "../../../constants/Colors";
 import { Snackbar } from 'react-native-paper';
 
 import { StackActions } from '@react-navigation/native';
+import { Api } from '../../../api/api';
 
 class EditProfileComponent extends Component {
 
@@ -33,7 +34,7 @@ class EditProfileComponent extends Component {
     const { user } = route.params;
 
     console.log('fetching user');
-
+    console.log(user);
     this.setState({
       user: user,
       date: user.a_birthdate ? new Date(user.a_birthdate) : new Date()
@@ -141,7 +142,7 @@ class EditProfileComponent extends Component {
     });
   }
 
-  handleDateChanged(timeStamp){
+  async handleDateChanged(timeStamp){
     var newDate = timeStamp ? new Date(timeStamp) : this.state.date;
     
     this.setState({
@@ -157,7 +158,8 @@ class EditProfileComponent extends Component {
           ...prevState.user,
           a_birthdate: isoDate
       }
-    }))
+    }));
+
   }
 
   async saveChanges(){    
@@ -187,6 +189,8 @@ class EditProfileComponent extends Component {
       activityIndicator: false
     })
   }
+
+  asy
 
   render() {
 
@@ -597,7 +601,7 @@ const styles = StyleSheet.create({
   },
 
   container:{
-    top: -55,
+    top: -35,
   },
   
 

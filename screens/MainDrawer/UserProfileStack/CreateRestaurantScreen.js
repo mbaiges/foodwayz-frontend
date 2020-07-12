@@ -212,6 +212,12 @@ class CreateRestaurantComponent extends Component {
               })
         }
 
+        checkIfHasChain(){
+            if(!this.state.chainSelected){
+                this.setState({isChain: false});
+            }
+        }
+
         render() {
 
             const {navigation} = this.props;
@@ -246,7 +252,7 @@ class CreateRestaurantComponent extends Component {
                     <TouchableOpacity style={styles.button} onPress={() => {
                         this.setModalVisible(true);
                      }} >
-                        <Text>Change Chain</Text>
+                        <Text style={styles.buttonText}>CHANGE CHAIN</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -425,6 +431,7 @@ class CreateRestaurantComponent extends Component {
                         visible={this.state.modalVisible}
                         onRequestClose={() => {
                             this.setState({modalVisible: false});
+                            this.checkIfHasChain();
                           }}
 
                     >

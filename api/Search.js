@@ -245,6 +245,10 @@ class SearchApi{
     return Api.post(`${SearchApi.url}/restaurant`, body);
   }
 
+  static searchRestaurantChains(body) {
+    return Api.post(`${SearchApi.url}/restaurant_chain`, body);
+  }
+
   static searchTypes(body) {
     return Api.post(`${SearchApi.url}/type`, body);
   }

@@ -18,7 +18,7 @@ import { Snackbar } from 'react-native-paper';
 
 import { Image, ListItem, Icon, Input, Rating } from 'react-native-elements';
 
-import { ViewsApi } from '../../api';
+import { ViewsApi, FoodApi } from '../../api';
 
 import { StackActions } from '@react-navigation/native';
 
@@ -63,6 +63,40 @@ class FoodScreenComponent extends Component {
 
   }
 
+  async updateFood() {
+    try {
+      const resp = await FoodApi.get(this.state.food.a_food_id);
+      switch(resp.status) {
+        case 200:
+          let food = resp.response.result;
+          let aux = {
+            quality: food.a_food_quality_score,
+            presentation: food.a_presentation_score,
+            price: food.a_price_quality_score
+          }
+          this.setState({
+            food: food,
+            type: food.a_type,
+            reviews: aux
+          })
+          this.setState({
+            ingrs: food.a_ingredients,
+            chars: food.a_characteristics,
+            rest: food.a_rest
+          })
+          break;
+        default:
+          console.log(`Status Received: ${resp.status} --->`);
+          console.log(`${resp.response}`);
+          // Show snackbar ?
+          break;
+      }
+    }
+    catch(error) {
+      console.log(error);
+    }
+  }
+
   dismissConnectionSnackBar = () => {
     this.setState({
       snackbarConnectionVisible: false
@@ -70,6 +104,8 @@ class FoodScreenComponent extends Component {
   }
 
   async componentDidMount() {
+    const { navigation } = this.props;
+
     this.setState({
       ActivityIndicator:true
     })
@@ -97,6 +133,17 @@ class FoodScreenComponent extends Component {
       // Show snackbar (Internet connecion, maybe?)
     }
 
+    this.setState({
+      updateWhenFocus: navigation.addListener('focus', async() => {
+        console.log("Updating");
+        await this.updateFood();
+      })
+    });
+
+  }
+
+  async componentWillUnmount() {
+    this.state.updateWhenFocus.remove();
   }
 
   render() {

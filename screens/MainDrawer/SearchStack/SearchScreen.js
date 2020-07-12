@@ -35,6 +35,7 @@ class SearchScreenComponent extends React.Component {
       search: '',
       timer: undefined,
       filterTimer: undefined,
+      hasSearchedBefore: false,
       queryResult: [],
   
       typesVisible: false,
@@ -101,7 +102,10 @@ class SearchScreenComponent extends React.Component {
       const resp = await SearchApi.searchFoods(initialQueryBody? initialQueryBody : this.state.queryBody);
       switch(resp.status) {
         case 200:
-          this.setState({ queryResult: resp.response.result });
+          this.setState({ 
+            queryResult: resp.response.result,
+            hasSearchedBefore: true 
+          });
           break;
       default:
         console.log(`Status Received: ${resp.status} --->`);
@@ -466,18 +470,24 @@ class SearchScreenComponent extends React.Component {
       }
     }
     
+    if (!this.state.hasSearchedBefore) {
+      this.setState({
+        activityIndicator: true
+      });
+    }
 
-    this.setState({
-      activityIndicator: true
-    });
+    if (this.state.queryBody.filters.a_ingr_ids !== actualQueryBody.filters.a_ingr_ids || 
+      this.state.queryBody.filters.a_char_ids !== actualQueryBody.filters.a_char_ids ||
+      this.state.queryBody.filters.a_type_id !== actualQueryBody.filters.a_type_id) {
+        await this.querySearch(actualQueryBody);
+    }
 
-    await this.querySearch(actualQueryBody);
 
     this.setState({
       activityIndicator: false
     });
 
-    route.params = undefined;
+    route.params = undefined
   }
 
   async addFocusListener(focusListener) {
