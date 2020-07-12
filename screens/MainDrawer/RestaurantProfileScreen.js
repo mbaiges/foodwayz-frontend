@@ -185,9 +185,11 @@ class RestaurantProfileComponent extends Component {
             :
       (<SafeAreaView style={styles.backgroundContainer}>
 
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.mainPage}>
-            <ScrollView horizontal={true}>
+            <ScrollView 
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}>
                 {this.state.images.map(image =>{
                 return(
                     <View> 
@@ -255,7 +257,9 @@ class RestaurantProfileComponent extends Component {
           <View style={styles.popularContainer} >
             <Text style={styles.subtitleText}>Our most popular foods</Text>
             <View style={styles.popular}>
-              <ScrollView horizontal={true}>
+              <ScrollView 
+                showsVerticalScrollIndicator={false}
+                horizontal={true}>
                 {this.state.dishes.map(dish =>{
                   return(
                     (dish.a_score >= 4) ? 

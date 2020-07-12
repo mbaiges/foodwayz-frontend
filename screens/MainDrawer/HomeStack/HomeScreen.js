@@ -30,6 +30,7 @@ class HomeScreenComponent extends Component {
       foods: [],
       user: {},
       userChars: [],
+      hasStarted: false,
     }
   }
 
@@ -45,7 +46,7 @@ class HomeScreenComponent extends Component {
       switch(resp.status) {
         case 200:
           this.setState({ user: resp.response.result });
-          console.log(resp);
+          //console.log(resp);
           break;
       default:
         console.log(`Status Received: ${resp.status} --->`);
@@ -65,7 +66,7 @@ class HomeScreenComponent extends Component {
 
     try {
       const resp2 = await UserHasCharacteristicApi.getCharactersticsByUser(this.state.user.a_user_id);
-      switch(resp.status) {
+      switch(resp2.status) {
         case 200:
           let aux = []
           resp2.response.result.forEach(char => {
@@ -74,7 +75,7 @@ class HomeScreenComponent extends Component {
       
           this.setState({ userChars: aux })
       
-          console.log(this.state.userChars)
+          //console.log(this.state.userChars)
           break;
       default:
         console.log(`Status Received: ${resp.status} --->`);
@@ -109,7 +110,7 @@ class HomeScreenComponent extends Component {
       switch(resp.status) {
         case 200:
           this.setState({ foods: resp.response.result });
-          console.log(resp);
+          //console.log(resp);
           break;
       default:
         console.log(`Status Received: ${resp.status} --->`);
@@ -129,15 +130,61 @@ class HomeScreenComponent extends Component {
   }
 
   async componentDidMount() {
+    const { navigation } = this.props;
+
     this.setState({
       activityIndicator: true
     })
     await this.fetchUser();
     await this.fetchFoods();
-    this.setState({
-      activityIndicator: false
-    })
 
+    this.setState({
+      updateWhenFocus: navigation.addListener('focus', async () => {
+        try {
+          const resp2 = await UserHasCharacteristicApi.getCharactersticsByUser(this.state.user.a_user_id);
+          switch(resp2.status) {
+            case 200:
+              let aux = []
+              resp2.response.result.forEach(char => {
+                aux.push(char.a_char_id);
+              });
+          
+              console.log(aux);
+              if (aux != this.state.userChars) {
+                console.log("CHARS CHANGED FROM");
+                console.log(this.state.userChars);
+                console.log("TO");
+                this.setState({ userChars: aux });
+                this.fetchFoods();
+                console.log(aux);
+              } 
+              //console.log(this.state.userChars)
+              break;
+          default:
+            console.log(`Status Received: ${resp.status} --->`);
+            console.log(`${resp.response}`);
+            // Show snackbar ?
+            break;
+          }
+        }
+        catch (error) {
+          console.log(error);
+          this.setState({
+            snackbarConnectionVisible: true
+          });
+          // Show snackbar (Internet connecion, maybe?)
+        }
+      })
+    });
+
+    this.setState({
+      activityIndicator: false,
+      hasStarted: true
+    });
+  }
+
+  componentWillUnmount() {
+    this.state.updateWhenFocus.remove();
   }
 
   render() {

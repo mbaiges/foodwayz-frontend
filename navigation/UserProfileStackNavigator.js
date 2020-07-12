@@ -84,7 +84,7 @@ function getHeaderTitle(route) {
     case "EditProfilePassword":
       return "Change Password";
     case "EditProfileAllergies":
-      return "Set Preferences";
+      return "Set Food Preferences";
 
     case "CreateRestaurant":
       return "Create Restaurant";

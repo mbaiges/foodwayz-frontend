@@ -102,7 +102,7 @@ class EditRestaurantComponent extends Component {
                     </View>
                 </SafeAreaView>)
                 :
-            (<ScrollView>
+            (<ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.backgroundContainer}>
                     
                     <Text style={styles.title}> Edit Restaurant</Text>

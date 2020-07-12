@@ -167,7 +167,9 @@ class FoodScreenComponent extends Component {
       </SafeAreaView>)
       :
       (<SafeAreaView style={styles.backgroundContainer}>
-        <ScrollView justifyContent='flex-start'>
+        <ScrollView 
+          showsVerticalScrollIndicator={false}
+          justifyContent='flex-start'>
           <View style={{ alignItems: 'center' }}>
             <Image source={{ uri: this.state.food.a_image_url }}
               style={styles.imageStyle} />

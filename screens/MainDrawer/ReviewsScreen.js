@@ -85,7 +85,7 @@ class ReviewsComponent extends Component {
             </SafeAreaView>)
             :
             (<SafeAreaView style={styles.backgroundContainer}>
-                <ScrollView>
+                <ScrollView showsHorizontalScrollIndicator={false}>
                 <View>
                 <Text style={styles.logoText}>All reviews</Text>
                 { reviewCards }

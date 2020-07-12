@@ -271,7 +271,7 @@ class CreateRestaurantComponent extends Component {
                 
             </SafeAreaView>)
             :
-          (<ScrollView>
+          (<ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.backgroundContainer}>
 
                 <Text style={styles.title}> Register Restaurant</Text>
@@ -458,7 +458,7 @@ class CreateRestaurantComponent extends Component {
                                         await this.fetchChains();
                                     }}
                                 />
-                                <ScrollView>
+                                <ScrollView showsVerticalScrollIndicator={false}>
                                     {chainOptionButtons}
                                 </ScrollView>
                             </View>

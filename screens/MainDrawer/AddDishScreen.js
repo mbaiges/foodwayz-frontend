@@ -691,7 +691,9 @@ class AddDishComponent extends Component {
       </SafeAreaView>)
       :
         (<SafeAreaView style={styles.backgroundContainer}>
-            <ScrollView vertical = {true}>
+            <ScrollView 
+              showsVerticalScrollIndicator={false}
+              vertical = {true}>
                 <TouchableOpacity onPress={() => { this.setState({modalImageVisible: true});  }}> 
                     <View style={styles.mainImage}>
                         <Image
@@ -893,7 +895,7 @@ class AddDishComponent extends Component {
                               await this.updateTypeSearch();
                             }}  
                         />
-                        <ScrollView>
+                        <ScrollView showsVerticalScrollIndicator={false}>
                             {this.state.allTypes.map((type, idx) => {
                                 return(
                                     <View key={idx}>             
@@ -975,7 +977,7 @@ class AddDishComponent extends Component {
                               await this.updateIngrSearch();
                             }} 
                         />
-                        <ScrollView>
+                        <ScrollView showsVerticalScrollIndicator={false}>
                             {this.state.allIngredients.map((ingr, idx) => {
                                 return(
                                     <View key={idx}>             
@@ -1058,7 +1060,7 @@ class AddDishComponent extends Component {
                               await this.updateCharSearch();
                             }}
                         />
-                        <ScrollView>
+                        <ScrollView showsVerticalScrollIndicator={false}>
                             {this.state.allCharacteristics.map((char, idx) => {
                                 return(
                                   <View key={idx}>             

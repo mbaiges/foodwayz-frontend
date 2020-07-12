@@ -226,21 +226,13 @@ class EditProfileAllergiesComponent extends Component {
       :
         
        ( <SafeAreaView style={styles.backgroundContainer}>
-            <ScrollView vertical = {true}>
+            <ScrollView showsVerticalScrollIndicator={false} vertical = {true}>
                 <View style={styles.inner}>
                     <View style={styles.mainPage}>
                         <Text style={styles.title}>Select Characteristics</Text>
                     </View>
                 </View>
                 { optionButtons }
-
-                <View style={styles.applyButtonContainer}>
-                  <TouchableOpacity style={styles.button} onPress={() => { 
-                      navigation.goBack()
-                  }} >
-                      <Text style={styles.buttonText}>BACK</Text>
-                  </TouchableOpacity>
-                </View>
                 <Snackbar
                   style={styles.snackBarError}
                   duration={4000}

@@ -41,7 +41,10 @@ export default class FoodCard extends Component {
           >
               <Text style={styles.foodName}>{title}</Text>
               <Text style={styles.foodBrand}>{brand}</Text>
-              <ScrollView horizontal={true} style={styles.tagsList}>
+              <ScrollView 
+                showsVerticalScrollIndicator={false}
+                horizontal={true} 
+                style={styles.tagsList}>
                 {tagButtons}    
                 {/* <TouchableOpacity style={styles.buttonTag}
                   onPress={() => Alert.alert('Simple Button pressed')}

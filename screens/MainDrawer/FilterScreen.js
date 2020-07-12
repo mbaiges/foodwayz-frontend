@@ -54,7 +54,9 @@ class FilterScreenComponent extends Component {
     return (
         
         <SafeAreaView style={styles.backgroundContainer}>
-            <ScrollView vertical = {true}>
+            <ScrollView 
+              showsVerticalScrollIndicator={false}
+              vertical = {true}>
                 <View style={styles.inner}>
                     <View style={styles.mainPage}>
                         <Text style={styles.text}>Select filters</Text>

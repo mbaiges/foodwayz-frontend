@@ -88,8 +88,7 @@ class CategoriesScreenComponent extends Component {
       </SafeAreaView>)
       :
       (<SafeAreaView style={styles.backgroundContainer}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false}>
           {
             this.state.types.map(type => {
               return (
@@ -116,7 +115,7 @@ class CategoriesScreenComponent extends Component {
           }
         </ScrollView>
         <Snackbar
-          style={styles.snackBarError}
+          style={styles.snackBar}
           duration={4000}
           visible={this.state.snackbarConnectionVisible}
           onDismiss={this.dismissConnectionSnackBar}

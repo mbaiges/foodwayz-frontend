@@ -89,7 +89,7 @@ class ForgotPassScreenComponent extends Component {
 
     return (
       <SafeAreaView style={styles.backgroundContainer}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.inner}>
               <View style={styles.mainPage}>

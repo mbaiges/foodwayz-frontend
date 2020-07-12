@@ -619,7 +619,7 @@ class SearchScreenComponent extends React.Component {
                     </View>
                     
                     <View style={styles.searchScrollView}>
-                        <ScrollView style={{flexGrow:0}}>
+                        <ScrollView showsVerticalScrollIndicator={false} style={{flexGrow:0}}>
                             {this.state.allTypes.map((type, idx) => {
                                 return(
                                     <View key={idx}>             
@@ -698,7 +698,7 @@ class SearchScreenComponent extends React.Component {
                     </View>
                     
                     <View style={styles.searchScrollView}>
-                        <ScrollView style={{flexGrow:0}}>
+                        <ScrollView showsVerticalScrollIndicator={false} style={{flexGrow:0}}>
                             {this.state.allIngredients.map((ingr, idx) => {
                                 return(
                                     <View key={idx}>             
@@ -778,7 +778,7 @@ class SearchScreenComponent extends React.Component {
                     </View>
                     
                     <View style={styles.searchScrollView}>
-                        <ScrollView style={{flexGrow:0}}>
+                        <ScrollView showsVerticalScrollIndicator={false} style={{flexGrow:0}}>
                             {this.state.allCharacteristics.map((char, idx) => {
                                 return(
                                   <View key={idx}>             
